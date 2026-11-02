@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "worldSeed": "VELASTRA-0001",
   "laws": {
     "preserveWitnessedReality": true,
@@ -9,12 +9,13 @@
     "generationRequiresFrontier": true,
     "generatedThingsNeedProvenance": true,
     "returnPathRequired": true,
+    "loopsOnlyToCanon": true,
     "modelsMayPropose": true,
     "modelsMayCommit": false
   },
   "limits": {
     "roomsPerBirth": 1,
     "objectsPerBirth": 1,
-    "thresholdsPerBirth": 1
+    "thresholdsPerBirth": 2
   }
 }

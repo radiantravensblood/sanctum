@@ -1,5 +1,5 @@
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 2;
+const VERSION = 3;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -79,6 +79,7 @@ function createInitialGenesis(world) {
       thresholds: {}
     },
     provenance: {},
+    resolutions: {},
     witnessed: {},
     canonical: {}
   };
@@ -110,6 +111,10 @@ function mergeGenesis(base, saved = {}) {
       ...base.provenance,
       ...(saved.provenance || {})
     },
+    resolutions: {
+      ...base.resolutions,
+      ...(saved.resolutions || {})
+    },
     witnessed: {
       ...base.witnessed,
       ...(saved.witnessed || {})
@@ -125,16 +130,19 @@ function migrateState(saved, world) {
   if (!saved || typeof saved !== "object") return null;
   if (saved.version > VERSION) return null;
 
-  if (saved.version === 1 || !saved.version) {
-    return {
-      ...saved,
-      version: VERSION,
-      thresholdTargets: saved.thresholdTargets || {},
-      genesis: saved.genesis || createInitialGenesis(world)
-    };
-  }
-
-  return saved;
+  return {
+    ...saved,
+    version: VERSION,
+    thresholdTargets: saved.thresholdTargets || {},
+    genesis: {
+      ...createInitialGenesis(world),
+      ...(saved.genesis || {}),
+      resolutions:
+        saved.genesis && saved.genesis.resolutions
+          ? saved.genesis.resolutions
+          : {}
+    }
+  };
 }
 
 function createInitialObjectLocations(world) {
@@ -151,7 +159,10 @@ function createInitialObjectLocations(world) {
 
 function createInitialThresholdStates(world) {
   return Object.fromEntries(
-    Object.values(world.thresholds).map((threshold) => [threshold.id, threshold.state])
+    Object.values(world.thresholds).map((threshold) => [
+      threshold.id,
+      threshold.state
+    ])
   );
 }
 
@@ -173,7 +184,7 @@ export function appendEvent(state, event) {
     ...rest
   });
 
-  if (state.ledger.length > 120) {
-    state.ledger = state.ledger.slice(-120);
+  if (state.ledger.length > 160) {
+    state.ledger = state.ledger.slice(-160);
   }
 }

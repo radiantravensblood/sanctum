@@ -19,16 +19,21 @@ export function validateDelta(delta, state, world) {
 
   const operations = Array.isArray(delta.operations) ? delta.operations : [];
   const counts = countOperations(operations);
+  const proposedRooms = new Set(
+    operations
+      .filter((operation) => operation.op === "create_room")
+      .map((operation) => operation.id)
+  );
 
-  if (counts.create_room > limits.roomsPerBirth) {
+  if ((counts.create_room || 0) > limits.roomsPerBirth) {
     errors.push("Birth exceeds the room limit.");
   }
 
-  if (counts.create_object > limits.objectsPerBirth) {
+  if ((counts.create_object || 0) > limits.objectsPerBirth) {
     errors.push("Birth exceeds the object limit.");
   }
 
-  if (counts.create_threshold > limits.thresholdsPerBirth) {
+  if ((counts.create_threshold || 0) > limits.thresholdsPerBirth) {
     errors.push("Birth exceeds the threshold limit.");
   }
 
@@ -43,23 +48,33 @@ export function validateDelta(delta, state, world) {
       if (existing) errors.push("Room already exists: " + operation.id);
 
       if (laws.returnPathRequired) {
-        const exits = operation.value && operation.value.exits
-          ? Object.values(operation.value.exits)
-          : [];
+        const exits =
+          operation.value && operation.value.exits
+            ? Object.values(operation.value.exits)
+            : [];
 
-        const hasReturn = exits.some((exit) => exit === delta.context.originRoomId);
+        const hasReturn = exits.some(
+          (exit) => exit === delta.context.originRoomId
+        );
+
         if (!hasReturn) errors.push("Generated room has no return path.");
       }
     }
 
     if (operation.op === "create_object") {
-      if (world.objects[operation.id] || state.genesis.generated.objects[operation.id]) {
+      if (
+        world.objects[operation.id] ||
+        state.genesis.generated.objects[operation.id]
+      ) {
         errors.push("Object already exists: " + operation.id);
       }
     }
 
     if (operation.op === "create_threshold") {
-      if (world.thresholds[operation.id] || state.genesis.generated.thresholds[operation.id]) {
+      if (
+        world.thresholds[operation.id] ||
+        state.genesis.generated.thresholds[operation.id]
+      ) {
         errors.push("Threshold already exists: " + operation.id);
       }
 
@@ -73,18 +88,35 @@ export function validateDelta(delta, state, world) {
 
       if (!threshold) {
         errors.push("Source threshold does not exist.");
-      } else {
-        if (laws.generationRequiresFrontier && threshold.mode !== "frontier") {
-          errors.push("Genesis cannot materialize through a non-frontier threshold.");
-        }
+        return;
+      }
 
-        if (threshold.requires && threshold.requires.length) {
-          errors.push("Genesis cannot rewrite a consent-bearing threshold.");
-        }
+      if (laws.generationRequiresFrontier && threshold.mode !== "frontier") {
+        errors.push("Genesis cannot materialize through a non-frontier threshold.");
+      }
 
-        if (threshold.target || threshold.state === "open") {
-          errors.push("The source threshold has already become real.");
-        }
+      if (threshold.requires && threshold.requires.length) {
+        errors.push("Genesis cannot rewrite a consent-bearing threshold.");
+      }
+
+      if (threshold.target || threshold.state === "open") {
+        errors.push("The source threshold has already become real.");
+      }
+
+      const existingTarget = getRoom(world, state, operation.target, {
+        fallback: false
+      });
+
+      if (!existingTarget && !proposedRooms.has(operation.target)) {
+        errors.push("Genesis cannot connect to a room that does not exist.");
+      }
+
+      if (
+        delta.kind === "loop" &&
+        laws.loopsOnlyToCanon &&
+        !state.genesis.canonical[operation.target]
+      ) {
+        errors.push("A loop may only resolve toward witnessed canon.");
       }
     }
   });
@@ -100,11 +132,8 @@ export function validateDelta(delta, state, world) {
 }
 
 function countOperations(operations) {
-  return operations.reduce(
-    (counts, operation) => {
-      counts[operation.op] = (counts[operation.op] || 0) + 1;
-      return counts;
-    },
-    {}
-  );
+  return operations.reduce((counts, operation) => {
+    counts[operation.op] = (counts[operation.op] || 0) + 1;
+    return counts;
+  }, {});
 }

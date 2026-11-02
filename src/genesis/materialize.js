@@ -30,6 +30,12 @@ export function applyDelta(delta, state) {
       case "connect_threshold":
         state.thresholdStates[operation.id] = "open";
         state.thresholdTargets[operation.id] = operation.target;
+        state.genesis.resolutions[operation.id] = {
+          kind: delta.kind || "birth",
+          topology: delta.topology || null,
+          target: operation.target,
+          provenance: delta.provenance
+        };
         break;
 
       default:

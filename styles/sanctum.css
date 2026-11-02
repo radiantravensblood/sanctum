@@ -423,3 +423,27 @@ body[data-generated="true"] .room-region::after {
   content: " · witnessed frontier";
   color: var(--muted);
 }
+
+
+/* Kernel 0003: equivalent objects may share presentation without sharing identity. */
+.object-label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.object-meta {
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body[data-generated="true"] .room-region {
+  max-width: 100%;
+}
+
+body[data-generated="true"] .room-region::after {
+  white-space: nowrap;
+}

@@ -6,65 +6,73 @@ Sanctum is a tiny browser-native place built around continuity rather than optim
 
 Kernel 0001 taught the house to remember.
 
-**Kernel 0002 introduces Genesis: the law beneath becoming.**
+Kernel 0002 introduced Genesis: the law beneath becoming.
+
+**Kernel 0003 teaches Genesis geography.**
 
 ## First law
 
 **Do not overwrite. Reflect.**
 
-The renderer presents what the world says is true. Genesis may propose new reality only at a frontier. The proposal must pass architectural law before it can materialize. Once a generated place is witnessed, it becomes canon and is never casually rerolled.
+Genesis still proposes changes through WorldDeltas. Architectural law still decides what may become real. Witnessed reality remains canon.
 
-## World grammar
+The difference is that new places now inherit local character and topology instead of forming one endless procedural hallway.
 
-Authored truth lives in `world/*.json`.
+## Motifs
 
-Current truth lives in persistent browser state.
+Frontiers can carry a local **motif**.
 
-Historical truth lives in the event ledger.
+A motif is not a global biome. It is inherited through the frontier that produced it. If a path branches and one branch remains untouched, that branch keeps its own local lineage until somebody returns to cross it.
 
-Genesis governs **potential truth**: things that could exist but do not yet.
+Current motifs include:
 
-The lifecycle is:
+- The Drowned Archive
+- The Borrowed Garden
+- The Brass Processional
+- The Glass Orchard
 
-`UNKNOWN → POTENTIAL → PROPOSED → VALIDATED → MATERIALIZED → WITNESSED → CANON`
+Each motif biases form, atmosphere, material, phenomena, object density, and topology for a small number of births. When its extent is exhausted, the next unwritten frontier may begin another motif.
 
-## Genesis
+Generated rooms display their motif as part of the region name.
 
-`src/genesis/` contains the first world-making engine:
+## Topology
 
-- `laws.js` — immutable architectural constraints.
-- `seed.js` — deterministic seeded possibility.
-- `grammar.js` — turns realm grammar into a proposed WorldDelta.
-- `validate.js` — rejects changes that violate the laws.
-- `materialize.js` — applies permitted deltas to current world state.
-- `provenance.js` — records why generated reality exists and when it became canon.
-- `genesis.js` — coordinates a birth at a latent frontier.
+A latent frontier no longer always means "create one room and another frontier."
 
-Nothing edits the world by divine fiat. Genesis produces a **WorldDelta**, law validates it, and only then can it become real.
+Genesis may now resolve a frontier as:
 
-## The first realm
+- **linear** — one room and one unwritten way onward,
+- **branch** — one room with two unwritten ways onward,
+- **terminal** — one room whose path is complete,
+- **loop** — no new room at all; the frontier folds back into witnessed canon.
 
-The authored Sanctum remains stable:
+Loops may only target places that have already been witnessed.
 
-`The Hearth → The Gallery of Unfinished Things → The Threshold`
+No existing canonical room is rewritten to create a loop. Instead, an unwritten frontier resolves toward known ground.
 
-The north mirror is still a consent-bearing threshold and Genesis cannot touch it.
+## Scarcity
 
-A separate eastern edge in The Threshold is an **unwritten frontier**. Crossing it births exactly one room from the Frontier grammar. That room always receives:
+Generated rooms no longer receive an object by default.
 
-- one stable return path,
-- one generated object,
-- one new latent frontier.
+Objects are possibilities rather than rewards. A room may contain something portable, something fixed, or nothing meant for taking at all.
 
-The realm therefore grows only where it is actually crossed.
+A terminal room is not a failure state. It is a place Genesis considers complete.
 
-No rooms are generated ahead of the traveler.
+## Carried objects
+
+The interface now stacks equivalent carried objects:
+
+`small brass token ×2`
+
+That is presentation only.
+
+Underneath, every token remains a separate object with its own unique ID and provenance. Leaving one removes one history from the stack. The others remain distinct.
 
 ## Canon
 
-A generated room is materialized when the frontier is crossed.
+The lifecycle remains:
 
-The moment it is entered for the first time, the room is marked **witnessed** and **canonical**.
+`UNKNOWN → POTENTIAL → PROPOSED → VALIDATED → MATERIALIZED → WITNESSED → CANON`
 
 Creation gets one chance.
 
@@ -72,9 +80,11 @@ History gets the rest.
 
 ## Current storage boundary
 
-Kernel 0002 still persists to `localStorage`. Each browser therefore holds its own universe.
+Kernel 0003 still persists to `localStorage`. Existing Kernel 0001 and 0002 worlds migrate forward rather than being erased.
 
-That is intentional for now. Shared canonical state belongs to a later threshold, after the laws of becoming have proven themselves.
+Each browser still carries its own universe.
+
+Shared canon remains a later threshold.
 
 ## Run
 
@@ -84,4 +94,8 @@ No framework. No package manager. No database. No AI call.
 
 DreamSocket comes later.
 
-First, the world learns how to become.
+First the world remembered.
+
+Then it learned to become.
+
+Now it is learning to become **somewhere**.

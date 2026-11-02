@@ -4,6 +4,80 @@
   "regionName": "Unwritten Realm",
   "forwardDirection": "north",
   "frontierText": "Beyond this edge, the world has not been written yet.",
+  "objectChance": 0.56,
+  "topology": {
+    "directions": ["north", "east", "south", "west"],
+    "minRoomsBeforeLoop": 4,
+    "loopChance": 0.16,
+    "branchChance": 0.22,
+    "terminalChance": 0.14
+  },
+  "motifs": [
+    {
+      "id": "drowned_archive",
+      "title": "The Drowned Archive",
+      "extent": [3, 5],
+      "forms": ["gallery", "cistern", "chamber"],
+      "atmospheres": ["still", "echoing"],
+      "materials": ["stone", "brass"],
+      "phenomena": ["rain_without_sky", "temporal_echo"],
+      "objects": ["brass_token", "glass_bell", "white_thread"],
+      "objectChance": 0.52,
+      "topology": {
+        "loopChance": 0.2,
+        "branchChance": 0.16,
+        "terminalChance": 0.1
+      }
+    },
+    {
+      "id": "borrowed_garden",
+      "title": "The Borrowed Garden",
+      "extent": [3, 4],
+      "forms": ["shrine", "chamber", "gallery"],
+      "atmospheres": ["overgrown", "warm"],
+      "materials": ["wood", "glass"],
+      "phenomena": ["misplaced_light", "living_architecture"],
+      "objects": ["white_thread", "dry_chair", "glass_bell"],
+      "objectChance": 0.44,
+      "topology": {
+        "loopChance": 0.1,
+        "branchChance": 0.28,
+        "terminalChance": 0.18
+      }
+    },
+    {
+      "id": "brass_processional",
+      "title": "The Brass Processional",
+      "extent": [4, 6],
+      "forms": ["gallery", "shrine", "cistern"],
+      "atmospheres": ["warm", "echoing", "still"],
+      "materials": ["brass", "stone", "wood"],
+      "phenomena": ["temporal_echo", "misplaced_light", "living_architecture"],
+      "objects": ["brass_token", "glass_bell"],
+      "objectChance": 0.62,
+      "topology": {
+        "loopChance": 0.18,
+        "branchChance": 0.22,
+        "terminalChance": 0.08
+      }
+    },
+    {
+      "id": "glass_orchard",
+      "title": "The Glass Orchard",
+      "extent": [2, 4],
+      "forms": ["chamber", "shrine"],
+      "atmospheres": ["still", "overgrown"],
+      "materials": ["glass", "wood"],
+      "phenomena": ["misplaced_light", "rain_without_sky"],
+      "objects": ["white_thread", "glass_bell"],
+      "objectChance": 0.36,
+      "topology": {
+        "loopChance": 0.12,
+        "branchChance": 0.18,
+        "terminalChance": 0.24
+      }
+    }
+  ],
   "forms": [
     {
       "id": "chamber",
@@ -78,24 +152,28 @@
     {
       "id": "rain_without_sky",
       "title": "Rain Room",
+      "nameVariants": ["The Rain Room", "The Sunken Rain", "The Ceiling Storm"],
       "description": "Rain falls through part of the room, although there is no sky and no visible source of water.",
       "inspectEcho": "The water is real enough to touch. Its source remains politely absent."
     },
     {
       "id": "misplaced_light",
       "title": "Borrowed Light",
+      "nameVariants": ["The Borrowed Light", "The Windowless Morning", "The Pale Corner"],
       "description": "A soft daylight occupies one corner, belonging to no window you can find.",
       "inspectEcho": "The light has direction but no visible origin."
     },
     {
       "id": "temporal_echo",
       "title": "Second Echo",
+      "nameVariants": ["The Second Echo", "The Remembering Hall", "The After-Sound"],
       "description": "Every few moments, the room repeats one tiny sound that happened several breaths ago.",
       "inspectEcho": "The repetition is exact, but it never chooses the loudest sound."
     },
     {
       "id": "living_architecture",
       "title": "Breathing Wall",
+      "nameVariants": ["The Breathing Wall", "The Patient Masonry", "The Sleeping Structure"],
       "description": "One wall expands and settles by a fraction, slowly enough that certainty takes time.",
       "inspectEcho": "Stone should not breathe. This stone declines to discuss the matter."
     }

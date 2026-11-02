@@ -1,7 +1,9 @@
 import { appendEvent } from "../state.js";
-import { composeBirth } from "./grammar.js";
+import { composeBirth, composeLoop } from "./grammar.js";
 import { applyDelta } from "./materialize.js";
+import { resolveMotif } from "./motif.js";
 import { makeGenesisSeed } from "./seed.js";
+import { planTopology } from "./topology.js";
 import { validateDelta } from "./validate.js";
 
 export function crossFrontier({
@@ -29,19 +31,48 @@ export function crossFrontier({
     String(creationIndex)
   ]);
 
-  const delta = composeBirth({
-    seed,
+  const motif = resolveMotif({
+    threshold,
     realm,
-    creationIndex,
-    originRoomId: state.location,
-    sourceThresholdId: threshold.id,
-    returnDirection: oppositeDirection(direction)
+    seed
   });
+
+  const returnDirection = oppositeDirection(direction);
+  const topology = planTopology({
+    seed,
+    state,
+    world,
+    realm,
+    motif,
+    originRoomId: state.location,
+    returnDirection
+  });
+
+  const delta =
+    topology.type === "loop"
+      ? composeLoop({
+          seed,
+          realm,
+          motif,
+          originRoomId: state.location,
+          sourceThresholdId: threshold.id,
+          targetRoomId: topology.targetRoomId
+        })
+      : composeBirth({
+          seed,
+          realm,
+          motif,
+          topology,
+          creationIndex,
+          originRoomId: state.location,
+          sourceThresholdId: threshold.id,
+          returnDirection
+        });
 
   const verdict = validateDelta(delta, state, world);
 
   if (!verdict.allowed) {
-    console.warn("Genesis rejected a proposed birth.", verdict.errors);
+    console.warn("Genesis rejected a proposed change.", verdict.errors);
     return {
       allowed: false,
       message: "The frontier stirs, but the world refuses the proposed shape."
@@ -51,18 +82,35 @@ export function crossFrontier({
   applyDelta(delta, state);
   state.genesis.counters[counterKey] = creationIndex;
 
-  appendEvent(state, {
-    actor: "genesis",
-    action: "genesis_birth",
-    room: delta.operations.find((operation) => operation.op === "create_room").id,
-    threshold: threshold.id,
-    realm: realmId,
-    seed
-  });
+  const targetRoomId = state.thresholdTargets[threshold.id];
+
+  if (delta.kind === "loop") {
+    appendEvent(state, {
+      actor: "genesis",
+      action: "genesis_loop",
+      from: state.location,
+      to: targetRoomId,
+      threshold: threshold.id,
+      realm: realmId,
+      motif: motif.id,
+      seed
+    });
+  } else {
+    appendEvent(state, {
+      actor: "genesis",
+      action: "genesis_birth",
+      room: targetRoomId,
+      threshold: threshold.id,
+      realm: realmId,
+      motif: motif.id,
+      topology: topology.type,
+      seed
+    });
+  }
 
   return {
     allowed: true,
-    targetRoomId: state.thresholdTargets[threshold.id],
+    targetRoomId,
     seed,
     delta
   };
