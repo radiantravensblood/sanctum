@@ -8,12 +8,14 @@ import {
 } from "./world.js";
 import { applyRoomVisual } from "./visual/chroma.js";
 import { renderScene } from "./visual/scene.js";
+import { reconstructSceneTruth } from "./genesis/scene-truth.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
   const objects = getVisibleObjects(world, state);
   const inventory = getInventory(world, state);
-  const visual = applyRoomVisual({ room, world, state });
+  const scene = reconstructSceneTruth(room, world);
+  const visual = applyRoomVisual({ room, world, state, scene });
 
   document.body.dataset.room = room.id;
   document.body.dataset.generated = isGeneratedRoom(state, room.id)
@@ -26,7 +28,7 @@ export function render({ state, world, message, dispatch }) {
   setText("response", message || "");
   setText("scene-symbol", room.symbol || "◇");
 
-  renderScene({ room, visual, objects });
+  renderScene({ room, visual, scene, objects });
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);

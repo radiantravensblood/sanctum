@@ -1,7 +1,7 @@
 import { resolveRoomVisual } from "../genesis/chroma.js";
 
-export function applyRoomVisual({ room, world, state }) {
-  const visual = resolveRoomVisual(room, world);
+export function applyRoomVisual({ room, world, state, scene = null }) {
+  const visual = resolveRoomVisual(room, world, scene);
   const palette = visual.palette || {};
   const root = document.documentElement;
 
@@ -19,12 +19,30 @@ export function applyRoomVisual({ room, world, state }) {
     hexToRgba(palette.ink || "#f3eadf", 0.14)
   );
 
-  document.body.dataset.phenomenon = visual.phenomenon || "authored";
-  document.body.dataset.atmosphere = visual.atmosphere || "authored";
-  document.body.dataset.material = visual.material || "authored";
+  document.body.dataset.phenomenon =
+    visual.phenomenon || (scene && scene.anomaly && scene.anomaly.phenomenon) || "authored";
+  document.body.dataset.atmosphere =
+    visual.atmosphere || (scene && scene.air && scene.air.atmosphere) || "authored";
+  document.body.dataset.material =
+    visual.material || (scene && scene.matter && scene.matter.material) || "authored";
 
   const patina = derivePatina(room, state, visual);
   root.style.setProperty("--room-patina", String(patina));
+
+  if (scene) {
+    root.style.setProperty(
+      "--room-humidity",
+      String(Number((scene.air && scene.air.humidity) || 0))
+    );
+    root.style.setProperty(
+      "--room-reverb",
+      String(Number((scene.acoustics && scene.acoustics.reverb) || 0))
+    );
+    root.style.setProperty(
+      "--room-light-directionality",
+      String(Number((scene.light && scene.light.directionality) || 0))
+    );
+  }
 
   return visual;
 }

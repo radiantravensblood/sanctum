@@ -5,7 +5,8 @@ export function composeVisualProfile({
   atmosphere,
   phenomenon,
   form,
-  seed
+  seed,
+  scene
 }) {
   const house = visualGrammar.house || {};
   const layers = [
@@ -31,6 +32,11 @@ export function composeVisualProfile({
     (layer.effects || []).forEach((effect) => effects.add(effect));
   });
 
+  if (scene) {
+    sensation = applySceneSensation(sensation, scene);
+    palette = applyPhenomenology(palette, scene);
+  }
+
   return {
     version: visualGrammar.version || 1,
     seed,
@@ -45,8 +51,8 @@ export function composeVisualProfile({
   };
 }
 
-export function resolveRoomVisual(room, world) {
-  if (room.visual) return room.visual;
+export function resolveRoomVisual(room, world, sceneOverride = null) {
+  if (room.visual && !sceneOverride) return room.visual;
 
   if (room.visualProfile && world.visualGrammar.authored[room.visualProfile]) {
     const authored = world.visualGrammar.authored[room.visualProfile];
@@ -88,7 +94,8 @@ export function resolveRoomVisual(room, world) {
           atmosphere,
           phenomenon,
           form,
-          seed: room.genesis.seed
+          seed: room.genesis.seed,
+          scene: sceneOverride || room.scene || null
         });
       }
     }
@@ -102,6 +109,83 @@ export function resolveRoomVisual(room, world) {
     sensation: { ...(world.visualGrammar.house.sensation || {}) },
     effects: [...(world.visualGrammar.house.effects || [])]
   };
+}
+
+function applySceneSensation(base, scene) {
+  const next = { ...base };
+
+  const mappings = {
+    wetness: scene.air && scene.air.humidity,
+    warmth: scene.air && scene.air.temperature,
+    diffusion: scene.light && 1 - Number(scene.light.directionality || 0),
+    stillness: scene.air && 1 - Number(scene.air.movement || 0),
+    density: scene.geometry && scene.geometry.enclosure,
+    age: scene.matter && scene.matter.porosity,
+    tenderness:
+      scene.matter &&
+      1 - Math.abs(Number(scene.matter.roughness || 0.5) - 0.45)
+  };
+
+  Object.entries(mappings).forEach(([key, value]) => {
+    if (typeof value === "number" && Number.isFinite(value)) {
+      next[key] = clamp((Number(next[key] || 0.5) + value) / 2, 0, 1);
+    }
+  });
+
+  return next;
+}
+
+function applyPhenomenology(palette, scene) {
+  let next = { ...palette };
+
+  if (scene.air && scene.air.humidity > 0.7) {
+    next = {
+      ...next,
+      field: mixHex(next.field, "#1a3136", 0.16),
+      surface: mixHex(next.surface, "#2a4243", 0.12),
+      glow: mixHex(next.glow, "#a6bec2", 0.12)
+    };
+  }
+
+  if (scene.light && scene.light.temperature > 0.66) {
+    next.accent = mixHex(next.accent, "#d5a15f", 0.16);
+    next.glow = mixHex(next.glow, "#ead39a", 0.18);
+  }
+
+  if (scene.light && scene.light.temperature < 0.34) {
+    next.glow = mixHex(next.glow, "#93b1bb", 0.2);
+    next.field = mixHex(next.field, "#172a31", 0.12);
+  }
+
+  if (scene.acoustics && scene.acoustics.reverb > 0.75) {
+    next.muted = mixHex(next.muted, "#9faab0", 0.12);
+  }
+
+  const scents = new Set(
+    ((scene.senses && scene.senses.scent) || []).map((value) =>
+      String(value).toLowerCase()
+    )
+  );
+
+  if (
+    scents.has("petrichor") ||
+    scents.has("wet stone") ||
+    scents.has("fresh rain on earth")
+  ) {
+    next.organic = mixHex(next.organic, "#596c58", 0.22);
+    next.accent = mixHex(next.accent, "#806b55", 0.16);
+    next.field = mixHex(next.field, "#1b2c2b", 0.08);
+  }
+
+  if (scents.has("green stems") || scents.has("wet leaves")) {
+    next.organic = mixHex(next.organic, "#74845d", 0.2);
+  }
+
+  if (scents.has("sun-warmed dust")) {
+    next.glow = mixHex(next.glow, "#e4c584", 0.14);
+  }
+
+  return next;
 }
 
 function blendPalette(base, overlay, amount) {

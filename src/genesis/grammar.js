@@ -2,6 +2,8 @@ import { createSeededRandom, pick } from "./seed.js";
 import { createProvenance } from "./provenance.js";
 import { scopePool } from "./motif.js";
 import { composeVisualProfile } from "./chroma.js";
+import { composeSceneTruth } from "./scene-truth.js";
+import { renderRoomLanguage } from "./language.js";
 
 export function composeBirth({
   seed,
@@ -13,6 +15,7 @@ export function composeBirth({
   sourceThresholdId,
   returnDirection,
   visualGrammar,
+  semanticGrammar,
   trigger = "cross_threshold"
 }) {
   const random = createSeededRandom(seed + ":grammar");
@@ -55,6 +58,26 @@ export function composeBirth({
     phenomenon.nameVariants || [phenomenon.title]
   );
 
+  const scene = composeSceneTruth({
+    semanticGrammar,
+    motif,
+    form,
+    material,
+    atmosphere,
+    phenomenon,
+    topology: topology.type,
+    seed
+  });
+
+  const language = renderRoomLanguage({
+    scene,
+    objectTemplate,
+    returnDirection,
+    forwardDirections,
+    topology,
+    seed
+  });
+
   const visual = composeVisualProfile({
     visualGrammar,
     motif,
@@ -62,7 +85,8 @@ export function composeBirth({
     atmosphere,
     phenomenon,
     form,
-    seed
+    seed,
+    scene
   });
 
   const room = {
@@ -71,23 +95,14 @@ export function composeBirth({
     region: (realm.regionName || realm.name) + " · " + motif.title,
     symbol: topology.type === "terminal" ? "·" : topology.type === "branch" ? "⌁" : "◌",
     generated: true,
-    description: [
-      form.description,
-      atmosphere.description,
-      material.description,
-      phenomenon.description
-    ].join(" "),
-    lookText: buildLookText({
-      returnDirection,
-      objectTemplate,
-      forwardDirections,
-      topology
-    }),
-    sitText: form.sitText + " " + atmosphere.description,
+    description: language.description,
+    lookText: language.lookText,
+    sitText: language.sitText,
     objects: objectId ? [objectId] : [],
     exits: {
       [returnDirection]: originRoomId
     },
+    scene,
     visual,
     genesis: {
       seed,
@@ -212,40 +227,4 @@ export function composeLoop({
       }
     ]
   };
-}
-
-function buildLookText({
-  returnDirection,
-  objectTemplate,
-  forwardDirections,
-  topology
-}) {
-  const parts = ["The way back remains " + returnDirection + "."];
-
-  if (objectTemplate) {
-    parts.push("The " + objectTemplate.name + " is here.");
-  } else {
-    parts.push("Nothing here appears to have been left for taking.");
-  }
-
-  if (topology.type === "terminal") {
-    parts.push("Nothing beyond this room asks to be made.");
-  } else if (topology.type === "branch") {
-    parts.push(
-      "The unwritten world waits in two directions: " +
-        forwardDirections.join(" and ") +
-        "."
-    );
-  } else if (forwardDirections.length) {
-    parts.push(
-      capitalize(forwardDirections[0]) +
-        " ends at another unwritten edge."
-    );
-  }
-
-  return parts.join(" ");
-}
-
-function capitalize(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1);
 }

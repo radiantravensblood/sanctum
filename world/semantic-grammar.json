@@ -1,0 +1,287 @@
+{
+  "version": 1,
+  "forms": {
+    "chamber": {
+      "geometry": {
+        "scale": 0.56,
+        "enclosure": 0.82,
+        "depth": 0.54,
+        "verticality": 0.48,
+        "symmetry": 0.58,
+        "focality": 0.42
+      },
+      "phrases": [
+        "The space gathers itself into a chamber with no obvious purpose.",
+        "The room closes around a single volume, deliberate without explaining why.",
+        "Walls establish a quiet chamber whose purpose has either passed or not yet arrived."
+      ]
+    },
+    "gallery": {
+      "geometry": {
+        "scale": 0.7,
+        "enclosure": 0.64,
+        "depth": 0.9,
+        "verticality": 0.52,
+        "symmetry": 0.46,
+        "focality": 0.3
+      },
+      "phrases": [
+        "A long room draws itself out ahead, narrow enough to feel intentional.",
+        "The architecture prefers distance here, pulling the eye farther than the room first admits.",
+        "The room extends in one patient direction, more passage than destination."
+      ]
+    },
+    "cistern": {
+      "geometry": {
+        "scale": 0.76,
+        "enclosure": 0.78,
+        "depth": 0.72,
+        "verticality": 0.34,
+        "symmetry": 0.72,
+        "focality": 0.7
+      },
+      "phrases": [
+        "The floor lowers into an old basin whose edges disappear into shadow.",
+        "The room gives way toward its center, descending around a basin worn older than the path into it.",
+        "Stone steps gather around a low hollow, as though the room were built to hold something absent."
+      ]
+    },
+    "shrine": {
+      "geometry": {
+        "scale": 0.5,
+        "enclosure": 0.7,
+        "depth": 0.48,
+        "verticality": 0.68,
+        "symmetry": 0.9,
+        "focality": 0.92
+      },
+      "phrases": [
+        "The room arranges itself around a quiet center without naming what belongs there.",
+        "Everything in the room seems to acknowledge the same empty center.",
+        "The architecture bends toward a focal place that asks for no devotion."
+      ]
+    }
+  },
+  "materials": {
+    "stone": {
+      "matter": {
+        "primary": "stone",
+        "roughness": 0.84,
+        "reflectivity": 0.12,
+        "thermal": 0.26,
+        "porosity": 0.78
+      },
+      "touch": ["cool mineral surface", "fine damp grit", "old stone"],
+      "phrases": [
+        "Dark stone holds the shape of the room.",
+        "The surfaces are mineral and cool, absorbing more light than they return.",
+        "Old stone carries the room with the patience of something that expects to outlast explanation."
+      ]
+    },
+    "brass": {
+      "matter": {
+        "primary": "brass",
+        "roughness": 0.38,
+        "reflectivity": 0.58,
+        "thermal": 0.7,
+        "porosity": 0.08
+      },
+      "touch": ["cool brass warming under touch", "aged metal", "fine engraved ridges"],
+      "phrases": [
+        "Thin lines of aged brass interrupt the surfaces like remembered handwriting.",
+        "Brass catches what little light exists and returns it in narrow, deliberate traces.",
+        "Aged brass appears throughout the structure, never enough to feel ornamental by accident."
+      ]
+    },
+    "wood": {
+      "matter": {
+        "primary": "wood",
+        "roughness": 0.58,
+        "reflectivity": 0.18,
+        "thermal": 0.76,
+        "porosity": 0.42
+      },
+      "touch": ["warm grain", "worn wood", "softened edges"],
+      "phrases": [
+        "Old wood appears where structure requires tenderness instead of weight.",
+        "Warm grain interrupts the architecture, worn smooth where hands might once have rested.",
+        "The wood is old but not brittle; its edges have been softened by use or by time."
+      ]
+    },
+    "glass": {
+      "matter": {
+        "primary": "glass",
+        "roughness": 0.12,
+        "reflectivity": 0.86,
+        "thermal": 0.2,
+        "porosity": 0.0
+      },
+      "touch": ["cool glass", "smooth clouded surface", "thin edge"],
+      "phrases": [
+        "Clouded glass catches light without revealing what might be behind it.",
+        "Glass divides the room without fully separating anything.",
+        "Translucent surfaces hold light longer than they hold reflection."
+      ]
+    }
+  },
+  "atmospheres": {
+    "still": {
+      "air": {
+        "movement": 0.08,
+        "humidity": 0.34,
+        "temperature": 0.42,
+        "pressure": 0.56
+      },
+      "acoustics": {
+        "reverb": 0.28,
+        "clarity": 0.92,
+        "delay": 0.08
+      },
+      "scent": ["cold dust", "settled fabric", "dry mineral air"],
+      "phrases": [
+        "The air is so still that small sounds seem to remain after they are made.",
+        "Nothing in the air appears interested in moving first.",
+        "The stillness is complete enough that even quiet actions seem briefly preserved."
+      ]
+    },
+    "warm": {
+      "air": {
+        "movement": 0.22,
+        "humidity": 0.3,
+        "temperature": 0.78,
+        "pressure": 0.48
+      },
+      "acoustics": {
+        "reverb": 0.36,
+        "clarity": 0.72,
+        "delay": 0.12
+      },
+      "scent": ["warmed wood", "faint wax", "old paper near heat"],
+      "phrases": [
+        "A low warmth rises from somewhere beneath the floor.",
+        "The room holds heat gently, without any visible fire to account for it.",
+        "Warmth gathers low in the space and makes the darker corners feel inhabited."
+      ]
+    },
+    "echoing": {
+      "air": {
+        "movement": 0.26,
+        "humidity": 0.42,
+        "temperature": 0.36,
+        "pressure": 0.64
+      },
+      "acoustics": {
+        "reverb": 0.86,
+        "clarity": 0.58,
+        "delay": 0.62
+      },
+      "scent": ["cool mineral air", "damp distance", "old brass"],
+      "phrases": [
+        "Sound returns softly, never quite from the direction it left.",
+        "The room gives every small noise back with its edges changed.",
+        "Even a careful footstep returns from somewhere the architecture does not quite justify."
+      ]
+    },
+    "overgrown": {
+      "air": {
+        "movement": 0.34,
+        "humidity": 0.7,
+        "temperature": 0.58,
+        "pressure": 0.46
+      },
+      "acoustics": {
+        "reverb": 0.18,
+        "clarity": 0.52,
+        "delay": 0.08
+      },
+      "scent": ["green stems", "wet leaves", "dark soil"],
+      "phrases": [
+        "Pale vines have found seams in the architecture and made patient use of them.",
+        "Growth occupies every available seam without making the room feel abandoned.",
+        "Leaves and pale stems soften the room's hard edges as though the architecture has been slowly forgiven."
+      ]
+    }
+  },
+  "phenomena": {
+    "rain_without_sky": {
+      "anomaly": {
+        "law": "precipitation_without_visible_source",
+        "intensity": 0.8,
+        "locality": 0.64,
+        "stability": 0.88
+      },
+      "light": {
+        "source": "diffuse",
+        "intensity": 0.3,
+        "temperature": 0.28,
+        "directionality": 0.2
+      },
+      "scent": ["petrichor", "wet stone", "fresh rain on earth"],
+      "phrases": [
+        "Rain falls through part of the room, although there is no sky and no visible source of water.",
+        "A curtain of rain occupies the room without weather above it.",
+        "Fresh rain descends from nowhere the architecture admits exists."
+      ]
+    },
+    "misplaced_light": {
+      "anomaly": {
+        "law": "illumination_without_visible_source",
+        "intensity": 0.64,
+        "locality": 0.54,
+        "stability": 0.96
+      },
+      "light": {
+        "source": "impossible_directional",
+        "intensity": 0.72,
+        "temperature": 0.68,
+        "directionality": 0.9
+      },
+      "scent": ["sun-warmed dust", "dry leaves", "linen in daylight"],
+      "phrases": [
+        "A soft daylight occupies one corner, belonging to no window you can find.",
+        "Daylight enters from an angle the room has no opening to provide.",
+        "One part of the room behaves as though morning exists just beyond a wall that has no outside."
+      ]
+    },
+    "temporal_echo": {
+      "anomaly": {
+        "law": "recent_sound_repeats_after_delay",
+        "intensity": 0.58,
+        "locality": 0.78,
+        "stability": 0.72
+      },
+      "light": {
+        "source": "ambient",
+        "intensity": 0.36,
+        "temperature": 0.4,
+        "directionality": 0.18
+      },
+      "scent": ["cold air", "dust after movement", "old metal"],
+      "phrases": [
+        "Every few moments, the room repeats one tiny sound that happened several breaths ago.",
+        "The room occasionally returns a sound after everyone has finished making it.",
+        "Small noises recur here, delayed long enough to feel remembered rather than echoed."
+      ]
+    },
+    "living_architecture": {
+      "anomaly": {
+        "law": "architecture_exhibits_slow_respiration",
+        "intensity": 0.5,
+        "locality": 0.5,
+        "stability": 0.9
+      },
+      "light": {
+        "source": "ambient",
+        "intensity": 0.4,
+        "temperature": 0.52,
+        "directionality": 0.24
+      },
+      "scent": ["warm stone", "old plaster", "faint green matter"],
+      "phrases": [
+        "One wall expands and settles by a fraction, slowly enough that certainty takes time.",
+        "The masonry appears to inhale and release, almost too slowly to accuse it of movement.",
+        "A section of the architecture keeps a rhythm no building should possess."
+      ]
+    }
+  }
+}

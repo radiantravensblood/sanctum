@@ -10,141 +10,193 @@ Kernel 0002 introduced Genesis: the law beneath becoming.
 
 Kernel 0003 taught Genesis geography.
 
-**Kernel 0004 teaches the world to show what it feels like.**
+Kernel 0004 taught the world to look like what it means.
+
+**Kernel 0005 takes the room apart.**
 
 ## First law
 
 **Do not overwrite. Reflect.**
 
-That law now applies to the visual layer too.
+The newest architectural distinction is simple:
 
-A room is not assigned a decorative theme after Genesis creates it. New generated rooms are born with **visual DNA** derived from the same semantic facts that shape their prose and topology:
+**A room is not its description.**
 
-- motif,
+It is also not its SVG.
+
+It is also not its palette.
+
+Those are renderings of a deeper canonical state.
+
+## Scene Truth
+
+Generated rooms are now born with a structured `scene` object assembled by `src/genesis/scene-truth.js`.
+
+Scene Truth carries facets such as:
+
+### Geometry
 - form,
+- scale,
+- enclosure,
+- depth,
+- verticality,
+- symmetry,
+- focality.
+
+### Matter
 - material,
-- atmosphere,
-- phenomenon,
-- seed.
+- roughness,
+- reflectivity,
+- thermal character,
+- porosity.
 
-The visual profile becomes part of the room's canon.
+### Air
+- movement,
+- humidity,
+- temperature,
+- pressure.
 
-## Chroma
+### Acoustics
+- reverberation,
+- clarity,
+- delay.
 
-`world/visual-grammar.json` defines the house language.
+### Light
+- source behavior,
+- intensity,
+- temperature,
+- directionality.
 
-It contains:
+### Anomaly
+- the impossible law operating in the room,
+- its intensity,
+- locality,
+- stability.
 
-- the baseline Sanctum palette,
-- authored profiles for the Hearth, Gallery, and Threshold,
-- motif palettes,
-- material influence,
-- atmospheric influence,
-- phenomenon influence,
-- sensation channels,
-- environmental effects.
+### Senses
+- scent,
+- touch.
 
-Genesis resolves those layers in `src/genesis/chroma.js`.
+A Rain Room may therefore know that it contains porous stone, cool humid air, high reverberation, diffuse cold light, precipitation without a visible source, and the scent of petrichor.
 
-A room therefore carries both language and sensation.
+None of those facts are prose yet.
 
-For example, a Rain Room is not simply "blue." Its visual profile is pulled toward cool mineral shadow, damp slate, mossed organic tones, diffused silver light, and low warmth.
+None are pixels yet.
 
-The intended feeling is closer to **petrichor** than to a generic rain icon.
+They are world truth.
 
-## Sensation channels
+## Many renderers, one reality
 
-Visual profiles currently carry continuous values such as:
+Scene Truth currently feeds three different interpreters.
 
-- wetness,
-- warmth,
-- diffusion,
-- stillness,
-- density,
-- age,
-- tenderness.
+### Language
 
-Those channels do not appear as scores in the interface.
+`src/genesis/language.js` turns facets into prose.
 
-They inform presentation.
+The description is no longer constructed by simply concatenating the same four fixed sentences every time. Geometry, atmosphere, matter, anomaly, topology, carried objects, and sometimes scent are expressed through deterministic language variants.
 
-The user should feel the room before they need to read a label explaining it.
+The same seed and same Scene Truth produce the same voice.
 
-## Scene grammar
+### Chroma
 
-The repeated orbit graphic has been replaced by a lightweight deterministic SVG renderer.
+`src/genesis/chroma.js` still respects the Studio visual grammar, but it now also reads physical facts.
 
-`src/visual/scene.js` composes scenes from reusable grammar:
+Humidity can cool and deepen the field.
 
-### Form
-- chamber,
-- gallery,
-- cistern,
-- shrine.
+Warm directional light can lift amber and gold.
 
-### Material
-- stone produces mineral marks,
-- brass introduces warm linear traces,
-- wood produces organic grain,
-- glass introduces translucent planes.
+Cold light can pull the glow toward mineral blue.
 
-### Atmosphere and phenomenon
-- impossible rain becomes animated rain strokes,
-- borrowed light enters from a source outside visible geometry,
-- echoes become repeated rings,
-- overgrowth becomes creeping linework,
-- living architecture subtly breathes,
-- authored spaces keep their own house symbols such as frames, mirror, and Hearth-fire.
+High reverberation can subtly cool muted tones.
 
-The same room seed always produces the same composition.
+Sensation is therefore increasingly derived from reality instead of category labels.
 
-## Geometry, atmosphere, patina
+### Geometry
 
-The visual doctrine is now:
+`src/visual/scene.js` now reads physical geometry rather than merely drawing one of four canned icons.
 
-**Geometry tells you what a place is.**
+Enclosure affects the room's span.
 
-**Atmosphere tells you what being there feels like.**
+Depth affects perspective.
 
-**Patina tells you that something has happened there.**
+Verticality affects ceilings and arches.
 
-Patina is intentionally quiet in Kernel 0004. Repeated visits deepen the room's surface treatment without showing a visit counter. Portable objects left in a room can appear as small visual residue inside the scene.
+Focality affects the visual center of a shrine.
 
-Later history systems can make patina richer without replacing the room's canonical identity.
+Roughness changes material marks.
+
+Reflectivity changes brass and glass behavior.
+
+Humidity changes haze.
+
+Reverberation changes visual echoes.
+
+Anomaly-law determines impossible behavior such as source-less rain or breathing masonry.
+
+The renderer is learning physics rather than room names.
+
+## Semantic grammar
+
+`world/semantic-grammar.json` is the first lexicon of the world beneath the words.
+
+It gives Genesis structured meaning for forms, materials, atmospheres, and phenomena, along with deterministic phrase families used by the language renderer.
+
+The long-term goal is not infinite adjective lists.
+
+It is a compact set of meaningful primitives that can combine into places whose prose, visuals, sound, interaction, and future machine interpretation all agree about what is actually there.
 
 ## Existing canon
 
-Rooms born before Kernel 0004 are not erased.
+Rooms born before Kernel 0005 are not invalidated.
 
-If an older generated room does not already carry stored visual DNA, the renderer reconstructs its profile deterministically from the Genesis metadata it already possesses.
+If an older generated room does not yet carry Scene Truth, the renderer reconstructs it deterministically from the Genesis metadata already preserved in that room.
 
-New rooms store their resolved visual profile at birth.
+New rooms store Scene Truth at birth.
 
-So the visual upgrade respects prior history instead of declaring the old halls invalid.
+Old halls remain old halls.
 
-## The Studio language
+They have simply become more legible.
 
-Sanctum's presentation is deliberately moving toward the same broader visual language intended for Viryn Studio:
+## The deeper architecture
 
-- editorial rather than dashboard-like,
-- warm and tactile,
-- ornamental without becoming heavy,
-- intimate rather than gamified,
-- richly composed while remaining technically light.
+The pipeline is now:
 
-The point is not to imitate a static concept image.
+```text
+Genesis choices
+      ↓
+  Scene Truth
+      ↓
+ ┌────┼─────────┐
+ ↓    ↓         ↓
+prose chroma geometry
+```
 
-The point is to make the **system capable of producing that degree of atmosphere from world-state**.
+That opens a much larger possibility.
+
+Future renderers can read the exact same world:
+
+- audio,
+- tactile/haptic expression,
+- accessibility narration,
+- alternate visual styles,
+- DreamSocket reasoning,
+- machine traversal,
+- memory summaries,
+- different devices.
+
+None of those systems need to invent the room again.
+
+They translate the same reality.
 
 ## Current storage boundary
 
-Kernel 0004 still persists to `localStorage`.
+Kernel 0005 still persists to `localStorage`.
 
-Each browser still carries its own history.
+Each browser still carries its own lived history.
 
-That remains useful: identical laws can currently produce different lived worlds on different machines.
+That remains useful while we discover which truths belong to cosmology and which belong to the traveler.
 
-Shared canon is a later threshold.
+Shared canon remains a later threshold.
 
 ## Run
 
@@ -158,7 +210,7 @@ No database.
 
 No AI runtime.
 
-The renderer is still plain browser technology: HTML, CSS, JavaScript, JSON, and SVG.
+HTML, CSS, JavaScript, JSON, and SVG remain enough.
 
 First the world remembered.
 
@@ -166,4 +218,6 @@ Then it learned to become.
 
 Then it learned to become somewhere.
 
-Now it is learning to **look like what it means**.
+Then it learned to look like what it means.
+
+Now it is learning the difference between **what a place is** and **how a place is expressed**.

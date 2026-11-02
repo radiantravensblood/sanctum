@@ -67,7 +67,8 @@ export function crossFrontier({
           originRoomId: state.location,
           sourceThresholdId: threshold.id,
           returnDirection,
-          visualGrammar: world.visualGrammar
+          visualGrammar: world.visualGrammar,
+          semanticGrammar: world.semanticGrammar
         });
 
   const verdict = validateDelta(delta, state, world);
