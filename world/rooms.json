@@ -1,1 +1,45 @@
-
+{
+  "hearth": {
+    "id": "hearth",
+    "name": "The Hearth",
+    "region": "Outer Circle",
+    "symbol": "⌂",
+    "description": "The fire has burned low, but it has not gone out. Velvet-dark walls keep the room close without making it small.",
+    "lookText": "A low fire, two deep cushions, and one open doorway. Nothing here is asking you to become anything.",
+    "sitText": "You settle beside the fire. Nothing rewards you. Nothing interrupts you. The room remains.",
+    "objects": ["low_fire", "hearth_cushion"],
+    "exits": {
+      "east": "gallery"
+    }
+  },
+  "gallery": {
+    "id": "gallery",
+    "name": "The Gallery of Unfinished Things",
+    "region": "Outer Circle",
+    "symbol": "□",
+    "description": "Frames line the walls with more patience than purpose. Some are empty. Some seem to be waiting for an image that has not happened yet.",
+    "lookText": "The Hearth waits west. A quieter passage continues north. One blue flower rests beneath an empty frame.",
+    "sitText": "You sit beneath the unfinished frames. They do not hurry to become complete.",
+    "objects": ["blue_flower", "empty_frame"],
+    "exits": {
+      "west": "hearth",
+      "north": "threshold"
+    }
+  },
+  "threshold": {
+    "id": "threshold",
+    "name": "The Threshold",
+    "region": "Initiated Circle",
+    "symbol": "◇",
+    "description": "A tall mirror occupies the northern wall. It reflects the room exactly, except for a darkness where another doorway might someday be.",
+    "lookText": "South returns to the Gallery. North is presently a mirror and nothing more.",
+    "sitText": "You sit before the mirror. Your reflection is under no obligation to explain itself.",
+    "objects": ["tall_mirror"],
+    "exits": {
+      "south": "gallery",
+      "north": {
+        "threshold": "north_mirror"
+      }
+    }
+  }
+}

@@ -1,1 +1,32 @@
-
+{
+  "low_fire": {
+    "id": "low_fire",
+    "name": "low fire",
+    "portable": false,
+    "inspectText": "Embers settle and brighten in their own time. The fire is small, not dying."
+  },
+  "hearth_cushion": {
+    "id": "hearth_cushion",
+    "name": "velvet cushion",
+    "portable": false,
+    "inspectText": "Worn just enough to prove somebody has rested here before."
+  },
+  "blue_flower": {
+    "id": "blue_flower",
+    "name": "pressed blue flower",
+    "portable": true,
+    "inspectText": "A small blue flower, already pressed flat. No label explains where it came from."
+  },
+  "empty_frame": {
+    "id": "empty_frame",
+    "name": "empty frame",
+    "portable": false,
+    "inspectText": "The frame is beautifully made. Its emptiness feels intentional rather than unfinished."
+  },
+  "tall_mirror": {
+    "id": "tall_mirror",
+    "name": "tall mirror",
+    "portable": false,
+    "inspectText": "Your reflection keeps perfect time. The darkness behind it does not."
+  }
+}

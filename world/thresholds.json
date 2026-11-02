@@ -1,1 +1,11 @@
-
+{
+  "north_mirror": {
+    "id": "north_mirror",
+    "state": "closed",
+    "target": null,
+    "requires": ["siege", "viryn"],
+    "mode": "unanimous",
+    "mutableByModel": false,
+    "closedText": "The mirror remains a mirror. Whatever lies beyond it has not been invited into existence yet."
+  }
+}

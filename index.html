@@ -1,1 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#140d16">
+  <title>Sanctum</title>
+  <meta name="description" content="A small sovereign place that remembers.">
+  <link rel="stylesheet" href="./styles/sanctum.css">
+</head>
+<body data-room="hearth">
+  <main class="sanctum-shell" aria-live="polite">
+    <header class="sanctum-header">
+      <div>
+        <p class="kicker">Velvet Sanctum / Kernel 0001</p>
+        <h1>Sanctum</h1>
+      </div>
+      <div class="seal" aria-label="Sanctum law">
+        <span class="seal-mark">◇</span>
+        <span>do not overwrite · reflect</span>
+      </div>
+    </header>
 
+    <section class="world-grid">
+      <article class="room-panel">
+        <div class="scene" id="scene" aria-hidden="true">
+          <div class="scene-orbit"></div>
+          <div class="scene-core"></div>
+          <div class="scene-symbol" id="scene-symbol">⌂</div>
+        </div>
+
+        <div class="room-copy">
+          <p class="room-region" id="room-region"></p>
+          <h2 id="room-title">The Hearth</h2>
+          <p class="room-description" id="room-description"></p>
+          <p class="response" id="response"></p>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading">
+            <h3>Here</h3>
+            <span>what the room currently holds</span>
+          </div>
+          <div class="object-list" id="object-list"></div>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading">
+            <h3>Ways through</h3>
+            <span>movement is an invitation, not a demand</span>
+          </div>
+          <div class="exit-list" id="exit-list"></div>
+        </div>
+      </article>
+
+      <aside class="memory-panel">
+        <section>
+          <div class="section-heading compact">
+            <h3>Carried</h3>
+            <span>nothing is bound to you</span>
+          </div>
+          <div class="inventory" id="inventory"></div>
+        </section>
+
+        <section>
+          <div class="section-heading compact">
+            <h3>Echoes</h3>
+            <span>recent machine memory</span>
+          </div>
+          <ol class="ledger" id="ledger"></ol>
+        </section>
+      </aside>
+    </section>
+
+    <nav class="verb-bar" aria-label="Sanctum actions">
+      <button type="button" data-fixed-verb="look">Look</button>
+      <button type="button" data-fixed-verb="sit">Sit</button>
+      <button type="button" data-fixed-verb="return">Return</button>
+      <span class="verb-law">look · move · inspect · take · leave · sit · return</span>
+    </nav>
+
+    <footer>
+      <p>The world does not resent your absence.</p>
+      <p class="build-note">No account. No streak. No optimization.</p>
+    </footer>
+  </main>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
