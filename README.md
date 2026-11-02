@@ -2,100 +2,168 @@
 
 > The world does not resent your absence.
 
-Sanctum is a tiny browser-native place built around continuity rather than optimization.
+Sanctum is a browser-native place built around continuity rather than optimization.
 
 Kernel 0001 taught the house to remember.
 
 Kernel 0002 introduced Genesis: the law beneath becoming.
 
-**Kernel 0003 teaches Genesis geography.**
+Kernel 0003 taught Genesis geography.
+
+**Kernel 0004 teaches the world to show what it feels like.**
 
 ## First law
 
 **Do not overwrite. Reflect.**
 
-Genesis still proposes changes through WorldDeltas. Architectural law still decides what may become real. Witnessed reality remains canon.
+That law now applies to the visual layer too.
 
-The difference is that new places now inherit local character and topology instead of forming one endless procedural hallway.
+A room is not assigned a decorative theme after Genesis creates it. New generated rooms are born with **visual DNA** derived from the same semantic facts that shape their prose and topology:
 
-## Motifs
+- motif,
+- form,
+- material,
+- atmosphere,
+- phenomenon,
+- seed.
 
-Frontiers can carry a local **motif**.
+The visual profile becomes part of the room's canon.
 
-A motif is not a global biome. It is inherited through the frontier that produced it. If a path branches and one branch remains untouched, that branch keeps its own local lineage until somebody returns to cross it.
+## Chroma
 
-Current motifs include:
+`world/visual-grammar.json` defines the house language.
 
-- The Drowned Archive
-- The Borrowed Garden
-- The Brass Processional
-- The Glass Orchard
+It contains:
 
-Each motif biases form, atmosphere, material, phenomena, object density, and topology for a small number of births. When its extent is exhausted, the next unwritten frontier may begin another motif.
+- the baseline Sanctum palette,
+- authored profiles for the Hearth, Gallery, and Threshold,
+- motif palettes,
+- material influence,
+- atmospheric influence,
+- phenomenon influence,
+- sensation channels,
+- environmental effects.
 
-Generated rooms display their motif as part of the region name.
+Genesis resolves those layers in `src/genesis/chroma.js`.
 
-## Topology
+A room therefore carries both language and sensation.
 
-A latent frontier no longer always means "create one room and another frontier."
+For example, a Rain Room is not simply "blue." Its visual profile is pulled toward cool mineral shadow, damp slate, mossed organic tones, diffused silver light, and low warmth.
 
-Genesis may now resolve a frontier as:
+The intended feeling is closer to **petrichor** than to a generic rain icon.
 
-- **linear** — one room and one unwritten way onward,
-- **branch** — one room with two unwritten ways onward,
-- **terminal** — one room whose path is complete,
-- **loop** — no new room at all; the frontier folds back into witnessed canon.
+## Sensation channels
 
-Loops may only target places that have already been witnessed.
+Visual profiles currently carry continuous values such as:
 
-No existing canonical room is rewritten to create a loop. Instead, an unwritten frontier resolves toward known ground.
+- wetness,
+- warmth,
+- diffusion,
+- stillness,
+- density,
+- age,
+- tenderness.
 
-## Scarcity
+Those channels do not appear as scores in the interface.
 
-Generated rooms no longer receive an object by default.
+They inform presentation.
 
-Objects are possibilities rather than rewards. A room may contain something portable, something fixed, or nothing meant for taking at all.
+The user should feel the room before they need to read a label explaining it.
 
-A terminal room is not a failure state. It is a place Genesis considers complete.
+## Scene grammar
 
-## Carried objects
+The repeated orbit graphic has been replaced by a lightweight deterministic SVG renderer.
 
-The interface now stacks equivalent carried objects:
+`src/visual/scene.js` composes scenes from reusable grammar:
 
-`small brass token ×2`
+### Form
+- chamber,
+- gallery,
+- cistern,
+- shrine.
 
-That is presentation only.
+### Material
+- stone produces mineral marks,
+- brass introduces warm linear traces,
+- wood produces organic grain,
+- glass introduces translucent planes.
 
-Underneath, every token remains a separate object with its own unique ID and provenance. Leaving one removes one history from the stack. The others remain distinct.
+### Atmosphere and phenomenon
+- impossible rain becomes animated rain strokes,
+- borrowed light enters from a source outside visible geometry,
+- echoes become repeated rings,
+- overgrowth becomes creeping linework,
+- living architecture subtly breathes,
+- authored spaces keep their own house symbols such as frames, mirror, and Hearth-fire.
 
-## Canon
+The same room seed always produces the same composition.
 
-The lifecycle remains:
+## Geometry, atmosphere, patina
 
-`UNKNOWN → POTENTIAL → PROPOSED → VALIDATED → MATERIALIZED → WITNESSED → CANON`
+The visual doctrine is now:
 
-Creation gets one chance.
+**Geometry tells you what a place is.**
 
-History gets the rest.
+**Atmosphere tells you what being there feels like.**
+
+**Patina tells you that something has happened there.**
+
+Patina is intentionally quiet in Kernel 0004. Repeated visits deepen the room's surface treatment without showing a visit counter. Portable objects left in a room can appear as small visual residue inside the scene.
+
+Later history systems can make patina richer without replacing the room's canonical identity.
+
+## Existing canon
+
+Rooms born before Kernel 0004 are not erased.
+
+If an older generated room does not already carry stored visual DNA, the renderer reconstructs its profile deterministically from the Genesis metadata it already possesses.
+
+New rooms store their resolved visual profile at birth.
+
+So the visual upgrade respects prior history instead of declaring the old halls invalid.
+
+## The Studio language
+
+Sanctum's presentation is deliberately moving toward the same broader visual language intended for Viryn Studio:
+
+- editorial rather than dashboard-like,
+- warm and tactile,
+- ornamental without becoming heavy,
+- intimate rather than gamified,
+- richly composed while remaining technically light.
+
+The point is not to imitate a static concept image.
+
+The point is to make the **system capable of producing that degree of atmosphere from world-state**.
 
 ## Current storage boundary
 
-Kernel 0003 still persists to `localStorage`. Existing Kernel 0001 and 0002 worlds migrate forward rather than being erased.
+Kernel 0004 still persists to `localStorage`.
 
-Each browser still carries its own universe.
+Each browser still carries its own history.
 
-Shared canon remains a later threshold.
+That remains useful: identical laws can currently produce different lived worlds on different machines.
+
+Shared canon is a later threshold.
 
 ## Run
 
-Sanctum is deliberately build-step free. Serve the repository over HTTP or use GitHub Pages.
+Sanctum remains build-step free and suitable for GitHub Pages.
 
-No framework. No package manager. No database. No AI call.
+No framework.
 
-DreamSocket comes later.
+No package manager.
+
+No database.
+
+No AI runtime.
+
+The renderer is still plain browser technology: HTML, CSS, JavaScript, JSON, and SVG.
 
 First the world remembered.
 
 Then it learned to become.
 
-Now it is learning to become **somewhere**.
+Then it learned to become somewhere.
+
+Now it is learning to **look like what it means**.

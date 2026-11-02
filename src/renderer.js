@@ -6,11 +6,14 @@ import {
   getObject,
   isGeneratedRoom
 } from "./world.js";
+import { applyRoomVisual } from "./visual/chroma.js";
+import { renderScene } from "./visual/scene.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
   const objects = getVisibleObjects(world, state);
   const inventory = getInventory(world, state);
+  const visual = applyRoomVisual({ room, world, state });
 
   document.body.dataset.room = room.id;
   document.body.dataset.generated = isGeneratedRoom(state, room.id)
@@ -23,6 +26,7 @@ export function render({ state, world, message, dispatch }) {
   setText("response", message || "");
   setText("scene-symbol", room.symbol || "◇");
 
+  renderScene({ room, visual, objects });
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
@@ -71,7 +75,11 @@ function renderExits(room, state, world, dispatch) {
   const exits = Object.entries(room.exits || {});
 
   if (!exits.length) {
-    root.append(empty("This place is complete. There is nowhere else it asks you to go."));
+    root.append(
+      empty(
+        "This place is complete. There is nowhere else it asks you to go."
+      )
+    );
     return;
   }
 

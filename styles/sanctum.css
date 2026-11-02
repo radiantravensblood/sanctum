@@ -447,3 +447,337 @@ body[data-generated="true"] .room-region {
 body[data-generated="true"] .room-region::after {
   white-space: nowrap;
 }
+
+
+/* Kernel 0004 — Chroma
+   Color is evidence of the room's interior truth. */
+:root {
+  --room-shadow: #120d13;
+  --room-field: #21141f;
+  --room-surface: #2e1c29;
+  --room-ink: #f3eadf;
+  --room-muted: #b6a6ae;
+  --room-accent: #d39a5d;
+  --room-glow: #e7b977;
+  --room-organic: #6f7655;
+  --room-line: rgba(243, 234, 223, 0.14);
+  --room-patina: 0.35;
+}
+
+body {
+  color: var(--room-ink);
+  background:
+    radial-gradient(circle at 18% -4%, color-mix(in srgb, var(--room-glow) 13%, transparent), transparent 36rem),
+    radial-gradient(circle at 82% 12%, color-mix(in srgb, var(--room-organic) 10%, transparent), transparent 42rem),
+    linear-gradient(180deg, var(--room-shadow) 0%, color-mix(in srgb, var(--room-shadow) 88%, black) 100%);
+  transition: background 900ms ease, color 600ms ease;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: calc(0.025 + var(--room-patina) * 0.045);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 3px,
+      color-mix(in srgb, var(--room-ink) 3%, transparent) 3px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 7px,
+      color-mix(in srgb, var(--room-accent) 2%, transparent) 7px 8px
+    );
+  mix-blend-mode: soft-light;
+  z-index: -1;
+}
+
+.sanctum-header,
+.verb-bar,
+footer {
+  border-color: var(--room-line);
+}
+
+.kicker,
+.room-region,
+.seal-mark,
+.response,
+.ledger li::before {
+  color: var(--room-accent);
+}
+
+.seal,
+.section-heading span,
+.verb-law,
+.build-note,
+.object-meta,
+.empty-state,
+footer {
+  color: var(--room-muted);
+}
+
+.room-panel,
+.memory-panel {
+  border-color: var(--room-line);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--room-surface) 34%, rgba(14, 10, 15, 0.88)),
+      color-mix(in srgb, var(--room-shadow) 58%, rgba(14, 10, 15, 0.94))
+    );
+  box-shadow:
+    0 28px 90px color-mix(in srgb, var(--room-shadow) 78%, black),
+    inset 0 1px 0 color-mix(in srgb, var(--room-glow) 7%, transparent);
+  transition: background 700ms ease, border-color 700ms ease, box-shadow 700ms ease;
+}
+
+.room-description,
+.ledger li {
+  color: color-mix(in srgb, var(--room-ink) 82%, var(--room-muted));
+}
+
+.scene {
+  position: relative;
+  min-height: 300px;
+  margin-bottom: 36px;
+  overflow: hidden;
+  border: 1px solid var(--room-line);
+  background: var(--room-shadow);
+  isolation: isolate;
+  transition: background 700ms ease, border-color 700ms ease;
+}
+
+body[data-generated="true"] .scene {
+  background: var(--room-shadow);
+}
+
+.scene::before,
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: auto;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.scene::before {
+  top: 18px;
+  right: 18px;
+  width: 74px;
+  height: 74px;
+  border-top: 1px solid color-mix(in srgb, var(--room-accent) 42%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--room-accent) 42%, transparent);
+  opacity: 0.7;
+  transform: none;
+  background: none;
+}
+
+.scene::after {
+  left: 18px;
+  bottom: 18px;
+  width: 74px;
+  height: 74px;
+  border-left: 1px solid color-mix(in srgb, var(--room-organic) 38%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--room-organic) 38%, transparent);
+  opacity: 0.6;
+  transform: none;
+  background: none;
+}
+
+.scene-canvas,
+.scene-canvas svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.scene-canvas {
+  min-height: 300px;
+}
+
+.scene-canvas svg {
+  min-height: 300px;
+}
+
+.scene-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 60%,
+      color-mix(in srgb, var(--room-shadow) 62%, transparent)
+    );
+}
+
+.scene-symbol {
+  position: static;
+  color: var(--room-glow);
+  font-size: 1.25rem;
+  text-shadow: 0 0 24px color-mix(in srgb, var(--room-glow) 55%, transparent);
+}
+
+.scene-law {
+  color: color-mix(in srgb, var(--room-muted) 82%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.object-card,
+.inventory-card,
+.exit-card {
+  border-color: var(--room-line);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--room-surface) 12%, transparent),
+      transparent
+    );
+}
+
+.action-button,
+.verb-bar button {
+  border-color: color-mix(in srgb, var(--room-accent) 36%, transparent);
+  color: var(--room-ink);
+}
+
+.action-button:hover,
+.verb-bar button:hover {
+  border-color: color-mix(in srgb, var(--room-glow) 78%, transparent);
+  background: color-mix(in srgb, var(--room-accent) 10%, transparent);
+}
+
+.response {
+  border-left-color: color-mix(in srgb, var(--room-accent) 68%, transparent);
+}
+
+.section-block {
+  border-color: var(--room-line);
+}
+
+.scene-architecture,
+.scene-material,
+.rain-field,
+.echo-field,
+.vine-field,
+.borrowed-light,
+.breathing-wall,
+.object-residue,
+.hearth-flame,
+.scene-glow {
+  transition: opacity 700ms ease;
+}
+
+.rain-field {
+  animation: rain-drift 3.6s linear infinite;
+}
+
+.echo-field {
+  animation: echo-breathe 6.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.vine-field {
+  animation: vine-sway 8s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.borrowed-light {
+  animation: light-wander 9s ease-in-out infinite alternate;
+}
+
+.breathing-wall {
+  animation: wall-breathe 5.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.hearth-flame {
+  animation: hearth-flicker 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes rain-drift {
+  from { transform: translateY(-10px); }
+  to { transform: translateY(18px); }
+}
+
+@keyframes echo-breathe {
+  0%, 100% { opacity: 0.72; transform: scale(0.985); }
+  50% { opacity: 1; transform: scale(1.018); }
+}
+
+@keyframes vine-sway {
+  from { transform: translateX(-2px) rotate(-0.15deg); }
+  to { transform: translateX(3px) rotate(0.18deg); }
+}
+
+@keyframes light-wander {
+  from { opacity: 0.1; transform: translateX(-8px); }
+  to { opacity: 0.2; transform: translateX(12px); }
+}
+
+@keyframes wall-breathe {
+  0%, 100% { opacity: 0.08; transform: scaleX(0.97); }
+  50% { opacity: 0.16; transform: scaleX(1.04); }
+}
+
+@keyframes hearth-flicker {
+  from { opacity: 0.3; transform: scaleY(0.96); }
+  to { opacity: 0.46; transform: scaleY(1.05); }
+}
+
+body[data-phenomenon="rain_without_sky"] .room-panel,
+body[data-phenomenon="rain_without_sky"] .memory-panel {
+  backdrop-filter: blur(22px) saturate(0.92);
+}
+
+body[data-phenomenon="misplaced_light"] .room-panel {
+  box-shadow:
+    0 28px 90px color-mix(in srgb, var(--room-shadow) 78%, black),
+    inset 0 1px 0 color-mix(in srgb, var(--room-glow) 18%, transparent);
+}
+
+body[data-atmosphere="overgrown"] .scene {
+  border-color: color-mix(in srgb, var(--room-organic) 42%, var(--room-line));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rain-field,
+  .echo-field,
+  .vine-field,
+  .borrowed-light,
+  .breathing-wall,
+  .hearth-flame {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 800px) {
+  .scene,
+  .scene-canvas,
+  .scene-canvas svg {
+    min-height: 240px;
+  }
+}
+
+@media (max-width: 560px) {
+  .scene,
+  .scene-canvas,
+  .scene-canvas svg {
+    min-height: 210px;
+  }
+
+  .scene-law {
+    display: none;
+  }
+}

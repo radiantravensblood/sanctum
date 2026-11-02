@@ -1,0 +1,314 @@
+{
+  "version": 1,
+  "house": {
+    "palette": {
+      "shadow": "#120d13",
+      "field": "#21141f",
+      "surface": "#2e1c29",
+      "ink": "#f3eadf",
+      "muted": "#b6a6ae",
+      "accent": "#d39a5d",
+      "glow": "#e7b977",
+      "organic": "#6f7655"
+    },
+    "sensation": {
+      "wetness": 0.05,
+      "warmth": 0.58,
+      "diffusion": 0.36,
+      "stillness": 0.62,
+      "density": 0.55,
+      "age": 0.72,
+      "tenderness": 0.72
+    },
+    "effects": ["ember_haze"]
+  },
+  "authored": {
+    "hearth": {
+      "palette": {
+        "shadow": "#120c0e",
+        "field": "#241414",
+        "surface": "#3b211c",
+        "ink": "#f7ecdf",
+        "muted": "#c0aaa1",
+        "accent": "#da8b45",
+        "glow": "#ffc173",
+        "organic": "#79644e"
+      },
+      "sensation": {
+        "wetness": 0.02,
+        "warmth": 0.92,
+        "diffusion": 0.48,
+        "stillness": 0.78,
+        "density": 0.62,
+        "age": 0.76,
+        "tenderness": 0.9
+      },
+      "effects": ["ember_haze", "hearth"]
+    },
+    "gallery": {
+      "palette": {
+        "shadow": "#100d15",
+        "field": "#20182a",
+        "surface": "#33263b",
+        "ink": "#f1e9e1",
+        "muted": "#aea3b7",
+        "accent": "#b69578",
+        "glow": "#c9a982",
+        "organic": "#596552"
+      },
+      "sensation": {
+        "wetness": 0.08,
+        "warmth": 0.46,
+        "diffusion": 0.54,
+        "stillness": 0.82,
+        "density": 0.5,
+        "age": 0.68,
+        "tenderness": 0.7
+      },
+      "effects": ["frames", "dust"]
+    },
+    "threshold": {
+      "palette": {
+        "shadow": "#0c0d13",
+        "field": "#171923",
+        "surface": "#292a36",
+        "ink": "#eeeae4",
+        "muted": "#a6a4b0",
+        "accent": "#b58c66",
+        "glow": "#aaa6cf",
+        "organic": "#535b55"
+      },
+      "sensation": {
+        "wetness": 0.04,
+        "warmth": 0.3,
+        "diffusion": 0.38,
+        "stillness": 0.9,
+        "density": 0.7,
+        "age": 0.74,
+        "tenderness": 0.48
+      },
+      "effects": ["mirror", "threshold_haze"]
+    }
+  },
+  "motifs": {
+    "drowned_archive": {
+      "blend": 0.78,
+      "palette": {
+        "shadow": "#0d1418",
+        "field": "#1b2a2e",
+        "surface": "#2b3b3d",
+        "ink": "#e9eee9",
+        "muted": "#9eafaa",
+        "accent": "#9b7a54",
+        "glow": "#78989b",
+        "organic": "#53695b"
+      },
+      "sensation": {
+        "wetness": 0.88,
+        "warmth": 0.18,
+        "diffusion": 0.8,
+        "stillness": 0.7,
+        "density": 0.8,
+        "age": 0.9,
+        "tenderness": 0.42
+      },
+      "effects": ["mineral_haze"]
+    },
+    "borrowed_garden": {
+      "blend": 0.76,
+      "palette": {
+        "shadow": "#11150f",
+        "field": "#20291d",
+        "surface": "#35402d",
+        "ink": "#f0eee1",
+        "muted": "#aeb39c",
+        "accent": "#c29259",
+        "glow": "#d5c58a",
+        "organic": "#73815b"
+      },
+      "sensation": {
+        "wetness": 0.42,
+        "warmth": 0.6,
+        "diffusion": 0.72,
+        "stillness": 0.58,
+        "density": 0.62,
+        "age": 0.68,
+        "tenderness": 0.82
+      },
+      "effects": ["leaf_haze"]
+    },
+    "brass_processional": {
+      "blend": 0.8,
+      "palette": {
+        "shadow": "#15100d",
+        "field": "#2a1d14",
+        "surface": "#47301d",
+        "ink": "#f4eadb",
+        "muted": "#b7a28e",
+        "accent": "#c58942",
+        "glow": "#e7a95b",
+        "organic": "#6d6547"
+      },
+      "sensation": {
+        "wetness": 0.1,
+        "warmth": 0.76,
+        "diffusion": 0.42,
+        "stillness": 0.45,
+        "density": 0.78,
+        "age": 0.86,
+        "tenderness": 0.42
+      },
+      "effects": ["brass_dust"]
+    },
+    "glass_orchard": {
+      "blend": 0.76,
+      "palette": {
+        "shadow": "#111719",
+        "field": "#1c2928",
+        "surface": "#2e3c38",
+        "ink": "#eef1e8",
+        "muted": "#a5b4ac",
+        "accent": "#b59d70",
+        "glow": "#b6d0c2",
+        "organic": "#657a63"
+      },
+      "sensation": {
+        "wetness": 0.32,
+        "warmth": 0.36,
+        "diffusion": 0.84,
+        "stillness": 0.82,
+        "density": 0.4,
+        "age": 0.6,
+        "tenderness": 0.78
+      },
+      "effects": ["glass_bloom"]
+    }
+  },
+  "materials": {
+    "stone": {
+      "blend": 0.14,
+      "palette": {
+        "field": "#22272a",
+        "surface": "#353a3b",
+        "accent": "#9a8872"
+      },
+      "sensation": { "density": 0.92, "age": 0.9 }
+    },
+    "brass": {
+      "blend": 0.2,
+      "palette": {
+        "surface": "#4a3321",
+        "accent": "#c9924e",
+        "glow": "#e2ad64"
+      },
+      "sensation": { "warmth": 0.68, "density": 0.7 }
+    },
+    "wood": {
+      "blend": 0.18,
+      "palette": {
+        "surface": "#3a2b20",
+        "accent": "#b58d63",
+        "organic": "#77664e"
+      },
+      "sensation": { "warmth": 0.72, "tenderness": 0.75 }
+    },
+    "glass": {
+      "blend": 0.18,
+      "palette": {
+        "surface": "#2b3838",
+        "glow": "#acd0c8",
+        "accent": "#9db9ae"
+      },
+      "sensation": { "diffusion": 0.88, "density": 0.3 }
+    }
+  },
+  "atmospheres": {
+    "still": {
+      "blend": 0.1,
+      "palette": { "field": "#1a1e22", "muted": "#a7a8aa" },
+      "sensation": { "stillness": 0.94, "diffusion": 0.42 },
+      "effects": ["slow_drift"]
+    },
+    "warm": {
+      "blend": 0.14,
+      "palette": { "field": "#302118", "glow": "#e7a866", "accent": "#cf8a4b" },
+      "sensation": { "warmth": 0.9, "tenderness": 0.74 },
+      "effects": ["warm_bloom"]
+    },
+    "echoing": {
+      "blend": 0.1,
+      "palette": { "field": "#1b2227", "glow": "#8ea5ad" },
+      "sensation": { "stillness": 0.48, "density": 0.62 },
+      "effects": ["echo_rings"]
+    },
+    "overgrown": {
+      "blend": 0.16,
+      "palette": { "field": "#1a261a", "organic": "#71805a", "accent": "#b29d67" },
+      "sensation": { "wetness": 0.48, "tenderness": 0.8 },
+      "effects": ["vines"]
+    }
+  },
+  "phenomena": {
+    "rain_without_sky": {
+      "blend": 0.34,
+      "palette": {
+        "shadow": "#0c1519",
+        "field": "#1b2f36",
+        "surface": "#294147",
+        "accent": "#8d9f96",
+        "glow": "#94afb9",
+        "organic": "#64745f"
+      },
+      "sensation": {
+        "wetness": 0.98,
+        "warmth": 0.16,
+        "diffusion": 0.9,
+        "stillness": 0.58
+      },
+      "effects": ["rain", "petrichor"]
+    },
+    "misplaced_light": {
+      "blend": 0.28,
+      "palette": {
+        "field": "#25281f",
+        "surface": "#36362b",
+        "accent": "#c8a76c",
+        "glow": "#ead99d"
+      },
+      "sensation": {
+        "warmth": 0.58,
+        "diffusion": 0.72,
+        "tenderness": 0.8
+      },
+      "effects": ["borrowed_light"]
+    },
+    "temporal_echo": {
+      "blend": 0.22,
+      "palette": {
+        "field": "#202329",
+        "accent": "#9a8fa4",
+        "glow": "#afa6bd"
+      },
+      "sensation": {
+        "stillness": 0.44,
+        "density": 0.6
+      },
+      "effects": ["echo_rings", "ghost_lines"]
+    },
+    "living_architecture": {
+      "blend": 0.22,
+      "palette": {
+        "field": "#25211f",
+        "surface": "#3a302a",
+        "accent": "#ae8666",
+        "organic": "#7f735f"
+      },
+      "sensation": {
+        "warmth": 0.52,
+        "stillness": 0.28,
+        "density": 0.84
+      },
+      "effects": ["breathing_wall"]
+    }
+  }
+}

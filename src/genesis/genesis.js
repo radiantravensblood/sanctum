@@ -66,7 +66,8 @@ export function crossFrontier({
           creationIndex,
           originRoomId: state.location,
           sourceThresholdId: threshold.id,
-          returnDirection
+          returnDirection,
+          visualGrammar: world.visualGrammar
         });
 
   const verdict = validateDelta(delta, state, world);

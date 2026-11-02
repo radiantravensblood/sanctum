@@ -1,6 +1,7 @@
 import { createSeededRandom, pick } from "./seed.js";
 import { createProvenance } from "./provenance.js";
 import { scopePool } from "./motif.js";
+import { composeVisualProfile } from "./chroma.js";
 
 export function composeBirth({
   seed,
@@ -11,6 +12,7 @@ export function composeBirth({
   originRoomId,
   sourceThresholdId,
   returnDirection,
+  visualGrammar,
   trigger = "cross_threshold"
 }) {
   const random = createSeededRandom(seed + ":grammar");
@@ -53,6 +55,16 @@ export function composeBirth({
     phenomenon.nameVariants || [phenomenon.title]
   );
 
+  const visual = composeVisualProfile({
+    visualGrammar,
+    motif,
+    material,
+    atmosphere,
+    phenomenon,
+    form,
+    seed
+  });
+
   const room = {
     id: roomId,
     name: roomName,
@@ -76,6 +88,7 @@ export function composeBirth({
     exits: {
       [returnDirection]: originRoomId
     },
+    visual,
     genesis: {
       seed,
       realm: realm.id,
