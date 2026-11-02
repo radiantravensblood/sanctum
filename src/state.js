@@ -1,31 +1,47 @@
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 1;
+const VERSION = 2;
 
 export function loadState(world) {
+  const base = createInitialState(world);
+
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return createInitialState(world);
+    if (!saved) return base;
 
-    const parsed = JSON.parse(saved);
-    if (parsed.version !== VERSION) return createInitialState(world);
-    if (!world.rooms[parsed.location]) parsed.location = "hearth";
+    const parsed = migrateState(JSON.parse(saved), world);
+    if (!parsed) return base;
 
-    return {
-      ...createInitialState(world),
+    const restored = {
+      ...base,
       ...parsed,
       objectLocations: {
-        ...createInitialObjectLocations(world),
+        ...base.objectLocations,
         ...(parsed.objectLocations || {})
       },
       thresholdStates: {
-        ...createInitialThresholdStates(world),
+        ...base.thresholdStates,
         ...(parsed.thresholdStates || {})
       },
-      ledger: Array.isArray(parsed.ledger) ? parsed.ledger : []
+      thresholdTargets: {
+        ...base.thresholdTargets,
+        ...(parsed.thresholdTargets || {})
+      },
+      visits: {
+        ...base.visits,
+        ...(parsed.visits || {})
+      },
+      ledger: Array.isArray(parsed.ledger) ? parsed.ledger : [],
+      genesis: mergeGenesis(base.genesis, parsed.genesis)
     };
+
+    if (!getKnownRoom(restored, world, restored.location)) {
+      restored.location = "hearth";
+    }
+
+    return restored;
   } catch (error) {
     console.warn("Sanctum state could not be restored.", error);
-    return createInitialState(world);
+    return base;
   }
 }
 
@@ -39,6 +55,7 @@ export function createInitialState(world) {
     location: "hearth",
     objectLocations: createInitialObjectLocations(world),
     thresholdStates: createInitialThresholdStates(world),
+    thresholdTargets: {},
     visits: { hearth: 1 },
     ledger: [
       {
@@ -47,8 +64,77 @@ export function createInitialState(world) {
         action: "arrive",
         room: "hearth"
       }
-    ]
+    ],
+    genesis: createInitialGenesis(world)
   };
+}
+
+function createInitialGenesis(world) {
+  return {
+    worldSeed: world.genesis.worldSeed,
+    counters: {},
+    generated: {
+      rooms: {},
+      objects: {},
+      thresholds: {}
+    },
+    provenance: {},
+    witnessed: {},
+    canonical: {}
+  };
+}
+
+function mergeGenesis(base, saved = {}) {
+  return {
+    ...base,
+    ...saved,
+    counters: {
+      ...base.counters,
+      ...(saved.counters || {})
+    },
+    generated: {
+      rooms: {
+        ...base.generated.rooms,
+        ...((saved.generated && saved.generated.rooms) || {})
+      },
+      objects: {
+        ...base.generated.objects,
+        ...((saved.generated && saved.generated.objects) || {})
+      },
+      thresholds: {
+        ...base.generated.thresholds,
+        ...((saved.generated && saved.generated.thresholds) || {})
+      }
+    },
+    provenance: {
+      ...base.provenance,
+      ...(saved.provenance || {})
+    },
+    witnessed: {
+      ...base.witnessed,
+      ...(saved.witnessed || {})
+    },
+    canonical: {
+      ...base.canonical,
+      ...(saved.canonical || {})
+    }
+  };
+}
+
+function migrateState(saved, world) {
+  if (!saved || typeof saved !== "object") return null;
+  if (saved.version > VERSION) return null;
+
+  if (saved.version === 1 || !saved.version) {
+    return {
+      ...saved,
+      version: VERSION,
+      thresholdTargets: saved.thresholdTargets || {},
+      genesis: saved.genesis || createInitialGenesis(world)
+    };
+  }
+
+  return saved;
 }
 
 function createInitialObjectLocations(world) {
@@ -69,14 +155,25 @@ function createInitialThresholdStates(world) {
   );
 }
 
+function getKnownRoom(state, world, roomId) {
+  return (
+    world.rooms[roomId] ||
+    (state.genesis.generated &&
+      state.genesis.generated.rooms &&
+      state.genesis.generated.rooms[roomId])
+  );
+}
+
 export function appendEvent(state, event) {
+  const { actor = "siege", ...rest } = event;
+
   state.ledger.push({
     at: new Date().toISOString(),
-    actor: "siege",
-    ...event
+    actor,
+    ...rest
   });
 
-  if (state.ledger.length > 80) {
-    state.ledger = state.ledger.slice(-80);
+  if (state.ledger.length > 120) {
+    state.ledger = state.ledger.slice(-120);
   }
 }

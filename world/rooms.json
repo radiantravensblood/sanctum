@@ -31,14 +31,17 @@
     "name": "The Threshold",
     "region": "Initiated Circle",
     "symbol": "◇",
-    "description": "A tall mirror occupies the northern wall. It reflects the room exactly, except for a darkness where another doorway might someday be.",
-    "lookText": "South returns to the Gallery. North is presently a mirror and nothing more.",
+    "description": "A tall mirror occupies the northern wall. It reflects the room exactly, except for a darkness where another doorway might someday be. To the east, the architecture thins into an unwritten edge.",
+    "lookText": "South returns to the Gallery. North is presently a mirror and nothing more. East is not a doorway so much as the possibility of one.",
     "sitText": "You sit before the mirror. Your reflection is under no obligation to explain itself.",
     "objects": ["tall_mirror"],
     "exits": {
       "south": "gallery",
       "north": {
         "threshold": "north_mirror"
+      },
+      "east": {
+        "threshold": "seed_gate"
       }
     }
   }

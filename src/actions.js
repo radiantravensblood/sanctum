@@ -1,8 +1,17 @@
 import { appendEvent } from "./state.js";
-import { getRoom, getThresholdState, getVisibleObjects, getInventory } from "./world.js";
+import {
+  getRoom,
+  getObject,
+  getThresholdState,
+  getVisibleObjects,
+  getInventory,
+  isGeneratedRoom
+} from "./world.js";
+import { crossFrontier } from "./genesis/genesis.js";
+import { markWitnessed } from "./genesis/provenance.js";
 
 export function performAction({ verb, target = null, state, world }) {
-  const room = getRoom(world, state.location);
+  const room = getRoom(world, state, state.location);
 
   switch (verb) {
     case "look":
@@ -34,7 +43,7 @@ export function performAction({ verb, target = null, state, world }) {
 }
 
 function move(direction, state, world) {
-  const room = getRoom(world, state.location);
+  const room = getRoom(world, state, state.location);
   const exit = room.exits && room.exits[direction];
 
   if (!exit) {
@@ -42,10 +51,25 @@ function move(direction, state, world) {
   }
 
   if (typeof exit === "object" && exit.threshold) {
-    const threshold = getThresholdState(world, state, exit.threshold);
+    let threshold = getThresholdState(world, state, exit.threshold);
 
     if (!threshold) {
       return result(state, "Something about this boundary is unreadable.");
+    }
+
+    if (threshold.state === "latent" && threshold.mode === "frontier") {
+      const birth = crossFrontier({
+        threshold,
+        direction,
+        state,
+        world
+      });
+
+      if (!birth.allowed) {
+        return result(state, birth.message);
+      }
+
+      threshold = getThresholdState(world, state, exit.threshold);
     }
 
     if (threshold.state !== "open" || !threshold.target) {
@@ -64,7 +88,8 @@ function move(direction, state, world) {
 }
 
 function enterRoom(targetRoomId, direction, state, world) {
-  const targetRoom = world.rooms[targetRoomId];
+  const targetRoom = getRoom(world, state, targetRoomId, { fallback: false });
+
   if (!targetRoom) {
     return result(state, "The path has no stable destination.");
   }
@@ -80,6 +105,13 @@ function enterRoom(targetRoomId, direction, state, world) {
     direction
   });
 
+  if (isGeneratedRoom(state, targetRoomId) && markWitnessed(state, targetRoomId)) {
+    appendEvent(state, {
+      action: "witness",
+      room: targetRoomId
+    });
+  }
+
   return result(state, targetRoom.description);
 }
 
@@ -89,7 +121,7 @@ function inspect(objectId, state, world) {
     ...getInventory(world, state)
   ].some((object) => object.id === objectId);
 
-  const object = world.objects[objectId];
+  const object = getObject(world, state, objectId);
 
   if (!object || !visible) {
     return result(state, "That is not presently within reach.");
@@ -105,7 +137,7 @@ function inspect(objectId, state, world) {
 }
 
 function take(objectId, state, world) {
-  const object = world.objects[objectId];
+  const object = getObject(world, state, objectId);
 
   if (!object || state.objectLocations[objectId] !== state.location) {
     return result(state, "That is not here to take.");
@@ -127,7 +159,7 @@ function take(objectId, state, world) {
 }
 
 function leave(objectId, state, world) {
-  const object = world.objects[objectId];
+  const object = getObject(world, state, objectId);
 
   if (!object || state.objectLocations[objectId] !== "inventory") {
     return result(state, "You are not carrying that.");
@@ -160,7 +192,7 @@ function returnHome(state, world) {
     to: "hearth"
   });
 
-  return result(state, getRoom(world, "hearth").description);
+  return result(state, getRoom(world, state, "hearth").description);
 }
 
 function result(state, message) {

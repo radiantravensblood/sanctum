@@ -6,7 +6,7 @@ import { render } from "./renderer.js";
 async function ignite() {
   const world = await loadWorld();
   let state = loadState(world);
-  let message = getRoom(world, state.location).description;
+  let message = getRoom(world, state, state.location).description;
 
   const dispatch = (verb, target = null) => {
     const outcome = performAction({
@@ -50,7 +50,7 @@ ignite().catch((error) => {
     '<main class="sanctum-shell">',
     '<p class="kicker">Threshold fault</p>',
     '<h1>The Sanctum could not ignite.</h1>',
-    '<p class="room-description">Serve this repository over HTTP so the world files can be read. The house is intact; the doorway simply needs a proper threshold.</p>',
+    '<p class="room-description">The house is intact, but one of its laws could not be read.</p>',
     '</main>'
   ].join("");
 });

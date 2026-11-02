@@ -1,11 +1,20 @@
-import { getRoom, getVisibleObjects, getInventory, getThresholdState } from "./world.js";
+import {
+  getRoom,
+  getVisibleObjects,
+  getInventory,
+  getThresholdState,
+  getObject,
+  isGeneratedRoom
+} from "./world.js";
 
 export function render({ state, world, message, dispatch }) {
-  const room = getRoom(world, state.location);
+  const room = getRoom(world, state, state.location);
   const objects = getVisibleObjects(world, state);
   const inventory = getInventory(world, state);
 
   document.body.dataset.room = room.id;
+  document.body.dataset.generated = isGeneratedRoom(state, room.id) ? "true" : "false";
+
   setText("room-region", room.region);
   setText("room-title", room.name);
   setText("room-description", room.description);
@@ -61,9 +70,17 @@ function renderExits(room, state, world, dispatch) {
 
     if (typeof exit === "object" && exit.threshold) {
       const threshold = getThresholdState(world, state, exit.threshold);
-      label.textContent = direction + " · " + (threshold && threshold.state === "open" ? "open threshold" : "unopened threshold");
+
+      if (threshold && threshold.state === "latent") {
+        label.textContent = direction + " · unwritten frontier";
+      } else if (threshold && threshold.state === "open") {
+        const destination = getRoom(world, state, threshold.target, { fallback: false });
+        label.textContent = direction + " · " + (destination ? destination.name : "open threshold");
+      } else {
+        label.textContent = direction + " · unopened threshold";
+      }
     } else {
-      const destination = world.rooms[exit];
+      const destination = getRoom(world, state, exit, { fallback: false });
       label.textContent = direction + " · " + (destination ? destination.name : "unknown");
     }
 
@@ -108,24 +125,33 @@ function renderLedger(state, world) {
   const root = document.getElementById("ledger");
   root.replaceChildren();
 
-  state.ledger.slice(-7).reverse().forEach((event) => {
+  state.ledger.slice(-8).reverse().forEach((event) => {
     const item = document.createElement("li");
-    item.textContent = describeEvent(event, world);
+    item.textContent = describeEvent(event, state, world);
     root.append(item);
   });
 }
 
-function describeEvent(event, world) {
-  const roomName = event.room && world.rooms[event.room] ? world.rooms[event.room].name : null;
-  const objectName = event.object && world.objects[event.object] ? world.objects[event.object].name : null;
+function describeEvent(event, state, world) {
+  const room = event.room
+    ? getRoom(world, state, event.room, { fallback: false })
+    : null;
+  const object = event.object
+    ? getObject(world, state, event.object)
+    : null;
+
+  const roomName = room ? room.name : null;
+  const objectName = object ? object.name : null;
 
   switch (event.action) {
     case "arrive":
       return "Arrived at the Hearth.";
     case "look":
       return "Looked around " + roomName + ".";
-    case "move":
-      return "Moved " + event.direction + " into " + world.rooms[event.to].name + ".";
+    case "move": {
+      const destination = getRoom(world, state, event.to, { fallback: false });
+      return "Moved " + event.direction + " into " + (destination ? destination.name : "the unknown") + ".";
+    }
     case "inspect":
       return "Inspected the " + objectName + ".";
     case "take":
@@ -138,6 +164,12 @@ function describeEvent(event, world) {
       return event.from === "hearth" ? "Remained at the Hearth." : "Returned to the Hearth.";
     case "meet_threshold":
       return "Met an unopened threshold.";
+    case "genesis_birth": {
+      const born = getRoom(world, state, event.room, { fallback: false });
+      return "Genesis gave shape to " + (born ? born.name : "a room") + ".";
+    }
+    case "witness":
+      return roomName + " was witnessed and became canon.";
     default:
       return "Something happened quietly.";
   }

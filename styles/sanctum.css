@@ -404,3 +404,22 @@ footer p {
     flex-direction: column;
   }
 }
+
+
+/* Genesis: generated rooms retain the same house language, but carry a faint frontier signature. */
+body[data-generated="true"] .scene {
+  background:
+    radial-gradient(circle at 50% 45%, rgba(209, 155, 102, 0.10), transparent 19%),
+    radial-gradient(circle at 30% 70%, rgba(112, 82, 128, 0.15), transparent 38%),
+    linear-gradient(145deg, rgba(255,255,255,0.015), rgba(0,0,0,0.16));
+}
+
+body[data-generated="true"] .scene-orbit {
+  border-style: dashed;
+  opacity: 0.76;
+}
+
+body[data-generated="true"] .room-region::after {
+  content: " · witnessed frontier";
+  color: var(--muted);
+}

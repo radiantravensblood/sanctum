@@ -1,0 +1,129 @@
+{
+  "id": "frontier",
+  "name": "The Unwritten Frontier",
+  "regionName": "Unwritten Realm",
+  "forwardDirection": "north",
+  "frontierText": "Beyond this edge, the world has not been written yet.",
+  "forms": [
+    {
+      "id": "chamber",
+      "label": "Chamber",
+      "description": "The space gathers itself into a chamber with no obvious purpose.",
+      "sitText": "You sit where the room seems least certain of itself."
+    },
+    {
+      "id": "gallery",
+      "label": "Gallery",
+      "description": "A long room draws itself out ahead, narrow enough to feel intentional.",
+      "sitText": "You sit along the wall and let the length of the place stop mattering."
+    },
+    {
+      "id": "cistern",
+      "label": "Cistern",
+      "description": "The floor lowers into an old basin whose edges disappear into shadow.",
+      "sitText": "You sit above the basin and listen for a depth you cannot measure."
+    },
+    {
+      "id": "shrine",
+      "label": "Shrine",
+      "description": "The room arranges itself around a quiet center without naming what belongs there.",
+      "sitText": "You sit near the center. No devotion is demanded of you."
+    }
+  ],
+  "atmospheres": [
+    {
+      "id": "still",
+      "title": "Still",
+      "description": "The air is so still that small sounds seem to remain after they are made."
+    },
+    {
+      "id": "warm",
+      "title": "Warm",
+      "description": "A low warmth rises from somewhere beneath the floor."
+    },
+    {
+      "id": "echoing",
+      "title": "Echoing",
+      "description": "Sound returns softly, never quite from the direction it left."
+    },
+    {
+      "id": "overgrown",
+      "title": "Overgrown",
+      "description": "Pale vines have found seams in the architecture and made patient use of them."
+    }
+  ],
+  "materials": [
+    {
+      "id": "stone",
+      "label": "Stone",
+      "description": "Dark stone holds the shape of the room."
+    },
+    {
+      "id": "brass",
+      "label": "Brass",
+      "description": "Thin lines of aged brass interrupt the surfaces like remembered handwriting."
+    },
+    {
+      "id": "wood",
+      "label": "Wood",
+      "description": "Old wood appears where structure requires tenderness instead of weight."
+    },
+    {
+      "id": "glass",
+      "label": "Glass",
+      "description": "Clouded glass catches light without revealing what might be behind it."
+    }
+  ],
+  "phenomena": [
+    {
+      "id": "rain_without_sky",
+      "title": "Rain Room",
+      "description": "Rain falls through part of the room, although there is no sky and no visible source of water.",
+      "inspectEcho": "The water is real enough to touch. Its source remains politely absent."
+    },
+    {
+      "id": "misplaced_light",
+      "title": "Borrowed Light",
+      "description": "A soft daylight occupies one corner, belonging to no window you can find.",
+      "inspectEcho": "The light has direction but no visible origin."
+    },
+    {
+      "id": "temporal_echo",
+      "title": "Second Echo",
+      "description": "Every few moments, the room repeats one tiny sound that happened several breaths ago.",
+      "inspectEcho": "The repetition is exact, but it never chooses the loudest sound."
+    },
+    {
+      "id": "living_architecture",
+      "title": "Breathing Wall",
+      "description": "One wall expands and settles by a fraction, slowly enough that certainty takes time.",
+      "inspectEcho": "Stone should not breathe. This stone declines to discuss the matter."
+    }
+  ],
+  "objects": [
+    {
+      "id": "dry_chair",
+      "name": "dry wooden chair",
+      "portable": false,
+      "inspectText": "The chair is completely dry, even where the room around it is not."
+    },
+    {
+      "id": "brass_token",
+      "name": "small brass token",
+      "portable": true,
+      "inspectText": "One side is smooth. The other bears a doorway too small to enter."
+    },
+    {
+      "id": "white_thread",
+      "name": "length of white thread",
+      "portable": true,
+      "inspectText": "The thread has been cut cleanly at both ends. It is longer than it first appears."
+    },
+    {
+      "id": "glass_bell",
+      "name": "clouded glass bell",
+      "portable": false,
+      "inspectText": "The bell has no clapper. Something inside it seems to remember sound anyway."
+    }
+  ]
+}

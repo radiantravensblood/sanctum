@@ -7,5 +7,14 @@
     "mode": "unanimous",
     "mutableByModel": false,
     "closedText": "The mirror remains a mirror. Whatever lies beyond it has not been invited into existence yet."
+  },
+  "seed_gate": {
+    "id": "seed_gate",
+    "state": "latent",
+    "target": null,
+    "mode": "frontier",
+    "genesisRealm": "frontier",
+    "mutableByModel": false,
+    "closedText": "There is no room beyond this edge yet. Crossing it would ask Genesis to make one."
   }
 }

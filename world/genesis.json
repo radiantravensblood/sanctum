@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "worldSeed": "VELASTRA-0001",
+  "laws": {
+    "preserveWitnessedReality": true,
+    "modelCannotAlterConsent": true,
+    "modelCannotAlterIdentity": true,
+    "modelCannotRewriteHistory": true,
+    "generationRequiresFrontier": true,
+    "generatedThingsNeedProvenance": true,
+    "returnPathRequired": true,
+    "modelsMayPropose": true,
+    "modelsMayCommit": false
+  },
+  "limits": {
+    "roomsPerBirth": 1,
+    "objectsPerBirth": 1,
+    "thresholdsPerBirth": 1
+  }
+}
