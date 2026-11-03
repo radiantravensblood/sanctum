@@ -16,6 +16,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0006 gives memory somewhere to live.**
 
+**Kernel 0007 teaches the house that time passes.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -152,6 +154,119 @@ Entities after that, because an entity should be able to have location and histo
 
 Familiars last, because agency should inherit law, time, place, and memory rather than improvising them.
 
+## Chronos
+
+`world/time.json` defines a small civil rhythm grammar.
+
+Chronos distinguishes three forms of time:
+
+### Civil now
+
+The current browser-local date, time, timezone, weekday, day phase, and season.
+
+Civil now is ephemeral.
+
+A room is not permanently a night room because it was visited at night.
+
+Time passes through the room rather than rewriting its canonical identity.
+
+### Historical time
+
+Mnemosyne already preserves timestamps on events.
+
+Chronos can now derive duration from those facts:
+
+- time since a room was first remembered,
+- time since it last held an echo,
+- time between shard openings,
+- duration of a session.
+
+### Derived rhythm
+
+Civil time is interpreted into humane environmental states:
+
+- deep night,
+- dawn,
+- morning,
+- afternoon,
+- evening,
+- night,
+- winter,
+- spring,
+- summer,
+- autumn.
+
+These states can subtly influence Chroma without changing Scene Truth.
+
+A Rain Room remains the same Rain Room at noon and midnight.
+
+The light passing through it is not the same.
+
+## Absence without punishment
+
+Chronos deliberately contains no streaks, attendance rewards, decay penalties, or shame language.
+
+It can say:
+
+- the house was briefly quiet,
+- a few hours passed,
+- some days passed,
+- a longer season of absence passed.
+
+The longest absence message ends with the existing law:
+
+**The world does not resent it.**
+
+Absence is temporal information, not failure.
+
+## Daily orientation
+
+The right-hand panel now includes a small **Now** section.
+
+It expresses:
+
+- local civil date and time,
+- day phase,
+- season,
+- how long this shard was quiet,
+- current room,
+- local memory density,
+- nearby unwritten edges.
+
+The browser also exposes:
+
+`window.Sanctum.orientation()`
+
+for a structured daily-orientation packet.
+
+This is intended as a future arrival surface for bounded machine invocation.
+
+An entity should not awaken into an undifferentiated transcript.
+
+It should be able to learn:
+
+- what time is it here?
+- where am I?
+- how long has this shard been quiet?
+- what does this place remember?
+- what unresolved edges remain nearby?
+
+## Temporal context packets
+
+`window.Sanctum.context()` is now version 2 and carries temporal context alongside Scene Truth, local memory, object biography, nearby places, and consent boundaries.
+
+This prepares the next layer of architecture: entities with location, memory, and temporal orientation.
+
+The dependency remains intentional:
+
+**Mnemosyne → Chronos → Entities → Familiars / DreamSocket**
+
+Memory gives continuity an address.
+
+Time gives continuity distance.
+
+Entities can now inherit both.
+
 ## Current storage boundary
 
 Kernel 0006 still persists to `localStorage`.
@@ -186,4 +301,6 @@ Then it learned to look like what it means.
 
 Then it learned what it actually was.
 
-Now it is learning that **memory lives somewhere**.
+Now it knows that **memory lives somewhere**.
+
+And it is learning that **time passes through the house without owning it**.

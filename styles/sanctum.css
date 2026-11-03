@@ -781,3 +781,58 @@ body[data-atmosphere="overgrown"] .scene {
     display: none;
   }
 }
+
+
+/* Kernel 0007 — Chronos
+   Time passes through the house; it does not grade the traveler. */
+:root {
+  --room-memory: 0;
+  --room-humidity: 0;
+  --room-reverb: 0;
+  --room-light-directionality: 0;
+}
+
+.orientation-panel {
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--room-line);
+}
+
+.time-primary {
+  margin: 0 0 8px;
+  color: var(--room-accent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.time-secondary {
+  margin: 0;
+  color: color-mix(in srgb, var(--room-ink) 72%, var(--room-muted));
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+body[data-day-phase="deep_night"] .scene-chrome,
+body[data-day-phase="night"] .scene-chrome {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--room-shadow) 10%, transparent),
+      transparent 52%,
+      color-mix(in srgb, var(--room-shadow) 72%, transparent)
+    );
+}
+
+body[data-day-phase="dawn"] .scene::before,
+body[data-day-phase="evening"] .scene::before {
+  border-color: color-mix(in srgb, var(--room-glow) 52%, transparent);
+}
+
+body[data-season="autumn"] .room-panel,
+body[data-season="autumn"] .memory-panel {
+  box-shadow:
+    0 28px 90px color-mix(in srgb, var(--room-shadow) 78%, black),
+    inset 0 1px 0 color-mix(in srgb, var(--room-accent) 9%, transparent);
+}

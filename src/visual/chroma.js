@@ -1,9 +1,15 @@
 import { resolveRoomVisual } from "../genesis/chroma.js";
 import { roomMemoryWeight } from "../memory/mnemosyne.js";
 
-export function applyRoomVisual({ room, world, state, scene = null }) {
+export function applyRoomVisual({
+  room,
+  world,
+  state,
+  scene = null,
+  temporal = null
+}) {
   const visual = resolveRoomVisual(room, world, scene);
-  const palette = visual.palette || {};
+  const palette = applyTemporalPalette(visual.palette || {}, temporal);
   const root = document.documentElement;
 
   setVar(root, "--room-shadow", palette.shadow);
@@ -55,6 +61,74 @@ export function applyRoomVisual({ room, world, state, scene = null }) {
   }
 
   return visual;
+}
+
+function applyTemporalPalette(base, temporal) {
+  if (!temporal || !temporal.rhythm) return { ...base };
+
+  let next = { ...base };
+  const phase = temporal.rhythm.phase || {};
+  const season = temporal.rhythm.season || {};
+
+  next = tintPalette(next, phase.tint, Number(phase.strength || 0));
+  next = tintPalette(next, season.tint, Number(season.strength || 0));
+
+  const light = Number(
+    typeof phase.light === "number" ? phase.light : 1
+  );
+
+  if (light < 1) {
+    const darkness = Math.min(0.16, (1 - light) * 0.3);
+    ["shadow", "field", "surface"].forEach((key) => {
+      if (next[key]) next[key] = mixHex(next[key], "#07080d", darkness);
+    });
+  }
+
+  return next;
+}
+
+function tintPalette(palette, tint, amount) {
+  if (!tint || !amount) return palette;
+  const next = { ...palette };
+
+  ["shadow", "field", "surface", "muted", "organic"].forEach((key) => {
+    if (next[key]) next[key] = mixHex(next[key], tint, amount);
+  });
+
+  ["accent", "glow"].forEach((key) => {
+    if (next[key]) next[key] = mixHex(next[key], tint, amount * 0.45);
+  });
+
+  return next;
+}
+
+function mixHex(a, b, amount) {
+  const first = parseHex(a);
+  const second = parseHex(b);
+  if (!first || !second) return a;
+
+  const channel = (left, right) =>
+    Math.round(left + (right - left) * amount)
+      .toString(16)
+      .padStart(2, "0");
+
+  return (
+    "#" +
+    channel(first.r, second.r) +
+    channel(first.g, second.g) +
+    channel(first.b, second.b)
+  );
+}
+
+function parseHex(value) {
+  const match = String(value || "").match(/^#([0-9a-f]{6})$/i);
+  if (!match) return null;
+
+  return {
+    r: parseInt(match[1].slice(0, 2), 16),
+    g: parseInt(match[1].slice(2, 4), 16),
+    b: parseInt(match[1].slice(4, 6), 16)
+  };
 }
 
 function derivePatina(room, state, visual, memoryWeight) {

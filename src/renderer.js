@@ -11,18 +11,24 @@ import { renderScene } from "./visual/scene.js";
 import { reconstructSceneTruth } from "./genesis/scene-truth.js";
 import { getRoomMemory } from "./memory/mnemosyne.js";
 import { describeLocalEcho } from "./memory/language.js";
+import { buildOrientation } from "./time/orientation.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
   const objects = getVisibleObjects(world, state);
   const inventory = getInventory(world, state);
   const scene = reconstructSceneTruth(room, world);
-  const visual = applyRoomVisual({ room, world, state, scene });
+  const orientation = buildOrientation({ state, world });
+  const visual = applyRoomVisual({ room, world, state, scene, temporal: orientation && orientation.now });
 
   document.body.dataset.room = room.id;
   document.body.dataset.generated = isGeneratedRoom(state, room.id)
     ? "true"
     : "false";
+  document.body.dataset.dayPhase =
+    orientation && orientation.now ? orientation.now.local.dayPhase : "unknown";
+  document.body.dataset.season =
+    orientation && orientation.now ? orientation.now.local.season : "unknown";
 
   setText("room-region", room.region);
   setText("room-title", room.name);
@@ -30,11 +36,33 @@ export function render({ state, world, message, dispatch }) {
   setText("response", message || "");
   setText("scene-symbol", room.symbol || "◇");
 
+  renderOrientation(orientation);
   renderScene({ room, visual, scene, objects });
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
   renderRoomMemory(state, world, room.id);
+}
+
+function renderOrientation(orientation) {
+  if (!orientation || !orientation.now) return;
+
+  const temporal = orientation.now;
+  setText(
+    "time-primary",
+    temporal.local.weekday +
+      " · " +
+      temporal.local.time +
+      " · " +
+      temporal.local.dayPhaseLabel +
+      " · " +
+      temporal.local.seasonLabel
+  );
+
+  setText(
+    "time-secondary",
+    temporal.local.date + " — " + orientation.prose
+  );
 }
 
 function renderObjects(objects, dispatch) {

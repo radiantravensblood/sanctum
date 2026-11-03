@@ -3,10 +3,13 @@ import { loadState, saveState } from "./state.js";
 import { performAction } from "./actions.js";
 import { render } from "./renderer.js";
 import { buildContextPacket } from "./memory/context.js";
+import { beginSession, touchSession } from "./time/chronos.js";
+import { buildOrientation } from "./time/orientation.js";
 
 async function ignite() {
   const world = await loadWorld();
   let state = loadState(world);
+  beginSession(state);
   let message = getRoom(world, state, state.location).description;
 
   const dispatch = (verb, target = null) => {
@@ -19,6 +22,7 @@ async function ignite() {
 
     state = outcome.state;
     message = outcome.message;
+    touchSession(state);
     saveState(state);
 
     render({
@@ -41,8 +45,29 @@ async function ignite() {
         state,
         world,
         roomId: state.location
+      }),
+    orientation: () =>
+      buildOrientation({
+        state,
+        world
       })
   });
+
+  window.addEventListener("beforeunload", () => {
+    touchSession(state);
+    saveState(state);
+  });
+
+  window.setInterval(() => {
+    if (document.visibilityState !== "visible") return;
+
+    render({
+      state,
+      world,
+      message,
+      dispatch
+    });
+  }, 60000);
 
   saveState(state);
 

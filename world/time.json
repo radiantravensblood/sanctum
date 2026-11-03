@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "dayPhases": [
+    {
+      "id": "deep_night",
+      "label": "deep night",
+      "startHour": 0,
+      "endHour": 5,
+      "tint": "#29304a",
+      "strength": 0.16,
+      "light": 0.72
+    },
+    {
+      "id": "dawn",
+      "label": "dawn",
+      "startHour": 5,
+      "endHour": 8,
+      "tint": "#b78372",
+      "strength": 0.12,
+      "light": 0.9
+    },
+    {
+      "id": "morning",
+      "label": "morning",
+      "startHour": 8,
+      "endHour": 12,
+      "tint": "#d3b57b",
+      "strength": 0.08,
+      "light": 1
+    },
+    {
+      "id": "afternoon",
+      "label": "afternoon",
+      "startHour": 12,
+      "endHour": 17,
+      "tint": "#c99d68",
+      "strength": 0.06,
+      "light": 0.98
+    },
+    {
+      "id": "evening",
+      "label": "evening",
+      "startHour": 17,
+      "endHour": 21,
+      "tint": "#a86755",
+      "strength": 0.12,
+      "light": 0.86
+    },
+    {
+      "id": "night",
+      "label": "night",
+      "startHour": 21,
+      "endHour": 24,
+      "tint": "#3d3657",
+      "strength": 0.14,
+      "light": 0.76
+    }
+  ],
+  "seasons": {
+    "winter": {
+      "label": "winter",
+      "months": [12, 1, 2],
+      "tint": "#77889a",
+      "strength": 0.05
+    },
+    "spring": {
+      "label": "spring",
+      "months": [3, 4, 5],
+      "tint": "#74876a",
+      "strength": 0.05
+    },
+    "summer": {
+      "label": "summer",
+      "months": [6, 7, 8],
+      "tint": "#b48a58",
+      "strength": 0.04
+    },
+    "autumn": {
+      "label": "autumn",
+      "months": [9, 10, 11],
+      "tint": "#986c4f",
+      "strength": 0.06
+    }
+  },
+  "absence": {
+    "briefMinutes": 90,
+    "sameDayHours": 12,
+    "recentDays": 3,
+    "longDays": 21
+  }
+}

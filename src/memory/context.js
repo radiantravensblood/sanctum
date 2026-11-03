@@ -6,6 +6,7 @@ import {
 } from "../world.js";
 import { getRoomMemory, getObjectMemory, getPathMemory } from "./mnemosyne.js";
 import { reconstructSceneTruth } from "../genesis/scene-truth.js";
+import { getTemporalContext } from "../time/chronos.js";
 
 export function buildContextPacket({ state, world, roomId = state.location }) {
   const room = getRoom(world, state, roomId, { fallback: false });
@@ -13,9 +14,11 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
 
   const objects = getVisibleObjectsAt(world, state, roomId);
   const memory = getRoomMemory(state, roomId);
+  const temporal = getTemporalContext({ state, world, roomId });
 
   return {
-    version: 1,
+    version: 2,
+    time: temporal,
     location: {
       id: room.id,
       name: room.name,
