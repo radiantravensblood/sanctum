@@ -836,3 +836,110 @@ body[data-season="autumn"] .memory-panel {
     0 28px 90px color-mix(in srgb, var(--room-shadow) 78%, black),
     inset 0 1px 0 color-mix(in srgb, var(--room-accent) 9%, transparent);
 }
+
+
+/* Kernel 0008 — Inhabitants
+   Presence may be subtle. Meaning must remain accessible. */
+.entity-list {
+  display: grid;
+  gap: 10px;
+}
+
+.entity-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--room-line);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--room-organic) 7%, transparent),
+      color-mix(in srgb, var(--room-surface) 9%, transparent)
+    );
+}
+
+.entity-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.entity-symbol {
+  flex: 0 0 auto;
+  width: 28px;
+  color: var(--room-glow);
+  font-size: 1.05rem;
+  text-align: center;
+  text-shadow: 0 0 18px color-mix(in srgb, var(--room-glow) 42%, transparent);
+}
+
+.entity-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.entity-name {
+  color: var(--room-ink);
+  font-size: 0.95rem;
+}
+
+.entity-kind {
+  color: var(--room-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.entity-presence {
+  pointer-events: none;
+}
+
+.entity-moth {
+  animation: entity-moth-drift 8.6s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.entity-brassling {
+  animation: entity-brass-meander 11s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.entity-threadling {
+  animation: entity-thread-curl 7.4s ease-in-out infinite alternate;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+@keyframes entity-moth-drift {
+  from { opacity: 0.52; transform: translate(-7px, 5px) rotate(-2deg); }
+  to { opacity: 0.82; transform: translate(9px, -8px) rotate(3deg); }
+}
+
+@keyframes entity-brass-meander {
+  from { opacity: 0.52; transform: translateX(-4px); }
+  to { opacity: 0.75; transform: translateX(7px); }
+}
+
+@keyframes entity-thread-curl {
+  from { opacity: 0.34; transform: scale(0.96) rotate(-1deg); }
+  to { opacity: 0.58; transform: scale(1.04) rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entity-moth,
+  .entity-brassling,
+  .entity-threadling {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .entity-card {
+    grid-template-columns: 1fr;
+  }
+}
