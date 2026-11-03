@@ -11,6 +11,7 @@ import { crossFrontier } from "./genesis/genesis.js";
 import { markWitnessed } from "./genesis/provenance.js";
 import { describeObjectTrail } from "./memory/language.js";
 import { describeEntity, getEntityRecord, rememberEntity } from "./entities/entities.js";
+import { proposeInteraction, resolveAcceptedCompany } from "./interactions/accord.js";
 
 export function performAction({ verb, target = null, state, world }) {
   const room = getRoom(world, state, state.location);
@@ -38,6 +39,9 @@ export function performAction({ verb, target = null, state, world }) {
 
     case "observe_entity":
       return observeEntity(target, state, world);
+
+    case "interact":
+      return interact(target, state, world);
 
     case "return":
       return returnHome(state, world);
@@ -117,7 +121,20 @@ function enterRoom(targetRoomId, direction, state, world) {
     });
   }
 
-  return result(state, targetRoom.description);
+  const company = resolveAcceptedCompany({
+    state,
+    world,
+    actorId: "siege",
+    from,
+    to: targetRoomId,
+    direction
+  });
+
+  const companyText = company.messages.length
+    ? " " + company.messages.join(" ")
+    : "";
+
+  return result(state, targetRoom.description + companyText);
 }
 
 function inspect(objectId, state, world) {
@@ -217,6 +234,23 @@ function observeEntity(entityId, state, world) {
       entityId
     })
   );
+}
+
+function interact(spec, state, world) {
+  if (!spec || !spec.targetId || !spec.affordance) {
+    return result(state, "The interaction proposal is incomplete.");
+  }
+
+  const outcome = proposeInteraction({
+    state,
+    world,
+    actorId: "siege",
+    targetId: spec.targetId,
+    affordance: spec.affordance,
+    objectId: spec.objectId || null
+  });
+
+  return result(state, outcome.message);
 }
 
 function returnHome(state, world) {
