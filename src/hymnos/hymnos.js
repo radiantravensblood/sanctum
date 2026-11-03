@@ -853,14 +853,6 @@ function detectRitual({
 
   const existing = state.hymnos.rituals[key];
 
-  if (existing) {
-    existing.occurrences = exchanges.length;
-    existing.lastAt =
-      exchanges[exchanges.length - 1].at;
-    existing.distinctDays = days.size;
-    return { ...existing };
-  }
-
   const answers = (
     state.hymnos.exchanges || []
   ).filter(
@@ -874,6 +866,32 @@ function detectRitual({
 
   const mutual =
     act === "diemesh" || answers.length > 0;
+
+  if (existing) {
+    const becameMutual =
+      !existing.mutual && mutual;
+
+    existing.occurrences = exchanges.length;
+    existing.lastAt =
+      exchanges[exchanges.length - 1].at;
+    existing.answeredOccurrences = answers.length;
+    existing.distinctDays = days.size;
+    existing.mutual = mutual;
+
+    if (becameMutual) {
+      recordCrossEvidence({
+        state,
+        world,
+        actorId: actor.id,
+        targetId: target.id,
+        type: "ritual",
+        room,
+        at: existing.lastAt
+      });
+    }
+
+    return { ...existing };
+  }
 
   const ritual = {
     id: "ritual." + key,
