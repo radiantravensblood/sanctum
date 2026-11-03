@@ -7,6 +7,7 @@ import {
 import { applySanctumIntent } from "./sanctum.js";
 import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
 import { selectMotifs, evaluateMotifExemplars } from "./motifs.js";
+import { compileAtelierManifest, evaluateAtelierExemplars } from "./atelier.js";
 
 export function buildVelastraPacket({
   state,
@@ -155,4 +156,74 @@ export function testVelastraMotifExemplars(world) {
   });
 }
 
-export { applySanctumIntent, composeScenePacket, selectMotifs };
+export function compileVelastraAtelier({
+  world,
+  scene = {},
+  limit = 7,
+  seed = "velastra-atelier"
+}) {
+  const composed = composeVelastraMotifs({
+    world,
+    scene,
+    limit,
+    seed: seed + ":motifs"
+  });
+
+  return {
+    scene: composed.scene,
+    motifs: composed.selection,
+    manifest: compileAtelierManifest({
+      atelierGrammar: world.velastraAtelier,
+      assetRegistry: world.velastraAssets,
+      scenePacket: composed.scene,
+      motifSelection: composed.selection,
+      seed
+    })
+  };
+}
+
+export function testVelastraAtelierExemplars(world) {
+  const scenePackets = {};
+  const motifSelections = {};
+
+  Object.entries(world.velastraScene.exemplars || {}).forEach(
+    ([id, exemplar]) => {
+      const scenePacket = composeVelastraScene({
+        world,
+        meaning: exemplar.meaning || {},
+        family: exemplar.family || "sanctum",
+        archetype: exemplar.archetype,
+        subjects: exemplar.subjects || [],
+        relation: exemplar.relation || null,
+        environment: exemplar.environment || null,
+        seed: "atelier-test-scene:" + id,
+        provenance: {
+          source: "atelier_exemplar_scene",
+          exemplar: id
+        }
+      });
+
+      scenePackets[id] = scenePacket;
+      motifSelections[id] = selectMotifs({
+        atlas: world.velastraMotifs,
+        scenePacket,
+        limit: 8,
+        seed: "atelier-test-motif:" + id
+      });
+    }
+  );
+
+  return evaluateAtelierExemplars({
+    atelierGrammar: world.velastraAtelier,
+    assetRegistry: world.velastraAssets,
+    scenePackets,
+    motifSelections
+  });
+}
+
+export {
+  applySanctumIntent,
+  composeScenePacket,
+  selectMotifs,
+  compileAtelierManifest
+};
