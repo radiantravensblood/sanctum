@@ -8,7 +8,7 @@ import { createInitialTime, mergeTime } from "./time/chronos.js";
 import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 6;
+const VERSION = 7;
 
 export function loadState(world) {
   const base = createInitialState(world);
