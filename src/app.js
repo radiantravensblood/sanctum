@@ -9,6 +9,9 @@ import { advanceEntities } from "./entities/behavior.js";
 import { buildEcologyPacket } from "./entities/ecology.js";
 import { buildRelationPacket } from "./entities/relation.js";
 import { buildAccordPacket, getAvailableAffordances, proposeInteraction } from "./interactions/accord.js";
+import { buildHymnosPacket, getAvailableHymnosActs, performHymnosAct, endDuet } from "./hymnos/hymnos.js";
+import { buildIdentityPacket } from "./hymnos/identity.js";
+import { buildCrossRelationPacket } from "./hymnos/relation.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -80,6 +83,81 @@ async function ignite() {
         actorId,
         targetId
       }),
+    hymnos: (actorId = "siege") =>
+      buildHymnosPacket({
+        state,
+        world,
+        actorId
+      }),
+    hymnosActs: (targetId, actorId = "siege") =>
+      getAvailableHymnosActs({
+        state,
+        world,
+        actorId,
+        targetId
+      }),
+    identity: (actorId) =>
+      buildIdentityPacket({
+        state,
+        world,
+        actorId
+      }),
+    crossRelations: () =>
+      buildCrossRelationPacket({
+        state,
+        world
+      }),
+    sing: ({
+      actorId = "siege",
+      targetId,
+      act
+    } = {}) => {
+      const outcome = performHymnosAct({
+        state,
+        world,
+        actorId,
+        targetId,
+        act
+      });
+
+      message = outcome.message;
+      touchSession(state);
+      advanceEntities({ state, world });
+      saveState(state);
+
+      render({
+        state,
+        world,
+        message,
+        dispatch
+      });
+
+      return outcome;
+    },
+    releaseDuet: ({
+      actorId = "siege",
+      targetId
+    } = {}) => {
+      const outcome = endDuet({
+        state,
+        world,
+        actorId,
+        targetId
+      });
+
+      message = outcome.message;
+      touchSession(state);
+      saveState(state);
+
+      render({
+        state,
+        world,
+        message,
+        dispatch
+      });
+
+      return outcome;
+    },
     propose: ({
       actorId = "siege",
       targetId,
