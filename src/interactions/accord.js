@@ -5,6 +5,7 @@ import { getObjectMemory } from "../memory/mnemosyne.js";
 import { getEntityRecord, getEntityTemplate, rememberEntity } from "../entities/entities.js";
 import { getRelation } from "../entities/relation.js";
 import { createInitialAccordState } from "./state.js";
+import { registerAccordEvidence } from "../hymnos/relation.js";
 
 export function getAvailableAffordances({
   state,
@@ -688,6 +689,31 @@ function recordInteraction({
     reason: decision.reason,
     object: objectId || null
   });
+
+  const crossRelation = registerAccordEvidence({
+    state,
+    world,
+    actorId: actor.id,
+    targetId: template.id,
+    affordance,
+    outcome: decision.outcome,
+    room: target.location,
+    at: event.at
+  });
+
+  if (crossRelation && crossRelation.changed) {
+    appendEvent(state, {
+      at: event.at,
+      actor: "sanctum",
+      action: "cross_relation_phase",
+      room: target.location,
+      participants: [
+        ...crossRelation.relation.participants
+      ],
+      fromPhase: crossRelation.from,
+      toPhase: crossRelation.to
+    });
+  }
 
   return event;
 }
