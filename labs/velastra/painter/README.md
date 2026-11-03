@@ -239,3 +239,16 @@ meaning / scene truth / motifs
 The browser does not become dependent on the painter.
 
 The painter does not become sovereign over the scene.
+
+## Contract tests
+
+The bridge contract uses only the Python standard library, so its safety and
+promotion tests do not require model weights or Diffusers:
+
+```bash
+python -m py_compile labs/velastra/painter/velastra_painter.py
+python -m unittest labs/velastra/painter/test_velastra_painter.py
+```
+
+CI runs those checks whenever the painter bridge, Atelier contract, or asset
+review policy changes.
