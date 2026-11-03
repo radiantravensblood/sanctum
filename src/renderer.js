@@ -229,6 +229,7 @@ function renderEntities(entities, inventory, state, world, dispatch) {
       });
 
     if (hymnos.activeDuet) {
+      card.classList.add("entity-card-duet");
       hymnosActions.append(
         button("Release duet", () =>
           dispatch("hymnos_release", {
