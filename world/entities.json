@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "laws": {
     "entitiesCannotGenerate": true,
     "entitiesCannotCrossLatentFrontiers": true,
@@ -42,7 +42,8 @@
           "linger": 0.26,
           "rest": 0.22,
           "notice_object": 0.05,
-          "attend_entity": 0.13
+          "attend_entity": 0.13,
+          "signal_presence": 0.04
         }
       },
       "affinities": {
@@ -163,7 +164,8 @@
           "linger": 0.18,
           "rest": 0.1,
           "notice_object": 0.12,
-          "attend_entity": 0.12
+          "attend_entity": 0.12,
+          "signal_presence": 0.05
         }
       },
       "affinities": {
@@ -286,7 +288,8 @@
           "linger": 0.14,
           "rest": 0.08,
           "notice_object": 0.38,
-          "attend_entity": 0.12
+          "attend_entity": 0.12,
+          "signal_presence": 0.05
         }
       },
       "affinities": {
