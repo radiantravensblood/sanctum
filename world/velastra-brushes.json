@@ -51,6 +51,27 @@
       "provenance": {
         "modelCard": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
         "verifiedAt": "2026-11-03"
+      },
+      "promptDialect": {
+        "mode": "concrete_painterly",
+        "philosophy": "Translate Virynism into visible material evidence rather than abstract adjectives.",
+        "directives": [
+          "State the room's concrete physical facts before atmospheric interpretation.",
+          "Translate memory into patina, residue, wear, interrupted marks, displaced materials, layered pigment, and spatial evidence.",
+          "Translate sacred incompletion into exposed grounds, partial studies, erased or abandoned marks, unfinished edges, and interrupted process rather than blank objects alone.",
+          "Translate threshold into depth at an edge: corridor, veil, shadow, reflection, recession, opening, or unresolved spatial continuation.",
+          "Prefer purposeful asymmetry and uneven negative space over centered showroom balance.",
+          "Use one dominant impossible or emotionally dissonant fact rather than many fantasy effects.",
+          "Keep the scene painterly and tactile; avoid generic cinematic concept-art polish."
+        ],
+        "negativePriorities": [
+          "showroom minimalism",
+          "tasteful empty-frame arrangement",
+          "perfect center symmetry",
+          "generic fantasy glow",
+          "clean staged interior photography",
+          "decorative mystical iconography"
+        ]
       }
     },
     "qwen_image": {
@@ -87,6 +108,24 @@
       "provenance": {
         "modelCard": "https://huggingface.co/Qwen/Qwen-Image",
         "verifiedAt": "2026-11-03"
+      },
+      "promptDialect": {
+        "mode": "structured_painterly",
+        "philosophy": "Preserve hierarchy and scene truth while expanding Virynism into layered visual relationships.",
+        "directives": [
+          "Honor the focal hierarchy explicitly and keep secondary details subordinate.",
+          "Render abstract meaning through concrete material, spatial, luminous, and gestural evidence.",
+          "Keep unresolved marks and partial process visible where Virynism asks for incompletion.",
+          "Use asymmetry, layered depth, and selective residue to avoid showroom composition.",
+          "Let symbolic meaning remain implicit in materials and light rather than explicit iconography."
+        ],
+        "negativePriorities": [
+          "literal symbol illustration",
+          "generic concept-art staging",
+          "over-detailed decorative clutter",
+          "sterile symmetry",
+          "photographic showroom polish"
+        ]
       }
     }
   },
