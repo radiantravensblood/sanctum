@@ -41,7 +41,10 @@ export function resolveIdentity({
       lineage: declared.lineage || null,
       relationalMode: declared.relationalMode || null,
       claimStatus: declared.claimStatus || "unclaimed",
-      source: "self_claim"
+      source:
+        declared.claimStatus === "self_authored"
+          ? "self_claim"
+          : "technical_actor"
     };
   }
 
