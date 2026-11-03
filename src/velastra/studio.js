@@ -331,10 +331,13 @@ function studioTokens(intent) {
 }
 
 function mergeMeaning(base, overlay) {
-  const mergedMaterials = [
-    ...((base.hints && base.hints.materials) || []),
-    ...((overlay.hints && overlay.hints.materials) || [])
-  ];
+  const overlayMaterials =
+    (overlay.hints && overlay.hints.materials) || [];
+  const baseMaterials =
+    (base.hints && base.hints.materials) || [];
+  const mergedMaterials = overlayMaterials.length
+    ? [...overlayMaterials]
+    : [...baseMaterials];
 
   return {
     role: overlay.role || base.role || "gathering",
