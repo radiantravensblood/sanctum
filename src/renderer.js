@@ -1,63 +1,38 @@
 import {
   getRoom,
-  getVisibleObjects,
   getInventory,
   getThresholdState,
-  getObject,
-  isGeneratedRoom
+  getObject
 } from "./world.js";
-import { applyRoomVisual } from "./visual/chroma.js";
 import { renderScene } from "./visual/scene.js";
-import { reconstructSceneTruth } from "./genesis/scene-truth.js";
 import { getRoomMemory } from "./memory/mnemosyne.js";
 import { describeLocalEcho } from "./memory/language.js";
-import { buildOrientation } from "./time/orientation.js";
-import { getEntitiesAt } from "./entities/entities.js";
 import { relationsForEntity } from "./entities/relation.js";
 import { getAvailableAffordances } from "./interactions/accord.js";
 import { getAvailableHymnosActs } from "./hymnos/hymnos.js";
 import { getCrossRelation } from "./hymnos/relation.js";
-import { buildVelastraPacket } from "./velastra/index.js";
-import { compileSanctumAtelier } from "./velastra/sanctum-atelier.js";
+import { buildCurrentSanctumPainting } from "./velastra/sanctum-painting.js";
 
 export function render({ state, world, message, dispatch }) {
-  const room = getRoom(world, state, state.location);
-  const objects = getVisibleObjects(world, state);
-  const inventory = getInventory(world, state);
-  const entities = getEntitiesAt(world, state, state.location);
-  const scene = reconstructSceneTruth(room, world);
-  const orientation = buildOrientation({ state, world });
-  const visual = applyRoomVisual({ room, world, state, scene, temporal: orientation && orientation.now });
-  const visualNow =
-    orientation &&
-    orientation.now &&
-    orientation.now.now
-      ? new Date(orientation.now.now)
-      : new Date();
-  const velastra = buildVelastraPacket({
+  const painting = buildCurrentSanctumPainting({
     state,
-    world,
-    roomId: room.id,
-    role: room.id === "threshold" ? "threshold" : "place",
-    family: "sanctum",
-    now: visualNow,
-    apply: true
+    world
   });
-  const atelier = compileSanctumAtelier({
-    state,
-    world,
+  const {
     room,
-    sceneTruth: scene,
-    visual,
-    visualIntent: velastra.intent,
     objects,
-    entities
-  });
+    entities,
+    scene,
+    orientation,
+    visual,
+    velastra,
+    atelier
+  } = painting;
+  const inventory = getInventory(world, state);
 
   document.body.dataset.room = room.id;
-  document.body.dataset.generated = isGeneratedRoom(state, room.id)
-    ? "true"
-    : "false";
+  document.body.dataset.generated =
+    painting.generated ? "true" : "false";
   document.body.dataset.dayPhase =
     orientation && orientation.now ? orientation.now.local.dayPhase : "unknown";
   document.body.dataset.season =
@@ -67,6 +42,10 @@ export function render({ state, world, message, dispatch }) {
   document.body.dataset.velastraMedium =
     atelier && atelier.manifest
       ? atelier.manifest.medium.id
+      : "none";
+  document.body.dataset.velastraPainting =
+    atelier && atelier.manifest
+      ? atelier.manifest.render.strategy
       : "none";
 
   setText("room-region", room.region);
