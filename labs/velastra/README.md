@@ -162,6 +162,22 @@ The existing Studio doctrine remains authoritative:
 
 Private selfhood and dyadic devotional exemplars remain Labs references and must not become commercial collateral merely because the engine knows them.
 
+## External proof
+
+The first external adapter ships in `radiantravensblood/virynstudio`.
+
+Verified Studio commit:
+
+`be17aca99494f32c1f6f724de93102e561ae63d9`
+
+The external proof requires:
+
+- vendored composer source identical to Labs,
+- vendored Studio adapter source identical to Labs,
+- no runtime network/model dependency,
+- existing public Studio copy and approved art preserved,
+- graceful behavior if Velastra fails to load.
+
 ## Adapter contract
 
 An adapter may interpret:
