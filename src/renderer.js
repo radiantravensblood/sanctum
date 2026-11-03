@@ -582,6 +582,9 @@ function renderRoomMemory(state, world, roomId) {
   });
 
   if (earlier.length) {
+    const archiveItem = document.createElement("li");
+    archiveItem.className = "ledger-archive-item";
+
     const archive = document.createElement("details");
     archive.className = "ledger-archive";
 
@@ -604,7 +607,8 @@ function renderRoomMemory(state, world, roomId) {
     });
 
     archive.append(summary, list);
-    root.append(archive);
+    archiveItem.append(archive);
+    root.append(archiveItem);
   }
 }
 
