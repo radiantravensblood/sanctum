@@ -28,9 +28,9 @@ export function buildEcologyPacket({
       lastActedAt: record && record.lastActedAt,
       lastMovedAt: record && record.lastMovedAt,
       lastObservedAt: record && record.lastObservedAt,
-      relations: record ? record.relations || {} : {},
+      relations: record ? copyRelations(record.relations || {}) : {},
       recentHistory: record
-        ? (record.history || []).slice(-12)
+        ? (record.history || []).slice(-12).map((event) => ({ ...event }))
         : []
     };
   });
@@ -75,8 +75,34 @@ function normalizeEvent(event, world, state) {
     to: event.to
       ? describeRoom(world, state, event.to)
       : null,
-    object: event.object || null,
+    object: event.object
+      ? describeObject(world, state, event.object)
+      : null,
     reason: event.reason || null
+  };
+}
+
+function copyRelations(relations) {
+  return Object.fromEntries(
+    Object.entries(relations).map(([id, relation]) => [
+      id,
+      { ...relation }
+    ])
+  );
+}
+
+function describeObject(world, state, objectId) {
+  const object =
+    (state.genesis &&
+      state.genesis.generated &&
+      state.genesis.generated.objects &&
+      state.genesis.generated.objects[objectId]) ||
+    world.objects[objectId] ||
+    null;
+
+  return {
+    id: objectId,
+    name: object ? object.name : null
   };
 }
 
