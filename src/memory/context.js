@@ -11,6 +11,7 @@ import { getEntitiesAt } from "../entities/entities.js";
 import { buildEcologyPacket } from "../entities/ecology.js";
 import { buildRelationPacket } from "../entities/relation.js";
 import { buildAccordPacket } from "../interactions/accord.js";
+import { buildHymnosPacket } from "../hymnos/hymnos.js";
 
 export function buildContextPacket({ state, world, roomId = state.location }) {
   const room = getRoom(world, state, roomId, { fallback: false });
@@ -22,7 +23,7 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
   const entities = getEntitiesAt(world, state, roomId);
 
   return {
-    version: 6,
+    version: 7,
     time: temporal,
     location: {
       id: room.id,
@@ -64,6 +65,11 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
       world,
       actorId: "siege"
     }),
+    hymnos: buildHymnosPacket({
+      state,
+      world,
+      actorId: "siege"
+    }),
     objects: objects.map((object) => ({
       id: object.id,
       name: object.name,
@@ -74,6 +80,7 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
     constraints: {
       entityLaws: world.entities.laws,
       interactionLaws: world.accord.laws,
+      hymnosLaws: world.hymnos.laws,
       consentThresholds: describeConsentThresholds(room, state, world),
       canonical: Boolean(state.genesis.canonical[room.id]),
       generated: Boolean(state.genesis.generated.rooms[room.id])
