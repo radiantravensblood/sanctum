@@ -56,6 +56,20 @@ export function compileAtelierManifest({
         : null,
       fallback: "procedural_underpainting"
     },
+    authoring: {
+      painterProtocol:
+        atelierGrammar.painterBridge?.protocol || null,
+      painterImplementation:
+        atelierGrammar.painterBridge?.implementation || null,
+      generation: "authoring_only",
+      candidateStatus:
+        atelierGrammar.painterBridge?.candidateStatus || "candidate",
+      approvedStatus:
+        atelierGrammar.painterBridge?.approvedStatus || "approved",
+      approvalRequired: true,
+      registryMutationDuringGeneration: false,
+      modelIsSemanticAuthority: false
+    },
     layers: (atelierGrammar.layerOrder || []).map(
       (id, index, all) => ({
         id,
