@@ -146,6 +146,16 @@ function describeState(record, world, state) {
     }
     case "wandering":
       return " It seems to have arrived by way of its own wandering.";
+    case "nearby":
+      return " It has permitted a closer shared distance.";
+    case "sharing_space":
+      return " It appears content to let the shared quiet continue.";
+    case "considering_company":
+      return " An invitation to travel together remains open until the next movement.";
+    case "accompanying":
+      return " It chose to come along rather than remain behind.";
+    case "keeping_distance":
+      return " It is keeping a clearer boundary around itself.";
     default:
       return "";
   }
