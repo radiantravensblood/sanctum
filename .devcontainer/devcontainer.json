@@ -1,7 +1,7 @@
 {
   "name": "Velastra Cloud Atelier",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
-  "postCreateCommand": "python3 -m pip install --user -r labs/velastra/painter/requirements-provider.txt",
+  "postCreateCommand": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r labs/velastra/painter/requirements-provider.txt",
   "secrets": {
     "HF_TOKEN": {
       "description": "Hugging Face fine-grained token with Make calls to Inference Providers permission.",
