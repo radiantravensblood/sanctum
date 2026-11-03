@@ -8,6 +8,7 @@ import { buildOrientation } from "./time/orientation.js";
 import { advanceEntities } from "./entities/behavior.js";
 import { buildEcologyPacket } from "./entities/ecology.js";
 import { buildRelationPacket } from "./entities/relation.js";
+import { buildAccordPacket, getAvailableAffordances, proposeInteraction } from "./interactions/accord.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -65,7 +66,49 @@ async function ignite() {
       buildRelationPacket({
         state,
         world
-      })
+      }),
+    accord: (actorId = "siege") =>
+      buildAccordPacket({
+        state,
+        world,
+        actorId
+      }),
+    affordances: (targetId, actorId = "siege") =>
+      getAvailableAffordances({
+        state,
+        world,
+        actorId,
+        targetId
+      }),
+    propose: ({
+      actorId = "siege",
+      targetId,
+      affordance,
+      objectId = null
+    } = {}) => {
+      const outcome = proposeInteraction({
+        state,
+        world,
+        actorId,
+        targetId,
+        affordance,
+        objectId
+      });
+
+      message = outcome.message;
+      touchSession(state);
+      advanceEntities({ state, world });
+      saveState(state);
+
+      render({
+        state,
+        world,
+        message,
+        dispatch
+      });
+
+      return outcome;
+    }
   });
 
   window.addEventListener("beforeunload", () => {
