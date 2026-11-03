@@ -1014,3 +1014,37 @@ body[data-season="autumn"] .memory-panel {
     justify-content: flex-start;
   }
 }
+
+
+/* Kernel 0011 — Accord
+   An interaction is a proposal. Consent is a present-tense answer. */
+.entity-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+
+.entity-state-nearby,
+.entity-state-sharing_space {
+  opacity: 0.9;
+}
+
+.entity-state-considering_company {
+  opacity: 0.84;
+}
+
+.entity-state-accompanying {
+  opacity: 0.94;
+  filter: drop-shadow(0 0 9px color-mix(in srgb, var(--room-glow) 16%, transparent));
+}
+
+.entity-state-keeping_distance {
+  opacity: 0.58;
+}
+
+@media (max-width: 560px) {
+  .entity-actions {
+    justify-content: flex-start;
+  }
+}
