@@ -236,6 +236,32 @@ export function classifyCrossRelation(
   return "unfamiliar";
 }
 
+export function seedCrossRelationsFromAccord(state, world) {
+  ensureRelations(state);
+
+  if (Object.keys(state.hymnos.relations).length) {
+    return;
+  }
+
+  (state.accord && state.accord.history
+    ? state.accord.history
+    : []
+  ).forEach((event) => {
+    if (!event.actor || !event.targetEntity) return;
+
+    registerAccordEvidence({
+      state,
+      world,
+      actorId: event.actor,
+      targetId: event.targetEntity,
+      affordance: event.affordance,
+      outcome: event.outcome,
+      room: event.room,
+      at: event.at
+    });
+  });
+}
+
 export function buildCrossRelationPacket({
   state,
   world
