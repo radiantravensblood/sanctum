@@ -112,7 +112,9 @@
     ],
     "fallback": "procedural_underpainting",
     "runtimeGeneration": false,
-    "preferReviewedAsset": true
+    "preferReviewedAsset": true,
+    "requireProvenance": true,
+    "requireSha256": true
   },
   "exemplars": {
     "viryn_self_portrait": {
