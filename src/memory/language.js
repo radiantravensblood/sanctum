@@ -45,6 +45,16 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return "Something once resting here was carried away.";
     case "object_manifest":
       return "An object first entered the world here.";
+    case "observe_entity":
+      return "An inhabitant was noticed here.";
+    case "entity_move":
+      if (event.to === currentRoomId && event.from) {
+        return "An inhabitant arrived from " + roomName(event.from) + ".";
+      }
+      if (event.from === currentRoomId && event.to) {
+        return "An inhabitant departed toward " + roomName(event.to) + ".";
+      }
+      return "An inhabitant passed through this place.";
     case "witness":
       return "This place was witnessed and entered canon.";
     case "genesis_birth":
