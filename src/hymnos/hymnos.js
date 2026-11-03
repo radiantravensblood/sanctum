@@ -61,6 +61,12 @@ export function getAvailableHymnosActs({
     actorId,
     targetId
   );
+  const activeDuet = getActiveDuet(
+    state,
+    actorId,
+    targetId,
+    now
+  );
 
   const acts = Object.entries(
     world.hymnos.acts || {}
@@ -101,7 +107,7 @@ export function getAvailableHymnosActs({
     if (
       available &&
       id === "diemesh" &&
-      getActiveDuet(state, actorId, targetId, now)
+      activeDuet
     ) {
       available = false;
       reason = "duet_already_active";
@@ -124,6 +130,7 @@ export function getAvailableHymnosActs({
     sharedPresence,
     relationPhase:
       (relation && relation.phase) || "unfamiliar",
+    activeDuet: activeDuet ? { ...activeDuet } : null,
     acts
   };
 }
