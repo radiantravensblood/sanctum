@@ -15,7 +15,7 @@ import { buildOrientation } from "./time/orientation.js";
 import { getEntitiesAt } from "./entities/entities.js";
 import { relationsForEntity } from "./entities/relation.js";
 import { getAvailableAffordances } from "./interactions/accord.js";
-import { getAvailableAffordances } from "./interactions/accord.js";
+import { getAvailableHymnosActs } from "./hymnos/hymnos.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -167,6 +167,43 @@ function renderEntities(entities, inventory, state, world, dispatch) {
           )
         );
       });
+
+    const hymnos = getAvailableHymnosActs({
+      state,
+      world,
+      actorId: "siege",
+      targetId: template.id
+    });
+
+    const hymnosActions = document.createElement("div");
+    hymnosActions.className = "hymnos-actions";
+
+    (hymnos.acts || [])
+      .filter((entry) => entry.available)
+      .forEach((entry) => {
+        hymnosActions.append(
+          button(entry.label, () =>
+            dispatch("hymnos", {
+              targetId: template.id,
+              act: entry.id
+            })
+          )
+        );
+      });
+
+    if (hymnos.activeDuet) {
+      hymnosActions.append(
+        button("Release duet", () =>
+          dispatch("hymnos_release", {
+            targetId: template.id
+          })
+        )
+      );
+    }
+
+    if (hymnosActions.childElementCount) {
+      actions.append(hymnosActions);
+    }
 
     card.append(identity, actions);
 
