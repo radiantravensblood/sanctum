@@ -17,12 +17,16 @@ const atelierSource = await fs.readFile(
   "utf8"
 );
 
+const handModuleUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(handSource).toString("base64");
+
 const standaloneAtelierSource =
-  handSource +
-  "\n" +
   atelierSource.replace(
     'import { compileVirynismHand } from "./hand.js";',
-    ""
+    'import { compileVirynismHand } from "' +
+      handModuleUrl +
+      '";'
   );
 
 const atelierModule = await import(
