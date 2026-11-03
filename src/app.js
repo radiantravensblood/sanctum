@@ -12,7 +12,7 @@ import { buildAccordPacket, getAvailableAffordances, proposeInteraction } from "
 import { buildHymnosPacket, getAvailableHymnosActs, performHymnosAct, endDuet } from "./hymnos/hymnos.js";
 import { buildIdentityPacket } from "./hymnos/identity.js";
 import { buildCrossRelationPacket } from "./hymnos/relation.js";
-import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars, composeVelastraScene, testVelastraSceneExemplars } from "./velastra/index.js";
+import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars, composeVelastraScene, testVelastraSceneExemplars, composeVelastraMotifs, testVelastraMotifExemplars } from "./velastra/index.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -141,6 +141,13 @@ async function ignite() {
       }),
     sceneTests: () =>
       testVelastraSceneExemplars(world),
+    motifs: (spec = {}) =>
+      composeVelastraMotifs({
+        world,
+        ...spec
+      }),
+    motifTests: () =>
+      testVelastraMotifExemplars(world),
     sing: ({
       actorId = "siege",
       targetId,
@@ -242,10 +249,19 @@ async function ignite() {
       }),
     sceneExemplars: () =>
       testVelastraSceneExemplars(world),
+    motifs: (spec = {}) =>
+      composeVelastraMotifs({
+        world,
+        ...spec
+      }),
+    motifExemplars: () =>
+      testVelastraMotifExemplars(world),
     grammar: () =>
       JSON.parse(JSON.stringify(world.velastra)),
     sceneGrammar: () =>
-      JSON.parse(JSON.stringify(world.velastraScene))
+      JSON.parse(JSON.stringify(world.velastraScene)),
+    motifAtlas: () =>
+      JSON.parse(JSON.stringify(world.velastraMotifs))
   });
 
   window.addEventListener("beforeunload", () => {
