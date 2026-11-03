@@ -132,7 +132,7 @@ function parseHex(value) {
 }
 
 function derivePatina(room, state, visual, memoryWeight) {
-  const visits = Number(state.visits[room.id] || 0);
+  const visits = Number((state.visits && state.visits[room.id]) || 0);
   const age = Number((visual.sensation && visual.sensation.age) || 0.5);
   const visitInfluence = Math.min(1, Math.log2(visits + 1) / 4);
 
