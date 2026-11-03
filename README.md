@@ -46,6 +46,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0021 gives the Painter Bridge a named, licensed Brush Cabinet so authoring commands resolve to real models and transports instead of placeholders.**
 
+**Kernel 0022 moves the authoring workstation into GitHub Codespaces so a low-storage local machine can still paint without cloning model weights or even the repository locally.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2015,9 +2017,104 @@ python3 labs/velastra/painter/velastra_painter.py brushes
 Model/backend overrides still exist for experiments, but the ordinary workflow
 should use named brushes so provenance remains intelligible.
 
+## Cloud Atelier
+
+Kernel 0022 moves Velastra's authoring workstation into GitHub Codespaces.
+
+The governing law is:
+
+**The brush may live elsewhere. The room remains here.**
+
+This exists for machines that should not be asked to carry the Sanctum repo,
+Python environment, provider dependencies, or model weights locally.
+
+### Codespace environment
+
+The repository now includes:
+
+`.devcontainer/devcontainer.json`
+
+A Codespace created from Sanctum:
+
+- runs in GitHub's cloud development environment,
+- installs only the lightweight Hugging Face provider client,
+- recommends a Codespaces secret named `HF_TOKEN`,
+- does not download image-model weights for the default provider path,
+- leaves the local computer unchanged.
+
+The secret is exposed inside the Codespace as an environment variable.
+
+It is not written into the repository.
+
+### Ephemeral handoff inbox
+
+The cloud authoring drop zone is:
+
+`authoring/inbox/`
+
+Exported `.velastra.json` handoffs placed there are ignored by Git.
+
+The directory is for temporary authoring material only.
+
+A room handoff should be deleted after the candidate has been rendered and the
+desired output has been retained.
+
+### Atelier commands
+
+Kernel 0022 gives the browser Atelier two command targets.
+
+**Copy local command** uses:
+
+`$HOME/Downloads/<handoff>.velastra.json`
+
+**Copy cloud command** uses:
+
+`authoring/inbox/<handoff>.velastra.json`
+
+Both commands preserve the chosen brush and transport.
+
+For the default cabinet, a cloud command is shaped like:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py render \
+  "authoring/inbox/<handoff>.velastra.json" \
+  --brush "z_image_turbo" \
+  --transport "huggingface"
+```
+
+### Cloud authoring ritual
+
+The intended low-storage flow is:
+
+```text
+Sanctum ?atelier=1
+        ↓
+Export painting packet
+        ↓
+Create/open Sanctum Codespace in browser
+        ↓
+Upload packet into authoring/inbox/
+        ↓
+Run copied cloud command
+        ↓
+.velastra/candidates/<assetKey>/
+        ↓
+review PNG + candidate JSON
+        ↓
+download what should survive
+        ↓
+approve later through the existing review threshold
+```
+
+No local clone is required.
+
+No model weights are stored on the local machine.
+
+No Hugging Face token enters repository history.
+
 ## Current storage boundary
 
-Kernel 0021 still persists to `localStorage`.
+Kernel 0022 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2080,3 +2177,5 @@ And now it is learning that **a model may hold the brush without being allowed t
 And now it knows that **a painting may remain while the life passing through it stays free to change**.
 
 And now it knows that **the hand holding the brush can change without changing what the room means**.
+
+And now it knows that **the hand does not even need to live on the same machine as the room**.
