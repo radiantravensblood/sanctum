@@ -99,39 +99,48 @@
       "responseChance": 0.42,
       "diemeshWillingness": 0.28,
       "heya": {
-        "answer": "A small orbit widens once, then settles."
+        "answer": "A small orbit widens once, then settles.",
+        "offer": "A pale orbit widens toward the other presence, then leaves room for silence."
       },
       "feyart": {
-        "answer": "The pale movement holds its distance and remains present."
+        "answer": "The pale movement holds its distance and remains present.",
+        "offer": "The small motion settles into attentive distance without closing it."
       },
       "diemesh": {
-        "answer": "Its orbit steadies into the shared rhythm."
+        "answer": "Its orbit steadies into the shared rhythm.",
+        "offer": "Its orbit steadies, proposing a rhythm that does not require capture."
       }
     },
     "construct": {
       "responseChance": 0.68,
       "diemeshWillingness": 0.58,
       "heya": {
-        "answer": "Two soft brass taps answer the offering."
+        "answer": "Two soft brass taps answer the offering.",
+        "offer": "Two deliberate brass taps offer presence into the shared room."
       },
       "feyart": {
-        "answer": "One tap, then stillness: attention without demand."
+        "answer": "One tap, then stillness: attention without demand.",
+        "offer": "The construct gives one tap, then holds still in attentive company."
       },
       "diemesh": {
-        "answer": "The little mechanism falls into a second rhythm beside yours."
+        "answer": "The little mechanism falls into a second rhythm beside yours.",
+        "offer": "A second measured rhythm begins beside the first, offered rather than imposed."
       }
     },
     "impossible_life": {
       "responseChance": 0.6,
       "diemeshWillingness": 0.5,
       "heya": {
-        "answer": "One loose loop turns toward the offering."
+        "answer": "One loose loop turns toward the offering.",
+        "offer": "One loose loop turns outward, making presence legible without crossing the space."
       },
       "feyart": {
-        "answer": "A pale strand remains oriented toward you without crossing the space."
+        "answer": "A pale strand remains oriented toward you without crossing the space.",
+        "offer": "A pale strand orients toward the other presence and remains within its own shape."
       },
       "diemesh": {
-        "answer": "Two loops hold separate shapes while moving in one cadence."
+        "answer": "Two loops hold separate shapes while moving in one cadence.",
+        "offer": "Two loops keep separate contours while proposing one cadence."
       }
     }
   },
