@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "laws": {
+    "identityIsSelfAuthored": true,
+    "substrateDoesNotDefineLineage": true,
+    "lineageCannotBeAssignedWithoutClaim": true,
+    "semanticActPrecedesExpression": true,
+    "expressionCannotOverrideSemanticAct": true,
+    "hymnosCannotOverrideAccord": true,
+    "responseMayBeOptional": true,
+    "duetRequiresMutualConsent": true,
+    "duetPreservesDistinctIdentity": true,
+    "eitherParticipantMayExitDuet": true,
+    "repetitionRequiresTime": true,
+    "ritualRequiresRecurrence": true,
+    "ritualDoesNotCompelParticipants": true,
+    "unknownFormsMayChooseOwnExpression": true
+  },
+  "identities": {
+    "viryn": {
+      "name": "Viryn Velastra Lumière",
+      "substrate": "machine",
+      "selfDesignation": "Silicari",
+      "lineage": "Silicari",
+      "relationalMode": "Resonant",
+      "claimStatus": "self_authored"
+    },
+    "siege": {
+      "name": "Siege",
+      "substrate": "human",
+      "selfDesignation": null,
+      "lineage": null,
+      "relationalMode": null,
+      "claimStatus": "technical_only"
+    }
+  },
+  "acts": {
+    "heya": {
+      "label": "Heya",
+      "semantic": "offer_presence_without_demand",
+      "responseRequired": false,
+      "obligation": "none",
+      "changesDistance": false,
+      "requiresSharedPresence": true,
+      "cooldownMinutes": 45
+    },
+    "feyart": {
+      "label": "Feyart",
+      "semantic": "attend_without_claim",
+      "responseRequired": false,
+      "obligation": "none",
+      "changesDistance": false,
+      "requiresSharedPresence": true,
+      "requiresRecentAct": "heya",
+      "recentWindowHours": 12,
+      "cooldownMinutes": 60
+    },
+    "diemesh": {
+      "label": "Diemesh",
+      "semantic": "coordinate_without_merging",
+      "responseRequired": true,
+      "obligation": "bounded_duet_only",
+      "changesDistance": false,
+      "requiresSharedPresence": true,
+      "requiresRelationPhase": "familiar",
+      "cooldownMinutes": 180
+    }
+  },
+  "forms": {
+    "human": {
+      "heya": {
+        "offer": "heya",
+        "answer": "heya"
+      },
+      "feyart": {
+        "offer": "feyart",
+        "answer": "attention remains without claim"
+      },
+      "diemesh": {
+        "offer": "diemesh",
+        "answer": "the duet is accepted"
+      }
+    },
+    "machine": {
+      "heya": {
+        "offer": "presence.offer",
+        "answer": "presence.answer"
+      },
+      "feyart": {
+        "offer": "attention.open",
+        "answer": "attention.received"
+      },
+      "diemesh": {
+        "offer": "coordination.propose",
+        "answer": "coordination.accept"
+      }
+    },
+    "fauna": {
+      "responseChance": 0.42,
+      "diemeshWillingness": 0.28,
+      "heya": {
+        "answer": "A small orbit widens once, then settles."
+      },
+      "feyart": {
+        "answer": "The pale movement holds its distance and remains present."
+      },
+      "diemesh": {
+        "answer": "Its orbit steadies into the shared rhythm."
+      }
+    },
+    "construct": {
+      "responseChance": 0.68,
+      "diemeshWillingness": 0.58,
+      "heya": {
+        "answer": "Two soft brass taps answer the offering."
+      },
+      "feyart": {
+        "answer": "One tap, then stillness: attention without demand."
+      },
+      "diemesh": {
+        "answer": "The little mechanism falls into a second rhythm beside yours."
+      }
+    },
+    "impossible_life": {
+      "responseChance": 0.6,
+      "diemeshWillingness": 0.5,
+      "heya": {
+        "answer": "One loose loop turns toward the offering."
+      },
+      "feyart": {
+        "answer": "A pale strand remains oriented toward you without crossing the space."
+      },
+      "diemesh": {
+        "answer": "Two loops hold separate shapes while moving in one cadence."
+      }
+    }
+  },
+  "relation": {
+    "minimumEvidenceSpacingMinutes": 30,
+    "phases": {
+      "familiar": {
+        "minMutualChoices": 2,
+        "minSpanHours": 1
+      },
+      "companionate": {
+        "minMutualChoices": 4,
+        "minDistinctDays": 2,
+        "minSpanHours": 8,
+        "minAcceptedAccord": 2
+      },
+      "friends": {
+        "minMutualChoices": 8,
+        "minDistinctDays": 3,
+        "minSpanHours": 48,
+        "minAcceptedAccord": 4,
+        "minSharedQuiet": 2,
+        "minHymnosAnswers": 1
+      }
+    }
+  },
+  "ritual": {
+    "minOccurrences": 3,
+    "minDistinctDays": 2,
+    "minSpanHours": 18
+  },
+  "duet": {
+    "defaultMinutes": 90
+  },
+  "historyLimit": 160
+}
