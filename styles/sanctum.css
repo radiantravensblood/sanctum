@@ -1776,3 +1776,55 @@ body[data-velastra-typography="operational"] .card-crown {
     animation: none !important;
   }
 }
+
+
+/* Kernel 0017 — Atelier Compiler
+   The brush may wander. The meaning may not. */
+.velastra-underpainting {
+  pointer-events: none;
+}
+
+.velastra-pigment-field {
+  mix-blend-mode: soft-light;
+}
+
+.velastra-light-field {
+  mix-blend-mode: screen;
+}
+
+.velastra-brush-field {
+  mix-blend-mode: screen;
+}
+
+.velastra-motif-traces {
+  mix-blend-mode: screen;
+}
+
+.velastra-patina {
+  mix-blend-mode: multiply;
+}
+
+.velastra-reviewed-painting {
+  pointer-events: none;
+}
+
+body[data-velastra-medium="luminous_oil"] .scene-architecture,
+body[data-velastra-medium="dream_oil"] .scene-architecture,
+body[data-velastra-medium="editorial_oil"] .scene-architecture,
+body[data-velastra-medium="environmental_oil"] .scene-architecture {
+  opacity: 0.82;
+}
+
+body[data-velastra-medium="ink_glass"] .velastra-pigment-field {
+  opacity: 0.72;
+}
+
+body[data-velastra-medium="artifact_oil"] .velastra-motif-traces {
+  opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .velastra-underpainting * {
+    animation: none !important;
+  }
+}
