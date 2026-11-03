@@ -13,6 +13,7 @@ import { getRoomMemory } from "./memory/mnemosyne.js";
 import { describeLocalEcho } from "./memory/language.js";
 import { buildOrientation } from "./time/orientation.js";
 import { getEntitiesAt } from "./entities/entities.js";
+import { relationsForEntity } from "./entities/relation.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -40,7 +41,7 @@ export function render({ state, world, message, dispatch }) {
 
   renderOrientation(orientation);
   renderScene({ room, visual, scene, objects, entities });
-  renderEntities(entities, dispatch);
+  renderEntities(entities, state, world, dispatch);
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
@@ -68,7 +69,7 @@ function renderOrientation(orientation) {
   );
 }
 
-function renderEntities(entities, dispatch) {
+function renderEntities(entities, state, world, dispatch) {
   const root = document.getElementById("entity-list");
   if (!root) return;
 
@@ -103,6 +104,23 @@ function renderEntities(entities, dispatch) {
     kind.textContent = template.kind.replaceAll("_", " ") + " · " + formatEntityStatus(record.status);
 
     copy.append(name, kind);
+
+    const namedRelations = relationsForEntity(
+      state,
+      world,
+      template.id
+    ).filter((relation) => relation.label);
+
+    if (namedRelations.length) {
+      const note = document.createElement("small");
+      note.className = "entity-relation";
+      note.textContent = formatRelationNote(
+        namedRelations[0],
+        template.id
+      );
+      copy.append(note);
+    }
+
     identity.append(symbol, copy);
 
     card.append(
@@ -112,6 +130,21 @@ function renderEntities(entities, dispatch) {
 
     root.append(card);
   });
+}
+
+function formatRelationNote(relation, entityId) {
+  const otherIndex = relation.entities[0] === entityId ? 1 : 0;
+  const otherName = relation.names[otherIndex] || "another inhabitant";
+
+  if (relation.phase === "friends") {
+    return "friends with " + otherName;
+  }
+
+  if (relation.phase === "companionate") {
+    return "often chooses the company of " + otherName;
+  }
+
+  return "familiar with " + otherName;
 }
 
 function formatEntityStatus(status) {
