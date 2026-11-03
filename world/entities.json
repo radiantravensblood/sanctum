@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "laws": {
     "entitiesCannotGenerate": true,
     "entitiesCannotCrossLatentFrontiers": true,
@@ -55,6 +55,82 @@
       "visual": {
         "shape": "moth",
         "motion": "drift"
+      },
+      "consent": {
+        "approach": {
+          "mode": "conditional",
+          "baseWillingness": 0.72,
+          "historyInfluence": 0.08,
+          "preferredWhen": [
+            "lingering",
+            "wandering",
+            "nearby"
+          ],
+          "preferredStateBonus": 0.08,
+          "messages": {
+            "accepted": [
+              "The pale lumenmoth keeps its place as you come nearer.",
+              "It shifts once in the light, but does not retreat."
+            ],
+            "declined": [
+              "The pale lumenmoth drifts farther toward the edge of the room.",
+              "It rises out of easy reach and keeps the distance."
+            ],
+            "deferred": [
+              "The moth is too settled into its own stillness to answer your approach just now."
+            ]
+          }
+        },
+        "wait_nearby": {
+          "mode": "conditional",
+          "baseWillingness": 0.9,
+          "historyInfluence": 0.06,
+          "messages": {
+            "accepted": [
+              "The lumenmoth permits the shared quiet.",
+              "It continues its small orbit while you remain nearby."
+            ],
+            "declined": [
+              "The moth chooses another pocket of the room."
+            ]
+          }
+        },
+        "offer_object": {
+          "mode": "conditional",
+          "baseWillingness": 0.28,
+          "objectMemoryInfluence": 0.16,
+          "messages": {
+            "accepted": [
+              "The lumenmoth circles the offered object once, attending without taking it."
+            ],
+            "declined": [
+              "The moth gives the offered object no special attention."
+            ]
+          }
+        },
+        "invite_company": {
+          "mode": "conditional",
+          "baseWillingness": 0.24,
+          "historyInfluence": 0.08,
+          "followChance": 0.42,
+          "messages": {
+            "accepted": [
+              "The moth's orbit settles closer, as though leaving the invitation open."
+            ],
+            "declined": [
+              "The lumenmoth keeps its own route."
+            ]
+          }
+        },
+        "touch": {
+          "mode": "deny",
+          "withdrawOnDecline": true,
+          "messages": {
+            "declined": [
+              "The lumenmoth lifts away before contact. The answer is clear."
+            ]
+          }
+        }
       }
     },
     {
@@ -100,6 +176,84 @@
       "visual": {
         "shape": "brassling",
         "motion": "meander"
+      },
+      "consent": {
+        "approach": {
+          "mode": "conditional",
+          "baseWillingness": 0.92,
+          "historyInfluence": 0.06,
+          "messages": {
+            "accepted": [
+              "The little processional taps one foot and allows you into its small radius.",
+              "It stays by the fire and makes no objection to your approach."
+            ],
+            "declined": [
+              "The processional angles its brass body away and keeps a little room between you."
+            ]
+          }
+        },
+        "wait_nearby": {
+          "mode": "allow",
+          "messages": {
+            "accepted": [
+              "The processional appears entirely content to share the fire in silence.",
+              "It remains posted near the Hearth. Apparently this counts as company."
+            ]
+          }
+        },
+        "offer_object": {
+          "mode": "conditional",
+          "baseWillingness": 0.58,
+          "historyInfluence": 0.08,
+          "preferredObjectTemplates": [
+            "brass_token"
+          ],
+          "preferredObjectBonus": 0.2,
+          "messages": {
+            "accepted": [
+              "The processional leans toward the offered object and studies it with patient little taps."
+            ],
+            "declined": [
+              "The processional regards the object, then returns its attention to the fire."
+            ]
+          }
+        },
+        "invite_company": {
+          "mode": "conditional",
+          "baseWillingness": 0.54,
+          "historyInfluence": 0.1,
+          "followChance": 0.64,
+          "messages": {
+            "accepted": [
+              "The processional turns toward the nearest lawful path. It will consider following when you move."
+            ],
+            "declined": [
+              "The processional remains firmly committed to its present post."
+            ]
+          }
+        },
+        "touch": {
+          "mode": "conditional",
+          "baseWillingness": 0.48,
+          "historyInfluence": 0.14,
+          "requiresAccepted": [
+            "approach"
+          ],
+          "deferWhen": [
+            "resting"
+          ],
+          "messages": {
+            "accepted": [
+              "The brass shell is cool and finely textured beneath your hand. The processional permits the contact."
+            ],
+            "declined": [
+              "The processional steps one careful pace aside."
+            ],
+            "deferred": [
+              "The processional is resting. It does not open that possibility just now."
+            ]
+          }
+        }
       }
     },
     {
@@ -145,6 +299,83 @@
       "visual": {
         "shape": "thread",
         "motion": "curl"
+      },
+      "consent": {
+        "approach": {
+          "mode": "conditional",
+          "baseWillingness": 0.76,
+          "historyInfluence": 0.08,
+          "messages": {
+            "accepted": [
+              "The threadling loosens one pale loop toward you and remains.",
+              "It gathers itself but does not withdraw from your approach."
+            ],
+            "declined": [
+              "The threadling draws its loose strands closer to itself."
+            ]
+          }
+        },
+        "wait_nearby": {
+          "mode": "conditional",
+          "baseWillingness": 0.92,
+          "historyInfluence": 0.05,
+          "messages": {
+            "accepted": [
+              "The threadling resumes its quiet rearranging while you share the room."
+            ],
+            "declined": [
+              "The knot settles into a seam farther away."
+            ]
+          }
+        },
+        "offer_object": {
+          "mode": "conditional",
+          "baseWillingness": 0.68,
+          "historyInfluence": 0.06,
+          "objectMemoryInfluence": 0.28,
+          "messages": {
+            "accepted": [
+              "A strand extends toward the offered object, stopping just short of contact. Its attention is unmistakable."
+            ],
+            "declined": [
+              "The threadling curls inward; the object does not call to it this time."
+            ]
+          }
+        },
+        "invite_company": {
+          "mode": "conditional",
+          "baseWillingness": 0.46,
+          "historyInfluence": 0.1,
+          "followChance": 0.58,
+          "messages": {
+            "accepted": [
+              "Several loops orient toward the path beside you. The invitation remains open until you move."
+            ],
+            "declined": [
+              "The threadling settles more deeply into the room it has chosen."
+            ]
+          }
+        },
+        "touch": {
+          "mode": "conditional",
+          "baseWillingness": 0.38,
+          "historyInfluence": 0.12,
+          "requiresAccepted": [
+            "wait_nearby"
+          ],
+          "withdrawOnDecline": true,
+          "messages": {
+            "accepted": [
+              "The outermost strand rests briefly against your fingers before curling back into the whole."
+            ],
+            "declined": [
+              "The threadling tightens away from your hand without leaving the room."
+            ],
+            "deferred": [
+              "The threadling has not yet made room for that kind of contact."
+            ]
+          }
+        }
       }
     }
   ],
