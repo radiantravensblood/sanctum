@@ -63,6 +63,7 @@ export function rememberEvent(state, event) {
     motif: event.motif || null,
     topology: event.topology || null,
     entity: event.entity || null,
+    otherEntity: event.otherEntity || null,
     reason: event.reason || null
   };
 
