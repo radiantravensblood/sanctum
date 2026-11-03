@@ -17,6 +17,7 @@ import { relationsForEntity } from "./entities/relation.js";
 import { getAvailableAffordances } from "./interactions/accord.js";
 import { getAvailableHymnosActs } from "./hymnos/hymnos.js";
 import { getCrossRelation } from "./hymnos/relation.js";
+import { buildVelastraPacket } from "./velastra/index.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -26,6 +27,21 @@ export function render({ state, world, message, dispatch }) {
   const scene = reconstructSceneTruth(room, world);
   const orientation = buildOrientation({ state, world });
   const visual = applyRoomVisual({ room, world, state, scene, temporal: orientation && orientation.now });
+  const visualNow =
+    orientation &&
+    orientation.now &&
+    orientation.now.now
+      ? new Date(orientation.now.now)
+      : new Date();
+  const velastra = buildVelastraPacket({
+    state,
+    world,
+    roomId: room.id,
+    role: room.id === "threshold" ? "threshold" : "place",
+    family: "sanctum",
+    now: visualNow,
+    apply: true
+  });
 
   document.body.dataset.room = room.id;
   document.body.dataset.generated = isGeneratedRoom(state, room.id)
@@ -35,6 +51,8 @@ export function render({ state, world, message, dispatch }) {
     orientation && orientation.now ? orientation.now.local.dayPhase : "unknown";
   document.body.dataset.season =
     orientation && orientation.now ? orientation.now.local.season : "unknown";
+  document.body.dataset.velastraEngine =
+    velastra && velastra.intent ? "active" : "unavailable";
 
   setText("room-region", room.region);
   setText("room-title", room.name);
