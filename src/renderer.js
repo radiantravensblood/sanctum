@@ -100,7 +100,7 @@ function renderEntities(entities, dispatch) {
 
     const kind = document.createElement("small");
     kind.className = "entity-kind";
-    kind.textContent = template.kind.replaceAll("_", " ");
+    kind.textContent = template.kind.replaceAll("_", " ") + " · " + formatEntityStatus(record.status);
 
     copy.append(name, kind);
     identity.append(symbol, copy);
@@ -112,6 +112,19 @@ function renderEntities(entities, dispatch) {
 
     root.append(card);
   });
+}
+
+function formatEntityStatus(status) {
+  const labels = {
+    present: "present",
+    wandering: "wandering",
+    lingering: "lingering",
+    resting: "resting",
+    attending_object: "attending",
+    in_company: "in company"
+  };
+
+  return labels[status] || "present";
 }
 
 function renderObjects(objects, dispatch) {
