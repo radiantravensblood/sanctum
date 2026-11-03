@@ -969,3 +969,14 @@ body[data-season="autumn"] .memory-panel {
 .entity-state-wandering {
   opacity: 0.78;
 }
+
+
+/* Kernel 0010 — Relation
+   The interface names relationship, never its hidden accounting. */
+.entity-relation {
+  color: color-mix(in srgb, var(--room-glow) 62%, var(--room-muted));
+  font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  font-size: 0.68rem;
+  font-style: italic;
+  line-height: 1.35;
+}
