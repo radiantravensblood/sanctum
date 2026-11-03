@@ -52,8 +52,13 @@ export async function copyPainterCommand(
       ? "authoring/inbox/" + filename
       : "$HOME/Downloads/" + filename;
 
+  const pythonCommand =
+    target === "cloud"
+      ? ".venv/bin/python"
+      : "python3";
+
   const command = [
-    "python3",
+    pythonCommand,
     "labs/velastra/painter/velastra_painter.py",
     "render",
     shellQuote(handoffPath),
