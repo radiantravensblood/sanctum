@@ -64,6 +64,12 @@ Authoring-side painter bridge:
 - `labs/velastra/painter/README.md`
 - `labs/velastra/painter/requirements-diffusers.txt`
 
+Sanctum living-canvas handoff:
+
+- `src/velastra/sanctum-painting.js`
+- `src/velastra/authoring.js`
+- `labs/velastra/tests/living-canvas.mjs`
+
 Studio adapter:
 
 - `world/velastra-studio.json`
@@ -174,6 +180,33 @@ Candidate output lives outside canon by default under `.velastra/`.
 
 Only an `approved` entry in `world/velastra-assets.json` may supersede the
 procedural underpainting.
+
+## Living Canvas contract
+
+Kernel 0020 distinguishes **place identity** from **present-tense occupancy**.
+
+For Sanctum room paintings:
+
+- canonical place assets are keyed to stable room identity,
+- current entities do not alter the permanent room asset key,
+- movable objects do not alter the permanent room asset key,
+- transient facts do not enter painter motif selection,
+- the handoff may still record live presence beside the manifest for author
+  awareness,
+- reviewed paintings become environmental ground,
+- runtime overlays may continue to express time, anomaly, objects, and
+  inhabitants.
+
+The browser authoring aperture is opt-in through `?atelier=1`.
+
+The handoff protocol is `velastra.handoff.v1`.
+
+The handoff is deliberately compatible with the Kernel 0019 Python bridge:
+the bridge already accepts an outer object containing `manifest`.
+
+This preserves the law:
+
+**the painting remembers the place; the runtime carries the moment.**
 
 ## Studio adapter contract
 
