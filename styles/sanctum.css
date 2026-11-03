@@ -1636,7 +1636,10 @@ body[data-season="autumn"] .memory-panel {
 }
 
 .place-card::before,
-.place-card::after,
+.place-card::after {
+  opacity: var(--velastra-frame-opacity, 0.35);
+}
+
 .rail-card::after {
   opacity: var(--velastra-ornament-opacity, 0.35);
 }
@@ -1654,8 +1657,7 @@ body[data-velastra-frame="open"] .place-card {
 
 body[data-velastra-frame="open"] .place-card::before {
   width: var(--velastra-interruption, 34%);
-  opacity:
-    calc(var(--velastra-ornament-opacity, 0.35) * 0.72);
+  opacity: var(--velastra-frame-opacity, 0.35);
 }
 
 body[data-velastra-frame="interrupted"] .place-card {
