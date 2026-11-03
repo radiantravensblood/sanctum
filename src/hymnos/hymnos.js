@@ -1070,9 +1070,14 @@ function composeMessage({
   );
 
   if (!response) {
+    const punctuation = /[.!?]$/.test(offer)
+      ? ""
+      : ".";
+
     return (
       offer +
-      ". Presence is offered; no answer is required."
+      punctuation +
+      " Presence is offered; no answer is required."
     );
   }
 
