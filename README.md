@@ -1631,6 +1631,22 @@ The generic composer remains the same engine.
 
 Studio contributes its own semantic grammar and adapter body.
 
+### External proof
+
+The first external consumer is live in:
+
+`radiantravensblood/virynstudio`
+
+Studio main commit:
+
+`be17aca99494f32c1f6f724de93102e561ae63d9`
+
+The Studio repo vendors the generic composer and Studio adapter locally.
+
+The proof gate verifies that those two source files are byte-for-byte identical to the Labs source at Kernel 0018.
+
+Removing the two Velastra asset includes and the single explicit framework semantic tag returns the touched public Studio files to their pre-adapter content.
+
 ### Studio tokens
 
 The adapter currently exposes restrained local tokens for:
