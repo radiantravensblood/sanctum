@@ -6,6 +6,7 @@ import {
 } from "./compose.js";
 import { applySanctumIntent } from "./sanctum.js";
 import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
+import { selectMotifs, evaluateMotifExemplars } from "./motifs.js";
 
 export function buildVelastraPacket({
   state,
@@ -103,4 +104,55 @@ export function testVelastraSceneExemplars(world) {
   });
 }
 
-export { applySanctumIntent, composeScenePacket };
+export function composeVelastraMotifs({
+  world,
+  scene = {},
+  limit = 7,
+  seed = "velastra-motifs"
+}) {
+  const scenePacket = composeVelastraScene({
+    world,
+    ...scene
+  });
+
+  return {
+    scene: scenePacket,
+    selection: selectMotifs({
+      atlas: world.velastraMotifs,
+      scenePacket,
+      limit,
+      seed
+    })
+  };
+}
+
+export function testVelastraMotifExemplars(world) {
+  const scenePackets = Object.fromEntries(
+    Object.entries(world.velastraScene.exemplars || {}).map(
+      ([id, exemplar]) => [
+        id,
+        composeVelastraScene({
+          world,
+          meaning: exemplar.meaning || {},
+          family: exemplar.family || "sanctum",
+          archetype: exemplar.archetype,
+          subjects: exemplar.subjects || [],
+          relation: exemplar.relation || null,
+          environment: exemplar.environment || null,
+          seed: "motif-test-scene:" + id,
+          provenance: {
+            source: "motif_exemplar_scene",
+            exemplar: id
+          }
+        })
+      ]
+    )
+  );
+
+  return evaluateMotifExemplars({
+    atlas: world.velastraMotifs,
+    scenePackets
+  });
+}
+
+export { applySanctumIntent, composeScenePacket, selectMotifs };
