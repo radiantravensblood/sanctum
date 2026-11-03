@@ -17,11 +17,10 @@ export function compileSanctumAtelier({
       ? "threshold_revelation"
       : "place_tableau";
 
-  const environmentFacts = [
+  const identityFacts = [
     room.name,
     room.region || null,
     room.description || null,
-    ...(objects || []).map((object) => object.name),
     ...((visual && visual.effects) || []).map((effect) =>
       String(effect).replaceAll("_", " ")
     ),
@@ -31,26 +30,24 @@ export function compileSanctumAtelier({
       : null
   ].filter(Boolean);
 
-  const subjects = (entities || [])
-    .slice(0, 3)
-    .map(({ template }) => ({
-      id: template.id,
-      role: "resident",
-      description:
-        template.name +
-        " · " +
-        String(template.kind || "inhabitant").replaceAll("_", " ")
-    }));
+  const transientFacts = [
+    ...(objects || []).map((object) => object.name),
+    ...(entities || []).map(({ template }) =>
+      template ? template.name : null
+    )
+  ].filter(Boolean);
 
   const scenePacket = composeScenePacket({
     sceneGrammar: world.velastraScene,
     visualIntent,
     archetype,
-    subjects,
+    subjects: [],
     relation: null,
     environment: {
       kind: room.id,
-      facts: environmentFacts
+      facts: [...identityFacts, ...transientFacts],
+      identityFacts,
+      transientFacts
     },
     seed:
       "sanctum:" +
@@ -59,7 +56,9 @@ export function compileSanctumAtelier({
       String(sceneTruth?.seed || visual?.seed || room.id),
     provenance: {
       source: "sanctum_live_scene",
-      room: room.id
+      room: room.id,
+      assetScope: "place",
+      transientPresenceExcludedFromCanonicalPainting: true
     }
   });
 
@@ -81,6 +80,18 @@ export function compileSanctumAtelier({
   return {
     scenePacket,
     motifSelection,
-    manifest
+    manifest,
+    livePresence: {
+      objects: (objects || []).map((object) => ({
+        id: object.id,
+        name: object.name,
+        portable: Boolean(object.portable)
+      })),
+      entities: (entities || []).map(({ template, record }) => ({
+        id: template.id,
+        name: template.name,
+        status: record.status || "present"
+      }))
+    }
   };
 }
