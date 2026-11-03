@@ -12,6 +12,7 @@ import { buildAccordPacket, getAvailableAffordances, proposeInteraction } from "
 import { buildHymnosPacket, getAvailableHymnosActs, performHymnosAct, endDuet } from "./hymnos/hymnos.js";
 import { buildIdentityPacket } from "./hymnos/identity.js";
 import { buildCrossRelationPacket } from "./hymnos/relation.js";
+import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars } from "./velastra/index.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -107,6 +108,32 @@ async function ignite() {
         state,
         world
       }),
+    velastra: ({
+      roomId = state.location,
+      role = roomId === "threshold" ? "threshold" : "place",
+      family = "sanctum",
+      overrides = {}
+    } = {}) =>
+      buildVelastraPacket({
+        state,
+        world,
+        roomId,
+        role,
+        family,
+        overrides,
+        apply: false
+      }),
+    visualize: (
+      meaning = {},
+      family = "sanctum"
+    ) =>
+      composeVelastraMeaning({
+        world,
+        meaning,
+        family
+      }),
+    velastraTests: () =>
+      testVelastraExemplars(world),
     sing: ({
       actorId = "siege",
       targetId,
@@ -187,6 +214,22 @@ async function ignite() {
 
       return outcome;
     }
+  });
+
+  window.Velastra = Object.freeze({
+    compose: (
+      meaning = {},
+      family = "sanctum"
+    ) =>
+      composeVelastraMeaning({
+        world,
+        meaning,
+        family
+      }),
+    exemplars: () =>
+      testVelastraExemplars(world),
+    grammar: () =>
+      JSON.parse(JSON.stringify(world.velastra))
   });
 
   window.addEventListener("beforeunload", () => {
