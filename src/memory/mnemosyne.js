@@ -61,7 +61,9 @@ export function rememberEvent(state, event) {
     threshold: event.threshold || null,
     realm: event.realm || null,
     motif: event.motif || null,
-    topology: event.topology || null
+    topology: event.topology || null,
+    entity: event.entity || null,
+    reason: event.reason || null
   };
 
   roomKeysFor(echo).forEach((roomId) => {
@@ -258,7 +260,7 @@ function roomKeysFor(echo) {
 
   if (echo.room) keys.add(echo.room);
 
-  if (echo.action === "move" || echo.action === "return") {
+  if (echo.action === "move" || echo.action === "return" || echo.action === "entity_move") {
     if (echo.from) keys.add(echo.from);
     if (echo.to) keys.add(echo.to);
   }
