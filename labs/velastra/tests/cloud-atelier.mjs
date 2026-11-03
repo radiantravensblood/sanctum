@@ -59,6 +59,18 @@ assert.ok(
 );
 
 assert.ok(
+  authoring.includes('".venv/bin/python"'),
+  "Cloud command must use the Codespace-isolated Python environment"
+);
+
+assert.ok(
+  String(devcontainer.postCreateCommand || "").includes(
+    "python3 -m venv .venv"
+  ),
+  "Codespace must create an isolated authoring environment"
+);
+
+assert.ok(
   !JSON.stringify(devcontainer).includes("hf_"),
   "devcontainer must not contain a token value"
 );
