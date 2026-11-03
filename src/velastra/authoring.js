@@ -36,7 +36,8 @@ export async function copyPainterCommand(
   brushCabinet,
   {
     brushId = null,
-    transportId = null
+    transportId = null,
+    target = "local"
   } = {}
 ) {
   const handoff = composePaintingHandoff(painting);
@@ -46,12 +47,16 @@ export async function copyPainterCommand(
     brushId,
     transportId
   );
+  const handoffPath =
+    target === "cloud"
+      ? "authoring/inbox/" + filename
+      : "$HOME/Downloads/" + filename;
 
   const command = [
     "python3",
     "labs/velastra/painter/velastra_painter.py",
     "render",
-    '"$HOME/Downloads/' + filename + '"',
+    shellQuote(handoffPath),
     "--brush",
     shellQuote(selection.brushId),
     "--transport",
@@ -75,6 +80,8 @@ export async function copyPainterCommand(
   return {
     command,
     copied,
+    target,
+    filename,
     ...selection
   };
 }
@@ -206,19 +213,39 @@ export function installAtelierDock({
   );
 
   const commandButton = button(
-    "Copy painter command",
+    "Copy local command",
     async () => {
       const result = await copyPainterCommand(
         getPainting(),
         brushCabinet,
         {
           brushId: brushSelect.value,
-          transportId: transportSelect.value
+          transportId: transportSelect.value,
+          target: "local"
         }
       );
       status.textContent = result.copied
         ? result.brushLabel +
-          " · command copied"
+          " · local command copied"
+        : result.command;
+    }
+  );
+
+  const cloudCommandButton = button(
+    "Copy cloud command",
+    async () => {
+      const result = await copyPainterCommand(
+        getPainting(),
+        brushCabinet,
+        {
+          brushId: brushSelect.value,
+          transportId: transportSelect.value,
+          target: "cloud"
+        }
+      );
+      status.textContent = result.copied
+        ? result.brushLabel +
+          " · cloud command copied"
         : result.command;
     }
   );
@@ -247,7 +274,11 @@ export function installAtelierDock({
     });
   });
 
-  actions.append(exportButton, commandButton);
+  actions.append(
+    exportButton,
+    commandButton,
+    cloudCommandButton
+  );
   dock.append(
     title,
     law,
@@ -310,9 +341,19 @@ export function resolveBrushSelection(
   }
 
   const transports = brush.transports || {};
+  const cabinetDefault =
+    brushCabinet.defaultTransport;
   const chosenTransport =
     transportId ||
-    brushCabinet.defaultTransport ||
+    (
+      transports[cabinetDefault]
+        ? cabinetDefault
+        : null
+    ) ||
+    Object.entries(transports).find(
+      ([, value]) =>
+        value && value.recommended === true
+    )?.[0] ||
     Object.keys(transports)[0];
   const transport =
     transports[chosenTransport];
