@@ -38,21 +38,31 @@ export async function copyPainterCommand(painting) {
     "python3",
     "labs/velastra/painter/velastra_painter.py",
     "render",
-    '"~/Downloads/' + filename + '"',
+    '"$HOME/Downloads/' + filename + '"',
     "--backend",
     "diffusers",
     "--model",
     "<model-id>"
   ].join(" ");
 
+  let copied = false;
+
   if (
     navigator.clipboard &&
     navigator.clipboard.writeText
   ) {
-    await navigator.clipboard.writeText(command);
+    try {
+      await navigator.clipboard.writeText(command);
+      copied = true;
+    } catch {
+      copied = false;
+    }
   }
 
-  return command;
+  return {
+    command,
+    copied
+  };
 }
 
 export function installAtelierDock({
@@ -100,13 +110,12 @@ export function installAtelierDock({
   const commandButton = button(
     "Copy painter command",
     async () => {
-      const command = await copyPainterCommand(
+      const result = await copyPainterCommand(
         getPainting()
       );
-      status.textContent =
-        navigator.clipboard
-          ? "command copied"
-          : command;
+      status.textContent = result.copied
+        ? "command copied"
+        : result.command;
     }
   );
 
