@@ -5,6 +5,7 @@ import {
   evaluateExemplars
 } from "./compose.js";
 import { applySanctumIntent } from "./sanctum.js";
+import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
 
 export function buildVelastraPacket({
   state,
@@ -61,4 +62,45 @@ export function testVelastraExemplars(world) {
   return evaluateExemplars(world.velastra);
 }
 
-export { applySanctumIntent };
+export function composeVelastraScene({
+  world,
+  meaning = {},
+  family = "sanctum",
+  archetype = null,
+  subjects = [],
+  relation = null,
+  environment = null,
+  seed = "velastra-scene",
+  provenance = {}
+}) {
+  const visualIntent = composeMeaning({
+    grammar: world.velastra,
+    meaning,
+    family
+  });
+
+  return composeScenePacket({
+    sceneGrammar: world.velastraScene,
+    visualIntent,
+    archetype,
+    subjects,
+    relation,
+    environment,
+    seed,
+    provenance
+  });
+}
+
+export function testVelastraSceneExemplars(world) {
+  return evaluateSceneExemplars({
+    sceneGrammar: world.velastraScene,
+    composeVisualIntent: (meaning, family) =>
+      composeMeaning({
+        grammar: world.velastra,
+        meaning,
+        family
+      })
+  });
+}
+
+export { applySanctumIntent, composeScenePacket };
