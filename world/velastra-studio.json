@@ -35,7 +35,12 @@
           "vitality": 0.74
         },
         "hints": {
-          "materials": ["paper", "brass", "botanical", "ember"]
+          "materials": [
+            "paper",
+            "brass",
+            "botanical",
+            "ember"
+          ]
         }
       }
     },
@@ -58,7 +63,11 @@
           "vitality": 0.62
         },
         "hints": {
-          "materials": ["paper", "brass", "botanical"]
+          "materials": [
+            "paper",
+            "brass",
+            "botanical"
+          ]
         }
       }
     },
@@ -81,7 +90,11 @@
           "vitality": 0.56
         },
         "hints": {
-          "materials": ["paper", "brass", "ember"]
+          "materials": [
+            "paper",
+            "brass",
+            "ember"
+          ]
         }
       }
     },
@@ -104,7 +117,10 @@
           "vitality": 0.52
         },
         "hints": {
-          "materials": ["paper", "brass"]
+          "materials": [
+            "paper",
+            "brass"
+          ]
         }
       }
     },
@@ -127,7 +143,11 @@
           "vitality": 0.56
         },
         "hints": {
-          "materials": ["paper", "brass", "glass"]
+          "materials": [
+            "paper",
+            "brass",
+            "glass"
+          ]
         }
       }
     },
@@ -150,7 +170,11 @@
           "vitality": 0.4
         },
         "hints": {
-          "materials": ["paper", "stone", "glass"]
+          "materials": [
+            "paper",
+            "stone",
+            "glass"
+          ]
         }
       }
     },
@@ -173,7 +197,11 @@
           "vitality": 0.52
         },
         "hints": {
-          "materials": ["ember", "paper", "brass"]
+          "materials": [
+            "ember",
+            "paper",
+            "brass"
+          ]
         }
       }
     },
@@ -196,7 +224,11 @@
           "vitality": 0.4
         },
         "hints": {
-          "materials": ["paper", "ember", "brass"]
+          "materials": [
+            "paper",
+            "ember",
+            "brass"
+          ]
         }
       }
     },
@@ -219,7 +251,11 @@
           "vitality": 0.32
         },
         "hints": {
-          "materials": ["glass", "paper", "brass"]
+          "materials": [
+            "glass",
+            "paper",
+            "brass"
+          ]
         }
       }
     }
@@ -234,7 +270,11 @@
         "permeability": 0.78
       },
       "hints": {
-        "materials": ["botanical", "paper", "ember"]
+        "materials": [
+          "botanical",
+          "paper",
+          "ember"
+        ]
       }
     },
     "ledger": {
@@ -246,19 +286,30 @@
         "intimacy": 0.52
       },
       "hints": {
-        "materials": ["paper", "brass", "ember"]
+        "materials": [
+          "paper",
+          "brass",
+          "ember"
+        ]
       }
     },
     "signal": {
       "axes": {
-        "vitality": 0.92,
-        "permeability": 0.74,
-        "certainty": 0.62,
-        "density": 0.64,
-        "intimacy": 0.5
+        "vitality": 0.9,
+        "permeability": 0.9,
+        "certainty": 0.46,
+        "density": 0.4,
+        "intimacy": 0.46,
+        "porosity": 0.86,
+        "sacredness": 0.24,
+        "remembrance": 0.38
       },
       "hints": {
-        "materials": ["glass", "brass", "shadow"]
+        "materials": [
+          "glass",
+          "brass",
+          "shadow"
+        ]
       }
     },
     "table": {
@@ -270,7 +321,11 @@
         "intimacy": 0.7
       },
       "hints": {
-        "materials": ["ember", "brass", "paper"]
+        "materials": [
+          "ember",
+          "brass",
+          "paper"
+        ]
       }
     }
   },
@@ -278,23 +333,42 @@
     "hero": {
       "surface": "hero_threshold",
       "expect": {
-        "materialsAny": ["botanical", "paper", "ember", "velvet", "brass"],
-        "frameAny": ["open", "held"],
-        "typographyAny": ["editorial", "ceremonial"]
+        "materialsAny": [
+          "botanical",
+          "paper",
+          "ember",
+          "velvet",
+          "brass"
+        ],
+        "frameAny": [
+          "open",
+          "held"
+        ],
+        "typographyAny": [
+          "editorial",
+          "ceremonial"
+        ]
       }
     },
     "pricing": {
       "surface": "pricing_clarity",
       "expect": {
         "ornamentMax": 0.36,
-        "typographyAny": ["operational", "editorial"]
+        "typographyAny": [
+          "operational",
+          "editorial"
+        ]
       }
     },
     "gathering_framework": {
       "surface": "framework_library",
       "framework": "gathering",
       "expect": {
-        "materialsAny": ["botanical", "ember", "paper"],
+        "materialsAny": [
+          "botanical",
+          "ember",
+          "paper"
+        ],
         "relationalityMin": 0.85
       }
     },
@@ -302,7 +376,11 @@
       "surface": "framework_library",
       "framework": "signal",
       "expect": {
-        "materialsAny": ["glass", "brass", "shadow"],
+        "materialsAny": [
+          "glass",
+          "brass",
+          "shadow"
+        ],
         "vitalityMin": 0.75
       }
     }
