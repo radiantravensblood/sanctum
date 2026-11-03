@@ -23,6 +23,94 @@ Sanctum continues to run with HTML, CSS, JavaScript, JSON, and SVG only.
 If no reviewed painting exists for an `assetKey`, the browser still uses the
 procedural underpainting from Kernel 0017.
 
+## Brush Cabinet
+
+Kernel 0021 removes the placeholder-model workflow.
+
+The Painter Bridge now resolves named brushes from:
+
+`world/velastra-brushes.json`
+
+List them with:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py brushes
+```
+
+The current default is:
+
+```text
+z_image_turbo
+Tongyi-MAI/Z-Image-Turbo
+Apache-2.0
+default transport: huggingface / fal-ai
+```
+
+The heavier alternate is:
+
+```text
+qwen_image
+Qwen/Qwen-Image
+Apache-2.0
+```
+
+A brush name is part of candidate provenance.
+
+A brush does not become part of scene truth.
+
+### Remote provider setup
+
+The recommended everyday transport uses Hugging Face Inference Providers.
+
+Create a virtual environment if desired, then install:
+
+```bash
+pip install -r labs/velastra/painter/requirements-provider.txt
+```
+
+Expose a Hugging Face token with Inference Providers permission only through
+the shell environment:
+
+```bash
+export HF_TOKEN="..."
+```
+
+Do not write the token into a manifest, handoff, command argument, JSON file,
+or registry entry.
+
+The bridge records only the environment-variable name.
+
+A normal render is now:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py \
+  render "$HOME/Downloads/gallery--velastra.place_tableau.example.velastra.json" \
+  --brush z_image_turbo \
+  --transport huggingface
+```
+
+The Atelier dock generates this shape automatically.
+
+### Local Diffusers transport
+
+Machines with suitable local acceleration can choose:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py \
+  render path/to/painting.velastra.json \
+  --brush z_image_turbo \
+  --transport diffusers
+```
+
+Install the local dependencies separately:
+
+```bash
+pip install -r labs/velastra/painter/requirements-diffusers.txt
+```
+
+Advanced `--model` and `--backend` overrides remain available for controlled
+experiments. Ordinary authoring should prefer named brushes.
+
 ## Candidate lifecycle
 
 A generated image is never canonical merely because a model returned it.
