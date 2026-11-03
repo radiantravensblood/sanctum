@@ -677,6 +677,7 @@ function recordInteraction({
   });
 
   appendEvent(state, {
+    at: event.at,
     actor: actor.id,
     action: "interaction",
     actorKind: actor.kind,
