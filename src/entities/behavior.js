@@ -13,10 +13,15 @@ import {
 import { createSeededRandom } from "../genesis/seed.js";
 import {
   getEntityRecord,
-  getEntityTemplate,
   rememberEntity,
   rememberEncounter
 } from "./entities.js";
+import {
+  getRelation,
+  hoursSinceRelationEvidence,
+  registerRelationEvidence,
+  relationChoiceBias
+} from "./relation.js";
 
 export function advanceEntities({
   state,
@@ -135,6 +140,18 @@ function chooseAction({
   if (!roomObjects.length) weights.notice_object = 0;
   if (!peers.length) weights.attend_entity = 0;
 
+  if (peers.length) {
+    const knownCompany = peers.some((peerId) => {
+      const relation = getRelation(state, template.id, peerId);
+      return relation && relation.phase !== "unfamiliar";
+    });
+
+    if (knownCompany) {
+      weights.attend_entity *= 1.18;
+      weights.linger *= 1.08;
+    }
+  }
+
   const seed = [
     world.genesis.worldSeed,
     template.id,
@@ -218,6 +235,7 @@ function executeAction({
         template,
         record,
         state,
+        world,
         at,
         action: "entity_rest",
         status: "resting"
@@ -229,6 +247,7 @@ function executeAction({
         template,
         record,
         state,
+        world,
         at,
         action: "entity_linger",
         status: "lingering"
@@ -258,6 +277,7 @@ function moveEntity({
       template,
       record,
       state,
+      world,
       at,
       action: "entity_linger",
       status: "lingering"
@@ -265,6 +285,12 @@ function moveEntity({
   }
 
   const from = record.location;
+  const targetPeers = peersAt(state, template.id, move.target)
+    .map((peerId) => ({
+      peerId,
+      before: getRelation(state, template.id, peerId)
+    }));
+
   record.location = move.target;
   record.lastMovedAt = at.toISOString();
   record.status = "wandering";
@@ -285,6 +311,36 @@ function moveEntity({
     actor: template.id
   });
 
+  targetPeers.forEach(({ peerId, before }) => {
+    if (
+      before &&
+      hoursSinceRelationEvidence(before, at.toISOString()) >=
+        Number((world.entities.relation && world.entities.relation.reunionHours) || 6)
+    ) {
+      recordRelationEvidence({
+        state,
+        world,
+        a: template.id,
+        b: peerId,
+        type: "reunion",
+        actor: template.id,
+        room: move.target,
+        at: at.toISOString()
+      });
+    }
+
+    recordRelationEvidence({
+      state,
+      world,
+      a: template.id,
+      b: peerId,
+      type: "approach",
+      actor: template.id,
+      room: move.target,
+      at: at.toISOString()
+    });
+  });
+
   return {
     action: "move",
     entity: template.id,
@@ -297,6 +353,7 @@ function remain({
   template,
   record,
   state,
+  world,
   at,
   action,
   status
@@ -315,6 +372,27 @@ function remain({
   appendEvent(state, {
     ...entityEvent,
     actor: template.id
+  });
+
+  const peers = peersAt(state, template.id, record.location);
+
+  peers.forEach((peerId) => {
+    const peer = getEntityRecord(state, peerId);
+    const sharedRest =
+      action === "entity_rest" &&
+      peer &&
+      peer.status === "resting";
+
+    recordRelationEvidence({
+      state,
+      world,
+      a: template.id,
+      b: peerId,
+      type: sharedRest ? "shared_rest" : "linger_together",
+      actor: template.id,
+      room: record.location,
+      at: at.toISOString()
+    });
   });
 
   return {
@@ -393,11 +471,16 @@ function encounterEntity({
     return null;
   }
 
+  const mutualBefore =
+    otherRecord.status === "in_company" &&
+    otherRecord.focus === template.id;
+
   record.status = "in_company";
   record.focus = otherId;
   otherRecord.status = otherRecord.status === "resting"
     ? "resting"
     : "in_company";
+
   if (otherRecord.status === "in_company") {
     otherRecord.focus = template.id;
   }
@@ -428,6 +511,40 @@ function encounterEntity({
     action: "entity_encounter",
     ...event
   });
+
+  recordRelationEvidence({
+    state,
+    world,
+    a: template.id,
+    b: otherId,
+    type: "encounter",
+    actor: template.id,
+    room: record.location,
+    at: at.toISOString()
+  });
+
+  recordRelationEvidence({
+    state,
+    world,
+    a: template.id,
+    b: otherId,
+    type: "attention",
+    actor: template.id,
+    room: record.location,
+    at: at.toISOString()
+  });
+
+  if (mutualBefore) {
+    recordRelationEvidence({
+      state,
+      world,
+      a: template.id,
+      b: otherId,
+      type: "mutual_attention",
+      room: record.location,
+      at: at.toISOString()
+    });
+  }
 
   return {
     action: "encounter",
@@ -538,6 +655,7 @@ function affinityScore({
     Number(affinities.familiarPaths || 0);
   score += Math.min(1, objects / 3) *
     Number(affinities.objects || 0);
+  score += relationChoiceBias(state, template.id, candidate.target);
 
   if (room && room.genesis) {
     const realm = world.realms[room.genesis.realm];
@@ -561,6 +679,43 @@ function affinityScore({
   }
 
   return score;
+}
+
+function recordRelationEvidence({
+  state,
+  world,
+  a,
+  b,
+  type,
+  actor = null,
+  room = null,
+  at
+}) {
+  const result = registerRelationEvidence({
+    state,
+    world,
+    a,
+    b,
+    type,
+    actor,
+    room,
+    at
+  });
+
+  if (!result || !result.changed) return result;
+
+  appendEvent(state, {
+    at,
+    actor: "sanctum",
+    action: "relation_phase",
+    room,
+    relation: result.relation.id,
+    entities: [...result.relation.entities],
+    fromPhase: result.from,
+    toPhase: result.to
+  });
+
+  return result;
 }
 
 function objectsAt(state, roomId) {
