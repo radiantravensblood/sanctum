@@ -7,7 +7,7 @@ import {
 import { createInitialTime, mergeTime } from "./time/chronos.js";
 import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
 import { seedRelationsFromLegacy } from "./entities/relation.js";
-import { createInitialAccordState, mergeAccordState } from "./interactions/accord.js";
+import { createInitialAccordState, mergeAccordState } from "./interactions/state.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
 const VERSION = 9;
