@@ -15,6 +15,7 @@ import { buildOrientation } from "./time/orientation.js";
 import { getEntitiesAt } from "./entities/entities.js";
 import { relationsForEntity } from "./entities/relation.js";
 import { getAvailableAffordances } from "./interactions/accord.js";
+import { getAvailableAffordances } from "./interactions/accord.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
