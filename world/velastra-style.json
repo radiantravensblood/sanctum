@@ -26,12 +26,12 @@
     {
       "id": "material_memory",
       "weight": 0.96,
-      "directive": "Let surfaces remember handling, weather, repair, age, pressure, and unfinished work through patina, worn edges, layered pigment, residue, and subtle imperfection."
+      "directive": "Let scene-permitted surfaces remember handling, weather, repair, age, pressure, and unfinished work through patina, worn edges, layered pigment, residue, and subtle imperfection."
     },
     {
       "id": "sacred_incompletion",
       "weight": 0.94,
-      "directive": "Permit unresolved marks, interrupted gestures, exposed underpainting, unfinished edges, partial studies, and meaningful absence when the scene allows them."
+      "directive": "Permit unresolved marks, interrupted gestures, exposed underpainting, unfinished edges, partial treatment, and meaningful absence on scene-permitted surfaces when the scene allows them."
     },
     {
       "id": "threshold_depth",
@@ -51,7 +51,7 @@
     {
       "id": "residue_before_props",
       "weight": 0.84,
-      "directive": "Prefer traces of use, discarded attempts, stains, folds, scratches, fingerprints, dust, thread, paper, wax, water, or displaced objects over decorative set dressing."
+      "directive": "Prefer traces of use on scene-permitted surfaces and materials—stains, wear, folds, scratches, dust, water, thread, wax, or displacement only when already supported by scene truth—over decorative set dressing."
     },
     {
       "id": "symbolic_restraint",
@@ -61,7 +61,7 @@
     {
       "id": "intimate_scale",
       "weight": 0.8,
-      "directive": "Even in large spaces, preserve a human sense of nearness: reachable surfaces, handled objects, local light, and evidence that someone could have just left."
+      "directive": "Even in large spaces, preserve a human sense of nearness through reachable scale, handled-looking surfaces, local light, and scene-supported evidence of prior presence; do not invent occupants or props."
     },
     {
       "id": "tonal_memory",
@@ -130,7 +130,7 @@
         "purposeful_asymmetry"
       ],
       "directives": [
-        "Show process through evidence of making rather than picturesque studio clutter.",
+        "Show process through evidence already supported by the scene rather than picturesque studio clutter.",
         "Let unfinished work remain genuinely unfinished."
       ]
     },
@@ -164,9 +164,9 @@
       "title": "The Gallery of Unfinished Things",
       "directives": [
         "Unfinishedness must read as process, waiting, abandonment, revision, and becoming—not merely blank framed surfaces.",
-        "Include evidence of attempts: partial studies, erased marks, exposed grounds, folded or discarded working material, interrupted hanging, or traces of prior placement when supported by scene truth.",
+        "Express prior attempts through treatment of scene-supported works and surfaces: partial marks, erased passages, exposed grounds, interrupted hanging, uneven completion, or traces of prior placement; do not invent unsupported props.",
         "The gallery should feel patient but not tidy; reverent but not sterile; beautiful without resolving its incompletion.",
-        "Let at least one work feel caught between absence and emergence without becoming a literal portal unless scene truth permits it."
+        "Let at least one existing work or surface feel caught between absence and emergence without becoming a literal portal unless scene truth permits it."
       ],
       "avoid": [
         "a symmetrical lineup of tasteful empty frames",
