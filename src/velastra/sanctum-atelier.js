@@ -45,7 +45,7 @@ export function compileSanctumAtelier({
     relation: null,
     environment: {
       kind: room.id,
-      facts: [...identityFacts, ...transientFacts],
+      facts: [...identityFacts],
       identityFacts,
       transientFacts
     },
