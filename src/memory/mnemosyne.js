@@ -68,7 +68,12 @@ export function rememberEvent(state, event) {
     relation: event.relation || null,
     entities: event.entities || null,
     fromPhase: event.fromPhase || null,
-    toPhase: event.toPhase || null
+    toPhase: event.toPhase || null,
+    actorKind: event.actorKind || null,
+    targetEntity: event.targetEntity || null,
+    affordance: event.affordance || null,
+    outcome: event.outcome || null,
+    companion: event.companion || null
   };
 
   roomKeysFor(echo).forEach((roomId) => {
