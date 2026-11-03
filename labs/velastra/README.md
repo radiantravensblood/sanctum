@@ -248,6 +248,29 @@ This preserves the law:
 
 **a brush may be chosen; meaning remains sovereign.**
 
+## Cloud Atelier contract
+
+Kernel 0022 allows the Painter Bridge to execute in GitHub Codespaces without
+changing the Painter Bridge's semantic authority.
+
+Cloud authoring may:
+
+- clone Sanctum onto GitHub-managed storage,
+- install provider-only authoring dependencies,
+- receive `HF_TOKEN` as a Codespaces development-environment secret,
+- accept temporary painting handoffs under `authoring/inbox/`,
+- write candidates under the already ignored `.velastra/` tree.
+
+Cloud authoring may not:
+
+- commit a token,
+- commit a temporary handoff by default,
+- move generation into visitor runtime,
+- bypass candidate review,
+- make Codespaces part of scene truth.
+
+The cloud environment is transport infrastructure only.
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.
