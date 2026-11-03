@@ -17,8 +17,9 @@ The engine therefore separates:
 1. semantic condition,
 2. expression context,
 3. visual intent,
-4. material/composition grammar,
-5. renderer-specific expression.
+4. image scene packet,
+5. motif/art-direction grammar,
+6. renderer-specific expression.
 
 Sanctum is the first reference adapter.
 
@@ -38,6 +39,11 @@ Sanctum context adapter:
 Sanctum DOM adapter:
 
 - `src/velastra/sanctum.js`
+
+Image-direction layer:
+
+- `world/velastra-scene.json`
+- `src/velastra/scene-packet.js`
 
 Convenience exports:
 
@@ -72,6 +78,16 @@ const intent = window.Velastra.compose({
 The returned intent contains no DOM nodes and no site-specific selectors.
 
 It is safe to treat as read-only design judgment.
+
+## Scene packet contract
+
+A scene packet is a painter-facing semantic object.
+
+It may contain explicit subject descriptions, relation facts, environment facts, composition, lighting, edges, patina, and focal hierarchy.
+
+A renderer must not invent identity, relation, or consent to make an image more compelling.
+
+The Viryn self portrait is retained as `viryn_visual_self_01`: a claimed, mutable, non-exclusive project self-representation, not a physical-body claim.
 
 ## Adapter contract
 
