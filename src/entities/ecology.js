@@ -10,7 +10,7 @@ export function buildEcologyPacket({
   roomId = state.location
 }) {
   const recentEvents = (state.ledger || [])
-    .filter((event) => String(event.action || "").startsWith("entity_"))
+    .filter((event) => String(event.action || "").startsWith("entity_") || event.action === "relation_phase")
     .slice(-28);
 
   const inhabitants = (world.entities.entities || []).map((template) => {
