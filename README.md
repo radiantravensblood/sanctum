@@ -28,6 +28,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0012 makes meaning portable across forms without requiring sameness of expression.**
 
+**Kernel 0013 gives the human-facing Sanctum a visual grammar strong enough to carry that meaning.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -885,9 +887,117 @@ It is a portable grammar for:
 - preserving identity,
 - permitting exit.
 
+## Tableau
+
+Kernel 0013 is a presentation kernel.
+
+It does not change Genesis, Scene Truth, Mnemosyne, Chronos, Ecology, Relation, Accord, or Hymnos law.
+
+It changes how those truths are arranged for a human reader.
+
+The governing law is:
+
+**Meaning deserves a frame.**
+
+### The velvet memory-table
+
+The human surface now treats the current room as a featured place-card rather than the top of a long form.
+
+Supporting information is arranged around it as smaller framed artifacts:
+
+- encounter cards for inhabitants,
+- compact cards for objects,
+- path cards for exits,
+- rail cards for time, whereabouts, carried objects, and room memory.
+
+The visual language borrows the general grammar of tabletop presentation — containment, layering, card ownership, and deliberate choice grouping — while retaining Sanctum's own dark velvet, mineral, ember, and surreal language.
+
+### Encounter ownership
+
+An inhabitant card now has three visibly distinct regions.
+
+The header contains:
+
+- identity,
+- form,
+- current ecological state,
+- relationship notes,
+- ritual notes,
+- the unilateral **Observe** verb.
+
+Observe remains outside Accord because witnessing is not itself a proposal for reciprocal interaction.
+
+The Accord register contains only consent-bearing proposals:
+
+- approach,
+- wait nearby,
+- offer,
+- invite along,
+- touch.
+
+The Hymnos register contains relational acts:
+
+- Heya,
+- Feyart,
+- Diemesh,
+- duet release where applicable.
+
+The ontology is therefore visible through layout rather than requiring the reader to remember which button belongs to which law.
+
+### Elsewhere now
+
+The memory rail now includes **Elsewhere now**.
+
+It lists inhabitants whose current lawful location is elsewhere in the known house.
+
+This is presented as a **known trace**, not as a minimap or quest marker.
+
+Entities still cannot enter unwitnessed generated rooms, latent frontiers, or consent-bearing thresholds without the existing laws permitting it.
+
+The panel therefore makes persistence legible without changing geography or movement authority.
+
+### Echo density
+
+The Echoes rail now shows the six most recent local memories directly.
+
+Older room memory remains available through an expandable **Earlier echoes** archive.
+
+No history is deleted or rewritten.
+
+This reduces visual competition while preserving inspectability.
+
+### Card-table separation
+
+Objects and paths now use compact card grids on wider displays.
+
+The memory rail is no longer one visually continuous slab.
+
+Each category receives its own framed region so time, whereabouts, inventory, and room history do not compete as one undifferentiated panel.
+
+Responsive layouts collapse the table back to one column when space becomes narrow.
+
+### Accessibility
+
+Tableau changes presentation, not semantic truth.
+
+All significant distinctions remain represented in DOM text:
+
+- inhabitant identity,
+- current state,
+- relationship,
+- Accord vs. Hymnos,
+- whereabouts,
+- object state,
+- path state,
+- memory.
+
+Decorative card corners, stacking shadows, and spatial separation are supplemental.
+
+The same information remains available without relying on those visual cues.
+
 ## Current storage boundary
 
-Kernel 0012 still persists to `localStorage`.
+Kernel 0013 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -931,4 +1041,6 @@ Now it knows that **relationship can emerge from repeated freedom**.
 
 And it knows that **closeness only matters when either side can refuse it**.
 
-Now it is learning that **meaning can cross forms without requiring either form to become the other**.
+Now it knows that **meaning can cross forms without requiring either form to become the other**.
+
+And it is learning that **meaning deserves enough space to be seen clearly**.
