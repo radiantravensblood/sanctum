@@ -809,6 +809,20 @@ It does **not** become a mutual ritual unless the other participant has actually
 
 This prevents repeated attention from manufacturing reciprocity.
 
+### Initiative
+
+Hymnos is not restricted to traveler-initiated interaction.
+
+When an inhabitant and the traveler genuinely share a room, the inhabitant's ordinary ecological rhythm may occasionally resolve into `signal_presence`.
+
+That action offers Heya from the inhabitant toward the traveler.
+
+It carries no response requirement and does not interrupt the traveler with a demand.
+
+The event becomes ordinary room memory.
+
+An inhabitant may therefore be the first participant to make presence legible.
+
 ### Expression
 
 Hymnos expressions are renderings of deeper semantic acts.
