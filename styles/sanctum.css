@@ -1931,3 +1931,49 @@ body[data-velastra-painting="reviewed_static_asset"] .scene-glow-reviewed {
     width: auto;
   }
 }
+
+
+/* Kernel 0021 — Brush Cabinet
+   A brush may be chosen. Meaning remains sovereign. */
+.atelier-field {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+}
+
+.atelier-field > span {
+  color: var(--room-muted);
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.atelier-field select {
+  min-width: 0;
+  padding: 7px 9px;
+  color: var(--room-ink);
+  border: 1px solid var(--room-line);
+  background:
+    color-mix(in srgb, var(--room-surface) 38%, var(--room-shadow));
+  font: inherit;
+}
+
+.atelier-field select:focus-visible {
+  outline: 1px solid
+    color-mix(in srgb, var(--room-accent) 62%, transparent);
+  outline-offset: 2px;
+}
+
+.atelier-transport-note {
+  color:
+    color-mix(in srgb, var(--room-glow) 48%, var(--room-muted)) !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+}
