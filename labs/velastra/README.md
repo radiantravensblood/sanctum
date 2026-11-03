@@ -63,6 +63,11 @@ Authoring-side painter bridge:
 - `labs/velastra/painter/velastra_painter.py`
 - `labs/velastra/painter/README.md`
 - `labs/velastra/painter/requirements-diffusers.txt`
+- `labs/velastra/painter/requirements-provider.txt`
+
+Brush cabinet:
+
+- `world/velastra-brushes.json`
 
 Sanctum living-canvas handoff:
 
@@ -207,6 +212,41 @@ the bridge already accepts an outer object containing `manifest`.
 This preserves the law:
 
 **the painting remembers the place; the runtime carries the moment.**
+
+## Brush Cabinet contract
+
+Kernel 0021 makes model choice an explicit authoring policy.
+
+The cabinet names:
+
+- model ID,
+- license,
+- capabilities,
+- default render settings,
+- available transports,
+- provider and credential-variable metadata.
+
+It does **not** enter the Scene Packet or alter scene truth.
+
+The default brush is currently `z_image_turbo`, using
+`Tongyi-MAI/Z-Image-Turbo`.
+
+The alternate `qwen_image` brush uses `Qwen/Qwen-Image`.
+
+Both active cabinet entries record Apache-2.0 licensing.
+
+The default transport is `huggingface`; local `diffusers` remains available.
+
+The bridge may record the name `HF_TOKEN` as the required credential source.
+It must never record the token value.
+
+A model that is useful but unsuitable for the current licensing or deployment
+boundary may be recorded under `observedNotEnabled` without becoming an
+available brush.
+
+This preserves the law:
+
+**a brush may be chosen; meaning remains sovereign.**
 
 ## Studio adapter contract
 

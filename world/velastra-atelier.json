@@ -20,7 +20,11 @@
     "modelIsBrushNotSemanticAuthority": true,
     "canonicalPlacePaintingExcludesTransientPresence": true,
     "reviewedPlacePaintingDoesNotFreezeRuntimePresence": true,
-    "placeIdentityMayOutliveCurrentOccupants": true
+    "placeIdentityMayOutliveCurrentOccupants": true,
+    "brushChoiceIsAuthoringPolicyNotSceneTruth": true,
+    "brushCredentialsMustNotPersist": true,
+    "brushLicenseMustBeRecordedWithCandidate": true,
+    "defaultBrushMustRemainReplaceable": true
   },
   "media": {
     "luminous_oil": {
@@ -145,7 +149,10 @@
     "approvedStatus": "approved",
     "candidateOutputRoot": ".velastra/candidates",
     "approvedAssetRoot": "assets/velastra/approved",
-    "approvalRequired": true
+    "approvalRequired": true,
+    "brushRegistry": "world/velastra-brushes.json",
+    "defaultBrushResolvedFromRegistry": true,
+    "credentialsFromEnvironmentOnly": true
   },
   "livingCanvas": {
     "version": 1,

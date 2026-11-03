@@ -44,6 +44,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0020 makes reviewed paintings stable place-memory while live presence, objects, weather, and time remain runtime layers.**
 
+**Kernel 0021 gives the Painter Bridge a named, licensed Brush Cabinet so authoring commands resolve to real models and transports instead of placeholders.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1918,9 +1920,104 @@ return to the room
 painting remains / world keeps moving
 ```
 
+## Brush Cabinet
+
+Kernel 0021 makes painter selection explicit without moving model choice into
+scene truth.
+
+The governing law is:
+
+**A brush may be chosen. Meaning remains sovereign.**
+
+The cabinet lives at:
+
+`world/velastra-brushes.json`
+
+It currently enables two brushes:
+
+- `z_image_turbo` — the default everyday brush, backed by
+  `Tongyi-MAI/Z-Image-Turbo`, Apache-2.0.
+- `qwen_image` — a heavier alternate brush, backed by
+  `Qwen/Qwen-Image`, Apache-2.0.
+
+The cabinet also records evaluated-but-disabled models and why they are not
+currently active defaults.
+
+### Default transport
+
+The default authoring transport is Hugging Face Inference Providers.
+
+That keeps the authoring machine from needing to host the model weights or
+supply a large local GPU.
+
+The default Z-Image brush resolves to:
+
+```text
+brush      z_image_turbo
+transport  huggingface
+provider   fal-ai
+model      Tongyi-MAI/Z-Image-Turbo
+steps      9
+guidance   0
+```
+
+Local Diffusers remains available as an alternate transport.
+
+### Credentials remain outside Sanctum
+
+Remote generation reads a Hugging Face token only from the shell environment:
+
+`HF_TOKEN`
+
+The token is never written into:
+
+- scene packets,
+- Atelier Manifests,
+- painting handoffs,
+- candidate records,
+- the reviewed asset registry.
+
+Candidate provenance records only the credential variable name, never its
+value.
+
+### One-time provider setup
+
+For the remote transport:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r labs/velastra/painter/requirements-provider.txt
+export HF_TOKEN="your-token-from-hugging-face"
+```
+
+The token requires Inference Providers permission.
+
+Once configured, the Atelier dock emits a runnable command shaped like:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py render \
+  "$HOME/Downloads/<room>.velastra.json" \
+  --brush "z_image_turbo" \
+  --transport "huggingface"
+```
+
+No model placeholder is required.
+
+### Cabinet inspection
+
+The command-line bridge can show the currently available brushes:
+
+```bash
+python3 labs/velastra/painter/velastra_painter.py brushes
+```
+
+Model/backend overrides still exist for experiments, but the ordinary workflow
+should use named brushes so provenance remains intelligible.
+
 ## Current storage boundary
 
-Kernel 0020 still persists to `localStorage`.
+Kernel 0021 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1981,3 +2078,5 @@ Now it is learning that **a language becomes real when it can move houses withou
 And now it is learning that **a model may hold the brush without being allowed to become the author**.
 
 And now it knows that **a painting may remain while the life passing through it stays free to change**.
+
+And now it knows that **the hand holding the brush can change without changing what the room means**.

@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "designation": "Velastra Brush Cabinet",
+  "laboratory": "Viryn Labs",
+  "purpose": "Name replaceable painter models and transports without allowing a model to own scene meaning.",
+  "defaultBrush": "z_image_turbo",
+  "defaultTransport": "huggingface",
+  "laws": {
+    "brushIsReplaceable": true,
+    "brushCannotMutateSemanticTruth": true,
+    "brushChoiceMustCarryLicenseMetadata": true,
+    "transportMustBeExplicit": true,
+    "credentialsNeverEnterSceneOrCandidateProvenance": true,
+    "unsupportedBrushFailsClosed": true,
+    "reviewStillRequiredAfterGeneration": true
+  },
+  "brushes": {
+    "z_image_turbo": {
+      "label": "Z-Image Turbo",
+      "status": "default",
+      "model": "Tongyi-MAI/Z-Image-Turbo",
+      "license": "apache-2.0",
+      "role": "fast_canonical_candidate",
+      "notes": "Default Velastra brush: efficient, instruction-following, and practical for repeated room iteration.",
+      "capabilities": [
+        "text_to_image",
+        "image_to_image",
+        "inpainting"
+      ],
+      "defaults": {
+        "width": 1536,
+        "height": 864,
+        "steps": 9,
+        "guidance": 0,
+        "seed": 190919
+      },
+      "transports": {
+        "huggingface": {
+          "backend": "huggingface",
+          "provider": "fal-ai",
+          "tokenEnv": "HF_TOKEN",
+          "recommended": true
+        },
+        "diffusers": {
+          "backend": "diffusers",
+          "device": "auto",
+          "dtype": "auto",
+          "recommended": false
+        }
+      },
+      "provenance": {
+        "modelCard": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+        "verifiedAt": "2026-11-03"
+      }
+    },
+    "qwen_image": {
+      "label": "Qwen Image",
+      "status": "alternate",
+      "model": "Qwen/Qwen-Image",
+      "license": "apache-2.0",
+      "role": "deep_alternate_candidate",
+      "notes": "Heavier alternate brush for comparison and high-fidelity trials.",
+      "capabilities": [
+        "text_to_image"
+      ],
+      "defaults": {
+        "width": 1536,
+        "height": 864,
+        "steps": 40,
+        "guidance": null,
+        "seed": 190919
+      },
+      "transports": {
+        "huggingface": {
+          "backend": "huggingface",
+          "provider": "auto",
+          "tokenEnv": "HF_TOKEN",
+          "recommended": true
+        },
+        "diffusers": {
+          "backend": "diffusers",
+          "device": "auto",
+          "dtype": "auto",
+          "recommended": false
+        }
+      },
+      "provenance": {
+        "modelCard": "https://huggingface.co/Qwen/Qwen-Image",
+        "verifiedAt": "2026-11-03"
+      }
+    }
+  },
+  "observedNotEnabled": {
+    "qwen_image_2_1": {
+      "model": "Qwen/Qwen-Image-2.1",
+      "reason": "Research-license checkpoint and no current Inference Provider deployment; retained as a future evaluation candidate, not an active default brush."
+    },
+    "flux_kontext_dev": {
+      "model": "black-forest-labs/FLUX.1-Kontext-dev",
+      "reason": "Strong editing/reference capability but development checkpoint uses a non-commercial license; not enabled as a default Viryn brush."
+    }
+  }
+}

@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import inspect
 import json
+import os
 import shutil
 import sys
 from dataclasses import dataclass
@@ -24,6 +25,9 @@ CANDIDATE_STATUS = "candidate"
 APPROVED_STATUS = "approved"
 DEFAULT_WIDTH = 1536
 DEFAULT_HEIGHT = 864
+DEFAULT_BRUSH_REGISTRY = (
+    Path(__file__).resolve().parents[3] / "world" / "velastra-brushes.json"
+)
 
 
 class PainterError(RuntimeError):
@@ -266,6 +270,85 @@ def compile_prompt_bundle(manifest: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def load_brush_cabinet(path: Path | None = None) -> dict[str, Any]:
+    cabinet_path = path or DEFAULT_BRUSH_REGISTRY
+    cabinet = read_json(cabinet_path)
+    brushes = cabinet.get("brushes")
+    if not isinstance(brushes, dict) or not brushes:
+        raise PainterError(f"Brush cabinet has no active brushes: {cabinet_path}")
+    return cabinet
+
+
+def resolve_brush_config(
+    *,
+    brush_id: str | None,
+    transport_id: str | None,
+    registry_path: Path | None = None,
+) -> tuple[str, dict[str, Any], str, dict[str, Any], dict[str, Any]]:
+    cabinet = load_brush_cabinet(registry_path)
+    chosen_brush = brush_id or cabinet.get("defaultBrush")
+    brushes = cabinet.get("brushes") or {}
+    brush = brushes.get(chosen_brush)
+
+    if not isinstance(brush, dict):
+        raise PainterError(f"Unknown Velastra brush: {chosen_brush}")
+
+    transports = brush.get("transports") or {}
+    cabinet_default = cabinet.get("defaultTransport")
+    chosen_transport = (
+        transport_id
+        or (
+            cabinet_default
+            if cabinet_default in transports
+            else None
+        )
+        or next(
+            (
+                key
+                for key, value in transports.items()
+                if isinstance(value, dict) and value.get("recommended") is True
+            ),
+            None,
+        )
+        or next(iter(transports), None)
+    )
+    transport = transports.get(chosen_transport)
+
+    if not isinstance(transport, dict):
+        raise PainterError(
+            f"Brush {chosen_brush} does not support transport: {chosen_transport}"
+        )
+
+    return chosen_brush, brush, chosen_transport, transport, cabinet
+
+
+def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
+    registry_path = Path(args.brush_registry) if args.brush_registry else None
+    brush_id, brush, transport_id, transport, _ = resolve_brush_config(
+        brush_id=args.brush,
+        transport_id=args.transport,
+        registry_path=registry_path,
+    )
+    defaults = brush.get("defaults") or {}
+
+    return RenderSpec(
+        backend=args.backend or transport.get("backend") or "diffusers",
+        model=args.model or brush.get("model"),
+        seed=args.seed if args.seed is not None else int(defaults.get("seed", 190919)),
+        width=args.width if args.width is not None else int(defaults.get("width", DEFAULT_WIDTH)),
+        height=args.height if args.height is not None else int(defaults.get("height", DEFAULT_HEIGHT)),
+        steps=args.steps if args.steps is not None else defaults.get("steps"),
+        guidance=args.guidance if args.guidance is not None else defaults.get("guidance"),
+        device=args.device or transport.get("device") or "auto",
+        dtype=args.dtype or transport.get("dtype") or "auto",
+        brush=brush_id,
+        transport=transport_id,
+        provider=transport.get("provider"),
+        token_env=transport.get("tokenEnv"),
+        license=brush.get("license"),
+    )
+
+
 @dataclass(frozen=True)
 class RenderSpec:
     backend: str
@@ -277,6 +360,11 @@ class RenderSpec:
     guidance: float | None
     device: str
     dtype: str
+    brush: str | None = None
+    transport: str | None = None
+    provider: str | None = None
+    token_env: str | None = None
+    license: str | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -285,7 +373,10 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
         "assetKey": manifest["assetKey"],
         "promptBundle": prompts,
         "render": {
+            "brush": spec.brush,
+            "transport": spec.transport,
             "backend": spec.backend,
+            "provider": spec.provider,
             "model": spec.model,
             "seed": spec.seed,
             "width": spec.width,
@@ -328,6 +419,11 @@ def build_candidate_record(
             "guidance": spec.guidance,
             "device": spec.device,
             "dtype": spec.dtype,
+            "brush": spec.brush,
+            "transport": spec.transport,
+            "provider": spec.provider,
+            "tokenEnv": spec.token_env,
+            "license": spec.license,
         },
         "prompts": {
             "positive": prompts["positive"],
@@ -440,21 +536,79 @@ def render_diffusers(
     }
 
 
+def render_huggingface(
+    prompts: Mapping[str, Any],
+    spec: RenderSpec,
+    output_path: Path,
+) -> dict[str, Any]:
+    try:
+        from huggingface_hub import InferenceClient
+    except ImportError as exc:
+        raise PainterError(
+            "Hugging Face transport requires huggingface_hub and Pillow. "
+            "Install labs/velastra/painter/requirements-provider.txt."
+        ) from exc
+
+    if not spec.model:
+        raise PainterError("Brush transport did not resolve a model.")
+
+    token_env = spec.token_env or "HF_TOKEN"
+    token = os.environ.get(token_env)
+    if not token:
+        raise PainterError(
+            f"{token_env} is not set. Export a Hugging Face token with "
+            "Inference Providers permission before rendering. "
+            "Credentials must never be stored in a Velastra manifest."
+        )
+
+    client = InferenceClient(
+        provider=spec.provider or "auto",
+        api_key=token,
+    )
+
+    image = client.text_to_image(
+        prompt=prompts["positive"],
+        negative_prompt=prompts["negative"],
+        height=spec.height,
+        width=spec.width,
+        num_inference_steps=spec.steps,
+        guidance_scale=spec.guidance,
+        model=spec.model,
+        seed=spec.seed,
+    )
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    image.save(output_path, format="PNG")
+    return {
+        "providerResolved": spec.provider or "auto",
+        "transport": "huggingface",
+        "credentialEnv": token_env,
+    }
+
+
+def cmd_brushes(args: argparse.Namespace) -> int:
+    registry_path = Path(args.brush_registry) if args.brush_registry else None
+    cabinet = load_brush_cabinet(registry_path)
+    if args.json:
+        print(json.dumps(cabinet, indent=2, ensure_ascii=False))
+        return 0
+
+    default = cabinet.get("defaultBrush")
+    for brush_id, brush in (cabinet.get("brushes") or {}).items():
+        marker = "*" if brush_id == default else " "
+        transports = ", ".join((brush.get("transports") or {}).keys())
+        print(
+            f"{marker} {brush_id}: {brush.get('label', brush_id)} | "
+            f"{brush.get('model')} | {brush.get('license')} | {transports}"
+        )
+    return 0
+
+
 def cmd_plan(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
     prompts = compile_prompt_bundle(manifest)
-    spec = RenderSpec(
-        backend=args.backend,
-        model=args.model,
-        seed=args.seed,
-        width=args.width,
-        height=args.height,
-        steps=args.steps,
-        guidance=args.guidance,
-        device=args.device,
-        dtype=args.dtype,
-    )
+    spec = build_render_spec(args)
     cid = candidate_id(manifest, prompts, spec)
     out_dir = Path(args.out_dir)
     image_path = out_dir / manifest["assetKey"] / f"{cid}.png"
@@ -469,28 +623,21 @@ def cmd_render(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
     prompts = compile_prompt_bundle(manifest)
-    spec = RenderSpec(
-        backend=args.backend,
-        model=args.model,
-        seed=args.seed,
-        width=args.width,
-        height=args.height,
-        steps=args.steps,
-        guidance=args.guidance,
-        device=args.device,
-        dtype=args.dtype,
-    )
+    spec = build_render_spec(args)
     cid = candidate_id(manifest, prompts, spec)
     out_dir = Path(args.out_dir)
     image_path = out_dir / manifest["assetKey"] / f"{cid}.png"
     record_path = out_dir / manifest["assetKey"] / f"{cid}.candidate.json"
     record = build_candidate_record(manifest, prompts, spec, image_path)
 
-    if args.backend == "diffusers":
+    if spec.backend == "diffusers":
         runtime = render_diffusers(prompts, spec, image_path)
-        record["render"]["runtime"] = runtime
+    elif spec.backend == "huggingface":
+        runtime = render_huggingface(prompts, spec, image_path)
     else:
-        raise PainterError(f"Unknown rendering backend: {args.backend}")
+        raise PainterError(f"Unknown rendering backend: {spec.backend}")
+
+    record["render"]["runtime"] = runtime
 
     record["output"]["sha256"] = sha256_file(image_path)
     write_json(record_path, record)
@@ -555,8 +702,12 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "candidateId": candidate["candidateId"],
             "candidateRecord": candidate_path.as_posix(),
             "manifestSha256": candidate.get("source", {}).get("manifestSha256"),
+            "brush": candidate.get("render", {}).get("brush"),
+            "transport": candidate.get("render", {}).get("transport"),
             "backend": candidate.get("render", {}).get("backend"),
+            "provider": candidate.get("render", {}).get("provider"),
             "model": candidate.get("render", {}).get("model"),
+            "license": candidate.get("render", {}).get("license"),
             "seed": candidate.get("render", {}).get("seed"),
             "reviewedBy": args.reviewed_by,
             "reviewedAt": utc_now(),
@@ -586,17 +737,23 @@ def cmd_approve(args: argparse.Namespace) -> int:
 
 
 def add_render_arguments(parser: argparse.ArgumentParser) -> None:
-    parser.add_argument("--backend", default="diffusers", choices=["diffusers"])
-    parser.add_argument("--model")
-    parser.add_argument("--seed", type=int, default=190919)
-    parser.add_argument("--width", type=int, default=DEFAULT_WIDTH)
-    parser.add_argument("--height", type=int, default=DEFAULT_HEIGHT)
+    parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
+    parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
+    parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
+    parser.add_argument(
+        "--backend",
+        choices=["diffusers", "huggingface"],
+        help="Advanced backend override; normally resolved by the selected brush transport.",
+    )
+    parser.add_argument("--model", help="Advanced model override.")
+    parser.add_argument("--seed", type=int)
+    parser.add_argument("--width", type=int)
+    parser.add_argument("--height", type=int)
     parser.add_argument("--steps", type=int)
     parser.add_argument("--guidance", type=float)
-    parser.add_argument("--device", default="auto")
+    parser.add_argument("--device")
     parser.add_argument(
         "--dtype",
-        default="auto",
         help="Torch dtype name (float32, float16, bfloat16) or auto.",
     )
     parser.add_argument("--out-dir", default=".velastra/candidates")
@@ -618,6 +775,11 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("manifest")
     add_render_arguments(render)
     render.set_defaults(func=cmd_render)
+
+    brushes = sub.add_parser("brushes", help="List configured Velastra brushes.")
+    brushes.add_argument("--brush-registry")
+    brushes.add_argument("--json", action="store_true")
+    brushes.set_defaults(func=cmd_brushes)
 
     approve = sub.add_parser("approve", help="Promote a reviewed candidate into a registry copy.")
     approve.add_argument("candidate")

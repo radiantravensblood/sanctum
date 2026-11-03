@@ -176,6 +176,10 @@ async function ignite() {
       downloadPaintingHandoff(
         currentPainting()
       ),
+    brushes: () =>
+      JSON.parse(
+        JSON.stringify(world.velastraBrushes)
+      ),
     studio: (surfaceId, frameworkId = null) =>
       composeVelastraStudioSurface({
         world,
@@ -329,12 +333,15 @@ async function ignite() {
       JSON.parse(JSON.stringify(world.velastraAtelier)),
     assetRegistry: () =>
       JSON.parse(JSON.stringify(world.velastraAssets)),
+    brushes: () =>
+      JSON.parse(JSON.stringify(world.velastraBrushes)),
     studioGrammar: () =>
       JSON.parse(JSON.stringify(world.velastraStudio))
   });
 
   atelierDock = installAtelierDock({
-    getPainting: currentPainting
+    getPainting: currentPainting,
+    brushCabinet: world.velastraBrushes
   });
 
   window.addEventListener("beforeunload", () => {
