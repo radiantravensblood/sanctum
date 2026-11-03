@@ -118,7 +118,7 @@ GitHub Codespace.
 
 Create the Codespace from the Sanctum repository in a browser.
 
-The committed devcontainer installs:
+The committed devcontainer creates an ignored `.venv` inside the Codespace and installs:
 
 `labs/velastra/painter/requirements-provider.txt`
 
