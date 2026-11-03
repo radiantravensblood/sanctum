@@ -1627,3 +1627,22 @@ body[data-season="autumn"] .memory-panel {
     flex: 1 1 auto;
   }
 }
+
+
+/* Tableau refinements */
+.entity-register .action-button {
+  padding: 7px 10px;
+  font-size: 0.86rem;
+}
+
+.ledger-archive-item {
+  padding: 0 !important;
+}
+
+.ledger-archive-item::before {
+  display: none;
+}
+
+.ledger-archive .ledger li:last-child {
+  padding-bottom: 0;
+}
