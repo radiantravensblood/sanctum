@@ -6,6 +6,7 @@ import { buildContextPacket } from "./memory/context.js";
 import { beginSession, touchSession } from "./time/chronos.js";
 import { buildOrientation } from "./time/orientation.js";
 import { advanceEntities } from "./entities/behavior.js";
+import { buildEcologyPacket } from "./entities/ecology.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -51,6 +52,11 @@ async function ignite() {
       }),
     orientation: () =>
       buildOrientation({
+        state,
+        world
+      }),
+    ecology: () =>
+      buildEcologyPacket({
         state,
         world
       })
