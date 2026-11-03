@@ -24,7 +24,10 @@
     "brushChoiceIsAuthoringPolicyNotSceneTruth": true,
     "brushCredentialsMustNotPersist": true,
     "brushLicenseMustBeRecordedWithCandidate": true,
-    "defaultBrushMustRemainReplaceable": true
+    "defaultBrushMustRemainReplaceable": true,
+    "authoringComputeMayLiveOutsideLocalDevice": true,
+    "codespaceCredentialMustRemainSecret": true,
+    "cloudHandoffMustRemainEphemeral": true
   },
   "media": {
     "luminous_oil": {
@@ -152,7 +155,14 @@
     "approvalRequired": true,
     "brushRegistry": "world/velastra-brushes.json",
     "defaultBrushResolvedFromRegistry": true,
-    "credentialsFromEnvironmentOnly": true
+    "credentialsFromEnvironmentOnly": true,
+    "cloudAuthoring": {
+      "environment": "github_codespaces",
+      "devcontainer": ".devcontainer/devcontainer.json",
+      "inbox": "authoring/inbox",
+      "credential": "HF_TOKEN",
+      "handoffsIgnoredByGit": true
+    }
   },
   "livingCanvas": {
     "version": 1,

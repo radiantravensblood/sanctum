@@ -111,6 +111,36 @@ pip install -r labs/velastra/painter/requirements-diffusers.txt
 Advanced `--model` and `--backend` overrides remain available for controlled
 experiments. Ordinary authoring should prefer named brushes.
 
+## Browser-only / low-storage authoring
+
+If the local machine should not carry a repository clone, use the repository's
+GitHub Codespace.
+
+Create the Codespace from the Sanctum repository in a browser.
+
+The committed devcontainer creates an ignored `.venv` inside the Codespace and installs:
+
+`labs/velastra/painter/requirements-provider.txt`
+
+and recommends the `HF_TOKEN` Codespaces secret.
+
+Export a painting packet from Sanctum, upload it into:
+
+`authoring/inbox/`
+
+and use **Copy cloud command** from the Atelier dock.
+
+The temporary handoff is ignored by Git.
+
+The default remote path does not download the image-model weights into the
+Codespace; inference remains provider-hosted.
+
+Candidate PNGs and sidecars still land under:
+
+`.velastra/candidates/`
+
+and remain outside canon until explicitly approved.
+
 ## Candidate lifecycle
 
 A generated image is never canonical merely because a model returned it.

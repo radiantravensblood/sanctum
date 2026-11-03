@@ -12,6 +12,9 @@ on:
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
+      - ".devcontainer/**"
+      - "authoring/inbox/README.md"
+      - ".gitignore"
   pull_request:
     paths:
       - "labs/velastra/painter/**"
@@ -23,6 +26,9 @@ on:
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
+      - ".devcontainer/**"
+      - "authoring/inbox/README.md"
+      - ".gitignore"
 
 jobs:
   painter-contract:
@@ -42,3 +48,5 @@ jobs:
         run: node labs/velastra/tests/living-canvas.mjs
       - name: Run brush cabinet contract
         run: node labs/velastra/tests/brush-cabinet.mjs
+      - name: Run cloud atelier contract
+        run: node labs/velastra/tests/cloud-atelier.mjs
