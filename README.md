@@ -18,6 +18,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0007 teaches the house that time passes.**
 
+**Kernel 0008 invites the first inhabitants inside.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -259,7 +261,7 @@ This prepares the next layer of architecture: entities with location, memory, an
 
 The dependency remains intentional:
 
-**Mnemosyne → Chronos → Entities → Familiars / DreamSocket**
+**Mnemosyne → Chronos → Inhabitants → Familiars / DreamSocket**
 
 Memory gives continuity an address.
 
@@ -267,9 +269,93 @@ Time gives continuity distance.
 
 Entities can now inherit both.
 
+## Inhabitants
+
+`world/entities.json` defines the first small ecology.
+
+Kernel 0008 begins with three original inhabitants:
+
+- **the pale lumenmoth** — drawn toward warm and unexplained light,
+- **the little processional** — a brass wanderer that favors familiar paths and pauses at thresholds,
+- **the loose threadling** — an impossible knot-like lifeform drawn toward objects and places with history.
+
+They are not quest dispensers, rewards, mascots, or simulated people.
+
+They are presences with location, rhythm, and memory.
+
+### Entity law
+
+Inhabitants may move only through known lawful geography.
+
+They cannot:
+
+- generate rooms,
+- cross latent unwritten frontiers,
+- cross consent-bearing thresholds,
+- enter an unwitnessed generated room.
+
+They can therefore inhabit canon without acquiring authority over canon.
+
+The northern mirror remains exactly as protected as before.
+
+### Temporal movement
+
+GitHub Pages does not secretly run inhabitants while the browser is closed.
+
+When the Sanctum is actually opened or remains active, the entity engine compares civil time with each inhabitant's own last movement and advances a bounded number of lawful steps.
+
+Returning after an absence may therefore reveal that an inhabitant is elsewhere.
+
+That is temporal catch-up at invocation, not a claim that a hidden process remained awake.
+
+### Memory
+
+Entity movement becomes ordinary world history.
+
+Rooms remember when an inhabitant arrived or departed.
+
+Observation becomes a local echo.
+
+Each entity also carries a bounded personal trail so inspection can reveal where its recent history passes.
+
+There is no affection meter and no reward for observation.
+
+Presence does not imply obligation.
+
+### Dual-ended accessibility
+
+Visual presentation is allowed to become subtly surreal without becoming the sole carrier of truth.
+
+Inhabitants have tiny deterministic SVG signatures:
+
+- a drifting pale glint for the lumenmoth,
+- a low brass shape for the processional,
+- a curling line for the threadling.
+
+But the semantic interface always names who is present in the **In company** section and provides a text-based Observe action.
+
+Reduced-motion preferences disable entity animation without removing entity state.
+
+The same rule applies to future visual experimentation:
+
+**visual ambiguity, semantic certainty.**
+
+### Context packets
+
+`window.Sanctum.context()` is now version 3.
+
+Alongside Scene Truth, Mnemosyne, Chronos, objects, nearby rooms, and consent boundaries, it includes:
+
+- inhabitants currently present,
+- their recent histories,
+- their last observed and moved times,
+- the entity laws governing their permissions.
+
+A future familiar therefore receives not merely company, but the laws under which company may act.
+
 ## Current storage boundary
 
-Kernel 0006 still persists to `localStorage`.
+Kernel 0008 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -303,4 +389,6 @@ Then it learned what it actually was.
 
 Now it knows that **memory lives somewhere**.
 
-And it is learning that **time passes through the house without owning it**.
+And it knows that **time passes through the house without owning it**.
+
+Now the house is learning that **presence can exist without demand**.
