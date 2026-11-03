@@ -117,6 +117,67 @@ class PainterBridgeTests(unittest.TestCase):
         with self.assertRaises(painter.PainterError):
             painter.require_manifest(manifest)
 
+    def brush_args(self, **overrides):
+        values = {
+            "brush": None,
+            "transport": None,
+            "brush_registry": None,
+            "backend": None,
+            "model": None,
+            "seed": None,
+            "width": None,
+            "height": None,
+            "steps": None,
+            "guidance": None,
+            "device": None,
+            "dtype": None,
+            "out_dir": ".velastra/candidates",
+        }
+        values.update(overrides)
+        return argparse.Namespace(**values)
+
+    def test_default_brush_resolves_to_z_image_provider(self):
+        spec = painter.build_render_spec(self.brush_args())
+
+        self.assertEqual(spec.brush, "z_image_turbo")
+        self.assertEqual(spec.transport, "huggingface")
+        self.assertEqual(spec.backend, "huggingface")
+        self.assertEqual(spec.provider, "fal-ai")
+        self.assertEqual(spec.model, "Tongyi-MAI/Z-Image-Turbo")
+        self.assertEqual(spec.license, "apache-2.0")
+        self.assertEqual(spec.steps, 9)
+        self.assertEqual(spec.guidance, 0)
+        self.assertEqual(spec.token_env, "HF_TOKEN")
+
+    def test_alternate_brush_can_use_local_diffusers(self):
+        spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image",
+                transport="diffusers",
+            )
+        )
+
+        self.assertEqual(spec.brush, "qwen_image")
+        self.assertEqual(spec.backend, "diffusers")
+        self.assertEqual(spec.model, "Qwen/Qwen-Image")
+        self.assertEqual(spec.license, "apache-2.0")
+        self.assertEqual(spec.steps, 40)
+
+    def test_candidate_records_credential_name_not_secret(self):
+        manifest = manifest_fixture()
+        prompts = painter.compile_prompt_bundle(manifest)
+        spec = painter.build_render_spec(self.brush_args())
+        record = painter.build_candidate_record(
+            manifest,
+            prompts,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+
+        serialized = json.dumps(record)
+        self.assertIn("HF_TOKEN", serialized)
+        self.assertNotIn("hf_secret_example", serialized)
+
     def test_approval_promotes_only_explicit_candidate(self):
         manifest = manifest_fixture()
         prompts = painter.compile_prompt_bundle(manifest)
