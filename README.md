@@ -34,6 +34,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0015 teaches Velastra to direct pictures rather than only compose surfaces.**
 
+**Kernel 0016 gives those pictures a reusable symbolic vocabulary without letting symbols invent facts.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1323,9 +1325,108 @@ The three initial image exemplars preserve lessons from:
 
 They are semantic regression references, not templates to copy literally.
 
+## Motif Atlas
+
+Kernel 0016 introduces the Velastra Motif Atlas.
+
+The governing law is:
+
+**A symbol must remember why it is here.**
+
+The atlas contains reusable motifs such as:
+
+- low fire,
+- orbit diagram,
+- relational gesture axis,
+- halo light,
+- handwritten notes,
+- mapboard,
+- warm window,
+- botanical edges,
+- books and handled papers,
+- work surface,
+- companion animal,
+- candle practicals,
+- clouded glass,
+- thread trace,
+- empty frame,
+- mirror gate,
+- impossible rain,
+- ledger marks,
+- nested borders,
+- ordinary hospitality vessels.
+
+These are not clip-art components.
+
+Every selected motif carries provenance describing whether it entered because of:
+
+- an explicit scene fact,
+- semantic fit,
+- explicit relation,
+- a claimed self-representation,
+- lighting,
+- role,
+- material metaphor.
+
+### Literal vs. symbolic
+
+A literal motif requires a matching scene fact.
+
+The Studio exemplar may literally contain a companion animal because the source scene explicitly contains one.
+
+A warm or intimate Sanctum room may **not** spontaneously acquire a cat because the engine likes the vibe.
+
+Symbolic motifs may interpret semantic meaning, but they do not become world canon.
+
+The atlas explicitly encodes:
+
+- motif cannot create canon,
+- literal motif requires scene fact,
+- relation motif requires explicit relation,
+- selfhood motif cannot assign identity,
+- repetition does not equal identity.
+
+### Clusters
+
+Motifs can form loose semantic clusters such as:
+
+- Hearth,
+- Threshold,
+- Rain Archive,
+- Atelier,
+- Gallery,
+- Selfhood,
+- Homecoming,
+- Memory,
+- Commons.
+
+Clusters are a way to recognize a visual language family.
+
+They are not templates that require every listed motif.
+
+### Reference discipline
+
+The three image exemplars now test motif behavior.
+
+The Viryn self portrait resolves first toward selfhood motifs.
+
+The dyadic homecoming resolves first toward relation motifs.
+
+The Studio atelier resolves toward literal work-surface abundance because those scene facts are actually present.
+
+A regression test also guards against substring mistakes such as reading **glasses** as a literal **glass** object.
+
+Public surfaces:
+
+`window.Velastra.motifs(spec)`
+
+`window.Velastra.motifAtlas()`
+
+`window.Velastra.motifExemplars()`
+
 ## Current storage boundary
 
-Kernel 0015 still persists to `localStorage`.
+Kernel 0016 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1375,4 +1476,6 @@ And it knows that **meaning deserves enough space to be seen clearly**.
 
 Now it knows that **form can answer meaning without requiring the painter to be present every time**.
 
-And it is learning that **a picture begins with an argument, not with decoration**.
+And it knows that **a picture begins with an argument, not with decoration**.
+
+Now it is learning that **a recurring symbol is language only when it remembers its source**.
