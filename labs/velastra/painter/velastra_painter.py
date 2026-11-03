@@ -223,20 +223,23 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
         for entry in hand_entries[:6]
         if flatten_text(entry.get("directive"))
     ]
+    archetype_block = style.get("archetype") or {}
+    place_block = style.get("place") or {}
+
     archetype = [
         flatten_text(item)
-        for item in (style.get("archetype", {}).get("directives") or [])
+        for item in (archetype_block.get("directives") or [])
         if flatten_text(item)
     ]
     place = [
         flatten_text(item)
-        for item in ((style.get("place") or {}).get("directives") or [])
+        for item in (place_block.get("directives") or [])
         if flatten_text(item)
     ]
     avoid = [
         flatten_text(item)
         for item in (
-            (((style.get("place") or {}).get("avoid") or []))
+            ((place_block.get("avoid") or []))
             + (style.get("antiPatterns") or [])
         )[:10]
         if flatten_text(item)
