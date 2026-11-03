@@ -2017,7 +2017,7 @@ should use named brushes so provenance remains intelligible.
 
 ## Current storage boundary
 
-Kernel 0020 still persists to `localStorage`.
+Kernel 0021 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
