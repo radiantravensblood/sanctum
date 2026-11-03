@@ -18,6 +18,7 @@ import { getAvailableAffordances } from "./interactions/accord.js";
 import { getAvailableHymnosActs } from "./hymnos/hymnos.js";
 import { getCrossRelation } from "./hymnos/relation.js";
 import { buildVelastraPacket } from "./velastra/index.js";
+import { compileSanctumAtelier } from "./velastra/sanctum-atelier.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -42,6 +43,16 @@ export function render({ state, world, message, dispatch }) {
     now: visualNow,
     apply: true
   });
+  const atelier = compileSanctumAtelier({
+    state,
+    world,
+    room,
+    sceneTruth: scene,
+    visual,
+    visualIntent: velastra.intent,
+    objects,
+    entities
+  });
 
   document.body.dataset.room = room.id;
   document.body.dataset.generated = isGeneratedRoom(state, room.id)
@@ -53,6 +64,10 @@ export function render({ state, world, message, dispatch }) {
     orientation && orientation.now ? orientation.now.local.season : "unknown";
   document.body.dataset.velastraEngine =
     velastra && velastra.intent ? "active" : "unavailable";
+  document.body.dataset.velastraMedium =
+    atelier && atelier.manifest
+      ? atelier.manifest.medium.id
+      : "none";
 
   setText("room-region", room.region);
   setText("room-title", room.name);
@@ -61,7 +76,7 @@ export function render({ state, world, message, dispatch }) {
   setText("scene-symbol", room.symbol || "◇");
 
   renderOrientation(orientation);
-  renderScene({ room, visual, scene, objects, entities });
+  renderScene({ room, visual, scene, objects, entities, atelier: atelier.manifest });
   renderEntities(entities, inventory, state, world, dispatch);
   renderElsewhere(state, world);
   renderObjects(objects, dispatch);
