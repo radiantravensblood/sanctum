@@ -42,7 +42,7 @@ export async function copyPainterCommand(painting) {
     "--backend",
     "diffusers",
     "--model",
-    "<model-id>"
+    '"YOUR_MODEL_ID"'
   ].join(" ");
 
   let copied = false;
