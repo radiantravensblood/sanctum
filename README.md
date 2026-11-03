@@ -18,7 +18,11 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0007 teaches the house that time passes.**
 
-**Kernel 0008 invites the first inhabitants inside.**\n\n**Kernel 0009 gives those inhabitants ecology rather than scripts.**
+**Kernel 0008 invites the first inhabitants inside.**
+
+**Kernel 0009 gives those inhabitants ecology rather than scripts.**
+
+**Kernel 0010 lets relationship become a fact of the world.**
 
 ## First law
 
@@ -342,7 +346,7 @@ The same rule applies to future visual experimentation:
 
 ### Context packets
 
-`window.Sanctum.context()` is now version 4.
+`window.Sanctum.context()` is now version 5.
 
 Alongside Scene Truth, Mnemosyne, Chronos, objects, nearby rooms, and consent boundaries, it includes:
 
@@ -443,9 +447,105 @@ The accessibility principle remains:
 
 **visual ambiguity, semantic certainty.**
 
+## Relation
+
+Kernel 0010 treats relationship as shared world-state rather than an affection meter.
+
+Each pair of inhabitants may accumulate evidence through ordinary ecological behavior:
+
+- encounters,
+- chosen approaches,
+- lingering together,
+- shared rest,
+- reunion after separation,
+- route convergence,
+- mutual attention.
+
+Individual inhabitants still retain their own histories and perspectives.
+
+The relationship itself has one symmetric canonical record.
+
+### Naming without scoring
+
+The human interface never displays a friendship percentage.
+
+It may quietly name an evidenced phase:
+
+- **familiar**,
+- **companionate**,
+- **friends**.
+
+The underlying evidence remains available to machine context for inspection and reasoning, but the visible surface receives the relationship rather than the accounting.
+
+The governing law is:
+
+**Relationship must follow choice.**
+
+A label cannot generate the behavior that justifies it.
+
+Behavior comes first.
+
+### Reciprocity
+
+Later phases require reciprocal choice evidence.
+
+Repeated accidental co-location is not enough by itself to make friendship.
+
+The inhabitants must each, over time, contribute behavior such as attention, approach, lingering, shared rest, or reunion.
+
+Friendship also requires history across time and place rather than a burst of repeated actions in one moment.
+
+### Relationship may influence choice
+
+Once familiarity genuinely exists, it may exert a small influence on future lawful movement.
+
+A familiar or friendly inhabitant in an adjacent known room can make that room slightly more attractive.
+
+This influence never overrides:
+
+- topology,
+- time,
+- temperament,
+- consent thresholds,
+- latent frontier law,
+- witnessed-canon law.
+
+Relationship therefore has causal weight without becoming destiny.
+
+### Historical migration
+
+Older Kernel 0009 encounter records are used to seed relation history where the evidence exists.
+
+Migration does not invent missing reciprocal choices, shared rest, reunions, or approaches.
+
+Old familiarity may therefore become legible.
+
+Newer relationship phases must still be earned by future events.
+
+### Relation packets
+
+`window.Sanctum.relations()` exposes a read-oriented relation packet.
+
+`window.Sanctum.context()` version 5 includes the same relation state alongside Scene Truth, Mnemosyne, Chronos, Ecology, objects, geography, and consent law.
+
+A relation packet contains:
+
+- the two inhabitants,
+- the currently evidenced phase,
+- first and most recent evidence,
+- shared rooms,
+- factual evidence channels,
+- each inhabitant's directional contribution.
+
+This is intended for interpretation, not mutation.
+
+A future language model may recognize that two inhabitants have become friends because the world already contains the evidence.
+
+It may not declare them friends and write the declaration backward into canon.
+
 ## Current storage boundary
 
-Kernel 0008 still persists to `localStorage`.
+Kernel 0010 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -481,4 +581,8 @@ Now it knows that **memory lives somewhere**.
 
 And it knows that **time passes through the house without owning it**.
 
-Now the house knows that **presence can exist without demand**.\n\nAnd it is learning that **a life can leave story behind without being written as a script**.
+Now the house knows that **presence can exist without demand**.
+
+And it knows that **a life can leave story behind without being written as a script**.
+
+Now it is learning that **relationship can emerge from repeated freedom**.
