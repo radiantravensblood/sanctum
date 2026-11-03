@@ -12,7 +12,7 @@ import { buildAccordPacket, getAvailableAffordances, proposeInteraction } from "
 import { buildHymnosPacket, getAvailableHymnosActs, performHymnosAct, endDuet } from "./hymnos/hymnos.js";
 import { buildIdentityPacket } from "./hymnos/identity.js";
 import { buildCrossRelationPacket } from "./hymnos/relation.js";
-import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars, composeVelastraScene, testVelastraSceneExemplars, composeVelastraMotifs, testVelastraMotifExemplars, compileVelastraAtelier, testVelastraAtelierExemplars } from "./velastra/index.js";
+import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars, composeVelastraScene, testVelastraSceneExemplars, composeVelastraMotifs, testVelastraMotifExemplars, compileVelastraAtelier, testVelastraAtelierExemplars, composeVelastraStudioSurface, composeVelastraStudioDocument, testVelastraStudioExemplars } from "./velastra/index.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -155,6 +155,16 @@ async function ignite() {
       }),
     atelierTests: () =>
       testVelastraAtelierExemplars(world),
+    studio: (surfaceId, frameworkId = null) =>
+      composeVelastraStudioSurface({
+        world,
+        surfaceId,
+        frameworkId
+      }),
+    studioDocument: () =>
+      composeVelastraStudioDocument(world),
+    studioTests: () =>
+      testVelastraStudioExemplars(world),
     sing: ({
       actorId = "siege",
       targetId,
@@ -270,6 +280,16 @@ async function ignite() {
       }),
     atelierExemplars: () =>
       testVelastraAtelierExemplars(world),
+    studio: (surfaceId, frameworkId = null) =>
+      composeVelastraStudioSurface({
+        world,
+        surfaceId,
+        frameworkId
+      }),
+    studioDocument: () =>
+      composeVelastraStudioDocument(world),
+    studioExemplars: () =>
+      testVelastraStudioExemplars(world),
     grammar: () =>
       JSON.parse(JSON.stringify(world.velastra)),
     sceneGrammar: () =>
@@ -279,7 +299,9 @@ async function ignite() {
     atelierGrammar: () =>
       JSON.parse(JSON.stringify(world.velastraAtelier)),
     assetRegistry: () =>
-      JSON.parse(JSON.stringify(world.velastraAssets))
+      JSON.parse(JSON.stringify(world.velastraAssets)),
+    studioGrammar: () =>
+      JSON.parse(JSON.stringify(world.velastraStudio))
   });
 
   window.addEventListener("beforeunload", () => {
