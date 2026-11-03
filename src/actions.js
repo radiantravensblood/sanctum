@@ -10,6 +10,7 @@ import {
 import { crossFrontier } from "./genesis/genesis.js";
 import { markWitnessed } from "./genesis/provenance.js";
 import { describeObjectTrail } from "./memory/language.js";
+import { describeEntity, getEntityRecord, rememberEntity } from "./entities/entities.js";
 
 export function performAction({ verb, target = null, state, world }) {
   const room = getRoom(world, state, state.location);
@@ -34,6 +35,9 @@ export function performAction({ verb, target = null, state, world }) {
     case "sit":
       appendEvent(state, { action: "sit", room: room.id });
       return result(state, room.sitText || "You sit. The room remains.");
+
+    case "observe_entity":
+      return observeEntity(target, state, world);
 
     case "return":
       return returnHome(state, world);
@@ -180,6 +184,38 @@ function leave(objectId, state, world) {
   return result(
     state,
     "You leave the " + object.name + " here. The room accepts it without comment."
+  );
+}
+
+function observeEntity(entityId, state, world) {
+  const record = getEntityRecord(state, entityId);
+
+  if (!record || record.location !== state.location) {
+    return result(state, "Whatever you noticed is no longer here.");
+  }
+
+  record.lastObservedAt = new Date().toISOString();
+
+  rememberEntity(record, {
+    at: record.lastObservedAt,
+    action: "observed",
+    room: state.location,
+    by: "siege"
+  });
+
+  appendEvent(state, {
+    action: "observe_entity",
+    room: state.location,
+    entity: entityId
+  });
+
+  return result(
+    state,
+    describeEntity({
+      world,
+      state,
+      entityId
+    })
   );
 }
 
