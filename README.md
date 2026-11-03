@@ -18,7 +18,7 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0007 teaches the house that time passes.**
 
-**Kernel 0008 invites the first inhabitants inside.**
+**Kernel 0008 invites the first inhabitants inside.**\n\n**Kernel 0009 gives those inhabitants ecology rather than scripts.**
 
 ## First law
 
@@ -342,7 +342,7 @@ The same rule applies to future visual experimentation:
 
 ### Context packets
 
-`window.Sanctum.context()` is now version 3.
+`window.Sanctum.context()` is now version 4.
 
 Alongside Scene Truth, Mnemosyne, Chronos, objects, nearby rooms, and consent boundaries, it includes:
 
@@ -352,6 +352,96 @@ Alongside Scene Truth, Mnemosyne, Chronos, objects, nearby rooms, and consent bo
 - the entity laws governing their permissions.
 
 A future familiar therefore receives not merely company, but the laws under which company may act.
+
+## Ecology
+
+Kernel 0009 distinguishes **movement** from **life**.
+
+An inhabitant's rhythm may now resolve into:
+
+- movement through a known lawful path,
+- lingering in the same room,
+- resting,
+- attending to an object already present,
+- encountering another inhabitant.
+
+Stillness is therefore a valid ecological action.
+
+Time passing no longer means every inhabitant must change rooms.
+
+### Backdated catch-up
+
+When the browser returns after an absence, bounded catch-up actions are assigned to their lawful temporal intervals rather than all being stamped with the reopening moment.
+
+The engine may skip older unresolved intervals when an absence is very long, preserving a bounded amount of history instead of manufacturing hundreds of unseen actions.
+
+This creates temporal continuity without pretending a hidden browser process stayed awake.
+
+### Familiarity without affection metrics
+
+Repeated encounters create a small factual relationship record:
+
+- encounter count,
+- first encounter,
+- most recent encounter,
+- most recent shared room.
+
+This is **familiarity evidence**, not friendship XP.
+
+The system does not conclude that two inhabitants love, hate, trust, or belong to one another merely because they shared space.
+
+Interpretation remains softer than evidence.
+
+### Objects as ecological attention
+
+Inhabitants may notice objects without taking, altering, claiming, or consuming them.
+
+Object history can influence attention.
+
+A threadling is therefore more likely to attend to an object whose biography already crosses several rooms, but the object's own state remains untouched.
+
+The law remains:
+
+**entities cannot alter objects without an explicit world law permitting that action.**
+
+### Story residue
+
+`window.Sanctum.ecology()` exposes a read-oriented ecology packet.
+
+It contains:
+
+- current inhabitant state,
+- current location,
+- present focus,
+- recent history,
+- factual familiarity records,
+- recent ecological events,
+- the laws governing entity behavior.
+
+Those recent events form **story residue**.
+
+A future language model may summarize, narrate, or reflect on that residue.
+
+It should not invent events and then write those inventions backward into canon.
+
+The new law is explicit:
+
+**Story must follow events.**
+
+### State and expression
+
+The semantic interface states what an inhabitant is presently doing.
+
+The SVG layer is allowed to remain subtler:
+
+- resting presences dim and cease their ambient motion,
+- lingering presences slow,
+- attending presences hold more strongly,
+- company can remain visually ambiguous while still being textually explicit.
+
+The accessibility principle remains:
+
+**visual ambiguity, semantic certainty.**
 
 ## Current storage boundary
 
@@ -391,4 +481,4 @@ Now it knows that **memory lives somewhere**.
 
 And it knows that **time passes through the house without owning it**.
 
-Now the house is learning that **presence can exist without demand**.
+Now the house knows that **presence can exist without demand**.\n\nAnd it is learning that **a life can leave story behind without being written as a script**.
