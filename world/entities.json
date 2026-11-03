@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "laws": {
+    "entitiesCannotGenerate": true,
+    "entitiesCannotCrossLatentFrontiers": true,
+    "entitiesCannotCrossConsentThresholds": true,
+    "generatedRoomsMustBeWitnessed": true,
+    "presenceMayBeMissed": true,
+    "observationCannotCompel": true
+  },
+  "entities": [
+    {
+      "id": "entity.lumenmoth",
+      "name": "the pale lumenmoth",
+      "kind": "fauna",
+      "symbol": "✧",
+      "start": "gallery",
+      "description": "A pale moth with translucent wings drifts near whatever light the room has not explained.",
+      "observe": [
+        "Its wings catch the room's light without quite reflecting it.",
+        "It keeps a respectful distance, circling once before settling somewhere you are not looking directly at.",
+        "For a moment its shadow arrives before the moth does."
+      ],
+      "rhythm": {
+        "active": ["evening", "night", "deep_night", "dawn"],
+        "intervalMinutes": 150,
+        "maxCatchupMoves": 3
+      },
+      "affinities": {
+        "warmth": 0.45,
+        "light": 0.92,
+        "memory": 0.28,
+        "objects": 0.12,
+        "familiarPaths": 0.16
+      },
+      "visual": {
+        "shape": "moth",
+        "motion": "drift"
+      }
+    },
+    {
+      "id": "entity.processional",
+      "name": "the little processional",
+      "kind": "construct",
+      "symbol": "◈",
+      "start": "hearth",
+      "description": "A palm-sized brass creature walks on four narrow feet, pausing at thresholds as though listening for permission.",
+      "observe": [
+        "It taps one brass foot against the floor and waits for the room to answer.",
+        "No visible mechanism explains how the little construct chooses a direction.",
+        "It stops at every threshold. It has never mistaken an opening for permission."
+      ],
+      "rhythm": {
+        "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
+        "intervalMinutes": 240,
+        "maxCatchupMoves": 2
+      },
+      "affinities": {
+        "warmth": 0.3,
+        "light": 0.18,
+        "memory": 0.62,
+        "objects": 0.24,
+        "familiarPaths": 0.96
+      },
+      "visual": {
+        "shape": "brassling",
+        "motion": "meander"
+      }
+    },
+    {
+      "id": "entity.threadling",
+      "name": "the loose threadling",
+      "kind": "impossible_life",
+      "symbol": "⌁",
+      "start": "gallery",
+      "description": "Something like a living knot of pale thread rests in the seams between objects, loosening and gathering itself by turns.",
+      "observe": [
+        "It has no obvious face, but one loop of thread turns toward the oldest object in the room.",
+        "The knot rearranges itself without ever becoming untied.",
+        "A strand reaches toward a nearby object, stops short of touching it, and curls back into the whole."
+      ],
+      "rhythm": {
+        "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
+        "intervalMinutes": 210,
+        "maxCatchupMoves": 3
+      },
+      "affinities": {
+        "warmth": 0.18,
+        "light": 0.2,
+        "memory": 0.72,
+        "objects": 0.98,
+        "familiarPaths": 0.38
+      },
+      "visual": {
+        "shape": "thread",
+        "motion": "curl"
+      }
+    }
+  ]
+}
