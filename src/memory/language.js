@@ -68,6 +68,26 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return entityName(event.entity) + " attended to something in this room.";
     case "entity_encounter":
       return entityName(event.entity) + " and " + entityName(event.otherEntity) + " shared this room long enough to notice one another.";
+    case "relation_phase": {
+      const names = (event.entities || []).map(entityName);
+      const subject = names.length === 2
+        ? names[0] + " and " + names[1]
+        : "Two inhabitants";
+
+      if (event.toPhase === "friends") {
+        return "The house has seen enough of " + subject + "'s choices to call them friends.";
+      }
+
+      if (event.toPhase === "companionate") {
+        return subject + " have begun choosing one another's company with some regularity.";
+      }
+
+      if (event.toPhase === "familiar") {
+        return subject + " have become familiar to one another.";
+      }
+
+      return "A relationship changed here.";
+    }
     case "witness":
       return "This place was witnessed and entered canon.";
     case "genesis_birth":
