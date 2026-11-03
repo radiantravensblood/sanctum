@@ -51,6 +51,12 @@ export function renderScene({ room, visual, scene, objects, entities = [], ateli
     })
   );
 
+  const reviewedPainting =
+    atelier &&
+    atelier.render &&
+    atelier.render.strategy ===
+      "reviewed_static_asset";
+
   if (atelier) {
     renderAtelierUnderpainting({
       svg,
@@ -58,13 +64,19 @@ export function renderScene({ room, visual, scene, objects, entities = [], ateli
     });
   }
 
-  renderAir(svg, scene, sensation, random);
-  renderArchitecture(svg, geometry, random);
-  renderMatter(svg, scene, visual, random);
-  renderLight(svg, scene, effects, random);
-  renderAcoustics(svg, scene, effects, random);
-  renderAnomaly(svg, scene, effects, sensation, random);
-  renderAuthoredMarks(svg, effects, random);
+  if (!reviewedPainting) {
+    renderAir(svg, scene, sensation, random);
+    renderArchitecture(svg, geometry, random);
+    renderMatter(svg, scene, visual, random);
+    renderLight(svg, scene, effects, random);
+    renderAcoustics(svg, scene, effects, random);
+    renderAnomaly(svg, scene, effects, sensation, random);
+    renderAuthoredMarks(svg, effects, random);
+  } else {
+    renderLight(svg, scene, effects, random);
+    renderAnomaly(svg, scene, effects, sensation, random);
+  }
+
   renderObjectResidue(svg, objects, random);
   renderEntityPresence(svg, entities, room, random);
 
@@ -74,8 +86,16 @@ export function renderScene({ room, visual, scene, objects, entities = [], ateli
     width: 800,
     height: 360,
     fill: "url(#room-glow)",
-    opacity: String(0.18 + Number(sensation.diffusion || 0.4) * 0.3),
-    class: "scene-glow"
+    opacity: String(
+      reviewedPainting
+        ? 0.035 + Number(sensation.diffusion || 0.4) * 0.07
+        : 0.18 + Number(sensation.diffusion || 0.4) * 0.3
+    ),
+    class:
+      "scene-glow" +
+      (reviewedPainting
+        ? " scene-glow-reviewed"
+        : "")
   });
   svg.append(veil);
 

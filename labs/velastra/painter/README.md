@@ -40,6 +40,30 @@ The bridge uses three explicit stages:
 `world/velastra-assets.json` remains the browser's authority. Its current
 Atelier policy only renders entries whose status is `approved`.
 
+## Export directly from Sanctum
+
+Kernel 0020 adds the preferred browser handoff.
+
+Open Sanctum with:
+
+`?atelier=1`
+
+and use **Export painting packet**, or call:
+
+```js
+window.Velastra.exportSanctumPainting()
+```
+
+The downloaded `.velastra.json` file uses
+`velastra.handoff.v1` and contains the Atelier Manifest under its top-level
+`manifest` key.
+
+The Painter Bridge accepts this file directly; no manual JSON extraction is
+required.
+
+Live inhabitants and movable objects are recorded as runtime presence but are
+explicitly excluded from the canonical place painting.
+
 ## Export an Atelier Manifest
 
 From Sanctum's browser console:

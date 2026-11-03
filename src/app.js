@@ -13,6 +13,8 @@ import { buildHymnosPacket, getAvailableHymnosActs, performHymnosAct, endDuet } 
 import { buildIdentityPacket } from "./hymnos/identity.js";
 import { buildCrossRelationPacket } from "./hymnos/relation.js";
 import { buildVelastraPacket, composeVelastraMeaning, testVelastraExemplars, composeVelastraScene, testVelastraSceneExemplars, composeVelastraMotifs, testVelastraMotifExemplars, compileVelastraAtelier, testVelastraAtelierExemplars, composeVelastraStudioSurface, composeVelastraStudioDocument, testVelastraStudioExemplars } from "./velastra/index.js";
+import { buildCurrentSanctumPainting, composePaintingHandoff } from "./velastra/sanctum-painting.js";
+import { downloadPaintingHandoff, installAtelierDock } from "./velastra/authoring.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -20,6 +22,13 @@ async function ignite() {
   beginSession(state);
   advanceEntities({ state, world });
   let message = getRoom(world, state, state.location).description;
+  let atelierDock = null;
+
+  const currentPainting = () =>
+    buildCurrentSanctumPainting({
+      state,
+      world
+    });
 
   const dispatch = (verb, target = null) => {
     const outcome = performAction({
@@ -41,6 +50,10 @@ async function ignite() {
       message,
       dispatch
     });
+
+    if (atelierDock) {
+      atelierDock.refresh();
+    }
   };
 
   document.querySelectorAll("[data-fixed-verb]").forEach((button) => {
@@ -155,6 +168,14 @@ async function ignite() {
       }),
     atelierTests: () =>
       testVelastraAtelierExemplars(world),
+    paintingHandoff: () =>
+      composePaintingHandoff(
+        currentPainting()
+      ),
+    exportPainting: () =>
+      downloadPaintingHandoff(
+        currentPainting()
+      ),
     studio: (surfaceId, frameworkId = null) =>
       composeVelastraStudioSurface({
         world,
@@ -280,6 +301,14 @@ async function ignite() {
       }),
     atelierExemplars: () =>
       testVelastraAtelierExemplars(world),
+    sanctumPainting: () =>
+      composePaintingHandoff(
+        currentPainting()
+      ),
+    exportSanctumPainting: () =>
+      downloadPaintingHandoff(
+        currentPainting()
+      ),
     studio: (surfaceId, frameworkId = null) =>
       composeVelastraStudioSurface({
         world,
@@ -302,6 +331,10 @@ async function ignite() {
       JSON.parse(JSON.stringify(world.velastraAssets)),
     studioGrammar: () =>
       JSON.parse(JSON.stringify(world.velastraStudio))
+  });
+
+  atelierDock = installAtelierDock({
+    getPainting: currentPainting
   });
 
   window.addEventListener("beforeunload", () => {
@@ -327,6 +360,10 @@ async function ignite() {
       message,
       dispatch
     });
+
+    if (atelierDock) {
+      atelierDock.refresh();
+    }
   }, 60000);
 
   saveState(state);

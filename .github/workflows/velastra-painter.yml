@@ -1,16 +1,24 @@
-name: Velastra Painter Bridge
+name: Velastra Contracts
 
 on:
   push:
     paths:
       - "labs/velastra/painter/**"
-      - "src/velastra/atelier.js"
+      - "labs/velastra/tests/**"
+      - "src/velastra/**"
+      - "src/visual/scene.js"
+      - "src/renderer.js"
+      - "src/app.js"
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
   pull_request:
     paths:
       - "labs/velastra/painter/**"
-      - "src/velastra/atelier.js"
+      - "labs/velastra/tests/**"
+      - "src/velastra/**"
+      - "src/visual/scene.js"
+      - "src/renderer.js"
+      - "src/app.js"
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
 
@@ -26,3 +34,5 @@ jobs:
         run: python -m py_compile labs/velastra/painter/velastra_painter.py
       - name: Run painter contract tests
         run: python -m unittest labs/velastra/painter/test_velastra_painter.py
+      - name: Run living canvas contract
+        run: node labs/velastra/tests/living-canvas.mjs

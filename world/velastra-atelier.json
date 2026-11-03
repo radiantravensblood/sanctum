@@ -17,7 +17,10 @@
     "authoringGenerationMayProposeCandidates": true,
     "candidateCannotSupersedeFallback": true,
     "candidateRequiresReviewBeforeRegistryApproval": true,
-    "modelIsBrushNotSemanticAuthority": true
+    "modelIsBrushNotSemanticAuthority": true,
+    "canonicalPlacePaintingExcludesTransientPresence": true,
+    "reviewedPlacePaintingDoesNotFreezeRuntimePresence": true,
+    "placeIdentityMayOutliveCurrentOccupants": true
   },
   "media": {
     "luminous_oil": {
@@ -143,5 +146,18 @@
     "candidateOutputRoot": ".velastra/candidates",
     "approvedAssetRoot": "assets/velastra/approved",
     "approvalRequired": true
+  },
+  "livingCanvas": {
+    "version": 1,
+    "handoffProtocol": "velastra.handoff.v1",
+    "authoringQuery": "atelier=1",
+    "canonicalLayer": "reviewed_static_asset",
+    "liveLayers": [
+      "temporal_light",
+      "anomaly",
+      "portable_objects",
+      "inhabitants"
+    ],
+    "proceduralFallbackRemainsAvailable": true
   }
 }

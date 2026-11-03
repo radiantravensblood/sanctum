@@ -1828,3 +1828,106 @@ body[data-velastra-medium="artifact_oil"] .velastra-motif-traces {
     animation: none !important;
   }
 }
+
+
+/* Kernel 0020 — Living Canvas
+   The painting remembers the place. The runtime carries the moment. */
+body[data-velastra-painting="reviewed_static_asset"] .rain-field {
+  mix-blend-mode: screen;
+  opacity: 0.52;
+}
+
+body[data-velastra-painting="reviewed_static_asset"] .borrowed-light {
+  mix-blend-mode: screen;
+  opacity: 0.46;
+}
+
+body[data-velastra-painting="reviewed_static_asset"] .object-residue,
+body[data-velastra-painting="reviewed_static_asset"] .entity-presence {
+  mix-blend-mode: screen;
+}
+
+body[data-velastra-painting="reviewed_static_asset"] .scene-glow-reviewed {
+  mix-blend-mode: soft-light;
+}
+
+.atelier-dock {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 30;
+  display: grid;
+  width: min(380px, calc(100vw - 32px));
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--room-line);
+  background:
+    color-mix(in srgb, var(--room-shadow) 92%, black);
+  box-shadow:
+    0 16px 48px
+    color-mix(in srgb, var(--room-shadow) 80%, black);
+  backdrop-filter: blur(12px);
+}
+
+.atelier-dock strong {
+  color: var(--room-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.atelier-dock small,
+.atelier-dock code {
+  color: var(--room-muted);
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+  font-size: 0.58rem;
+  line-height: 1.45;
+}
+
+.atelier-dock small {
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.atelier-dock code {
+  overflow-wrap: anywhere;
+}
+
+.atelier-dock-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.atelier-dock button {
+  flex: 1 1 150px;
+  min-height: 36px;
+  padding: 8px 10px;
+  color: var(--room-ink);
+  border: 1px solid var(--room-line);
+  background:
+    color-mix(in srgb, var(--room-surface) 32%, transparent);
+  cursor: pointer;
+}
+
+.atelier-dock button:hover,
+.atelier-dock button:focus-visible {
+  border-color:
+    color-mix(in srgb, var(--room-accent) 56%, var(--room-line));
+  background:
+    color-mix(in srgb, var(--room-surface) 52%, transparent);
+}
+
+@media (max-width: 640px) {
+  .atelier-dock {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    width: auto;
+  }
+}

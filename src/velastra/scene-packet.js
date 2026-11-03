@@ -354,15 +354,27 @@ function normalizeEnvironment(environment) {
   if (!environment) {
     return {
       kind: null,
-      facts: []
+      facts: [],
+      identityFacts: [],
+      transientFacts: []
     };
   }
 
+  const facts = Array.isArray(environment.facts)
+    ? [...environment.facts]
+    : [];
+  const identityFacts = Array.isArray(environment.identityFacts)
+    ? [...environment.identityFacts]
+    : [...facts];
+  const transientFacts = Array.isArray(environment.transientFacts)
+    ? [...environment.transientFacts]
+    : [];
+
   return {
     kind: environment.kind || null,
-    facts: Array.isArray(environment.facts)
-      ? [...environment.facts]
-      : []
+    facts,
+    identityFacts,
+    transientFacts
   };
 }
 
