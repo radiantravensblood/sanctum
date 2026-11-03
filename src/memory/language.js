@@ -70,17 +70,24 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return entityName(event.entity) + " and " + entityName(event.otherEntity) + " shared this room long enough to notice one another.";
     case "interaction": {
       const target = entityName(event.targetEntity);
-      const verb = String(event.affordance || "interaction").replaceAll("_", " ");
+      const phrases = {
+        approach: "approach",
+        wait_nearby: "shared quiet",
+        offer_object: "offered object",
+        invite_company: "invitation to travel together",
+        touch: "touch"
+      };
+      const phrase = phrases[event.affordance] || "interaction";
 
       if (event.outcome === "accepted") {
-        return target + " accepted an invitation to " + verb + ".";
+        return target + " accepted the " + phrase + ".";
       }
 
       if (event.outcome === "deferred") {
-        return target + " left the " + verb + " unanswered for now.";
+        return target + " left the " + phrase + " unanswered for now.";
       }
 
-      return target + " declined the " + verb + ".";
+      return target + " declined the " + phrase + ".";
     }
     case "entity_accompany":
       return entityName(event.entity) + " chose to travel onward in company.";
