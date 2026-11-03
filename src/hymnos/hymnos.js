@@ -26,7 +26,8 @@ export function getAvailableHymnosActs({
   state,
   world,
   actorId = "siege",
-  targetId
+  targetId,
+  now = new Date()
 }) {
   const actor = resolveParticipant({
     state,
@@ -77,7 +78,8 @@ export function getAvailableHymnosActs({
         act: definition.requiresRecentAct,
         hours: Number(
           definition.recentWindowHours || 12
-        )
+        ),
+        now
       })
     ) {
       available = false;
@@ -99,7 +101,7 @@ export function getAvailableHymnosActs({
     if (
       available &&
       id === "diemesh" &&
-      getActiveDuet(state, actorId, targetId)
+      getActiveDuet(state, actorId, targetId, now)
     ) {
       available = false;
       reason = "duet_already_active";
@@ -147,7 +149,8 @@ export function performHymnosAct({
     state,
     world,
     actorId,
-    targetId
+    targetId,
+    now
   });
   const availableAct = availability.acts.find(
     (entry) => entry.id === act
@@ -218,7 +221,7 @@ export function performHymnosAct({
     now
   });
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: actor.id,
@@ -325,7 +328,8 @@ export function endDuet({
 export function getActiveDuet(
   state,
   actorId,
-  targetId
+  targetId,
+  now = new Date()
 ) {
   if (!state.hymnos || !state.hymnos.duets) {
     return null;
@@ -333,15 +337,29 @@ export function getActiveDuet(
 
   const participants = [actorId, targetId].sort();
 
-  return (
+  const duet =
     Object.values(state.hymnos.duets).find(
-      (duet) =>
-        duet.status === "active" &&
-        duet.participants.length === 2 &&
-        duet.participants[0] === participants[0] &&
-        duet.participants[1] === participants[1]
-    ) || null
-  );
+      (candidate) =>
+        candidate.status === "active" &&
+        candidate.participants.length === 2 &&
+        candidate.participants[0] === participants[0] &&
+        candidate.participants[1] === participants[1]
+    ) || null;
+
+  if (!duet) return null;
+
+  const expiry = new Date(duet.expiresAt).getTime();
+  if (
+    Number.isFinite(expiry) &&
+    now.getTime() > expiry
+  ) {
+    duet.status = "ended";
+    duet.endedAt = duet.expiresAt;
+    duet.endedBy = "time";
+    return null;
+  }
+
+  return duet;
 }
 
 export function buildHymnosPacket({
@@ -422,7 +440,7 @@ function performDiemesh({
     now
   });
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: actor.id,
@@ -464,7 +482,7 @@ function performDiemesh({
     };
   }
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: target.id,
@@ -505,7 +523,7 @@ function performDiemesh({
 
   state.hymnos.duets[id] = duet;
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: actor.id,
@@ -595,7 +613,7 @@ function maybeAnswer({
     now
   });
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: target.id,
@@ -852,7 +870,7 @@ function detectRitual({
 
   state.hymnos.rituals[key] = ritual;
 
-  registerCrossFormEvidence({
+  recordCrossEvidence({
     state,
     world,
     actorId: actor.id,
@@ -1056,9 +1074,10 @@ function hasRecentAct({
   actorId,
   targetId,
   act,
-  hours
+  hours,
+  now
 }) {
-  const now = Date.now();
+  const nowMs = now.getTime();
   const participants = [actorId, targetId];
 
   return (state.hymnos.exchanges || []).some(
@@ -1066,7 +1085,7 @@ function hasRecentAct({
       exchange.act === act &&
       participants.includes(exchange.actor) &&
       participants.includes(exchange.target) &&
-      now -
+      nowMs -
         new Date(exchange.at).getTime() <=
         hours * 3600000
   );
@@ -1110,6 +1129,46 @@ function participantName(participant) {
       participant.identity.name) ||
     participant.id
   );
+}
+
+function recordCrossEvidence({
+  state,
+  world,
+  actorId,
+  targetId,
+  type,
+  affordance = null,
+  outcome = null,
+  room = null,
+  at
+}) {
+  const result = registerCrossFormEvidence({
+    state,
+    world,
+    actorId,
+    targetId,
+    type,
+    affordance,
+    outcome,
+    room,
+    at
+  });
+
+  if (result && result.changed) {
+    appendEvent(state, {
+      at,
+      actor: "sanctum",
+      action: "cross_relation_phase",
+      room,
+      participants: [
+        ...result.relation.participants
+      ],
+      fromPhase: result.from,
+      toPhase: result.to
+    });
+  }
+
+  return result;
 }
 
 function rejected(reason) {
