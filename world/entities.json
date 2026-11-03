@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "laws": {
     "entitiesCannotGenerate": true,
     "entitiesCannotCrossLatentFrontiers": true,
@@ -9,7 +9,9 @@
     "entitiesMayRemainStill": true,
     "presenceMayBeMissed": true,
     "observationCannotCompel": true,
-    "storyMustFollowEvents": true
+    "storyMustFollowEvents": true,
+    "relationshipLabelsRequireEvidence": true,
+    "relationshipsMayInfluenceChoice": true
   },
   "entities": [
     {
@@ -25,7 +27,12 @@
         "For a moment its shadow arrives before the moth does."
       ],
       "rhythm": {
-        "active": ["evening", "night", "deep_night", "dawn"],
+        "active": [
+          "evening",
+          "night",
+          "deep_night",
+          "dawn"
+        ],
         "intervalMinutes": 150,
         "maxCatchupActions": 3
       },
@@ -63,7 +70,14 @@
         "It stops at every threshold. It has never mistaken an opening for permission."
       ],
       "rhythm": {
-        "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
+        "active": [
+          "morning",
+          "afternoon",
+          "evening",
+          "night",
+          "deep_night",
+          "dawn"
+        ],
         "intervalMinutes": 240,
         "maxCatchupActions": 3
       },
@@ -101,7 +115,14 @@
         "A strand reaches toward a nearby object, stops short of touching it, and curls back into the whole."
       ],
       "rhythm": {
-        "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
+        "active": [
+          "morning",
+          "afternoon",
+          "evening",
+          "night",
+          "deep_night",
+          "dawn"
+        ],
         "intervalMinutes": 210,
         "maxCatchupActions": 4
       },
@@ -126,5 +147,29 @@
         "motion": "curl"
       }
     }
-  ]
+  ],
+  "relation": {
+    "reunionHours": 6,
+    "phases": {
+      "familiar": {
+        "minEncounters": 2,
+        "minDistinctRooms": 1,
+        "minSpanHours": 1
+      },
+      "companionate": {
+        "minEncounters": 4,
+        "minDistinctRooms": 2,
+        "minSpanHours": 8,
+        "minReciprocalChoicesEach": 1
+      },
+      "friends": {
+        "minEncounters": 6,
+        "minDistinctRooms": 2,
+        "minSpanHours": 24,
+        "minReciprocalChoicesEach": 2,
+        "minSharedRest": 1,
+        "minReunions": 1
+      }
+    }
+  }
 }
