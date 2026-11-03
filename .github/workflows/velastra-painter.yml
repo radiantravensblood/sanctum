@@ -36,5 +36,9 @@ jobs:
         run: python -m py_compile labs/velastra/painter/velastra_painter.py
       - name: Run painter contract tests
         run: python -m unittest labs/velastra/painter/test_velastra_painter.py
+      - name: Check authoring module syntax
+        run: node --check src/velastra/authoring.js
       - name: Run living canvas contract
         run: node labs/velastra/tests/living-canvas.mjs
+      - name: Run brush cabinet contract
+        run: node labs/velastra/tests/brush-cabinet.mjs
