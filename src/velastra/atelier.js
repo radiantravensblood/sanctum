@@ -216,22 +216,32 @@ function resolveReviewedAsset({
 }
 
 function buildAssetKey(scenePacket) {
+  const placeScoped =
+    scenePacket.provenance?.assetScope === "place";
   const semanticIdentity = {
     archetype: scenePacket.archetype,
+    scope: placeScoped ? "place" : "scene",
     source:
       scenePacket.provenance?.room ||
       scenePacket.provenance?.exemplar ||
       scenePacket.environment?.kind ||
       scenePacket.provenance?.source ||
       "scene",
-    subjects: (scenePacket.subjects || []).map(
-      (subject) => ({
-        id: subject.id,
-        claim: subject.visualClaim?.id || null
-      })
-    ),
-    relation: scenePacket.relation?.kind || null,
-    facts: scenePacket.environment?.facts || []
+    subjects: placeScoped
+      ? []
+      : (scenePacket.subjects || []).map(
+          (subject) => ({
+            id: subject.id,
+            claim: subject.visualClaim?.id || null
+          })
+        ),
+    relation: placeScoped
+      ? null
+      : scenePacket.relation?.kind || null,
+    facts:
+      scenePacket.environment?.identityFacts ||
+      scenePacket.environment?.facts ||
+      []
   };
 
   return (
