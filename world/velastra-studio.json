@@ -1,0 +1,310 @@
+{
+  "version": 1,
+  "designation": "Velastra Studio Adapter Grammar",
+  "laboratory": "Viryn Labs",
+  "purpose": "Let Viryn Studio consume the same semantic expression engine without inheriting Sanctum's visual skin.",
+  "laws": {
+    "studioMeaningPrecedesBrandTreatment": true,
+    "paintingInvitesInterfaceExplains": true,
+    "privateIntimacyStaysPrivate": true,
+    "frameworkKeepsJourney": true,
+    "capabilitiesTravel": true,
+    "adapterDoesNotRewriteCopy": true,
+    "adapterDoesNotReplaceApprovedArt": true,
+    "accessibilityStructureRemainsSovereign": true,
+    "commercialUseCannotReassignPrivateIdentity": true,
+    "studioIsConsumerNotOwnerOfVelastra": true
+  },
+  "surfaces": {
+    "hero_threshold": {
+      "selector": ".atelier-hero-section",
+      "meaning": {
+        "role": "gathering",
+        "axes": {
+          "intimacy": 0.72,
+          "certainty": 0.72,
+          "sacredness": 0.44,
+          "urgency": 0.16,
+          "density": 0.62,
+          "age": 0.34,
+          "warmth": 0.88,
+          "porosity": 0.66,
+          "remembrance": 0.28,
+          "permeability": 0.74,
+          "relationality": 0.86,
+          "vitality": 0.74
+        },
+        "hints": {
+          "materials": ["paper", "brass", "botanical", "ember"]
+        }
+      }
+    },
+    "framework_library": {
+      "selector": "#frameworks",
+      "meaning": {
+        "role": "gathering",
+        "axes": {
+          "intimacy": 0.62,
+          "certainty": 0.8,
+          "sacredness": 0.28,
+          "urgency": 0.08,
+          "density": 0.72,
+          "age": 0.42,
+          "warmth": 0.7,
+          "porosity": 0.5,
+          "remembrance": 0.38,
+          "permeability": 0.68,
+          "relationality": 0.78,
+          "vitality": 0.62
+        },
+        "hints": {
+          "materials": ["paper", "brass", "botanical"]
+        }
+      }
+    },
+    "edition_tableau": {
+      "selector": "#editions",
+      "meaning": {
+        "role": "artifact",
+        "axes": {
+          "intimacy": 0.66,
+          "certainty": 0.78,
+          "sacredness": 0.34,
+          "urgency": 0.06,
+          "density": 0.68,
+          "age": 0.54,
+          "warmth": 0.76,
+          "porosity": 0.48,
+          "remembrance": 0.66,
+          "permeability": 0.56,
+          "relationality": 0.72,
+          "vitality": 0.56
+        },
+        "hints": {
+          "materials": ["paper", "brass", "ember"]
+        }
+      }
+    },
+    "process_rhythm": {
+      "selector": "#process",
+      "meaning": {
+        "role": "operational",
+        "axes": {
+          "intimacy": 0.5,
+          "certainty": 0.9,
+          "sacredness": 0.16,
+          "urgency": 0.18,
+          "density": 0.72,
+          "age": 0.24,
+          "warmth": 0.58,
+          "porosity": 0.34,
+          "remembrance": 0.22,
+          "permeability": 0.54,
+          "relationality": 0.68,
+          "vitality": 0.52
+        },
+        "hints": {
+          "materials": ["paper", "brass"]
+        }
+      }
+    },
+    "portfolio_gallery": {
+      "selector": "#work",
+      "meaning": {
+        "role": "artifact",
+        "axes": {
+          "intimacy": 0.54,
+          "certainty": 0.78,
+          "sacredness": 0.22,
+          "urgency": 0.06,
+          "density": 0.74,
+          "age": 0.44,
+          "warmth": 0.62,
+          "porosity": 0.42,
+          "remembrance": 0.54,
+          "permeability": 0.52,
+          "relationality": 0.58,
+          "vitality": 0.56
+        },
+        "hints": {
+          "materials": ["paper", "brass", "glass"]
+        }
+      }
+    },
+    "pricing_clarity": {
+      "selector": "#pricing",
+      "meaning": {
+        "role": "operational",
+        "axes": {
+          "intimacy": 0.3,
+          "certainty": 0.96,
+          "sacredness": 0.06,
+          "urgency": 0.34,
+          "density": 0.82,
+          "age": 0.12,
+          "warmth": 0.4,
+          "porosity": 0.18,
+          "remembrance": 0.12,
+          "permeability": 0.38,
+          "relationality": 0.36,
+          "vitality": 0.4
+        },
+        "hints": {
+          "materials": ["paper", "stone", "glass"]
+        }
+      }
+    },
+    "care_continuity": {
+      "selector": "#care-plans",
+      "meaning": {
+        "role": "gathering",
+        "axes": {
+          "intimacy": 0.7,
+          "certainty": 0.84,
+          "sacredness": 0.2,
+          "urgency": 0.12,
+          "density": 0.58,
+          "age": 0.42,
+          "warmth": 0.74,
+          "porosity": 0.44,
+          "remembrance": 0.52,
+          "permeability": 0.54,
+          "relationality": 0.82,
+          "vitality": 0.52
+        },
+        "hints": {
+          "materials": ["ember", "paper", "brass"]
+        }
+      }
+    },
+    "studio_identity": {
+      "selector": "#about",
+      "meaning": {
+        "role": "memory",
+        "axes": {
+          "intimacy": 0.7,
+          "certainty": 0.78,
+          "sacredness": 0.36,
+          "urgency": 0.04,
+          "density": 0.52,
+          "age": 0.62,
+          "warmth": 0.72,
+          "porosity": 0.56,
+          "remembrance": 0.74,
+          "permeability": 0.58,
+          "relationality": 0.72,
+          "vitality": 0.4
+        },
+        "hints": {
+          "materials": ["paper", "ember", "brass"]
+        }
+      }
+    },
+    "decision_threshold": {
+      "selector": "#faq",
+      "meaning": {
+        "role": "threshold",
+        "axes": {
+          "intimacy": 0.46,
+          "certainty": 0.82,
+          "sacredness": 0.18,
+          "urgency": 0.08,
+          "density": 0.7,
+          "age": 0.24,
+          "warmth": 0.48,
+          "porosity": 0.5,
+          "remembrance": 0.22,
+          "permeability": 0.68,
+          "relationality": 0.5,
+          "vitality": 0.32
+        },
+        "hints": {
+          "materials": ["glass", "paper", "brass"]
+        }
+      }
+    }
+  },
+  "frameworks": {
+    "gathering": {
+      "axes": {
+        "intimacy": 0.82,
+        "relationality": 0.96,
+        "warmth": 0.86,
+        "vitality": 0.82,
+        "permeability": 0.78
+      },
+      "hints": {
+        "materials": ["botanical", "paper", "ember"]
+      }
+    },
+    "ledger": {
+      "axes": {
+        "certainty": 0.88,
+        "density": 0.72,
+        "remembrance": 0.78,
+        "age": 0.62,
+        "intimacy": 0.52
+      },
+      "hints": {
+        "materials": ["paper", "brass", "ember"]
+      }
+    },
+    "signal": {
+      "axes": {
+        "vitality": 0.92,
+        "permeability": 0.74,
+        "certainty": 0.62,
+        "density": 0.64,
+        "intimacy": 0.5
+      },
+      "hints": {
+        "materials": ["glass", "brass", "shadow"]
+      }
+    },
+    "table": {
+      "axes": {
+        "warmth": 0.94,
+        "density": 0.72,
+        "relationality": 0.82,
+        "vitality": 0.76,
+        "intimacy": 0.7
+      },
+      "hints": {
+        "materials": ["ember", "brass", "paper"]
+      }
+    }
+  },
+  "exemplars": {
+    "hero": {
+      "surface": "hero_threshold",
+      "expect": {
+        "materialsAny": ["botanical", "paper", "ember", "velvet", "brass"],
+        "frameAny": ["open", "held"],
+        "typographyAny": ["editorial", "ceremonial"]
+      }
+    },
+    "pricing": {
+      "surface": "pricing_clarity",
+      "expect": {
+        "ornamentMax": 0.36,
+        "typographyAny": ["operational", "editorial"]
+      }
+    },
+    "gathering_framework": {
+      "surface": "framework_library",
+      "framework": "gathering",
+      "expect": {
+        "materialsAny": ["botanical", "ember", "paper"],
+        "relationalityMin": 0.85
+      }
+    },
+    "signal_framework": {
+      "surface": "framework_library",
+      "framework": "signal",
+      "expect": {
+        "materialsAny": ["glass", "brass", "shadow"],
+        "vitalityMin": 0.75
+      }
+    }
+  }
+}
