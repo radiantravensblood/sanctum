@@ -49,53 +49,38 @@ export function selectMotifs({
         return null;
       }
 
-      let score = semanticScore(motif.vector || {}, axes);
+      let score =
+        semanticScore(motif.vector || {}, axes) * 0.72;
 
       if ((motif.roles || []).includes(role)) {
-        score += 0.16;
+        score += 0.08;
       }
 
       if ((motif.materials || []).some((material) => materials.has(material))) {
-        score += 0.1;
+        score += 0.06;
       }
 
       if ((motif.lighting || []).includes(lighting)) {
-        score += 0.14;
+        score += 0.1;
       }
 
       if (literalMatches.length) {
-        score += 0.34;
+        score += 0.42;
       }
 
       if (
         relation &&
         motif.family === "relation"
       ) {
-        score += 0.22;
-      }
-
-      if (
-        scenePacket.archetype === "atelier_tableau" &&
-        motif.family === "atelier"
-      ) {
-        score += 0.14;
-      }
-
-      if (
-        scenePacket.archetype === "self_portrait" &&
-        motif.family === "selfhood"
-      ) {
         score += 0.18;
       }
 
-      if (
-        scenePacket.archetype === "threshold_revelation" &&
-        motif.family === "threshold"
-      ) {
-        score += 0.18;
-      }
+      score += archetypeFamilyBias(
+        scenePacket.archetype,
+        motif.family
+      );
 
-      score += random() * 0.012;
+      score += random() * 0.006;
 
       const mode = chooseMode(motif, literalMatches);
 
@@ -137,7 +122,7 @@ export function selectMotifs({
       continue;
     }
 
-    if (candidate.score < 0.52 && candidate.mode !== "literal") {
+    if (candidate.score < 0.6 && candidate.mode !== "literal") {
       continue;
     }
 
@@ -274,15 +259,96 @@ function collectFacts(scenePacket) {
 
 function matchLiteralTriggers(triggers, facts) {
   return triggers.filter((trigger) => {
-    const needle = String(trigger).toLowerCase();
+    const needle = tokenize(trigger);
 
-    return facts.some(
-      (fact) =>
-        fact === needle ||
-        fact.includes(needle) ||
-        needle.includes(fact)
+    return facts.some((fact) =>
+      containsTokenSequence(tokenize(fact), needle)
     );
   });
+}
+
+function tokenize(value) {
+  return String(value)
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter(Boolean);
+}
+
+function containsTokenSequence(haystack, needle) {
+  if (!needle.length || needle.length > haystack.length) {
+    return false;
+  }
+
+  outer:
+  for (let start = 0; start <= haystack.length - needle.length; start += 1) {
+    for (let i = 0; i < needle.length; i += 1) {
+      if (haystack[start + i] !== needle[i]) {
+        continue outer;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+function archetypeFamilyBias(archetype, family) {
+  const table = {
+    self_portrait: {
+      selfhood: 0.28,
+      hearth: 0.04,
+      memory: 0.02,
+      relation: -0.08,
+      atelier: -0.14,
+      commons: -0.12,
+      threshold: -0.08,
+      ledger: -0.1,
+      rain_archive: -0.1,
+      gallery: -0.08
+    },
+    dyadic_homecoming: {
+      relation: 0.3,
+      selfhood: 0.04,
+      commons: 0.02,
+      atelier: -0.08,
+      threshold: -0.08,
+      ledger: -0.08,
+      rain_archive: -0.08
+    },
+    atelier_tableau: {
+      atelier: 0.28,
+      commons: 0.08,
+      selfhood: -0.12,
+      relation: -0.06,
+      threshold: -0.12,
+      rain_archive: -0.12
+    },
+    place_tableau: {
+      hearth: 0.08,
+      memory: 0.08,
+      rain_archive: 0.08,
+      gallery: 0.06,
+      commons: 0.04
+    },
+    threshold_revelation: {
+      threshold: 0.28,
+      memory: 0.08,
+      gallery: 0.04,
+      commons: -0.08,
+      atelier: -0.08
+    },
+    artifact_still_life: {
+      memory: 0.16,
+      ledger: 0.14,
+      atelier: 0.04,
+      selfhood: -0.08
+    }
+  };
+
+  return Number(
+    (table[archetype] && table[archetype][family]) || 0
+  );
 }
 
 function semanticScore(vector, axes) {
