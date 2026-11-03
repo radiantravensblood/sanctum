@@ -78,7 +78,11 @@ function normalizeEvent(event, world, state) {
     object: event.object
       ? describeObject(world, state, event.object)
       : null,
-    reason: event.reason || null
+    reason: event.reason || null,
+    relation: event.relation || null,
+    relationEntities: event.entities || null,
+    fromPhase: event.fromPhase || null,
+    toPhase: event.toPhase || null
   };
 }
 
