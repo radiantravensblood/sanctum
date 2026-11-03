@@ -8,6 +8,7 @@ import { getRoomMemory, getObjectMemory, getPathMemory } from "./mnemosyne.js";
 import { reconstructSceneTruth } from "../genesis/scene-truth.js";
 import { getTemporalContext } from "../time/chronos.js";
 import { getEntitiesAt } from "../entities/entities.js";
+import { buildEcologyPacket } from "../entities/ecology.js";
 
 export function buildContextPacket({ state, world, roomId = state.location }) {
   const room = getRoom(world, state, roomId, { fallback: false });
@@ -19,7 +20,7 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
   const entities = getEntitiesAt(world, state, roomId);
 
   return {
-    version: 3,
+    version: 4,
     time: temporal,
     location: {
       id: room.id,
@@ -39,10 +40,19 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
       name: template.name,
       kind: template.kind,
       description: template.description,
+      status: record.status,
+      focus: record.focus,
+      lastActedAt: record.lastActedAt,
       lastMovedAt: record.lastMovedAt,
       lastObservedAt: record.lastObservedAt,
+      relations: record.relations || {},
       recentHistory: (record.history || []).slice(-8)
     })),
+    ecology: buildEcologyPacket({
+      state,
+      world,
+      roomId
+    }),
     objects: objects.map((object) => ({
       id: object.id,
       name: object.name,
