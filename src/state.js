@@ -6,9 +6,10 @@ import {
 } from "./memory/mnemosyne.js";
 import { createInitialTime, mergeTime } from "./time/chronos.js";
 import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
+import { seedRelationsFromLegacy } from "./entities/relation.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 7;
+const VERSION = 8;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -49,6 +50,8 @@ export function loadState(world) {
     if (!parsed.memory || !Object.keys(parsed.memory.rooms || {}).length) {
       rebuildMemoryFromLedger(restored);
     }
+
+    seedRelationsFromLegacy(restored, world);
 
     if (!getKnownRoom(restored, world, restored.location)) {
       restored.location = "hearth";
