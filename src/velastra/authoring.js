@@ -31,18 +31,31 @@ export function downloadPaintingHandoff(painting) {
   };
 }
 
-export async function copyPainterCommand(painting) {
+export async function copyPainterCommand(
+  painting,
+  brushCabinet,
+  {
+    brushId = null,
+    transportId = null
+  } = {}
+) {
   const handoff = composePaintingHandoff(painting);
   const filename = paintingHandoffFilename(handoff);
+  const selection = resolveBrushSelection(
+    brushCabinet,
+    brushId,
+    transportId
+  );
+
   const command = [
     "python3",
     "labs/velastra/painter/velastra_painter.py",
     "render",
     '"$HOME/Downloads/' + filename + '"',
-    "--backend",
-    "diffusers",
-    "--model",
-    '"YOUR_MODEL_ID"'
+    "--brush",
+    shellQuote(selection.brushId),
+    "--transport",
+    shellQuote(selection.transportId)
   ].join(" ");
 
   let copied = false;
@@ -61,12 +74,14 @@ export async function copyPainterCommand(painting) {
 
   return {
     command,
-    copied
+    copied,
+    ...selection
   };
 }
 
 export function installAtelierDock({
-  getPainting
+  getPainting,
+  brushCabinet
 }) {
   const params = new URLSearchParams(
     window.location.search
@@ -88,9 +103,92 @@ export function installAtelierDock({
 
   const law = document.createElement("small");
   law.textContent =
-    "the painting remembers the place · the runtime carries the moment";
+    "the model holds the brush · Velastra remains the author";
 
   const status = document.createElement("code");
+
+  const brushRow = document.createElement("label");
+  brushRow.className = "atelier-field";
+  const brushLabel = document.createElement("span");
+  brushLabel.textContent = "Brush";
+  const brushSelect = document.createElement("select");
+  brushSelect.setAttribute("aria-label", "Velastra brush");
+
+  Object.entries(brushCabinet?.brushes || {}).forEach(
+    ([id, brush]) => {
+      const option = document.createElement("option");
+      option.value = id;
+      option.textContent =
+        brush.label || id;
+      if (id === brushCabinet.defaultBrush) {
+        option.selected = true;
+      }
+      brushSelect.append(option);
+    }
+  );
+
+  const transportRow = document.createElement("label");
+  transportRow.className = "atelier-field";
+  const transportLabel = document.createElement("span");
+  transportLabel.textContent = "Transport";
+  const transportSelect = document.createElement("select");
+  transportSelect.setAttribute(
+    "aria-label",
+    "Velastra brush transport"
+  );
+
+  brushRow.append(brushLabel, brushSelect);
+  transportRow.append(
+    transportLabel,
+    transportSelect
+  );
+
+  const transportNote = document.createElement("small");
+  transportNote.className = "atelier-transport-note";
+
+  const syncTransports = () => {
+    const brush =
+      brushCabinet?.brushes?.[brushSelect.value] || {};
+    const transports = brush.transports || {};
+    const previous = transportSelect.value;
+
+    transportSelect.replaceChildren();
+
+    Object.entries(transports).forEach(
+      ([id, transport]) => {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent =
+          transportLabelText(id, transport);
+        if (
+          id === previous ||
+          (!previous &&
+            id === brushCabinet.defaultTransport) ||
+          transport.recommended === true
+        ) {
+          option.selected = true;
+        }
+        transportSelect.append(option);
+      }
+    );
+
+    const selected =
+      transports[transportSelect.value] ||
+      transports[
+        brushCabinet.defaultTransport
+      ] ||
+      Object.values(transports)[0] ||
+      {};
+
+    transportNote.textContent =
+      selected.tokenEnv
+        ? "credential · " +
+          selected.tokenEnv +
+          " from shell environment"
+        : "local authoring transport";
+  };
+
+  syncTransports();
 
   const actions = document.createElement("div");
   actions.className = "atelier-dock-actions";
@@ -111,22 +209,63 @@ export function installAtelierDock({
     "Copy painter command",
     async () => {
       const result = await copyPainterCommand(
-        getPainting()
+        getPainting(),
+        brushCabinet,
+        {
+          brushId: brushSelect.value,
+          transportId: transportSelect.value
+        }
       );
       status.textContent = result.copied
-        ? "command copied"
+        ? result.brushLabel +
+          " · command copied"
         : result.command;
     }
   );
 
+  brushSelect.addEventListener("change", () => {
+    syncTransports();
+    refreshAtelierDock({
+      dock,
+      status,
+      getPainting,
+      brushCabinet,
+      brushSelect,
+      transportSelect
+    });
+  });
+
+  transportSelect.addEventListener("change", () => {
+    syncTransports();
+    refreshAtelierDock({
+      dock,
+      status,
+      getPainting,
+      brushCabinet,
+      brushSelect,
+      transportSelect
+    });
+  });
+
   actions.append(exportButton, commandButton);
-  dock.append(title, law, status, actions);
+  dock.append(
+    title,
+    law,
+    status,
+    brushRow,
+    transportRow,
+    transportNote,
+    actions
+  );
   document.body.append(dock);
 
   refreshAtelierDock({
     dock,
     status,
-    getPainting
+    getPainting,
+    brushCabinet,
+    brushSelect,
+    transportSelect
   });
 
   return {
@@ -135,25 +274,128 @@ export function installAtelierDock({
       refreshAtelierDock({
         dock,
         status,
-        getPainting
+        getPainting,
+        brushCabinet,
+        brushSelect,
+        transportSelect
       })
+  };
+}
+
+export function resolveBrushSelection(
+  brushCabinet,
+  brushId = null,
+  transportId = null
+) {
+  if (
+    !brushCabinet ||
+    !brushCabinet.brushes
+  ) {
+    throw new Error(
+      "Velastra Brush Cabinet is unavailable."
+    );
+  }
+
+  const chosenBrush =
+    brushId ||
+    brushCabinet.defaultBrush;
+  const brush =
+    brushCabinet.brushes[chosenBrush];
+
+  if (!brush) {
+    throw new Error(
+      "Unknown Velastra brush: " +
+        chosenBrush
+    );
+  }
+
+  const transports = brush.transports || {};
+  const chosenTransport =
+    transportId ||
+    brushCabinet.defaultTransport ||
+    Object.keys(transports)[0];
+  const transport =
+    transports[chosenTransport];
+
+  if (!transport) {
+    throw new Error(
+      "Brush " +
+        chosenBrush +
+        " does not support transport " +
+        chosenTransport
+    );
+  }
+
+  return {
+    brushId: chosenBrush,
+    brushLabel:
+      brush.label || chosenBrush,
+    model: brush.model,
+    license: brush.license,
+    transportId: chosenTransport,
+    backend: transport.backend,
+    provider: transport.provider || null,
+    tokenEnv: transport.tokenEnv || null
   };
 }
 
 function refreshAtelierDock({
   dock,
   status,
-  getPainting
+  getPainting,
+  brushCabinet,
+  brushSelect,
+  transportSelect
 }) {
   const painting = getPainting();
   const manifest = painting.atelier.manifest;
+  const selection = resolveBrushSelection(
+    brushCabinet,
+    brushSelect?.value || null,
+    transportSelect?.value || null
+  );
 
   dock.dataset.strategy =
     manifest.render.strategy;
+  dock.dataset.brush =
+    selection.brushId;
+  dock.dataset.transport =
+    selection.transportId;
+
   status.textContent =
     shortKey(manifest.assetKey) +
     " · " +
+    selection.brushLabel +
+    " · " +
     manifest.render.strategy.replaceAll("_", " ");
+}
+
+function transportLabelText(id, transport) {
+  if (id === "huggingface") {
+    return (
+      "Hugging Face" +
+      (transport.provider &&
+      transport.provider !== "auto"
+        ? " · " + transport.provider
+        : " · auto provider")
+    );
+  }
+
+  if (id === "diffusers") {
+    return "Local Diffusers";
+  }
+
+  return id;
+}
+
+function shellQuote(value) {
+  return (
+    '"' +
+    String(value || "")
+      .replaceAll("\\", "\\\\")
+      .replaceAll('"', '\\"') +
+    '"'
+  );
 }
 
 function shortKey(value) {
