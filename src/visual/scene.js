@@ -682,7 +682,7 @@ function renderEntityPresence(svg, entities, room, random) {
     "aria-hidden": "true"
   });
 
-  entities.forEach(({ template }, index) => {
+  entities.forEach(({ template, record }, index) => {
     const entityRandom = createRandom(
       room.id + ":" + template.id + ":" + String(index)
     );
@@ -692,7 +692,7 @@ function renderEntityPresence(svg, entities, room, random) {
 
     if (shape === "moth") {
       const moth = svgElement("g", {
-        class: "entity-moth",
+        class: "entity-moth entity-state-" + (record.status || "present"),
         transform: "translate(" + x + " " + y + ")"
       });
 
@@ -730,7 +730,7 @@ function renderEntityPresence(svg, entities, room, random) {
 
     if (shape === "brassling") {
       const brassling = svgElement("g", {
-        class: "entity-brassling",
+        class: "entity-brassling entity-state-" + (record.status || "present"),
         transform: "translate(" + x + " " + (250 + entityRandom() * 45) + ")",
         stroke: "var(--room-accent)",
         fill: "none",
@@ -766,7 +766,7 @@ function renderEntityPresence(svg, entities, room, random) {
     }
 
     const threadling = svgElement("path", {
-      class: "entity-threadling",
+      class: "entity-threadling entity-state-" + (record.status || "present"),
       d:
         "M " +
         (x - 22) +
