@@ -57,11 +57,11 @@
         "philosophy": "Translate Virynism into visible material evidence rather than abstract adjectives.",
         "directives": [
           "State the room's concrete physical facts before atmospheric interpretation.",
-          "Translate memory into patina, residue, wear, interrupted marks, displaced materials, layered pigment, and spatial evidence.",
-          "Translate sacred incompletion into exposed grounds, partial studies, erased or abandoned marks, unfinished edges, and interrupted process rather than blank objects alone.",
-          "Translate threshold into depth at an edge: corridor, veil, shadow, reflection, recession, opening, or unresolved spatial continuation.",
+          "Translate memory through treatment of scene-permitted surfaces and materials: patina, residue, wear, interrupted marks, layered pigment, and spatial evidence.",
+          "Translate sacred incompletion through treatment of existing works and surfaces: exposed grounds, partial passages, erased marks, unfinished edges, and interrupted process rather than blank objects alone.",
+          "Translate threshold into depth at an existing edge or scene-permitted spatial feature: corridor, veil, shadow, reflection, recession, opening, or unresolved continuation.",
           "Prefer purposeful asymmetry and uneven negative space over centered showroom balance.",
-          "Use one dominant impossible or emotionally dissonant fact rather than many fantasy effects.",
+          "Use one dominant impossible or emotionally dissonant fact only when supported by scene truth rather than multiplying fantasy effects.",
           "Keep the scene painterly and tactile; avoid generic cinematic concept-art polish."
         ],
         "negativePriorities": [
@@ -114,9 +114,9 @@
         "philosophy": "Preserve hierarchy and scene truth while expanding Virynism into layered visual relationships.",
         "directives": [
           "Honor the focal hierarchy explicitly and keep secondary details subordinate.",
-          "Render abstract meaning through concrete material, spatial, luminous, and gestural evidence.",
-          "Keep unresolved marks and partial process visible where Virynism asks for incompletion.",
-          "Use asymmetry, layered depth, and selective residue to avoid showroom composition.",
+          "Render abstract meaning through treatment of scene-permitted material, space, light, and gesture rather than by inventing new props.",
+          "Keep unresolved marks and partial process visible on existing works and surfaces where Virynism asks for incompletion.",
+          "Use asymmetry, layered depth, and scene-supported residue to avoid showroom composition.",
           "Let symbolic meaning remain implicit in materials and light rather than explicit iconography."
         ],
         "negativePriorities": [
