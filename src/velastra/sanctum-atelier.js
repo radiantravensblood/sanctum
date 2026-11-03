@@ -72,6 +72,7 @@ export function compileSanctumAtelier({
   const manifest = compileAtelierManifest({
     atelierGrammar: world.velastraAtelier,
     assetRegistry: world.velastraAssets,
+    styleGrammar: world.velastraStyle,
     scenePacket,
     motifSelection,
     seed: "sanctum-atelier:" + room.id

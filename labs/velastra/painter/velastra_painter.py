@@ -195,24 +195,80 @@ def compile_truth_envelope(manifest: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def compile_prompt_bundle(manifest: Mapping[str, Any]) -> dict[str, Any]:
+def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
+    style = manifest.get("style")
+    if not isinstance(style, Mapping):
+        return {
+            "hand": [],
+            "archetype": [],
+            "place": [],
+            "avoid": [],
+        }
+
+    hand_entries = [
+        entry
+        for entry in (style.get("hand") or [])
+        if isinstance(entry, Mapping) and entry.get("directive")
+    ]
+    emphasis = set(style.get("emphasis") or [])
+    hand_entries.sort(
+        key=lambda entry: (
+            0 if entry.get("id") in emphasis else 1,
+            -float(entry.get("weight") or 0),
+        )
+    )
+
+    hand = [
+        flatten_text(entry.get("directive"))
+        for entry in hand_entries[:6]
+        if flatten_text(entry.get("directive"))
+    ]
+    archetype_block = style.get("archetype") or {}
+    place_block = style.get("place") or {}
+
+    archetype = [
+        flatten_text(item)
+        for item in (archetype_block.get("directives") or [])
+        if flatten_text(item)
+    ]
+    place = [
+        flatten_text(item)
+        for item in (place_block.get("directives") or [])
+        if flatten_text(item)
+    ]
+    avoid = [
+        flatten_text(item)
+        for item in (
+            ((place_block.get("avoid") or []))
+            + (style.get("antiPatterns") or [])
+        )[:10]
+        if flatten_text(item)
+    ]
+
+    return {
+        "hand": hand,
+        "archetype": archetype,
+        "place": place,
+        "avoid": avoid,
+    }
+
+
+def compile_prompt_bundle(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
     brief = manifest.get("artBrief") or {}
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
+    style = style_lines(manifest)
+    dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
 
     positive_sections: list[str] = [
         "Create a finished painterly image from this authored scene direction.",
+        "Scene truth is authoritative. Style may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.",
         f"Primary visual argument: {flatten_text(brief.get('thesis'))}",
         f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
     ]
-
-    camera = flatten_text(brief.get("camera") or (scene.get("composition") or {}).get("camera"))
-    if camera:
-        positive_sections.append(f"Camera and composition: {camera}")
-
-    hierarchy = flatten_text(brief.get("hierarchy"))
-    if hierarchy:
-        positive_sections.append(f"Focal hierarchy: {hierarchy}")
 
     subjects = truth["subjects"]
     if subjects:
@@ -223,6 +279,32 @@ def compile_prompt_bundle(manifest: Mapping[str, Any]) -> dict[str, Any]:
 
     if truth["environment"]:
         positive_sections.append("Environment facts: " + " | ".join(truth["environment"]))
+
+    hierarchy = flatten_text(brief.get("hierarchy"))
+    if hierarchy:
+        positive_sections.append(f"Focal hierarchy: {hierarchy}")
+
+    if style["hand"]:
+        positive_sections.append(
+            "Virynism — handwriting laws: " + " | ".join(style["hand"])
+        )
+
+    if style["archetype"]:
+        positive_sections.append(
+            "Virynism — archetype handling: " + " | ".join(style["archetype"])
+        )
+
+    if style["place"]:
+        positive_sections.append(
+            "Virynism — place-specific handling: " + " | ".join(style["place"])
+        )
+
+    camera = flatten_text(
+        brief.get("camera")
+        or (scene.get("composition") or {}).get("camera")
+    )
+    if camera:
+        positive_sections.append(f"Camera and composition: {camera}")
 
     lighting = flatten_text(brief.get("lighting"))
     if lighting:
@@ -238,35 +320,84 @@ def compile_prompt_bundle(manifest: Mapping[str, Any]) -> dict[str, Any]:
 
     if truth["literalMotifs"]:
         positive_sections.append(
-            "Literal motifs permitted by scene truth: " + " | ".join(truth["literalMotifs"])
+            "Literal motifs permitted by scene truth: "
+            + " | ".join(truth["literalMotifs"])
         )
     if truth["symbolicMotifs"]:
         positive_sections.append(
-            "Symbolic motifs may remain metaphorical: " + " | ".join(truth["symbolicMotifs"])
+            "Symbolic motifs must remain metaphorical or materially embedded: "
+            + " | ".join(truth["symbolicMotifs"])
         )
 
-    directives = [flatten_text(item) for item in (brief.get("directives") or [])]
+    directives = [
+        flatten_text(item)
+        for item in (brief.get("directives") or [])
+    ]
     directives = [item for item in directives if item]
     if directives:
-        positive_sections.append("Art direction: " + " | ".join(directives))
+        positive_sections.append(
+            "Scene art direction: " + " | ".join(directives)
+        )
+
+    dialect_directives = [
+        flatten_text(item)
+        for item in (dialect.get("directives") or [])
+    ]
+    dialect_directives = [
+        item for item in dialect_directives if item
+    ]
+    if dialect_directives:
+        positive_sections.append(
+            "Brush translation rules: "
+            + " | ".join(dialect_directives)
+        )
 
     positive_sections.append(
-        "Let material, light, gesture, atmosphere, and painterly edges carry meaning; "
-        "avoid sterile interface geometry unless the scene explicitly requires it."
+        "Let material, light, gesture, residue, atmosphere, negative space, "
+        "and painterly edges carry meaning. Preserve strangeness without spectacle."
     )
 
     negative = [
         "Do not invent additional people, identities, relationships, consent, touch, text, logos, symbols, or objects.",
         "Do not turn symbolic motifs into literal world facts.",
         "Do not add decorative UI chrome, cards, captions, labels, diagrams, or typography unless explicitly present in scene facts.",
-        "Do not flatten the image into generic concept art, stock illustration, clip art, or procedural SVG aesthetics.",
+        "Do not flatten the image into generic concept art, stock illustration, clip art, procedural SVG aesthetics, or staged showroom photography.",
         "Do not contradict the explicit subject, relation, environment, camera, lighting, or provenance constraints.",
     ]
 
+    if style["avoid"]:
+        negative.append(
+            "Virynism rejects: " + " | ".join(style["avoid"])
+        )
+
+    dialect_negative = [
+        flatten_text(item)
+        for item in (dialect.get("negativePriorities") or [])
+    ]
+    dialect_negative = [
+        item for item in dialect_negative if item
+    ]
+    if dialect_negative:
+        negative.append(
+            "Brush-specific avoidances: "
+            + " | ".join(dialect_negative)
+        )
+
     return {
-        "positive": "\n".join(section for section in positive_sections if section and not section.endswith(": ")),
+        "positive": "\n".join(
+            section
+            for section in positive_sections
+            if section and not section.endswith(": ")
+        ),
         "negative": "\n".join(negative),
         "truthEnvelope": truth,
+        "style": {
+            "id": (manifest.get("style") or {}).get("id"),
+            "version": (manifest.get("style") or {}).get("version"),
+            "designation": (manifest.get("style") or {}).get("designation"),
+            "emphasis": (manifest.get("style") or {}).get("emphasis") or [],
+            "dialect": dialect.get("mode"),
+        },
     }
 
 
@@ -346,6 +477,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         provider=transport.get("provider"),
         token_env=transport.get("tokenEnv"),
         license=brush.get("license"),
+        prompt_dialect=brush.get("promptDialect"),
     )
 
 
@@ -365,6 +497,7 @@ class RenderSpec:
     provider: str | None = None
     token_env: str | None = None
     license: str | None = None
+    prompt_dialect: Mapping[str, Any] | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -408,6 +541,7 @@ def build_candidate_record(
             "manifestSha256": sha256_bytes(canonical_json(manifest)),
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
+            "style": prompts.get("style"),
         },
         "render": {
             "backend": spec.backend,
@@ -424,6 +558,11 @@ def build_candidate_record(
             "provider": spec.provider,
             "tokenEnv": spec.token_env,
             "license": spec.license,
+            "promptDialect": (
+                spec.prompt_dialect.get("mode")
+                if isinstance(spec.prompt_dialect, Mapping)
+                else None
+            ),
         },
         "prompts": {
             "positive": prompts["positive"],
@@ -607,8 +746,8 @@ def cmd_brushes(args: argparse.Namespace) -> int:
 def cmd_plan(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
-    prompts = compile_prompt_bundle(manifest)
     spec = build_render_spec(args)
+    prompts = compile_prompt_bundle(manifest, spec)
     cid = candidate_id(manifest, prompts, spec)
     out_dir = Path(args.out_dir)
     image_path = out_dir / manifest["assetKey"] / f"{cid}.png"
@@ -622,8 +761,8 @@ def cmd_plan(args: argparse.Namespace) -> int:
 def cmd_render(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
-    prompts = compile_prompt_bundle(manifest)
     spec = build_render_spec(args)
+    prompts = compile_prompt_bundle(manifest, spec)
     cid = candidate_id(manifest, prompts, spec)
     out_dir = Path(args.out_dir)
     image_path = out_dir / manifest["assetKey"] / f"{cid}.png"
@@ -708,6 +847,8 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "provider": candidate.get("render", {}).get("provider"),
             "model": candidate.get("render", {}).get("model"),
             "license": candidate.get("render", {}).get("license"),
+            "promptDialect": candidate.get("render", {}).get("promptDialect"),
+            "style": candidate.get("source", {}).get("style"),
             "seed": candidate.get("render", {}).get("seed"),
             "reviewedBy": args.reviewed_by,
             "reviewedAt": utc_now(),

@@ -12,6 +12,7 @@ on:
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
+      - "world/velastra-style.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -26,6 +27,7 @@ on:
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
+      - "world/velastra-style.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -50,3 +52,5 @@ jobs:
         run: node labs/velastra/tests/brush-cabinet.mjs
       - name: Run cloud atelier contract
         run: node labs/velastra/tests/cloud-atelier.mjs
+      - name: Run Virynism hand contract
+        run: node labs/velastra/tests/virynism-hand.mjs

@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
 
+const handSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/hand.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
 const atelierSource = await fs.readFile(
   new URL(
     "../../../src/velastra/atelier.js",
@@ -9,9 +17,21 @@ const atelierSource = await fs.readFile(
   "utf8"
 );
 
+const handModuleUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(handSource).toString("base64");
+
+const standaloneAtelierSource =
+  atelierSource.replace(
+    'import { compileVirynismHand } from "./hand.js";',
+    'import { compileVirynismHand } from "' +
+      handModuleUrl +
+      '";'
+  );
+
 const atelierModule = await import(
   "data:text/javascript;base64," +
-    Buffer.from(atelierSource).toString("base64")
+    Buffer.from(standaloneAtelierSource).toString("base64")
 );
 
 const { compileAtelierManifest } = atelierModule;

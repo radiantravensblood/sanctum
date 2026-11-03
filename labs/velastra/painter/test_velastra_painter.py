@@ -30,6 +30,44 @@ def manifest_fixture():
             "fallback": "procedural_underpainting",
         },
         "medium": {"id": "environmental_oil"},
+        "style": {
+            "version": 1,
+            "id": "virynism",
+            "designation": "Virynism",
+            "hand": [
+                {
+                    "id": "material_memory",
+                    "weight": 0.96,
+                    "directive": "Let surfaces remember handling through patina and residue.",
+                },
+                {
+                    "id": "sacred_incompletion",
+                    "weight": 0.94,
+                    "directive": "Permit unresolved marks, exposed grounds, and unfinished edges.",
+                },
+            ],
+            "emphasis": ["material_memory", "sacred_incompletion"],
+            "archetype": {
+                "id": "place_tableau",
+                "directives": [
+                    "Paint the room as an inhabited memory-field rather than a decorated location."
+                ],
+            },
+            "place": {
+                "id": "gallery",
+                "title": "The Gallery of Unfinished Things",
+                "directives": [
+                    "Unfinishedness must read as process and becoming, not merely blank framed surfaces."
+                ],
+                "avoid": [
+                    "a symmetrical lineup of tasteful empty frames"
+                ],
+            },
+            "antiPatterns": [
+                "tasteful showroom minimalism",
+                "generic cinematic concept art",
+            ],
+        },
         "scene": {
             "composition": {"camera": "wide intimate room tableau"},
             "lighting": {"meaning": "cool rain held by warm brass"},
@@ -100,6 +138,50 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertIn("rain_without_sky", truth["literalMotifs"][0])
         self.assertIn("thread_trace", truth["symbolicMotifs"][0])
         self.assertIn("Do not invent additional people", bundle["negative"])
+
+    def test_prompt_bundle_carries_virynism_hand(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertIn("Virynism — handwriting laws", bundle["positive"])
+        self.assertIn("inhabited memory-field", bundle["positive"])
+        self.assertIn("process and becoming", bundle["positive"])
+        self.assertIn("tasteful showroom minimalism", bundle["negative"])
+        self.assertIn("tasteful empty-frame arrangement", bundle["negative"])
+        self.assertEqual(bundle["style"]["id"], "virynism")
+        self.assertEqual(bundle["style"]["dialect"], "concrete_painterly")
+
+    def test_style_change_changes_candidate_not_asset_identity(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        first_bundle = painter.compile_prompt_bundle(manifest, spec)
+        first_id = painter.candidate_id(manifest, first_bundle, spec)
+
+        changed = json.loads(json.dumps(manifest))
+        changed["style"]["place"]["directives"].append(
+            "Let revision remain visibly unresolved."
+        )
+        changed_bundle = painter.compile_prompt_bundle(changed, spec)
+        changed_id = painter.candidate_id(changed, changed_bundle, spec)
+
+        self.assertEqual(manifest["assetKey"], changed["assetKey"])
+        self.assertNotEqual(first_id, changed_id)
+
+    def test_candidate_records_style_and_brush_dialect(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        prompts = painter.compile_prompt_bundle(manifest, spec)
+        record = painter.build_candidate_record(
+            manifest,
+            prompts,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+
+        self.assertEqual(record["source"]["style"]["id"], "virynism")
+        self.assertEqual(record["source"]["style"]["version"], 1)
+        self.assertEqual(record["render"]["promptDialect"], "concrete_painterly")
 
     def test_candidate_identity_is_deterministic_and_seed_sensitive(self):
         manifest = manifest_fixture()

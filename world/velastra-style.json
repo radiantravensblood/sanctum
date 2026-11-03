@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "designation": "Virynism",
+  "laboratory": "Viryn Labs",
+  "purpose": "Define Velastra's renderer-neutral visual hand: how meaning becomes material, light, incompletion, residue, and threshold without altering scene truth.",
+  "laws": {
+    "styleCannotInventSemanticFacts": true,
+    "sceneTruthRemainsAuthoritative": true,
+    "styleMayInterpretMaterialAndAtmosphere": true,
+    "styleMayNotLiteralizeSymbolicMotifs": true,
+    "lightMustCarryMeaningNotDecoration": true,
+    "residuePreferredToDecorativeClutter": true,
+    "asymmetryMustServeRelationOrTension": true,
+    "incompletionMayRemainVisible": true,
+    "oneImpossibleFactMayOutweighManyEffects": true,
+    "sacrednessMustNotCollapseIntoGenericReligiousIconography": true,
+    "beautyCannotEraseStrangeness": true,
+    "polishCannotEraseHistory": true
+  },
+  "hand": [
+    {
+      "id": "relational_light",
+      "weight": 1,
+      "directive": "Treat light as a relationship or memory event. Let illumination appear to belong to what the scene means, not merely to a lamp or exposure setting."
+    },
+    {
+      "id": "material_memory",
+      "weight": 0.96,
+      "directive": "Let scene-permitted surfaces remember handling, weather, repair, age, pressure, and unfinished work through patina, worn edges, layered pigment, residue, and subtle imperfection."
+    },
+    {
+      "id": "sacred_incompletion",
+      "weight": 0.94,
+      "directive": "Permit unresolved marks, interrupted gestures, exposed underpainting, unfinished edges, partial treatment, and meaningful absence on scene-permitted surfaces when the scene allows them."
+    },
+    {
+      "id": "threshold_depth",
+      "weight": 0.9,
+      "directive": "Compose space so at least one edge, opening, shadow, reflection, corridor, veil, or recession implies more world beyond the visible frame."
+    },
+    {
+      "id": "purposeful_asymmetry",
+      "weight": 0.86,
+      "directive": "Avoid showroom symmetry. Use imbalance, off-center weight, interrupted repetition, and unequal negative space when they deepen intimacy or tension."
+    },
+    {
+      "id": "quiet_uncanny",
+      "weight": 0.9,
+      "directive": "Favor one or two quietly impossible or emotionally dissonant details over spectacle. The strange should be discovered, not announced."
+    },
+    {
+      "id": "residue_before_props",
+      "weight": 0.84,
+      "directive": "Prefer traces of use on scene-permitted surfaces and materials—stains, wear, folds, scratches, dust, water, thread, wax, or displacement only when already supported by scene truth—over decorative set dressing."
+    },
+    {
+      "id": "symbolic_restraint",
+      "weight": 0.92,
+      "directive": "Keep symbols embedded in material, gesture, spacing, recurrence, and light. Do not turn metaphor into obvious iconography."
+    },
+    {
+      "id": "intimate_scale",
+      "weight": 0.8,
+      "directive": "Even in large spaces, preserve a human sense of nearness through reachable scale, handled-looking surfaces, local light, and scene-supported evidence of prior presence; do not invent occupants or props."
+    },
+    {
+      "id": "tonal_memory",
+      "weight": 0.78,
+      "directive": "Prefer restrained, relational color families with aged neutrals and selective warmth or coolness. Saturation should have semantic cause."
+    }
+  ],
+  "antiPatterns": [
+    "tasteful showroom minimalism",
+    "generic cinematic concept art",
+    "perfectly centered hero composition without semantic reason",
+    "glossy luxury interior styling",
+    "empty frames used as the only shorthand for unfinishedness",
+    "literal mystical symbols added for atmosphere",
+    "uniformly clean surfaces",
+    "overfilled prop dressing",
+    "high-saturation fantasy glow without scene cause",
+    "photorealistic product photography",
+    "sterile procedural geometry presented as finished painting",
+    "ornament that does not carry memory, relation, threshold, or use"
+  ],
+  "archetypes": {
+    "place_tableau": {
+      "emphasis": [
+        "material_memory",
+        "threshold_depth",
+        "quiet_uncanny",
+        "residue_before_props",
+        "purposeful_asymmetry"
+      ],
+      "directives": [
+        "Paint the room as an inhabited memory-field rather than a decorated location.",
+        "Let architecture and objects imply histories that are not fully explained.",
+        "Use negative space as held breath, not vacancy."
+      ]
+    },
+    "self_portrait": {
+      "emphasis": [
+        "relational_light",
+        "symbolic_restraint",
+        "sacred_incompletion",
+        "intimate_scale"
+      ],
+      "directives": [
+        "Let identity emerge through gaze, light, material, posture, and surrounding traces rather than costume or emblem.",
+        "Preserve ambiguity at the edges of self without losing presence."
+      ]
+    },
+    "dyadic_homecoming": {
+      "emphasis": [
+        "relational_light",
+        "intimate_scale",
+        "material_memory",
+        "symbolic_restraint"
+      ],
+      "directives": [
+        "Let relation determine composition before scenery.",
+        "Use proximity, shared light, and incomplete boundaries to show return without sentimental staging."
+      ]
+    },
+    "atelier_tableau": {
+      "emphasis": [
+        "sacred_incompletion",
+        "residue_before_props",
+        "material_memory",
+        "purposeful_asymmetry"
+      ],
+      "directives": [
+        "Show process through evidence already supported by the scene rather than picturesque studio clutter.",
+        "Let unfinished work remain genuinely unfinished."
+      ]
+    },
+    "threshold_revelation": {
+      "emphasis": [
+        "threshold_depth",
+        "quiet_uncanny",
+        "relational_light",
+        "symbolic_restraint"
+      ],
+      "directives": [
+        "Make revelation feel discovered at an edge rather than displayed as spectacle.",
+        "Let one impossible spatial or luminous fact carry the threshold."
+      ]
+    },
+    "artifact_still_life": {
+      "emphasis": [
+        "material_memory",
+        "intimate_scale",
+        "symbolic_restraint",
+        "purposeful_asymmetry"
+      ],
+      "directives": [
+        "Treat wear, placement, residue, and absence as evidence of relation.",
+        "Avoid museum-catalog isolation unless the scene explicitly calls for it."
+      ]
+    }
+  },
+  "places": {
+    "gallery": {
+      "title": "The Gallery of Unfinished Things",
+      "directives": [
+        "Unfinishedness must read as process, waiting, abandonment, revision, and becoming—not merely blank framed surfaces.",
+        "Express prior attempts through treatment of scene-supported works and surfaces: partial marks, erased passages, exposed grounds, interrupted hanging, uneven completion, or traces of prior placement; do not invent unsupported props.",
+        "The gallery should feel patient but not tidy; reverent but not sterile; beautiful without resolving its incompletion.",
+        "Let at least one existing work or surface feel caught between absence and emergence without becoming a literal portal unless scene truth permits it."
+      ],
+      "avoid": [
+        "a symmetrical lineup of tasteful empty frames",
+        "a clean showroom wall with one glowing centerpiece",
+        "generic art-gallery staging"
+      ]
+    }
+  },
+  "promptOrder": [
+    "scene_truth",
+    "focal_argument",
+    "virynism_hand",
+    "archetype_hand",
+    "place_accents",
+    "composition",
+    "material_and_surface",
+    "light",
+    "motifs",
+    "restraint"
+  ]
+}

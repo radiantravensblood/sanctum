@@ -69,6 +69,12 @@ Brush cabinet:
 
 - `world/velastra-brushes.json`
 
+Virynism handwriting:
+
+- `world/velastra-style.json`
+- `src/velastra/hand.js`
+- `labs/velastra/tests/virynism-hand.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -270,6 +276,42 @@ Cloud authoring may not:
 - make Codespaces part of scene truth.
 
 The cloud environment is transport infrastructure only.
+
+## Virynism contract
+
+Kernel 0023 adds a renderer-neutral handwriting layer between scene truth and
+brush-specific execution.
+
+Virynism may interpret:
+
+- material,
+- light,
+- edge,
+- residue,
+- negative space,
+- asymmetry,
+- atmosphere,
+- incompletion,
+- threshold depth.
+
+Virynism may not:
+
+- invent a person, relation, consent state, or object,
+- turn symbolic motifs into literal world facts,
+- mutate canonical place identity,
+- require one specific image model,
+- hide its active version from provenance.
+
+Each Atelier Manifest carries the active style snapshot.
+
+Each brush may provide a dialect that converts that snapshot into
+model-appropriate painter direction.
+
+The candidate sidecar records both style identity/version and dialect mode.
+
+The law is:
+
+**the brush may vary; the hand must remain.**
 
 ## Studio adapter contract
 

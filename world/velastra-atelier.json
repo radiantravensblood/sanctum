@@ -27,7 +27,11 @@
     "defaultBrushMustRemainReplaceable": true,
     "authoringComputeMayLiveOutsideLocalDevice": true,
     "codespaceCredentialMustRemainSecret": true,
-    "cloudHandoffMustRemainEphemeral": true
+    "cloudHandoffMustRemainEphemeral": true,
+    "virynismMustTravelInsideManifest": true,
+    "styleCannotChangeCanonicalPlaceIdentity": true,
+    "styleChangeMustChangeCandidateIdentity": true,
+    "brushDialectMayTranslateButNotOverrideStyle": true
   },
   "media": {
     "luminous_oil": {
@@ -162,7 +166,9 @@
       "inbox": "authoring/inbox",
       "credential": "HF_TOKEN",
       "handoffsIgnoredByGit": true
-    }
+    },
+    "styleRegistry": "world/velastra-style.json",
+    "styleSnapshotTravelsWithManifest": true
   },
   "livingCanvas": {
     "version": 1,

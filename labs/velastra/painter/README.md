@@ -141,6 +141,49 @@ Candidate PNGs and sidecars still land under:
 
 and remain outside canon until explicitly approved.
 
+## Virynism and brush dialects
+
+Kernel 0023 makes the Painter Bridge consume the style snapshot already carried
+inside the Atelier Manifest.
+
+The prompt compiler preserves this order of authority:
+
+```text
+scene truth
+    ↓
+Virynism handwriting
+    ↓
+archetype handling
+    ↓
+place-specific handling
+    ↓
+brush dialect
+    ↓
+model
+```
+
+A brush dialect is translation, not authorship.
+
+The default Z-Image dialect favors concrete visible evidence over abstract
+style adjectives.
+
+For example, `material memory` becomes patina, residue, wear, layered pigment,
+and handled edges.
+
+`Sacred incompletion` becomes exposed grounds, partial studies, erased marks,
+interrupted gestures, and unfinished edges.
+
+The prompt compiler sends only the archetype-emphasized hand laws plus the
+strongest remaining laws to avoid drowning the brush in instruction.
+
+The complete style packet remains in the manifest and candidate provenance.
+
+Changing Virynism changes candidate identity but not the canonical room asset
+key.
+
+Therefore a new style revision can propose a new painting of the same place
+without pretending the place itself became a different place.
+
 ## Candidate lifecycle
 
 A generated image is never canonical merely because a model returned it.

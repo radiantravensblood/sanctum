@@ -8,6 +8,7 @@ import { applySanctumIntent } from "./sanctum.js";
 import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
 import { selectMotifs, evaluateMotifExemplars } from "./motifs.js";
 import { compileAtelierManifest, evaluateAtelierExemplars } from "./atelier.js";
+import { compileVirynismHand } from "./hand.js";
 import { composeStudioSurface, composeStudioDocument, evaluateStudioExemplars } from "./studio.js";
 
 export function buildVelastraPacket({
@@ -176,6 +177,7 @@ export function compileVelastraAtelier({
     manifest: compileAtelierManifest({
       atelierGrammar: world.velastraAtelier,
       assetRegistry: world.velastraAssets,
+      styleGrammar: world.velastraStyle,
       scenePacket: composed.scene,
       motifSelection: composed.selection,
       seed
@@ -217,6 +219,7 @@ export function testVelastraAtelierExemplars(world) {
   return evaluateAtelierExemplars({
     atelierGrammar: world.velastraAtelier,
     assetRegistry: world.velastraAssets,
+    styleGrammar: world.velastraStyle,
     scenePackets,
     motifSelections
   });
@@ -254,6 +257,7 @@ export {
   composeScenePacket,
   selectMotifs,
   compileAtelierManifest,
+  compileVirynismHand,
   composeStudioSurface,
   composeStudioDocument
 };

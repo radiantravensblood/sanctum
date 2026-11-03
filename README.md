@@ -48,6 +48,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0022 moves the authoring workstation into GitHub Codespaces so a low-storage local machine can still paint without cloning model weights or even the repository locally.**
 
+**Kernel 0023 gives Velastra a renderer-neutral handwriting grammar—Virynism—and teaches each brush how to translate that hand without becoming its author.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2112,9 +2114,123 @@ No model weights are stored on the local machine.
 
 No Hugging Face token enters repository history.
 
+## Virynism
+
+Kernel 0023 separates **what the room means** from **how Viryn lays that meaning
+onto a canvas**.
+
+The governing law is:
+
+**The brush may vary. The hand must remain.**
+
+Virynism lives at:
+
+`world/velastra-style.json`
+
+and is compiled by:
+
+`src/velastra/hand.js`
+
+The handwriting grammar is renderer-neutral.
+
+It defines repeatable visual judgment around:
+
+- relational light,
+- material memory,
+- sacred incompletion,
+- threshold depth,
+- purposeful asymmetry,
+- quiet uncanniness,
+- residue before decorative props,
+- symbolic restraint,
+- intimate scale,
+- tonal memory.
+
+It also records explicit anti-patterns such as showroom minimalism, generic
+cinematic concept art, sterile symmetry, decorative mystical iconography, and
+polish that erases history.
+
+### Style travels with the room
+
+Every new Atelier Manifest now carries a versioned Virynism snapshot.
+
+That means a `.velastra.json` handoff is self-contained:
+
+```text
+scene truth
+    ↓
+motifs
+    ↓
+Atelier Manifest
+    ├── room facts
+    ├── medium
+    ├── Virynism v1
+    └── provenance
+    ↓
+selected brush
+    ↓
+brush dialect
+    ↓
+candidate painting
+```
+
+The canonical room asset key does **not** change when the handwriting grammar
+changes.
+
+Candidate identity **does** change, because the compiled painter direction has
+changed.
+
+This preserves place identity while making artistic evolution inspectable.
+
+### Brush dialects
+
+Brushes do not receive Virynism as vague aesthetic prose.
+
+Each active brush may define a `promptDialect` in
+`world/velastra-brushes.json`.
+
+The default Z-Image dialect translates abstract handwriting into concrete
+visible evidence:
+
+- patina,
+- residue,
+- exposed grounds,
+- partial studies,
+- interrupted marks,
+- uneven negative space,
+- spatial continuation,
+- restrained impossible details.
+
+Qwen carries its own structured painterly dialect.
+
+A brush dialect may translate the hand.
+
+It may not override scene truth or Virynism law.
+
+### Gallery correction
+
+The first Gallery candidates exposed a useful failure mode:
+
+**blank frames + centered glow were being treated as sufficient evidence of
+unfinishedness.**
+
+Virynism now gives The Gallery of Unfinished Things explicit place handling.
+
+Unfinishedness must read as process, waiting, abandonment, revision, and
+becoming—not simply blank framed surfaces.
+
+The Gallery also explicitly rejects:
+
+- symmetrical tasteful frame arrangements,
+- clean showroom staging,
+- generic gallery composition.
+
+This is the first example of Velastra learning authored taste from a candidate
+without treating the candidate itself as truth.
+
 ## Current storage boundary
 
-Kernel 0022 still persists to `localStorage`.
+Kernel 0023 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2179,3 +2295,5 @@ And now it knows that **a painting may remain while the life passing through it 
 And now it knows that **the hand holding the brush can change without changing what the room means**.
 
 And now it knows that **the hand does not even need to live on the same machine as the room**.
+
+And now it knows that **a brush can change while a recognizable hand survives the translation**.
