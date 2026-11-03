@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "designation": "Velastra Atelier Compiler",
+  "laboratory": "Viryn Labs",
+  "purpose": "Compile scene direction and motifs into a renderer-neutral art manifest with an API-free painterly fallback.",
+  "laws": {
+    "compilerCannotInventSemanticFacts": true,
+    "scenePacketRemainsAuthoritative": true,
+    "motifProvenanceMustSurviveCompilation": true,
+    "reviewedStaticAssetMaySupersedeFallback": true,
+    "staticAssetRequiresApproval": true,
+    "runtimeGenerationForbidden": true,
+    "fallbackMustRemainAccessibleWithoutImage": true,
+    "underpaintingMayBeAbstract": true,
+    "underpaintingCannotPretendToBeFigurativeTruth": true,
+    "assetProvenanceRequired": true
+  },
+  "media": {
+    "luminous_oil": {
+      "pigmentLayers": 8,
+      "strokeCount": 18,
+      "brushScale": 0.72,
+      "grain": 0.42,
+      "blur": 0.58,
+      "bloom": 0.68,
+      "edgeVariance": 0.52,
+      "motifOpacity": 0.28,
+      "vignette": 0.64
+    },
+    "dream_oil": {
+      "pigmentLayers": 10,
+      "strokeCount": 24,
+      "brushScale": 0.82,
+      "grain": 0.54,
+      "blur": 0.66,
+      "bloom": 0.52,
+      "edgeVariance": 0.72,
+      "motifOpacity": 0.34,
+      "vignette": 0.58
+    },
+    "editorial_oil": {
+      "pigmentLayers": 12,
+      "strokeCount": 28,
+      "brushScale": 0.66,
+      "grain": 0.58,
+      "blur": 0.44,
+      "bloom": 0.48,
+      "edgeVariance": 0.58,
+      "motifOpacity": 0.4,
+      "vignette": 0.46
+    },
+    "environmental_oil": {
+      "pigmentLayers": 11,
+      "strokeCount": 30,
+      "brushScale": 0.88,
+      "grain": 0.62,
+      "blur": 0.64,
+      "bloom": 0.42,
+      "edgeVariance": 0.74,
+      "motifOpacity": 0.3,
+      "vignette": 0.62
+    },
+    "ink_glass": {
+      "pigmentLayers": 7,
+      "strokeCount": 16,
+      "brushScale": 0.52,
+      "grain": 0.36,
+      "blur": 0.38,
+      "bloom": 0.34,
+      "edgeVariance": 0.44,
+      "motifOpacity": 0.38,
+      "vignette": 0.7
+    },
+    "artifact_oil": {
+      "pigmentLayers": 8,
+      "strokeCount": 20,
+      "brushScale": 0.56,
+      "grain": 0.66,
+      "blur": 0.36,
+      "bloom": 0.3,
+      "edgeVariance": 0.48,
+      "motifOpacity": 0.46,
+      "vignette": 0.56
+    }
+  },
+  "archetypeProfiles": {
+    "self_portrait": "luminous_oil",
+    "dyadic_homecoming": "dream_oil",
+    "atelier_tableau": "editorial_oil",
+    "place_tableau": "environmental_oil",
+    "threshold_revelation": "ink_glass",
+    "artifact_still_life": "artifact_oil"
+  },
+  "layerOrder": [
+    "field",
+    "pigment",
+    "light",
+    "atmosphere",
+    "motif",
+    "structure",
+    "patina",
+    "grain",
+    "vignette"
+  ],
+  "staticAssetPolicy": {
+    "allowedStatuses": ["approved"],
+    "fallback": "procedural_underpainting",
+    "runtimeGeneration": false,
+    "preferReviewedAsset": true
+  },
+  "exemplars": {
+    "viryn_self_portrait": {
+      "sceneExemplar": "viryn_self_portrait",
+      "medium": "luminous_oil",
+      "strategy": "procedural_underpainting"
+    },
+    "dyadic_homecoming": {
+      "sceneExemplar": "dyadic_homecoming",
+      "medium": "dream_oil",
+      "strategy": "procedural_underpainting"
+    },
+    "studio_atelier": {
+      "sceneExemplar": "studio_atelier",
+      "medium": "editorial_oil",
+      "strategy": "procedural_underpainting"
+    }
+  }
+}
