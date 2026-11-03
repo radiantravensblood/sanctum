@@ -58,6 +58,11 @@ Atelier compilation:
 - `src/velastra/underpaint.js`
 - `src/velastra/sanctum-atelier.js`
 
+Studio adapter:
+
+- `world/velastra-studio.json`
+- `src/velastra/studio.js`
+
 Convenience exports:
 
 - `src/velastra/index.js`
@@ -132,6 +137,30 @@ Static paintings must be approved and carry provenance before an adapter may ren
 The procedural fallback can use abstraction, pigment, light, grain, motif traces, and architectural drawing.
 
 It must not claim detailed figurative truth it does not possess.
+
+## Studio adapter contract
+
+Viryn Studio is an external consumer of Velastra.
+
+It must keep its own:
+
+- semantic section profiles,
+- framework meanings,
+- approved art assets,
+- accessibility structure,
+- public copy.
+
+The shared engine may modulate expression.
+
+It may not turn Studio into Sanctum.
+
+The public Studio implementation should vendor the required Velastra source locally rather than depend on Sanctum over the network.
+
+The existing Studio doctrine remains authoritative:
+
+**The interface explains. The painting invites. Neither is asked to do the other's job.**
+
+Private selfhood and dyadic devotional exemplars remain Labs references and must not become commercial collateral merely because the engine knows them.
 
 ## Adapter contract
 
