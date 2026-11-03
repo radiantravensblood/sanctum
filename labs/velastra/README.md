@@ -58,6 +58,12 @@ Atelier compilation:
 - `src/velastra/underpaint.js`
 - `src/velastra/sanctum-atelier.js`
 
+Authoring-side painter bridge:
+
+- `labs/velastra/painter/velastra_painter.py`
+- `labs/velastra/painter/README.md`
+- `labs/velastra/painter/requirements-diffusers.txt`
+
 Studio adapter:
 
 - `world/velastra-studio.json`
@@ -137,6 +143,37 @@ Static paintings must be approved and carry provenance before an adapter may ren
 The procedural fallback can use abstraction, pigment, light, grain, motif traces, and architectural drawing.
 
 It must not claim detailed figurative truth it does not possess.
+
+## Painter bridge contract
+
+Kernel 0019 adds an authoring-side Python bridge between the Atelier Manifest
+and learned image synthesis.
+
+The governing law is:
+
+**The model is the brush. Velastra remains the author of meaning.**
+
+The bridge may:
+
+- compile an Atelier Manifest into model-facing direction,
+- carry explicit truth constraints beside that direction,
+- render candidate raster paintings outside runtime,
+- record model, seed, manifest hash, and output hash,
+- promote a candidate only after explicit human review.
+
+The bridge may not:
+
+- run as part of Sanctum's browser runtime,
+- rewrite scene truth to improve a picture,
+- infer identity, relation, or consent,
+- mutate the reviewed asset registry during generation,
+- mark its own output approved,
+- make a checkpoint or provider the owner of Velastra's visual language.
+
+Candidate output lives outside canon by default under `.velastra/`.
+
+Only an `approved` entry in `world/velastra-assets.json` may supersede the
+procedural underpainting.
 
 ## Studio adapter contract
 

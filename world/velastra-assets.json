@@ -5,7 +5,11 @@
     "onlyApprovedAssetsMayRender": true,
     "missingAssetFallsBack": true,
     "assetMustNameSemanticSource": true,
-    "assetDoesNotReplaceScenePacket": true
+    "assetDoesNotReplaceScenePacket": true,
+    "candidateAssetsCannotRender": true,
+    "generationDoesNotImplyApproval": true,
+    "approvalRequiresReviewProvenance": true,
+    "approvedAssetHashShouldBeRecorded": true
   },
   "entries": {},
   "referenceExemplars": {

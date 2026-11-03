@@ -1,0 +1,5 @@
+# Velastra authoring candidates and local Python environments
+.velastra/
+.venv/
+__pycache__/
+*.pyc

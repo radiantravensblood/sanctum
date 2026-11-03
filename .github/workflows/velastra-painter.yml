@@ -1,0 +1,28 @@
+name: Velastra Painter Bridge
+
+on:
+  push:
+    paths:
+      - "labs/velastra/painter/**"
+      - "src/velastra/atelier.js"
+      - "world/velastra-atelier.json"
+      - "world/velastra-assets.json"
+  pull_request:
+    paths:
+      - "labs/velastra/painter/**"
+      - "src/velastra/atelier.js"
+      - "world/velastra-atelier.json"
+      - "world/velastra-assets.json"
+
+jobs:
+  painter-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check Python syntax
+        run: python -m py_compile labs/velastra/painter/velastra_painter.py
+      - name: Run painter contract tests
+        run: python -m unittest labs/velastra/painter/test_velastra_painter.py

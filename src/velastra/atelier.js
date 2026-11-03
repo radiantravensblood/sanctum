@@ -56,6 +56,20 @@ export function compileAtelierManifest({
         : null,
       fallback: "procedural_underpainting"
     },
+    authoring: {
+      painterProtocol:
+        atelierGrammar.painterBridge?.protocol || null,
+      painterImplementation:
+        atelierGrammar.painterBridge?.implementation || null,
+      generation: "authoring_only",
+      candidateStatus:
+        atelierGrammar.painterBridge?.candidateStatus || "candidate",
+      approvedStatus:
+        atelierGrammar.painterBridge?.approvedStatus || "approved",
+      approvalRequired: true,
+      registryMutationDuringGeneration: false,
+      modelIsSemanticAuthority: false
+    },
     layers: (atelierGrammar.layerOrder || []).map(
       (id, index, all) => ({
         id,
@@ -139,6 +153,28 @@ export function evaluateAtelierExemplars({
           pass: manifest.render.strategy === exemplar.strategy,
           actual: manifest.render.strategy,
           expected: exemplar.strategy
+        },
+        {
+          rule: "runtimeGeneration",
+          pass: manifest.render.runtimeGeneration === false,
+          actual: manifest.render.runtimeGeneration,
+          expected: false
+        },
+        {
+          rule: "authoringApproval",
+          pass:
+            manifest.authoring.approvalRequired === true &&
+            manifest.authoring.modelIsSemanticAuthority === false,
+          actual: {
+            approvalRequired:
+              manifest.authoring.approvalRequired,
+            modelIsSemanticAuthority:
+              manifest.authoring.modelIsSemanticAuthority
+          },
+          expected: {
+            approvalRequired: true,
+            modelIsSemanticAuthority: false
+          }
         }
       ];
 
@@ -169,7 +205,9 @@ function resolveReviewedAsset({
 
   if (
     !allowed.includes(entry.status) ||
-    !entry.path
+    !entry.path ||
+    (policy?.requireProvenance && !entry.provenance) ||
+    (policy?.requireSha256 && !entry.sha256)
   ) {
     return null;
   }
