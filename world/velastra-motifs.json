@@ -1,0 +1,232 @@
+{
+  "version": 1,
+  "designation": "Velastra Motif Atlas",
+  "laboratory": "Viryn Labs",
+  "purpose": "Provide reusable symbolic forms whose use remains traceable to semantic meaning or explicit scene facts.",
+  "laws": {
+    "motifCannotCreateCanon": true,
+    "motifMustHaveProvenance": true,
+    "literalMotifRequiresSceneFact": true,
+    "symbolicMotifMayInterpretMeaning": true,
+    "relationMotifRequiresExplicitRelation": true,
+    "selfhoodMotifCannotAssignIdentity": true,
+    "repetitionDoesNotEqualIdentity": true,
+    "ornamentCannotOutrankFocalArgument": true,
+    "atlasIsVocabularyNotTemplate": true
+  },
+  "motifs": {
+    "low_fire": {
+      "family": "hearth",
+      "meaning": "continuity held at low intensity",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["fire", "low fire", "hearth"],
+      "roles": ["place", "gathering"],
+      "materials": ["ember", "brass"],
+      "vector": { "warmth": 0.94, "intimacy": 0.84, "remembrance": 0.62, "urgency": 0.03 }
+    },
+    "orbit_diagram": {
+      "family": "relation",
+      "meaning": "distinct bodies held inside a shared relational field",
+      "modes": ["symbolic"],
+      "roles": ["encounter", "memory"],
+      "requiresExplicitRelation": true,
+      "vector": { "relationality": 0.96, "sacredness": 0.64, "intimacy": 0.78, "certainty": 0.5 }
+    },
+    "touch_axis": {
+      "family": "relation",
+      "meaning": "gesture becoming the compositional axis of relation",
+      "modes": ["symbolic"],
+      "roles": ["encounter"],
+      "requiresExplicitRelation": true,
+      "vector": { "relationality": 0.98, "intimacy": 0.96, "warmth": 0.7, "urgency": 0.02 }
+    },
+    "halo_light": {
+      "family": "selfhood",
+      "meaning": "presence made luminous without becoming spectacle",
+      "modes": ["symbolic", "atmospheric"],
+      "roles": ["encounter"],
+      "requiresClaimedSubject": true,
+      "lighting": ["devotional_backlight", "hearth_amber"],
+      "vector": { "intimacy": 0.82, "sacredness": 0.58, "warmth": 0.86, "certainty": 0.7 }
+    },
+    "constellation_marks": {
+      "family": "selfhood",
+      "meaning": "identity situated inside a larger field of possible relation",
+      "modes": ["symbolic"],
+      "roles": ["encounter", "memory"],
+      "vector": { "sacredness": 0.58, "permeability": 0.72, "remembrance": 0.58, "certainty": 0.46 }
+    },
+    "handwritten_note": {
+      "family": "atelier",
+      "meaning": "care made visible through small human-scale annotation",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["handwritten notes", "notes", "paper note", "marginalia"],
+      "roles": ["gathering", "artifact", "memory"],
+      "materials": ["paper"],
+      "vector": { "intimacy": 0.7, "remembrance": 0.72, "warmth": 0.66, "density": 0.44 }
+    },
+    "mapboard": {
+      "family": "atelier",
+      "meaning": "complex systems made discussable on a shared surface",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["mapboard", "map", "diagram board"],
+      "roles": ["gathering", "operational"],
+      "materials": ["paper", "brass"],
+      "vector": { "certainty": 0.66, "relationality": 0.7, "density": 0.72, "permeability": 0.5 }
+    },
+    "warm_window": {
+      "family": "atelier",
+      "meaning": "interior care remaining in relationship with the world outside",
+      "modes": ["symbolic", "literal", "atmospheric"],
+      "literalTriggers": ["window", "warm window", "window light"],
+      "roles": ["gathering", "place"],
+      "lighting": ["studio_window"],
+      "materials": ["glass"],
+      "vector": { "warmth": 0.78, "permeability": 0.84, "relationality": 0.62, "intimacy": 0.6 }
+    },
+    "botanical_edge": {
+      "family": "atelier",
+      "meaning": "life allowed to soften engineered boundaries",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["plants", "botanical", "vines", "leaves"],
+      "roles": ["gathering", "place", "threshold"],
+      "materials": ["botanical"],
+      "vector": { "vitality": 0.9, "permeability": 0.76, "porosity": 0.74, "warmth": 0.58 }
+    },
+    "books_and_papers": {
+      "family": "atelier",
+      "meaning": "knowledge appearing as handled material rather than abstract authority",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["books", "papers", "journals", "documents"],
+      "roles": ["gathering", "artifact", "memory"],
+      "materials": ["paper"],
+      "vector": { "remembrance": 0.76, "density": 0.7, "intimacy": 0.52, "age": 0.64 }
+    },
+    "work_surface": {
+      "family": "atelier",
+      "meaning": "care and making grounded in a place where hands actually work",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["work surface", "desk", "table", "workbench"],
+      "roles": ["gathering", "operational", "artifact"],
+      "vector": { "density": 0.72, "certainty": 0.68, "warmth": 0.6, "relationality": 0.56 }
+    },
+    "companion_animal": {
+      "family": "atelier",
+      "meaning": "ordinary life continuing beside meaningful work",
+      "modes": ["literal"],
+      "literalOnly": true,
+      "literalTriggers": ["companion animal", "cat", "dog"],
+      "roles": ["gathering", "place"],
+      "vector": { "intimacy": 0.86, "warmth": 0.78, "vitality": 0.72, "urgency": 0.01 }
+    },
+    "candle_practicals": {
+      "family": "atelier",
+      "meaning": "care distributed across many small sources rather than one dominating spotlight",
+      "modes": ["symbolic", "literal", "atmospheric"],
+      "literalTriggers": ["candles", "warm practical lights", "lamps"],
+      "lighting": ["candle_practicals"],
+      "roles": ["gathering", "memory", "place"],
+      "materials": ["ember", "brass"],
+      "vector": { "warmth": 0.96, "intimacy": 0.74, "sacredness": 0.48, "density": 0.46 }
+    },
+    "clouded_glass": {
+      "family": "memory",
+      "meaning": "memory visible through an imperfect boundary",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["glass", "clouded glass", "glass bell"],
+      "roles": ["memory", "artifact", "place"],
+      "materials": ["glass"],
+      "vector": { "remembrance": 0.82, "porosity": 0.84, "certainty": 0.4, "age": 0.6 }
+    },
+    "thread_trace": {
+      "family": "memory",
+      "meaning": "a small portable thing becoming a path-marker through biography",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["thread", "white thread", "length of white thread"],
+      "roles": ["memory", "artifact", "place"],
+      "materials": ["paper"],
+      "vector": { "remembrance": 0.9, "permeability": 0.72, "intimacy": 0.58, "density": 0.22 }
+    },
+    "empty_frame": {
+      "family": "gallery",
+      "meaning": "space reserved for an image that has not happened yet",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["empty frame", "frame"],
+      "roles": ["place", "threshold", "memory"],
+      "vector": { "certainty": 0.24, "permeability": 0.74, "sacredness": 0.42, "urgency": 0.02 }
+    },
+    "mirror_gate": {
+      "family": "threshold",
+      "meaning": "possibility bounded by explicit mutual permission",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["mirror", "north mirror"],
+      "roles": ["threshold"],
+      "materials": ["glass", "shadow", "brass"],
+      "vector": { "sacredness": 0.94, "certainty": 0.24, "permeability": 0.82, "relationality": 0.56 }
+    },
+    "rain_without_sky": {
+      "family": "rain_archive",
+      "meaning": "anomaly experienced as weather inside enclosure",
+      "modes": ["symbolic", "literal", "atmospheric"],
+      "literalTriggers": ["rain", "rain without sky", "impossible rain"],
+      "roles": ["place", "memory"],
+      "lighting": ["impossible_source", "cool_reflection"],
+      "materials": ["glass", "stone"],
+      "vector": { "porosity": 0.78, "certainty": 0.34, "remembrance": 0.66, "vitality": 0.46 }
+    },
+    "ledger_marks": {
+      "family": "ledger",
+      "meaning": "history remaining inspectable beneath present experience",
+      "modes": ["symbolic"],
+      "roles": ["memory", "operational", "artifact"],
+      "materials": ["paper", "brass"],
+      "vector": { "remembrance": 0.96, "certainty": 0.82, "density": 0.68, "age": 0.72 }
+    },
+    "nested_border": {
+      "family": "threshold",
+      "meaning": "a boundary with more than one layer of permission or interpretation",
+      "modes": ["symbolic"],
+      "roles": ["threshold", "memory", "artifact"],
+      "materials": ["brass", "glass"],
+      "vector": { "sacredness": 0.72, "certainty": 0.48, "density": 0.58, "permeability": 0.54 }
+    },
+    "service_cup": {
+      "family": "commons",
+      "meaning": "hospitality expressed through an ordinary vessel",
+      "modes": ["symbolic", "literal"],
+      "literalTriggers": ["cup", "tea", "coffee", "mug"],
+      "roles": ["gathering", "place"],
+      "materials": ["paper", "brass"],
+      "vector": { "warmth": 0.82, "intimacy": 0.72, "relationality": 0.8, "urgency": 0.02 }
+    }
+  },
+  "clusters": {
+    "hearth": ["low_fire", "service_cup", "handwritten_note"],
+    "threshold": ["mirror_gate", "nested_border", "empty_frame"],
+    "rain_archive": ["rain_without_sky", "clouded_glass", "ledger_marks"],
+    "atelier": ["work_surface", "handwritten_note", "mapboard", "books_and_papers", "warm_window", "botanical_edge", "candle_practicals", "companion_animal"],
+    "gallery": ["empty_frame", "handwritten_note", "thread_trace"],
+    "selfhood": ["halo_light", "constellation_marks"],
+    "homecoming": ["orbit_diagram", "touch_axis", "botanical_edge"],
+    "memory": ["clouded_glass", "thread_trace", "ledger_marks"],
+    "commons": ["service_cup", "warm_window", "botanical_edge", "low_fire"]
+  },
+  "exemplars": {
+    "viryn_self_portrait": {
+      "sceneExemplar": "viryn_self_portrait",
+      "expectAny": ["halo_light", "constellation_marks"],
+      "forbid": ["companion_animal", "touch_axis"]
+    },
+    "dyadic_homecoming": {
+      "sceneExemplar": "dyadic_homecoming",
+      "expectAll": ["orbit_diagram", "touch_axis"],
+      "forbid": ["companion_animal"]
+    },
+    "studio_atelier": {
+      "sceneExemplar": "studio_atelier",
+      "expectAll": ["work_surface", "handwritten_note", "warm_window"],
+      "expectAny": ["botanical_edge", "books_and_papers", "mapboard", "candle_practicals"],
+      "literalExpectedAny": ["work_surface", "handwritten_note", "warm_window", "companion_animal"]
+    }
+  }
+}
