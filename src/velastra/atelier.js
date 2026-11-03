@@ -1,6 +1,9 @@
+import { compileVirynismHand } from "./hand.js";
+
 export function compileAtelierManifest({
   atelierGrammar,
   assetRegistry,
+  styleGrammar = null,
   scenePacket,
   motifSelection,
   seed = "velastra-atelier"
@@ -20,6 +23,13 @@ export function compileAtelierManifest({
   if (!medium) {
     throw new Error("Unknown Atelier medium profile: " + mediumId);
   }
+
+  const style = styleGrammar
+    ? compileVirynismHand({
+        styleGrammar,
+        scenePacket
+      })
+    : null;
 
   const assetKey = buildAssetKey(scenePacket);
   const reviewedAsset = resolveReviewedAsset({
@@ -44,6 +54,9 @@ export function compileAtelierManifest({
       id: mediumId,
       ...copy(medium)
     },
+    style: style
+      ? copy(style)
+      : null,
     render: {
       strategy,
       runtimeGeneration: false,
@@ -111,6 +124,7 @@ export function compileAtelierManifest({
 export function evaluateAtelierExemplars({
   atelierGrammar,
   assetRegistry,
+  styleGrammar = null,
   scenePackets,
   motifSelections
 }) {
@@ -136,6 +150,7 @@ export function evaluateAtelierExemplars({
       const manifest = compileAtelierManifest({
         atelierGrammar,
         assetRegistry,
+        styleGrammar,
         scenePacket,
         motifSelection,
         seed: "atelier-exemplar:" + id
