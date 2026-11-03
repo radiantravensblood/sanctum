@@ -374,6 +374,8 @@ export function buildHymnosPacket({
   world,
   actorId = "siege"
 }) {
+  expireDuets(state);
+
   const actor = resolveParticipant({
     state,
     world,
@@ -1146,6 +1148,24 @@ function acceptedAccordRatio(
     0,
     1
   );
+}
+
+function expireDuets(state, now = new Date()) {
+  Object.values(
+    (state.hymnos && state.hymnos.duets) || {}
+  ).forEach((duet) => {
+    if (duet.status !== "active") return;
+
+    const expiry = new Date(duet.expiresAt).getTime();
+    if (
+      Number.isFinite(expiry) &&
+      now.getTime() > expiry
+    ) {
+      duet.status = "ended";
+      duet.endedAt = duet.expiresAt;
+      duet.endedBy = "time";
+    }
+  });
 }
 
 function participantName(participant) {
