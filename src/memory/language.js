@@ -1,6 +1,7 @@
 import { getObjectMemory } from "./mnemosyne.js";
 import { getRoom } from "../world.js";
 import { getEntityTemplate } from "../entities/entities.js";
+import { buildIdentityPacket } from "../hymnos/identity.js";
 
 export function describeObjectTrail({ state, world, objectId }) {
   const memory = getObjectMemory(state, objectId);
@@ -33,6 +34,20 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
   const entityName = (entityId) => {
     const entity = getEntityTemplate(world, entityId);
     return entity ? entity.name : "an inhabitant";
+  };
+  const participantName = (actorId) => {
+    const entity = getEntityTemplate(world, actorId);
+    if (entity) return entity.name;
+
+    const identity = buildIdentityPacket({
+      state,
+      world,
+      actorId
+    });
+
+    return identity && identity.name
+      ? identity.name
+      : actorId || "a presence";
   };
 
   switch (event.action) {
@@ -93,6 +108,45 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return entityName(event.entity) + " chose to travel onward in company.";
     case "interaction_boundary":
       return entityName(event.entity) + " chose not to continue through this boundary.";
+    case "cross_relation_phase": {
+      const names = (event.participants || []).map(participantName);
+      const subject = names.length === 2
+        ? names[0] + " and " + names[1]
+        : "Two presences";
+
+      if (event.toPhase === "friends") {
+        return "The house has seen enough reciprocal choice to call " + subject + " friends.";
+      }
+
+      if (event.toPhase === "companionate") {
+        return subject + " have begun choosing one another across forms with some regularity.";
+      }
+
+      if (event.toPhase === "familiar") {
+        return subject + " have become familiar to one another.";
+      }
+
+      return "A cross-form relationship changed here.";
+    }
+    case "hymnos_act":
+      if (event.hymn === "heya") {
+        return participantName(event.actor) + " offered presence here without demanding an answer.";
+      }
+      if (event.hymn === "feyart") {
+        return participantName(event.actor) + " practiced attention here without claim.";
+      }
+      if (event.hymn === "diemesh") {
+        return participantName(event.actor) + " proposed coordinated presence without merger.";
+      }
+      return "A Hymnos act was offered here.";
+    case "hymnos_answer":
+      return participantName(event.actor) + " answered " + String(event.hymn || "the relational act") + " in its own form.";
+    case "hymnos_duet":
+      return "A diemesh duet began here while preserving the participants as distinct.";
+    case "hymnos_release":
+      return "A duet was released here without taking either participant with it.";
+    case "hymnos_ritual":
+      return "A recurring " + String(event.hymn || "Hymnos") + " pattern became legible as ritual here.";
     case "relation_phase": {
       const names = (event.entities || []).map(entityName);
       const subject = names.length === 2
