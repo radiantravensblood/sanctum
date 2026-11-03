@@ -12,6 +12,7 @@ import { markWitnessed } from "./genesis/provenance.js";
 import { describeObjectTrail } from "./memory/language.js";
 import { describeEntity, getEntityRecord, rememberEntity } from "./entities/entities.js";
 import { proposeInteraction, resolveAcceptedCompany } from "./interactions/accord.js";
+import { performHymnosAct, endDuet } from "./hymnos/hymnos.js";
 
 export function performAction({ verb, target = null, state, world }) {
   const room = getRoom(world, state, state.location);
@@ -42,6 +43,12 @@ export function performAction({ verb, target = null, state, world }) {
 
     case "interact":
       return interact(target, state, world);
+
+    case "hymnos":
+      return singHymnos(target, state, world);
+
+    case "hymnos_release":
+      return releaseHymnos(target, state, world);
 
     case "return":
       return returnHome(state, world);
@@ -248,6 +255,37 @@ function interact(spec, state, world) {
     targetId: spec.targetId,
     affordance: spec.affordance,
     objectId: spec.objectId || null
+  });
+
+  return result(state, outcome.message);
+}
+
+function singHymnos(spec, state, world) {
+  if (!spec || !spec.targetId || !spec.act) {
+    return result(state, "The Hymnos act is incomplete.");
+  }
+
+  const outcome = performHymnosAct({
+    state,
+    world,
+    actorId: "siege",
+    targetId: spec.targetId,
+    act: spec.act
+  });
+
+  return result(state, outcome.message);
+}
+
+function releaseHymnos(spec, state, world) {
+  if (!spec || !spec.targetId) {
+    return result(state, "No duet has been named for release.");
+  }
+
+  const outcome = endDuet({
+    state,
+    world,
+    actorId: "siege",
+    targetId: spec.targetId
   });
 
   return result(state, outcome.message);
