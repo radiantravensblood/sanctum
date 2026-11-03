@@ -5,9 +5,10 @@ import {
   rememberEvent
 } from "./memory/mnemosyne.js";
 import { createInitialTime, mergeTime } from "./time/chronos.js";
+import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 5;
+const VERSION = 6;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -41,7 +42,8 @@ export function loadState(world) {
       ledger: Array.isArray(parsed.ledger) ? parsed.ledger : [],
       genesis: mergeGenesis(base.genesis, parsed.genesis),
       memory: mergeMemory(base.memory, parsed.memory),
-      time: mergeTime(base.time, parsed.time)
+      time: mergeTime(base.time, parsed.time),
+      entities: mergeEntityState(base.entities, parsed.entities)
     };
 
     if (!parsed.memory || !Object.keys(parsed.memory.rooms || {}).length) {
@@ -74,7 +76,8 @@ export function createInitialState(world) {
     ledger: [],
     genesis: createInitialGenesis(world),
     memory: createInitialMemory(),
-    time: createInitialTime()
+    time: createInitialTime(),
+    entities: createInitialEntityState(world)
   };
 
   appendEvent(state, {
@@ -153,6 +156,7 @@ function migrateState(saved, world) {
     thresholdTargets: saved.thresholdTargets || {},
     memory: saved.memory || null,
     time: saved.time || null,
+    entities: saved.entities || null,
     genesis: {
       ...createInitialGenesis(world),
       ...(saved.genesis || {}),
