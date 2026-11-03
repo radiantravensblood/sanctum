@@ -45,6 +45,7 @@ export function render({ state, world, message, dispatch }) {
   renderOrientation(orientation);
   renderScene({ room, visual, scene, objects, entities });
   renderEntities(entities, inventory, state, world, dispatch);
+  renderElsewhere(state, world);
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
@@ -84,8 +85,11 @@ function renderEntities(entities, inventory, state, world, dispatch) {
   }
 
   entities.forEach(({ template, record }) => {
-    const card = document.createElement("div");
-    card.className = "entity-card";
+    const card = document.createElement("article");
+    card.className = "entity-card encounter-card";
+
+    const header = document.createElement("div");
+    header.className = "entity-card-header";
 
     const identity = document.createElement("div");
     identity.className = "entity-identity";
@@ -102,11 +106,19 @@ function renderEntities(entities, inventory, state, world, dispatch) {
     name.className = "entity-name";
     name.textContent = template.name;
 
+    const meta = document.createElement("div");
+    meta.className = "entity-meta";
+
     const kind = document.createElement("small");
     kind.className = "entity-kind";
-    kind.textContent = template.kind.replaceAll("_", " ") + " · " + formatEntityStatus(record.status);
+    kind.textContent = template.kind.replaceAll("_", " ");
 
-    copy.append(name, kind);
+    const status = document.createElement("small");
+    status.className = "entity-status";
+    status.textContent = formatEntityStatus(record.status);
+
+    meta.append(kind, status);
+    copy.append(name, meta);
 
     const namedRelations = relationsForEntity(
       state,
@@ -162,10 +174,21 @@ function renderEntities(entities, inventory, state, world, dispatch) {
 
     identity.append(symbol, copy);
 
-    const actions = document.createElement("div");
-    actions.className = "entity-actions";
-    actions.append(
-      button("Observe", () => dispatch("observe_entity", template.id))
+    const witness = button(
+      "Observe",
+      () => dispatch("observe_entity", template.id)
+    );
+    witness.classList.add("witness-button");
+
+    header.append(identity, witness);
+
+    const registers = document.createElement("div");
+    registers.className = "entity-registers";
+
+    const accordRegister = createActionRegister(
+      "Accord",
+      "proposal · present-tense consent",
+      "accord-register"
     );
 
     const accord = getAvailableAffordances({
@@ -179,8 +202,8 @@ function renderEntities(entities, inventory, state, world, dispatch) {
       .filter((entry) => entry.available)
       .forEach((entry) => {
         if (entry.id === "offer_object") {
-          (entry.objects || []).slice(0, 3).forEach((object) => {
-            actions.append(
+          (entry.objects || []).slice(0, 2).forEach((object) => {
+            accordRegister.actions.append(
               button(
                 "Offer " + object.name,
                 () =>
@@ -195,7 +218,7 @@ function renderEntities(entities, inventory, state, world, dispatch) {
           return;
         }
 
-        actions.append(
+        accordRegister.actions.append(
           button(entry.label, () =>
             dispatch("interact", {
               targetId: template.id,
@@ -205,6 +228,18 @@ function renderEntities(entities, inventory, state, world, dispatch) {
         );
       });
 
+    if (!accordRegister.actions.childElementCount) {
+      accordRegister.actions.append(
+        empty("No Accord proposal is presently open.")
+      );
+    }
+
+    const hymnosRegister = createActionRegister(
+      "Hymnos",
+      "relational act · different expression, same truth",
+      "hymnos-register"
+    );
+
     const hymnos = getAvailableHymnosActs({
       state,
       world,
@@ -212,13 +247,10 @@ function renderEntities(entities, inventory, state, world, dispatch) {
       targetId: template.id
     });
 
-    const hymnosActions = document.createElement("div");
-    hymnosActions.className = "hymnos-actions";
-
     (hymnos.acts || [])
       .filter((entry) => entry.available)
       .forEach((entry) => {
-        hymnosActions.append(
+        hymnosRegister.actions.append(
           button(entry.label, () =>
             dispatch("hymnos", {
               targetId: template.id,
@@ -230,7 +262,7 @@ function renderEntities(entities, inventory, state, world, dispatch) {
 
     if (hymnos.activeDuet) {
       card.classList.add("entity-card-duet");
-      hymnosActions.append(
+      hymnosRegister.actions.append(
         button("Release duet", () =>
           dispatch("hymnos_release", {
             targetId: template.id
@@ -239,12 +271,125 @@ function renderEntities(entities, inventory, state, world, dispatch) {
       );
     }
 
-    if (hymnosActions.childElementCount) {
-      actions.append(hymnosActions);
+    if (!hymnosRegister.actions.childElementCount) {
+      hymnosRegister.actions.append(
+        empty("No Hymnos act is presently open.")
+      );
     }
 
-    card.append(identity, actions);
+    registers.append(
+      accordRegister.root,
+      hymnosRegister.root
+    );
 
+    card.append(header, registers);
+    root.append(card);
+  });
+}
+
+function createActionRegister(label, note, className) {
+  const root = document.createElement("section");
+  root.className = "entity-register " + className;
+
+  const header = document.createElement("div");
+  header.className = "register-heading";
+
+  const title = document.createElement("span");
+  title.className = "register-title";
+  title.textContent = label;
+
+  const law = document.createElement("small");
+  law.className = "register-note";
+  law.textContent = note;
+
+  const actions = document.createElement("div");
+  actions.className = "register-actions";
+
+  header.append(title, law);
+  root.append(header, actions);
+
+  return { root, actions };
+}
+
+function renderElsewhere(state, world) {
+  const root = document.getElementById("whereabouts");
+  if (!root) return;
+
+  root.replaceChildren();
+
+  const elsewhere = (world.entities.entities || [])
+    .map((template) => ({
+      template,
+      record:
+        state.entities &&
+        state.entities.records &&
+        state.entities.records[template.id]
+    }))
+    .filter(
+      ({ record }) =>
+        record &&
+        record.location &&
+        record.location !== state.location
+    );
+
+  if (!elsewhere.length) {
+    root.append(
+      empty("No other inhabitant leaves a current trace elsewhere in the known house.")
+    );
+    return;
+  }
+
+  elsewhere.forEach(({ template, record }) => {
+    const card = document.createElement("div");
+    card.className = "whereabouts-card";
+
+    const symbol = document.createElement("span");
+    symbol.className = "whereabouts-symbol";
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.textContent = template.symbol || "·";
+
+    const copy = document.createElement("div");
+    copy.className = "whereabouts-copy";
+
+    const name = document.createElement("span");
+    name.className = "whereabouts-name";
+    name.textContent = template.name;
+
+    const room = getRoom(
+      world,
+      state,
+      record.location,
+      { fallback: false }
+    );
+
+    const trace = document.createElement("small");
+    trace.className = "whereabouts-trace";
+    trace.textContent =
+      "known elsewhere · " +
+      (room ? room.name : "somewhere unnamed") +
+      " · " +
+      formatEntityStatus(record.status);
+
+    copy.append(name, trace);
+
+    const relation = getCrossRelation(
+      state,
+      "siege",
+      template.id
+    );
+
+    if (
+      relation &&
+      relation.phase !== "unfamiliar"
+    ) {
+      const relationNote = document.createElement("small");
+      relationNote.className = "whereabouts-relation";
+      relationNote.textContent =
+        formatCrossRelationNote(relation.phase);
+      copy.append(relationNote);
+    }
+
+    card.append(symbol, copy);
     root.append(card);
   });
 }
@@ -420,18 +565,47 @@ function renderRoomMemory(state, world, roomId) {
   root.replaceChildren();
 
   const memory = getRoomMemory(state, roomId);
-  const echoes = memory.echoes.slice(-9).reverse();
+  const echoes = [...memory.echoes].reverse();
 
   if (!echoes.length) {
     root.append(empty("This room has not learned any echoes yet."));
     return;
   }
 
-  echoes.forEach((event) => {
+  const latest = echoes.slice(0, 6);
+  const earlier = echoes.slice(6);
+
+  latest.forEach((event) => {
     const item = document.createElement("li");
     item.textContent = describeLocalEcho(event, state, world, roomId);
     root.append(item);
   });
+
+  if (earlier.length) {
+    const archive = document.createElement("details");
+    archive.className = "ledger-archive";
+
+    const summary = document.createElement("summary");
+    summary.textContent =
+      "Earlier echoes · " + earlier.length;
+
+    const list = document.createElement("ol");
+    list.className = "ledger ledger-earlier";
+
+    earlier.forEach((event) => {
+      const item = document.createElement("li");
+      item.textContent = describeLocalEcho(
+        event,
+        state,
+        world,
+        roomId
+      );
+      list.append(item);
+    });
+
+    archive.append(summary, list);
+    root.append(archive);
+  }
 }
 
 function groupObjects(objects) {
