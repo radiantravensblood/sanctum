@@ -1,4 +1,6 @@
-export function renderScene({ room, visual, scene, objects, entities = [] }) {
+import { renderAtelierUnderpainting } from "../velastra/underpaint.js";
+
+export function renderScene({ room, visual, scene, objects, entities = [], atelier = null }) {
   const root = document.getElementById("scene-canvas");
   if (!root) return;
 
@@ -48,6 +50,13 @@ export function renderScene({ room, visual, scene, objects, entities = [] }) {
       fill: "url(#room-field)"
     })
   );
+
+  if (atelier) {
+    renderAtelierUnderpainting({
+      svg,
+      manifest: atelier
+    });
+  }
 
   renderAir(svg, scene, sensation, random);
   renderArchitecture(svg, geometry, random);
