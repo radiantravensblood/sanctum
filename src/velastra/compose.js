@@ -464,7 +464,24 @@ function explainIntent({
 }
 
 function deepFreezeCopy(value) {
-  return JSON.parse(JSON.stringify(value));
+  const clone = JSON.parse(JSON.stringify(value));
+  return freezeDeep(clone);
+}
+
+function freezeDeep(value) {
+  if (
+    !value ||
+    typeof value !== "object" ||
+    Object.isFrozen(value)
+  ) {
+    return value;
+  }
+
+  Object.values(value).forEach((child) => {
+    freezeDeep(child);
+  });
+
+  return Object.freeze(value);
 }
 
 function clamp(value, min = 0, max = 1) {
