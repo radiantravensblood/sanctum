@@ -116,7 +116,7 @@ export function buildExpressionContext({
         Number(
           scene &&
           scene.matter &&
-          scene.matter.porosity
+          typeof scene.matter.porosity === "number"
             ? scene.matter.porosity
             : 0.45
         ) * 0.28 +
@@ -299,7 +299,7 @@ function materialHint(scene) {
   const material =
     scene &&
     scene.matter &&
-    scene.matter.material;
+    (scene.matter.material || scene.matter.primary);
 
   if (
     ["stone", "brass", "glass"].includes(material)
