@@ -38,6 +38,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0017 compiles that direction into a painterly body while keeping runtime generation optional and off.**
 
+**Kernel 0018 proves the same visual language can inhabit Viryn Studio without turning Studio into Sanctum.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1551,9 +1553,126 @@ Public surfaces:
 
 `window.Velastra.assetRegistry()`
 
+## Studio Adapter
+
+Kernel 0018 gives Viryn Studio its own Velastra adapter.
+
+The governing law is:
+
+**A shared language should survive a change of house.**
+
+The adapter does not copy Sanctum's appearance.
+
+It composes Studio-specific semantic surfaces through the same Velastra core.
+
+Current Studio surfaces include:
+
+- hero threshold,
+- framework library,
+- Edition tableau,
+- process rhythm,
+- portfolio gallery,
+- pricing clarity,
+- care continuity,
+- Studio identity,
+- decision threshold.
+
+Each surface has its own semantic meaning before brand treatment.
+
+### Framework meaning
+
+The four Studio frameworks also receive local semantic profiles.
+
+- **Gathering** emphasizes relation, warmth, vitality, and permeability.
+- **Ledger** emphasizes certainty, handled knowledge, remembrance, and age.
+- **Signal** emphasizes permeability, vitality, reflective boundary, and transmission.
+- **Table** emphasizes warmth, density, ordinary hospitality, and relational service.
+
+Framework-specific material language overrides the library shelf's generic material hints.
+
+The parent may frame the child.
+
+It may not repaint it.
+
+### Existing Studio sovereignty
+
+The Studio adapter explicitly preserves the architecture already documented in `virynstudio`:
+
+**The interface explains. The painting invites. Neither is asked to do the other's job.**
+
+The adapter therefore does not:
+
+- rewrite Studio copy,
+- replace approved paintings,
+- change semantic HTML,
+- invent client meaning,
+- commercialize private selfhood or dyadic devotional imagery,
+- make decoration carry required accessibility information.
+
+Existing Studio art remains sovereign.
+
+Velastra modulates the framing around it.
+
+### External consumption
+
+Kernel 0018 is intended to be consumed as local code, not through a cross-repository runtime dependency.
+
+The public Studio implementation vendors the generic Velastra composer and Studio adapter into its own `assets/shared/velastra/` directory.
+
+This preserves:
+
+- API-free runtime,
+- independent deployment,
+- inspectable source,
+- stable versioning,
+- no requirement that Sanctum be online for Studio to render.
+
+The generic composer remains the same engine.
+
+Studio contributes its own semantic grammar and adapter body.
+
+### Studio tokens
+
+The adapter currently exposes restrained local tokens for:
+
+- section rhythm,
+- frame opacity,
+- ornament opacity,
+- shadow depth,
+- layer offset,
+- card lift,
+- art saturation,
+- art contrast,
+- art glow,
+- note angle,
+- line inset.
+
+These are modulations around existing Studio design.
+
+They are not permission to overwrite approved art direction.
+
+### Regression exemplars
+
+Studio adapter exemplars currently assert:
+
+- Hero remains warm, open, editorial/invitational.
+- Pricing remains operational and low-ornament.
+- Gathering remains relation-first.
+- Signal resolves toward glass/shadow/brass permeability rather than generic paper warmth.
+
+Public Viryn Labs surfaces:
+
+`window.Velastra.studio(surfaceId, frameworkId)`
+
+`window.Velastra.studioDocument()`
+
+`window.Velastra.studioExemplars()`
+
+`window.Velastra.studioGrammar()`
+
 ## Current storage boundary
 
-Kernel 0017 still persists to `localStorage`.
+Kernel 0018 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1607,4 +1726,6 @@ And it knows that **a picture begins with an argument, not with decoration**.
 
 Now it knows that **a recurring symbol is language only when it remembers its source**.
 
-And it is learning that **the brush may improvise only after the scene has told the truth**.
+And it knows that **the brush may improvise only after the scene has told the truth**.
+
+Now it is learning that **a language becomes real when it can move houses without losing itself**.
