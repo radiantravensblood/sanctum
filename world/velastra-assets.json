@@ -9,7 +9,10 @@
     "candidateAssetsCannotRender": true,
     "generationDoesNotImplyApproval": true,
     "approvalRequiresReviewProvenance": true,
-    "approvedAssetHashShouldBeRecorded": true
+    "approvedAssetHashShouldBeRecorded": true,
+    "transientPresenceCannotChangePlaceAssetIdentity": true,
+    "approvedPlacePaintingMaySitBeneathLivePresence": true,
+    "canonicalPaintingRepresentsPlaceNotMoment": true
   },
   "entries": {},
   "referenceExemplars": {
