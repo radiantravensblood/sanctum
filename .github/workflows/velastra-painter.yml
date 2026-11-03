@@ -1,16 +1,24 @@
-name: Velastra Painter Bridge
+name: Velastra Contracts
 
 on:
   push:
     paths:
       - "labs/velastra/painter/**"
-      - "src/velastra/atelier.js"
+      - "labs/velastra/tests/**"
+      - "src/velastra/**"
+      - "src/visual/scene.js"
+      - "src/renderer.js"
+      - "src/app.js"
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
   pull_request:
     paths:
       - "labs/velastra/painter/**"
-      - "src/velastra/atelier.js"
+      - "labs/velastra/tests/**"
+      - "src/velastra/**"
+      - "src/visual/scene.js"
+      - "src/renderer.js"
+      - "src/app.js"
       - "world/velastra-atelier.json"
       - "world/velastra-assets.json"
 
