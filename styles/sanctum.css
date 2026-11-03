@@ -943,3 +943,29 @@ body[data-season="autumn"] .memory-panel {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Kernel 0009 — Ecology
+   State is factual. Visual behavior may remain suggestive. */
+.entity-state-resting {
+  opacity: 0.48;
+  animation-play-state: paused !important;
+}
+
+.entity-state-lingering {
+  opacity: 0.68;
+  animation-duration: 14s !important;
+}
+
+.entity-state-attending_object {
+  opacity: 0.82;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--room-glow) 18%, transparent));
+}
+
+.entity-state-in_company {
+  opacity: 0.88;
+}
+
+.entity-state-wandering {
+  opacity: 0.78;
+}
