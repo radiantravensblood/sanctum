@@ -5,11 +5,13 @@ import { render } from "./renderer.js";
 import { buildContextPacket } from "./memory/context.js";
 import { beginSession, touchSession } from "./time/chronos.js";
 import { buildOrientation } from "./time/orientation.js";
+import { advanceEntities } from "./entities/behavior.js";
 
 async function ignite() {
   const world = await loadWorld();
   let state = loadState(world);
   beginSession(state);
+  advanceEntities({ state, world });
   let message = getRoom(world, state, state.location).description;
 
   const dispatch = (verb, target = null) => {
@@ -23,6 +25,7 @@ async function ignite() {
     state = outcome.state;
     message = outcome.message;
     touchSession(state);
+    advanceEntities({ state, world });
     saveState(state);
 
     render({
@@ -60,6 +63,15 @@ async function ignite() {
 
   window.setInterval(() => {
     if (document.visibilityState !== "visible") return;
+
+    const changes = advanceEntities({
+      state,
+      world
+    });
+
+    if (changes.length) {
+      saveState(state);
+    }
 
     render({
       state,
