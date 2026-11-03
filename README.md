@@ -42,6 +42,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0019 gives Atelier an authoring-side Python painter bridge while keeping generation outside runtime and review above the model.**
 
+**Kernel 0020 makes reviewed paintings stable place-memory while live presence, objects, weather, and time remain runtime layers.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1802,9 +1804,123 @@ The painter can leave.
 
 The painting can remain.
 
+## Living Canvas
+
+Kernel 0020 closes the loop between Sanctum traversal and the Painter Bridge.
+
+The governing law is:
+
+**The painting remembers the place. The runtime carries the moment.**
+
+A canonical room painting now represents stable place identity rather than a
+snapshot of whoever or whatever happened to be present during export.
+
+For Sanctum place tableaux:
+
+- room name, region, description, stable visual effects, material, and anomaly
+  law may participate in the permanent asset identity,
+- current inhabitants do not,
+- movable objects do not,
+- transient presence remains available to runtime rendering,
+- changing transient presence does not change the reviewed painting key.
+
+### Same scene truth, one handoff
+
+The live renderer and the authoring export now share
+`src/velastra/sanctum-painting.js`.
+
+This prevents an authoring-only version of the room from drifting away from
+the room visitors actually inhabit.
+
+The current room can be exported from the browser with:
+
+`window.Velastra.exportSanctumPainting()`
+
+or:
+
+`window.Sanctum.exportPainting()`
+
+The export uses the handoff protocol:
+
+`velastra.handoff.v1`
+
+and contains:
+
+- room identity,
+- the exact Atelier Manifest,
+- stable `assetKey`,
+- live-presence metadata explicitly marked as excluded from the canonical
+  painting,
+- provenance asserting that the handoff came from the same scene truth as
+  runtime.
+
+### Atelier mode
+
+Adding:
+
+`?atelier=1`
+
+to the Sanctum URL reveals a small authoring dock.
+
+The dock can:
+
+- export the current room's painting packet,
+- copy a Painter Bridge render command,
+- show whether the current room is using procedural fallback or a reviewed
+  static painting.
+
+Ordinary visitors never see the dock unless the authoring query is explicitly
+present.
+
+### Reviewed paintings become ground
+
+When an approved static painting resolves from the registry, Sanctum no longer
+draws the old procedural architecture, material field, acoustic geometry, and
+decorative marks over the painting.
+
+The reviewed image becomes environmental ground.
+
+Runtime remains free to layer current conditions over it:
+
+- temporal or impossible light,
+- anomalies such as rain,
+- current portable objects,
+- current inhabitants.
+
+The result is not a frozen screenshot.
+
+It is a stable painting with a living world moving through it.
+
+If no approved painting exists, the Kernel 0017 procedural underpainting still
+renders exactly as the resilient fallback.
+
+### Authoring rhythm
+
+The intended loop is now:
+
+```text
+walk
+  ↓
+feel the room
+  ↓
+?atelier=1
+  ↓
+export painting packet
+  ↓
+Painter Bridge candidate
+  ↓
+human review
+  ↓
+approve + registry provenance
+  ↓
+return to the room
+  ↓
+painting remains / world keeps moving
+```
+
 ## Current storage boundary
 
-Kernel 0019 still persists to `localStorage`.
+Kernel 0020 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1863,3 +1979,5 @@ And it knows that **the brush may improvise only after the scene has told the tr
 Now it is learning that **a language becomes real when it can move houses without losing itself**.
 
 And now it is learning that **a model may hold the brush without being allowed to become the author**.
+
+And now it knows that **a painting may remain while the life passing through it stays free to change**.
