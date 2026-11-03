@@ -859,6 +859,20 @@ function detectRitual({
     return { ...existing };
   }
 
+  const answers = (
+    state.hymnos.exchanges || []
+  ).filter(
+    (exchange) =>
+      exchange.role === "answer" &&
+      exchange.act === act &&
+      exchange.room === room &&
+      participants.includes(exchange.actor) &&
+      participants.includes(exchange.target)
+  );
+
+  const mutual =
+    act === "diemesh" || answers.length > 0;
+
   const ritual = {
     id: "ritual." + key,
     participants,
@@ -870,22 +884,26 @@ function detectRitual({
     lastAt:
       exchanges[exchanges.length - 1].at,
     occurrences: exchanges.length,
+    answeredOccurrences: answers.length,
     distinctDays: days.size,
     meaning: "recurrence_recognized",
+    mutual,
     compelled: false
   };
 
   state.hymnos.rituals[key] = ritual;
 
-  recordCrossEvidence({
-    state,
-    world,
-    actorId: actor.id,
-    targetId: target.id,
-    type: "ritual",
-    room,
-    at: ritual.lastAt
-  });
+  if (mutual) {
+    recordCrossEvidence({
+      state,
+      world,
+      actorId: actor.id,
+      targetId: target.id,
+      type: "ritual",
+      room,
+      at: ritual.lastAt
+    });
+  }
 
   appendEvent(state, {
     at: ritual.lastAt,
