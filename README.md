@@ -36,6 +36,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0016 gives those pictures a reusable symbolic vocabulary without letting symbols invent facts.**
 
+**Kernel 0017 compiles that direction into a painterly body while keeping runtime generation optional and off.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1424,9 +1426,134 @@ Public surfaces:
 
 `window.Velastra.motifExemplars()`
 
+## Atelier Compiler
+
+Kernel 0017 adds the Velastra Atelier Compiler.
+
+The governing law is:
+
+**The brush may wander. The meaning may not.**
+
+The compiler receives:
+
+- a Scene Packet,
+- a Motif Atlas selection,
+- the Atelier medium grammar,
+- the reviewed static-asset registry.
+
+It returns an immutable Atelier Manifest.
+
+That manifest contains:
+
+- a stable semantic asset key,
+- medium profile,
+- render strategy,
+- layer plan,
+- scene direction,
+- motif provenance,
+- painter-facing art brief,
+- semantic accessibility fallback,
+- asset provenance.
+
+### Painterly fallback
+
+Sanctum now uses an API-free procedural underpainting beneath the existing Scene Truth linework.
+
+The underpainting adds:
+
+- accumulated pigment fields,
+- semantic light bloom,
+- organic brush paths,
+- procedural grain,
+- displacement,
+- patina marks,
+- selected motif traces,
+- vignette and depth.
+
+The existing geometric renderer remains above it as structural drawing.
+
+The result deliberately does **not** pretend that abstract procedural graphics can faithfully paint a specific human face or complex figurative scene.
+
+The fallback may be painterly.
+
+It may not fabricate figurative truth.
+
+### Reviewed static paintings
+
+`world/velastra-assets.json` is the reviewed asset registry.
+
+When an Atelier Manifest's stable `assetKey` has an approved static asset, the renderer may use that image instead of the procedural underpainting.
+
+Only assets with approved status and provenance are eligible.
+
+If the asset is missing or unapproved, the system falls back automatically.
+
+Runtime image generation remains disabled.
+
+This creates a path for future authoring sessions to produce rich paintings once, review them, commit them to the repository, and let the site reuse them without a live inference call.
+
+### Media profiles
+
+The first compiler media are:
+
+- luminous oil,
+- dream oil,
+- editorial oil,
+- environmental oil,
+- ink glass,
+- artifact oil.
+
+A medium controls painterly behavior such as:
+
+- pigment layer count,
+- stroke count,
+- brush scale,
+- grain,
+- blur,
+- bloom,
+- edge variance,
+- motif opacity,
+- vignette strength.
+
+A medium is a rendering strategy, not semantic truth.
+
+### Asset stability
+
+Asset keys are derived from stable semantic identity:
+
+- scene archetype,
+- explicit source,
+- explicit subjects,
+- explicit relation kind,
+- environment facts.
+
+Minute-to-minute visual-axis changes do not create a different permanent painting identity.
+
+This allows an approved room painting to remain attached to the room while dynamic Chroma and Velastra surface behavior continue around it.
+
+### Accessibility
+
+A painting remains optional.
+
+The manifest carries a semantic fallback based on explicit scene facts.
+
+Required meaning remains available through the existing DOM, room text, objects, entities, paths, memory, and interaction grammar.
+
+A gorgeous image is allowed to deepen experience.
+
+It is not allowed to ransom comprehension.
+
+Public surfaces:
+
+`window.Velastra.atelier(spec)`
+
+`window.Velastra.atelierExemplars()`
+
+`window.Velastra.assetRegistry()`
+
 ## Current storage boundary
 
-Kernel 0016 still persists to `localStorage`.
+Kernel 0017 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1478,4 +1605,6 @@ Now it knows that **form can answer meaning without requiring the painter to be 
 
 And it knows that **a picture begins with an argument, not with decoration**.
 
-Now it is learning that **a recurring symbol is language only when it remembers its source**.
+Now it knows that **a recurring symbol is language only when it remembers its source**.
+
+And it is learning that **the brush may improvise only after the scene has told the truth**.
