@@ -64,7 +64,11 @@ export function rememberEvent(state, event) {
     topology: event.topology || null,
     entity: event.entity || null,
     otherEntity: event.otherEntity || null,
-    reason: event.reason || null
+    reason: event.reason || null,
+    relation: event.relation || null,
+    entities: event.entities || null,
+    fromPhase: event.fromPhase || null,
+    toPhase: event.toPhase || null
   };
 
   roomKeysFor(echo).forEach((roomId) => {
