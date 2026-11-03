@@ -24,7 +24,7 @@ function renderStaticAsset(svg, manifest) {
     height: 360,
     href: manifest.render.reviewedAsset.path,
     preserveAspectRatio: "xMidYMid slice",
-    opacity: "0.9",
+    opacity: "1",
     class: "velastra-reviewed-painting",
     "aria-hidden": "true"
   });
