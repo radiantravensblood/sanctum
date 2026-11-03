@@ -1,12 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "laws": {
     "entitiesCannotGenerate": true,
     "entitiesCannotCrossLatentFrontiers": true,
     "entitiesCannotCrossConsentThresholds": true,
     "generatedRoomsMustBeWitnessed": true,
+    "entitiesCannotAlterObjectsWithoutLaw": true,
+    "entitiesMayRemainStill": true,
     "presenceMayBeMissed": true,
-    "observationCannotCompel": true
+    "observationCannotCompel": true,
+    "storyMustFollowEvents": true
   },
   "entities": [
     {
@@ -24,7 +27,16 @@
       "rhythm": {
         "active": ["evening", "night", "deep_night", "dawn"],
         "intervalMinutes": 150,
-        "maxCatchupMoves": 3
+        "maxCatchupActions": 3
+      },
+      "behavior": {
+        "weights": {
+          "move": 0.34,
+          "linger": 0.26,
+          "rest": 0.22,
+          "notice_object": 0.05,
+          "attend_entity": 0.13
+        }
       },
       "affinities": {
         "warmth": 0.45,
@@ -53,7 +65,16 @@
       "rhythm": {
         "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
         "intervalMinutes": 240,
-        "maxCatchupMoves": 2
+        "maxCatchupActions": 3
+      },
+      "behavior": {
+        "weights": {
+          "move": 0.48,
+          "linger": 0.18,
+          "rest": 0.1,
+          "notice_object": 0.12,
+          "attend_entity": 0.12
+        }
       },
       "affinities": {
         "warmth": 0.3,
@@ -82,7 +103,16 @@
       "rhythm": {
         "active": ["morning", "afternoon", "evening", "night", "deep_night", "dawn"],
         "intervalMinutes": 210,
-        "maxCatchupMoves": 3
+        "maxCatchupActions": 4
+      },
+      "behavior": {
+        "weights": {
+          "move": 0.28,
+          "linger": 0.14,
+          "rest": 0.08,
+          "notice_object": 0.38,
+          "attend_entity": 0.12
+        }
       },
       "affinities": {
         "warmth": 0.18,
