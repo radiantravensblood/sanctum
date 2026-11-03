@@ -68,6 +68,24 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return entityName(event.entity) + " attended to something in this room.";
     case "entity_encounter":
       return entityName(event.entity) + " and " + entityName(event.otherEntity) + " shared this room long enough to notice one another.";
+    case "interaction": {
+      const target = entityName(event.targetEntity);
+      const verb = String(event.affordance || "interaction").replaceAll("_", " ");
+
+      if (event.outcome === "accepted") {
+        return target + " accepted an invitation to " + verb + ".";
+      }
+
+      if (event.outcome === "deferred") {
+        return target + " left the " + verb + " unanswered for now.";
+      }
+
+      return target + " declined the " + verb + ".";
+    }
+    case "entity_accompany":
+      return entityName(event.entity) + " chose to travel onward in company.";
+    case "interaction_boundary":
+      return entityName(event.entity) + " chose not to continue through this boundary.";
     case "relation_phase": {
       const names = (event.entities || []).map(entityName);
       const subject = names.length === 2
