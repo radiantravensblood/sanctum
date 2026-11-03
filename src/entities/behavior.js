@@ -22,6 +22,7 @@ import {
   registerRelationEvidence,
   relationChoiceBias
 } from "./relation.js";
+import { performHymnosAct } from "../hymnos/hymnos.js";
 
 export function advanceEntities({
   state,
@@ -139,6 +140,9 @@ function chooseAction({
   if (!neighbors.length) weights.move = 0;
   if (!roomObjects.length) weights.notice_object = 0;
   if (!peers.length) weights.attend_entity = 0;
+  if (state.location !== record.location) {
+    weights.signal_presence = 0;
+  }
 
   if (peers.length) {
     const knownCompany = peers.some((peerId) => {
@@ -230,6 +234,15 @@ function executeAction({
         random: action.random
       });
 
+    case "signal_presence":
+      return signalPresence({
+        template,
+        record,
+        state,
+        world,
+        at
+      });
+
     case "rest":
       return remain({
         template,
@@ -253,6 +266,30 @@ function executeAction({
         status: "lingering"
       });
   }
+}
+
+function signalPresence({
+  template,
+  record,
+  state,
+  world,
+  at
+}) {
+  const outcome = performHymnosAct({
+    state,
+    world,
+    actorId: template.id,
+    targetId: "siege",
+    act: "heya",
+    now: at
+  });
+
+  return {
+    action: "signal_presence",
+    entity: template.id,
+    room: record.location,
+    outcome: outcome.outcome
+  };
 }
 
 function moveEntity({
