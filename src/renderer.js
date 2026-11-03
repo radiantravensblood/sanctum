@@ -16,6 +16,7 @@ import { getEntitiesAt } from "./entities/entities.js";
 import { relationsForEntity } from "./entities/relation.js";
 import { getAvailableAffordances } from "./interactions/accord.js";
 import { getAvailableHymnosActs } from "./hymnos/hymnos.js";
+import { getCrossRelation } from "./hymnos/relation.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -123,6 +124,42 @@ function renderEntities(entities, inventory, state, world, dispatch) {
       copy.append(note);
     }
 
+    const crossRelation = getCrossRelation(
+      state,
+      "siege",
+      template.id
+    );
+
+    if (
+      crossRelation &&
+      crossRelation.phase !== "unfamiliar"
+    ) {
+      const note = document.createElement("small");
+      note.className = "entity-cross-relation";
+      note.textContent = formatCrossRelationNote(
+        crossRelation.phase
+      );
+      copy.append(note);
+    }
+
+    const localRitual = Object.values(
+      (state.hymnos && state.hymnos.rituals) || {}
+    ).find(
+      (ritual) =>
+        ritual.room === state.location &&
+        ritual.participants.includes("siege") &&
+        ritual.participants.includes(template.id)
+    );
+
+    if (localRitual) {
+      const ritualNote = document.createElement("small");
+      ritualNote.className = "entity-ritual";
+      ritualNote.textContent =
+        (localRitual.mutual ? "shared ritual · " : "recurring practice · ") +
+        localRitual.act;
+      copy.append(ritualNote);
+    }
+
     identity.append(symbol, copy);
 
     const actions = document.createElement("div");
@@ -224,6 +261,18 @@ function formatRelationNote(relation, entityId) {
   }
 
   return "familiar with " + otherName;
+}
+
+function formatCrossRelationNote(phase) {
+  if (phase === "friends") {
+    return "friends with you";
+  }
+
+  if (phase === "companionate") {
+    return "often chooses relation with you";
+  }
+
+  return "familiar with you";
 }
 
 function formatEntityStatus(status) {
