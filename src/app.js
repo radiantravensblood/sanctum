@@ -7,6 +7,7 @@ import { beginSession, touchSession } from "./time/chronos.js";
 import { buildOrientation } from "./time/orientation.js";
 import { advanceEntities } from "./entities/behavior.js";
 import { buildEcologyPacket } from "./entities/ecology.js";
+import { buildRelationPacket } from "./entities/relation.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -57,6 +58,11 @@ async function ignite() {
       }),
     ecology: () =>
       buildEcologyPacket({
+        state,
+        world
+      }),
+    relations: () =>
+      buildRelationPacket({
         state,
         world
       })
