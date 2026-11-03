@@ -1,5 +1,5 @@
 export async function loadWorld() {
-  const [rooms, objects, thresholds, genesis, frontier, visualGrammar, semanticGrammar, time] = await Promise.all([
+  const [rooms, objects, thresholds, genesis, frontier, visualGrammar, semanticGrammar, time, entities] = await Promise.all([
     fetch("./world/rooms.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/objects.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/thresholds.json").then(assertResponse).then((response) => response.json()),
@@ -7,7 +7,8 @@ export async function loadWorld() {
     fetch("./world/realms/frontier.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/visual-grammar.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/semantic-grammar.json").then(assertResponse).then((response) => response.json()),
-    fetch("./world/time.json").then(assertResponse).then((response) => response.json())
+    fetch("./world/time.json").then(assertResponse).then((response) => response.json()),
+    fetch("./world/entities.json").then(assertResponse).then((response) => response.json())
   ]);
 
   return {
@@ -18,6 +19,7 @@ export async function loadWorld() {
     visualGrammar,
     semanticGrammar,
     time,
+    entities,
     realms: {
       [frontier.id]: frontier
     }
