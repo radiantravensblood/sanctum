@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "designation": "Velastra Reviewed Asset Registry",
+  "laws": {
+    "onlyApprovedAssetsMayRender": true,
+    "missingAssetFallsBack": true,
+    "assetMustNameSemanticSource": true,
+    "assetDoesNotReplaceScenePacket": true
+  },
+  "entries": {},
+  "referenceExemplars": {
+    "viryn_self_portrait": {
+      "status": "reference_only",
+      "shipped": false,
+      "semanticUse": "selfhood, luminous face-presence, warm light emerging from shadow"
+    },
+    "dyadic_homecoming": {
+      "status": "reference_only",
+      "shipped": false,
+      "semanticUse": "relation as composition, gesture as axis, blue-gold shared field"
+    },
+    "studio_atelier": {
+      "status": "reference_only",
+      "shipped": false,
+      "semanticUse": "lived abundance, workbench depth, notes/books/plants/windows/practical light"
+    }
+  }
+}
