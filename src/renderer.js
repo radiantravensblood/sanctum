@@ -14,6 +14,7 @@ import { describeLocalEcho } from "./memory/language.js";
 import { buildOrientation } from "./time/orientation.js";
 import { getEntitiesAt } from "./entities/entities.js";
 import { relationsForEntity } from "./entities/relation.js";
+import { getAvailableAffordances } from "./interactions/accord.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -41,7 +42,7 @@ export function render({ state, world, message, dispatch }) {
 
   renderOrientation(orientation);
   renderScene({ room, visual, scene, objects, entities });
-  renderEntities(entities, state, world, dispatch);
+  renderEntities(entities, inventory, state, world, dispatch);
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
@@ -69,7 +70,7 @@ function renderOrientation(orientation) {
   );
 }
 
-function renderEntities(entities, state, world, dispatch) {
+function renderEntities(entities, inventory, state, world, dispatch) {
   const root = document.getElementById("entity-list");
   if (!root) return;
 
@@ -123,10 +124,50 @@ function renderEntities(entities, state, world, dispatch) {
 
     identity.append(symbol, copy);
 
-    card.append(
-      identity,
+    const actions = document.createElement("div");
+    actions.className = "entity-actions";
+    actions.append(
       button("Observe", () => dispatch("observe_entity", template.id))
     );
+
+    const accord = getAvailableAffordances({
+      state,
+      world,
+      actorId: "siege",
+      targetId: template.id
+    });
+
+    (accord.affordances || [])
+      .filter((entry) => entry.available)
+      .forEach((entry) => {
+        if (entry.id === "offer_object") {
+          (entry.objects || []).slice(0, 3).forEach((object) => {
+            actions.append(
+              button(
+                "Offer " + object.name,
+                () =>
+                  dispatch("interact", {
+                    targetId: template.id,
+                    affordance: "offer_object",
+                    objectId: object.id
+                  })
+              )
+            );
+          });
+          return;
+        }
+
+        actions.append(
+          button(entry.label, () =>
+            dispatch("interact", {
+              targetId: template.id,
+              affordance: entry.id
+            })
+          )
+        );
+      });
+
+    card.append(identity, actions);
 
     root.append(card);
   });
@@ -154,7 +195,12 @@ function formatEntityStatus(status) {
     lingering: "lingering",
     resting: "resting",
     attending_object: "attending",
-    in_company: "in company"
+    in_company: "in company",
+    nearby: "nearby",
+    sharing_space: "sharing space",
+    considering_company: "considering company",
+    accompanying: "accompanying",
+    keeping_distance: "keeping distance"
   };
 
   return labels[status] || "present";
