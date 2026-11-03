@@ -294,9 +294,14 @@ def resolve_brush_config(
         raise PainterError(f"Unknown Velastra brush: {chosen_brush}")
 
     transports = brush.get("transports") or {}
+    cabinet_default = cabinet.get("defaultTransport")
     chosen_transport = (
         transport_id
-        or cabinet.get("defaultTransport")
+        or (
+            cabinet_default
+            if cabinet_default in transports
+            else None
+        )
         or next(
             (
                 key
