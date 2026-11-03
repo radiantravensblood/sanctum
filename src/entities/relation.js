@@ -180,15 +180,15 @@ export function relationChoiceBias(state, actorId, roomId) {
 
     const phaseBias = {
       unfamiliar: 0,
-      familiar: 0.08,
-      companionate: 0.18,
-      friends: 0.32
+      familiar: 0.04,
+      companionate: 0.09,
+      friends: 0.16
     }[relation.phase] || 0;
 
     const actorPerspective = relation.perspectives[actorId] || {};
     const ownChoice = Math.min(
-      0.14,
-      reciprocalChoiceCount(actorPerspective) * 0.018
+      0.07,
+      reciprocalChoiceCount(actorPerspective) * 0.01
     );
 
     return sum + phaseBias + ownChoice;
