@@ -1,4 +1,4 @@
-export function renderScene({ room, visual, scene, objects }) {
+export function renderScene({ room, visual, scene, objects, entities = [] }) {
   const root = document.getElementById("scene-canvas");
   if (!root) return;
 
@@ -57,6 +57,7 @@ export function renderScene({ room, visual, scene, objects }) {
   renderAnomaly(svg, scene, effects, sensation, random);
   renderAuthoredMarks(svg, effects, random);
   renderObjectResidue(svg, objects, random);
+  renderEntityPresence(svg, entities, room, random);
 
   const veil = svgElement("rect", {
     x: 0,
@@ -668,6 +669,141 @@ function renderObjectResidue(svg, objects, random) {
         r: object.templateId === "brass_token" ? 6 : 3
       })
     );
+  });
+
+  svg.append(group);
+}
+
+function renderEntityPresence(svg, entities, room, random) {
+  if (!entities.length) return;
+
+  const group = svgElement("g", {
+    class: "entity-presence",
+    "aria-hidden": "true"
+  });
+
+  entities.forEach(({ template }, index) => {
+    const entityRandom = createRandom(
+      room.id + ":" + template.id + ":" + String(index)
+    );
+    const x = 110 + entityRandom() * 580;
+    const y = 78 + entityRandom() * 190;
+    const shape = template.visual && template.visual.shape;
+
+    if (shape === "moth") {
+      const moth = svgElement("g", {
+        class: "entity-moth",
+        transform: "translate(" + x + " " + y + ")"
+      });
+
+      moth.append(
+        svgElement("ellipse", {
+          cx: -7,
+          cy: 0,
+          rx: 10,
+          ry: 5,
+          fill: "var(--room-glow)",
+          opacity: "0.18",
+          transform: "rotate(-28)"
+        }),
+        svgElement("ellipse", {
+          cx: 7,
+          cy: 0,
+          rx: 10,
+          ry: 5,
+          fill: "var(--room-glow)",
+          opacity: "0.18",
+          transform: "rotate(28)"
+        }),
+        svgElement("circle", {
+          cx: 0,
+          cy: 1,
+          r: 2.4,
+          fill: "var(--room-ink)",
+          opacity: "0.46"
+        })
+      );
+
+      group.append(moth);
+      return;
+    }
+
+    if (shape === "brassling") {
+      const brassling = svgElement("g", {
+        class: "entity-brassling",
+        transform: "translate(" + x + " " + (250 + entityRandom() * 45) + ")",
+        stroke: "var(--room-accent)",
+        fill: "none",
+        opacity: "0.46",
+        "stroke-width": "1.6",
+        "stroke-linecap": "round"
+      });
+
+      brassling.append(
+        svgElement("ellipse", {
+          cx: 0,
+          cy: 0,
+          rx: 13,
+          ry: 7,
+          fill: "var(--room-accent)",
+          opacity: "0.08"
+        }),
+        svgElement("line", { x1: -8, y1: 5, x2: -12, y2: 13 }),
+        svgElement("line", { x1: -2, y1: 6, x2: -3, y2: 14 }),
+        svgElement("line", { x1: 5, y1: 6, x2: 7, y2: 14 }),
+        svgElement("line", { x1: 10, y1: 4, x2: 14, y2: 12 }),
+        svgElement("circle", {
+          cx: 8,
+          cy: -1,
+          r: 1.5,
+          fill: "var(--room-glow)",
+          stroke: "none"
+        })
+      );
+
+      group.append(brassling);
+      return;
+    }
+
+    const threadling = svgElement("path", {
+      class: "entity-threadling",
+      d:
+        "M " +
+        (x - 22) +
+        " " +
+        y +
+        " C " +
+        (x - 4) +
+        " " +
+        (y - 18) +
+        ", " +
+        (x + 10) +
+        " " +
+        (y + 18) +
+        ", " +
+        (x + 26) +
+        " " +
+        (y - 2) +
+        " C " +
+        (x + 12) +
+        " " +
+        (y - 12) +
+        ", " +
+        (x - 10) +
+        " " +
+        (y + 14) +
+        ", " +
+        (x - 22) +
+        " " +
+        y,
+      fill: "none",
+      stroke: "var(--room-ink)",
+      opacity: "0.22",
+      "stroke-width": "1.2",
+      "stroke-linecap": "round"
+    });
+
+    group.append(threadling);
   });
 
   svg.append(group);
