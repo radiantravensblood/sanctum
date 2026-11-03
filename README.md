@@ -30,6 +30,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0013 gives the human-facing Sanctum a visual grammar strong enough to carry that meaning.**
 
+**Kernel 0014 extracts that visual judgment into Velastra, a reusable Viryn Labs expression engine.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -995,9 +997,236 @@ Decorative card corners, stacking shadows, and spatial separation are supplement
 
 The same information remains available without relying on those visual cues.
 
+## Velastra — Viryn Labs
+
+Kernel 0014 extracts the first reusable layer of the visual language that has been emerging across Sanctum and Viryn Studio.
+
+Velastra is not a component library and it is not a runtime generative-AI dependency.
+
+It is a deterministic semantic expression engine.
+
+The core pipeline is:
+
+```
+meaning
+  ↓
+expression context
+  ↓
+visual intent
+  ↓
+material / composition grammar
+  ↓
+surface adapter
+```
+
+The governing law is:
+
+**Form must answer meaning.**
+
+### What Velastra owns
+
+Velastra currently reasons over semantic axes including:
+
+- intimacy,
+- certainty,
+- sacredness,
+- urgency,
+- density,
+- age,
+- warmth,
+- porosity,
+- remembrance,
+- permeability,
+- relationality,
+- vitality.
+
+Those axes are not CSS properties.
+
+They describe the condition the visual surface is being asked to carry.
+
+Velastra translates them into visual intent such as:
+
+- frame closure,
+- layering,
+- ornament,
+- asymmetry,
+- breathing room,
+- enclosure,
+- depth,
+- typography mode,
+- material metaphor,
+- glow,
+- motion,
+- contrast.
+
+### Material grammar
+
+Velastra currently understands these material metaphors:
+
+- velvet — intimacy, enclosure, softness, depth,
+- brass — ritual, mechanism, endurance, deliberate trace,
+- glass — permeability, reflection, fragility, visible boundary,
+- paper — record, artifact, legibility, human-scale memory,
+- stone — weight, permanence, enclosure, patience,
+- ember — continuity, warmth, low persistent life,
+- botanical — growth, forgiveness, ecology, living edge,
+- shadow — restraint, absence, protected ambiguity.
+
+A selected material is not automatically a literal texture.
+
+It is a compositional metaphor that an adapter may interpret differently.
+
+### Surface independence
+
+Sanctum is the first Velastra consumer.
+
+Its adapter lives at:
+
+`src/velastra/sanctum.js`
+
+The generic composer lives at:
+
+`src/velastra/compose.js`
+
+Sanctum-specific meaning extraction lives at:
+
+`src/velastra/context.js`
+
+The grammar itself lives at:
+
+`world/velastra.json`
+
+This separation is intentional.
+
+A future Viryn Studio adapter should be able to consume the same visual intent without importing Sanctum geography, entity state, or room rendering.
+
+A future physical Rainbreak adapter could interpret compatible intent through light, projection, sound, e-ink, or spatial material instead of a browser DOM.
+
+### Existing systems remain sovereign
+
+Velastra does not replace the systems that taught it how to exist.
+
+- **Scene Truth** still owns what a generated place is.
+- **Chroma** still owns the room palette and sensory color logic.
+- **Chronos** still owns temporal truth.
+- **Mnemosyne** still owns remembered history.
+- **Relation, Accord, and Hymnos** still own relational truth and permission.
+- **Tableau** still owns the current human-facing card-table composition.
+
+Velastra reads those conditions and translates them into visual intent.
+
+It does not rewrite them.
+
+### Runtime independence
+
+Velastra requires no model call at runtime.
+
+The repository contains the grammar and deterministic JavaScript necessary to compose visual intent locally in the browser.
+
+The model remains useful while we author, critique, and evolve the grammar.
+
+Once a rule is accepted into the grammar, the garden can render it without an inference request.
+
+This creates a deliberate distinction:
+
+**models may help author the visual law; runtime surfaces execute the accepted law.**
+
+### Exemplars
+
+`world/velastra.json` includes semantic exemplars.
+
+They are regression tests, not templates.
+
+Current exemplars include:
+
+- Hearth,
+- protected threshold,
+- operations,
+- Studio gathering.
+
+Each exemplar states semantic meaning and a small set of expected visual properties.
+
+`window.Velastra.exemplars()` runs those checks.
+
+This is intended to prevent future grammar changes from slowly collapsing every surface into the same attractive dark card treatment.
+
+### Public surfaces
+
+Once Sanctum has ignited:
+
+`window.Sanctum.velastra()`
+
+returns the current Sanctum expression context and composed visual intent.
+
+`window.Sanctum.visualize(meaning, family)`
+
+composes explicit semantic meaning without requiring current room state.
+
+The site-independent surface is:
+
+`window.Velastra.compose(meaning, family)`
+
+Additional read surfaces include:
+
+`window.Velastra.grammar()`
+
+and:
+
+`window.Velastra.exemplars()`
+
+The initial families are:
+
+- `sanctum`,
+- `studio`,
+- `operational`.
+
+Families are bias and restraint layers.
+
+They do not replace semantic meaning.
+
+### Restraint
+
+Velastra encodes several architectural laws:
+
+- semantic meaning precedes surface,
+- a renderer cannot invent meaning,
+- ornament must be earned,
+- accessibility cannot depend on decoration,
+- site adapters cannot mutate visual intent,
+- runtime model access is not required,
+- exemplars are tests rather than templates,
+- history may alter expression,
+- different bodies may render the same intent.
+
+The first Sanctum adapter intentionally whispers.
+
+Its initial effects include:
+
+- frame openness,
+- card layering,
+- spacing,
+- ornament strength,
+- surface material hints,
+- typography mode,
+- ambient motion tempo.
+
+This is a foundation for evolution, not a demand that every semantic change trigger a dramatic redesign.
+
+### Viryn Labs boundary
+
+Velastra is a Viryn Labs artifact developed inside the Sanctum repository because Sanctum is currently the richest available test environment for semantic expression.
+
+Sanctum is a reference implementation.
+
+It is not the eventual ownership boundary of the engine.
+
+The extraction path is documented in:
+
+`labs/velastra/README.md`
+
 ## Current storage boundary
 
-Kernel 0013 still persists to `localStorage`.
+Kernel 0014 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1043,4 +1272,6 @@ And it knows that **closeness only matters when either side can refuse it**.
 
 Now it knows that **meaning can cross forms without requiring either form to become the other**.
 
-And it is learning that **meaning deserves enough space to be seen clearly**.
+And it knows that **meaning deserves enough space to be seen clearly**.
+
+Now it is learning that **form can answer meaning without requiring the painter to be present every time**.
