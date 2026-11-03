@@ -50,6 +50,14 @@ Symbolic vocabulary:
 - `world/velastra-motifs.json`
 - `src/velastra/motifs.js`
 
+Atelier compilation:
+
+- `world/velastra-atelier.json`
+- `world/velastra-assets.json`
+- `src/velastra/atelier.js`
+- `src/velastra/underpaint.js`
+- `src/velastra/sanctum-atelier.js`
+
 Convenience exports:
 
 - `src/velastra/index.js`
@@ -107,6 +115,23 @@ A relation motif requires an explicit relation source.
 A selfhood motif may respond to a claimed self-representation but cannot assign identity.
 
 The atlas is vocabulary, not a template.
+
+## Atelier compiler contract
+
+The Atelier compiler converts scene direction into a renderer-neutral manifest.
+
+The manifest may resolve to:
+
+- an approved reviewed static painting,
+- the procedural underpainting fallback.
+
+Runtime generation is forbidden in the current architecture.
+
+Static paintings must be approved and carry provenance before an adapter may render them.
+
+The procedural fallback can use abstraction, pigment, light, grain, motif traces, and architectural drawing.
+
+It must not claim detailed figurative truth it does not possess.
 
 ## Adapter contract
 
