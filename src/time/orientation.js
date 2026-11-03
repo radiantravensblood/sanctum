@@ -1,6 +1,7 @@
 import { getRoom, getThresholdState } from "../world.js";
 import { getRoomMemory } from "../memory/mnemosyne.js";
 import { getTemporalContext } from "./chronos.js";
+import { getEntitiesAt } from "../entities/entities.js";
 
 export function buildOrientation({
   state,
@@ -17,6 +18,7 @@ export function buildOrientation({
     now
   });
   const memory = getRoomMemory(state, room.id);
+  const company = getEntitiesAt(world, state, room.id);
   const exits = Object.entries(room.exits || {});
   const unwritten = exits.filter(([, exit]) => {
     if (typeof exit !== "object" || !exit.threshold) return false;
@@ -44,6 +46,11 @@ export function buildOrientation({
         (anchor) => state.objectLocations[anchor.object] === room.id
       ).length
     },
+    company: company.map(({ template }) => ({
+      id: template.id,
+      name: template.name,
+      kind: template.kind
+    })),
     thresholds: {
       unwritten: unwritten.map(([direction, exit]) => ({
         direction,
@@ -63,7 +70,8 @@ export function buildOrientation({
       room,
       temporal,
       memory,
-      unwrittenCount: unwritten.length
+      unwrittenCount: unwritten.length,
+      companyCount: company.length
     })
   };
 }
@@ -72,7 +80,8 @@ function describeOrientation({
   room,
   temporal,
   memory,
-  unwrittenCount
+  unwrittenCount,
+  companyCount
 }) {
   const fragments = [
     temporal.local.weekday +
@@ -90,6 +99,12 @@ function describeOrientation({
     fragments.push("This place remembers a little of what has happened here.");
   } else {
     fragments.push("This place is still nearly unmarked.");
+  }
+
+  if (companyCount === 1) {
+    fragments.push("Another presence shares this room.");
+  } else if (companyCount > 1) {
+    fragments.push("Other presences share this room.");
   }
 
   if (unwrittenCount === 1) {
