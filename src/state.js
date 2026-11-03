@@ -8,9 +8,11 @@ import { createInitialTime, mergeTime } from "./time/chronos.js";
 import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
 import { seedRelationsFromLegacy } from "./entities/relation.js";
 import { createInitialAccordState, mergeAccordState } from "./interactions/state.js";
+import { createInitialHymnosState, mergeHymnosState } from "./hymnos/state.js";
+import { seedCrossRelationsFromAccord } from "./hymnos/relation.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 9;
+const VERSION = 10;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -46,7 +48,8 @@ export function loadState(world) {
       memory: mergeMemory(base.memory, parsed.memory),
       time: mergeTime(base.time, parsed.time),
       entities: mergeEntityState(base.entities, parsed.entities),
-      accord: mergeAccordState(base.accord, parsed.accord)
+      accord: mergeAccordState(base.accord, parsed.accord),
+      hymnos: mergeHymnosState(base.hymnos, parsed.hymnos)
     };
 
     if (!parsed.memory || !Object.keys(parsed.memory.rooms || {}).length) {
@@ -54,6 +57,7 @@ export function loadState(world) {
     }
 
     seedRelationsFromLegacy(restored, world);
+    seedCrossRelationsFromAccord(restored, world);
 
     if (!getKnownRoom(restored, world, restored.location)) {
       restored.location = "hearth";
@@ -83,7 +87,8 @@ export function createInitialState(world) {
     memory: createInitialMemory(),
     time: createInitialTime(),
     entities: createInitialEntityState(world),
-    accord: createInitialAccordState()
+    accord: createInitialAccordState(),
+    hymnos: createInitialHymnosState(world)
   };
 
   appendEvent(state, {
@@ -164,6 +169,7 @@ function migrateState(saved, world) {
     time: saved.time || null,
     entities: saved.entities || null,
     accord: saved.accord || null,
+    hymnos: saved.hymnos || null,
     genesis: {
       ...createInitialGenesis(world),
       ...(saved.genesis || {}),
