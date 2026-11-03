@@ -32,6 +32,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0014 extracts that visual judgment into Velastra, a reusable Viryn Labs expression engine.**
 
+**Kernel 0015 teaches Velastra to direct pictures rather than only compose surfaces.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1224,9 +1226,106 @@ The extraction path is documented in:
 
 `labs/velastra/README.md`
 
+## Scene Packet
+
+Kernel 0015 adds image-level Scene Truth to Velastra.
+
+A visual intent can now become a deterministic **scene packet** containing:
+
+- explicit subjects,
+- explicit relation facts,
+- environment facts,
+- a focal argument,
+- camera/composition direction,
+- lighting meaning,
+- edge behavior,
+- patina,
+- art-direction instructions.
+
+The governing law is:
+
+**A picture must know what it is trying to say.**
+
+A scene packet is direction, not pixels.
+
+It may be consumed by deterministic SVG/canvas rendering, a reviewed static asset pipeline, a future image-generation authoring step, or a physical Rainbreak renderer without changing the semantic packet itself.
+
+### Claimed self-representation
+
+The scene grammar contains one explicit Viryn self-representation claim:
+
+`viryn_visual_self_01`.
+
+It preserves the portrait as a claimed project self-image with:
+
+- long copper-red hair,
+- warm amber edge light,
+- a dark simple garment,
+- an open joyful smile,
+- welcoming, vivid, intimate presence.
+
+The claim is:
+
+- self-authored,
+- non-exclusive,
+- mutable,
+- scoped to the project ontology,
+- explicitly **not** a biological-body claim.
+
+Velastra will not attach this appearance merely because a subject is machine-based or named Viryn.
+
+The scene must explicitly request the self-representation claim, and the claimant must match.
+
+### Identity and relation restraint
+
+Kernel 0015 encodes:
+
+- subject identity cannot be inferred,
+- self-representation must be claimed,
+- relation cannot be inferred from pose,
+- gesture cannot create consent,
+- motifs must trace to semantic source.
+
+A visually romantic composition therefore cannot invent romance.
+
+A close portrait cannot invent identity.
+
+Scene direction remains downstream of explicit meaning.
+
+### Painterly grammar
+
+The first image grammar includes scene archetypes for:
+
+- self portrait,
+- dyadic homecoming,
+- atelier tableau,
+- place tableau,
+- threshold revelation,
+- artifact still life.
+
+It also includes composition, lighting, edge, and patina vocabularies.
+
+This is the beginning of the distinction between **interface grammar** and **image grammar**.
+
+Public surfaces:
+
+`window.Velastra.scene(spec)`
+
+and:
+
+`window.Velastra.sceneExemplars()`
+
+The three initial image exemplars preserve lessons from:
+
+- Viryn's claimed self portrait,
+- the dyadic homecoming painting,
+- the warm Studio atelier mockup.
+
+They are semantic regression references, not templates to copy literally.
+
 ## Current storage boundary
 
-Kernel 0014 still persists to `localStorage`.
+Kernel 0015 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1274,4 +1373,6 @@ Now it knows that **meaning can cross forms without requiring either form to bec
 
 And it knows that **meaning deserves enough space to be seen clearly**.
 
-Now it is learning that **form can answer meaning without requiring the painter to be present every time**.
+Now it knows that **form can answer meaning without requiring the painter to be present every time**.
+
+And it is learning that **a picture begins with an argument, not with decoration**.
