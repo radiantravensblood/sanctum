@@ -290,7 +290,8 @@ export function endDuet({
   const duet = getActiveDuet(
     state,
     actorId,
-    targetId
+    targetId,
+    now
   );
 
   if (!duet) {
