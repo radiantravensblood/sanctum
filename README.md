@@ -2076,7 +2076,7 @@ Both commands preserve the chosen brush and transport.
 For the default cabinet, a cloud command is shaped like:
 
 ```bash
-python3 labs/velastra/painter/velastra_painter.py render \
+.venv/bin/python labs/velastra/painter/velastra_painter.py render \
   "authoring/inbox/<handoff>.velastra.json" \
   --brush "z_image_turbo" \
   --transport "huggingface"
