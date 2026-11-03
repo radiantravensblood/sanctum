@@ -2,7 +2,7 @@
   "version": 1,
   "designation": "Velastra Atelier Compiler",
   "laboratory": "Viryn Labs",
-  "purpose": "Compile scene direction and motifs into a renderer-neutral art manifest with an API-free painterly fallback.",
+  "purpose": "Compile scene direction and motifs into a renderer-neutral art manifest with an API-free runtime fallback and an authoring-only painter bridge.",
   "laws": {
     "compilerCannotInventSemanticFacts": true,
     "scenePacketRemainsAuthoritative": true,
@@ -13,7 +13,11 @@
     "fallbackMustRemainAccessibleWithoutImage": true,
     "underpaintingMayBeAbstract": true,
     "underpaintingCannotPretendToBeFigurativeTruth": true,
-    "assetProvenanceRequired": true
+    "assetProvenanceRequired": true,
+    "authoringGenerationMayProposeCandidates": true,
+    "candidateCannotSupersedeFallback": true,
+    "candidateRequiresReviewBeforeRegistryApproval": true,
+    "modelIsBrushNotSemanticAuthority": true
   },
   "media": {
     "luminous_oil": {
@@ -103,7 +107,9 @@
     "vignette"
   ],
   "staticAssetPolicy": {
-    "allowedStatuses": ["approved"],
+    "allowedStatuses": [
+      "approved"
+    ],
     "fallback": "procedural_underpainting",
     "runtimeGeneration": false,
     "preferReviewedAsset": true
@@ -124,5 +130,16 @@
       "medium": "editorial_oil",
       "strategy": "procedural_underpainting"
     }
+  },
+  "painterBridge": {
+    "protocol": "velastra.painter.v1",
+    "authoringOnly": true,
+    "runtimeGeneration": false,
+    "implementation": "labs/velastra/painter/velastra_painter.py",
+    "candidateStatus": "candidate",
+    "approvedStatus": "approved",
+    "candidateOutputRoot": ".velastra/candidates",
+    "approvedAssetRoot": "assets/velastra/approved",
+    "approvalRequired": true
   }
 }
