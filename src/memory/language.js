@@ -1,5 +1,6 @@
 import { getObjectMemory } from "./mnemosyne.js";
 import { getRoom } from "../world.js";
+import { getEntityTemplate } from "../entities/entities.js";
 
 export function describeObjectTrail({ state, world, objectId }) {
   const memory = getObjectMemory(state, objectId);
@@ -29,6 +30,10 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
     const room = getRoom(world, state, roomId, { fallback: false });
     return room ? room.name : "somewhere unnamed";
   };
+  const entityName = (entityId) => {
+    const entity = getEntityTemplate(world, entityId);
+    return entity ? entity.name : "an inhabitant";
+  };
 
   switch (event.action) {
     case "arrive":
@@ -49,12 +54,20 @@ export function describeLocalEcho(event, state, world, currentRoomId) {
       return "An inhabitant was noticed here.";
     case "entity_move":
       if (event.to === currentRoomId && event.from) {
-        return "An inhabitant arrived from " + roomName(event.from) + ".";
+        return entityName(event.entity) + " arrived from " + roomName(event.from) + ".";
       }
       if (event.from === currentRoomId && event.to) {
-        return "An inhabitant departed toward " + roomName(event.to) + ".";
+        return entityName(event.entity) + " departed toward " + roomName(event.to) + ".";
       }
-      return "An inhabitant passed through this place.";
+      return entityName(event.entity) + " passed through this place.";
+    case "entity_linger":
+      return entityName(event.entity) + " remained here for a while.";
+    case "entity_rest":
+      return entityName(event.entity) + " rested here.";
+    case "entity_notice_object":
+      return entityName(event.entity) + " attended to something in this room.";
+    case "entity_encounter":
+      return entityName(event.entity) + " and " + entityName(event.otherEntity) + " shared this room long enough to notice one another.";
     case "witness":
       return "This place was witnessed and entered canon.";
     case "genesis_birth":
