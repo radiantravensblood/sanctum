@@ -108,6 +108,20 @@ export function crossFrontier({
       topology: topology.type,
       seed
     });
+
+    delta.operations
+      .filter((operation) => operation.op === "create_object")
+      .forEach((operation) => {
+        appendEvent(state, {
+          actor: "genesis",
+          action: "object_manifest",
+          room: operation.room,
+          object: operation.id,
+          realm: realmId,
+          motif: motif.id,
+          seed
+        });
+      });
   }
 
   return {

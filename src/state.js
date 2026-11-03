@@ -1,5 +1,12 @@
+import {
+  createInitialMemory,
+  mergeMemory,
+  rebuildMemoryFromLedger,
+  rememberEvent
+} from "./memory/mnemosyne.js";
+
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 3;
+const VERSION = 4;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -31,8 +38,13 @@ export function loadState(world) {
         ...(parsed.visits || {})
       },
       ledger: Array.isArray(parsed.ledger) ? parsed.ledger : [],
-      genesis: mergeGenesis(base.genesis, parsed.genesis)
+      genesis: mergeGenesis(base.genesis, parsed.genesis),
+      memory: mergeMemory(base.memory, parsed.memory)
     };
+
+    if (!parsed.memory || !Object.keys(parsed.memory.rooms || {}).length) {
+      rebuildMemoryFromLedger(restored);
+    }
 
     if (!getKnownRoom(restored, world, restored.location)) {
       restored.location = "hearth";
@@ -50,23 +62,25 @@ export function saveState(state) {
 }
 
 export function createInitialState(world) {
-  return {
+  const state = {
     version: VERSION,
     location: "hearth",
     objectLocations: createInitialObjectLocations(world),
     thresholdStates: createInitialThresholdStates(world),
     thresholdTargets: {},
     visits: { hearth: 1 },
-    ledger: [
-      {
-        at: new Date().toISOString(),
-        actor: "siege",
-        action: "arrive",
-        room: "hearth"
-      }
-    ],
-    genesis: createInitialGenesis(world)
+    ledger: [],
+    genesis: createInitialGenesis(world),
+    memory: createInitialMemory()
   };
+
+  appendEvent(state, {
+    actor: "siege",
+    action: "arrive",
+    room: "hearth"
+  });
+
+  return state;
 }
 
 function createInitialGenesis(world) {
@@ -134,6 +148,7 @@ function migrateState(saved, world) {
     ...saved,
     version: VERSION,
     thresholdTargets: saved.thresholdTargets || {},
+    memory: saved.memory || null,
     genesis: {
       ...createInitialGenesis(world),
       ...(saved.genesis || {}),
@@ -177,14 +192,18 @@ function getKnownRoom(state, world, roomId) {
 
 export function appendEvent(state, event) {
   const { actor = "siege", ...rest } = event;
-
-  state.ledger.push({
+  const entry = {
     at: new Date().toISOString(),
     actor,
     ...rest
-  });
+  };
 
-  if (state.ledger.length > 160) {
-    state.ledger = state.ledger.slice(-160);
+  state.ledger.push(entry);
+  rememberEvent(state, entry);
+
+  if (state.ledger.length > 240) {
+    state.ledger = state.ledger.slice(-240);
   }
+
+  return entry;
 }

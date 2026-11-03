@@ -2,6 +2,7 @@ import { loadWorld, getRoom } from "./world.js";
 import { loadState, saveState } from "./state.js";
 import { performAction } from "./actions.js";
 import { render } from "./renderer.js";
+import { buildContextPacket } from "./memory/context.js";
 
 async function ignite() {
   const world = await loadWorld();
@@ -32,6 +33,15 @@ async function ignite() {
     button.addEventListener("click", () => {
       dispatch(button.dataset.fixedVerb);
     });
+  });
+
+  window.Sanctum = Object.freeze({
+    context: () =>
+      buildContextPacket({
+        state,
+        world,
+        roomId: state.location
+      })
   });
 
   saveState(state);

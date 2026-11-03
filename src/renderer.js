@@ -9,6 +9,8 @@ import {
 import { applyRoomVisual } from "./visual/chroma.js";
 import { renderScene } from "./visual/scene.js";
 import { reconstructSceneTruth } from "./genesis/scene-truth.js";
+import { getRoomMemory } from "./memory/mnemosyne.js";
+import { describeLocalEcho } from "./memory/language.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
@@ -32,7 +34,7 @@ export function render({ state, world, message, dispatch }) {
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
-  renderLedger(state, world);
+  renderRoomMemory(state, world, room.id);
 }
 
 function renderObjects(objects, dispatch) {
@@ -156,89 +158,23 @@ function renderInventory(objects, dispatch) {
   });
 }
 
-function renderLedger(state, world) {
+function renderRoomMemory(state, world, roomId) {
   const root = document.getElementById("ledger");
   root.replaceChildren();
 
-  state.ledger
-    .slice(-9)
-    .reverse()
-    .forEach((event) => {
-      const item = document.createElement("li");
-      item.textContent = describeEvent(event, state, world);
-      root.append(item);
-    });
-}
+  const memory = getRoomMemory(state, roomId);
+  const echoes = memory.echoes.slice(-9).reverse();
 
-function describeEvent(event, state, world) {
-  const room = event.room
-    ? getRoom(world, state, event.room, { fallback: false })
-    : null;
-  const object = event.object ? getObject(world, state, event.object) : null;
-
-  const roomName = room ? room.name : null;
-  const objectName = object ? object.name : null;
-
-  switch (event.action) {
-    case "arrive":
-      return "Arrived at the Hearth.";
-    case "look":
-      return "Looked around " + roomName + ".";
-    case "move": {
-      const destination = getRoom(world, state, event.to, {
-        fallback: false
-      });
-      return (
-        "Moved " +
-        event.direction +
-        " into " +
-        (destination ? destination.name : "the unknown") +
-        "."
-      );
-    }
-    case "inspect":
-      return "Inspected the " + objectName + ".";
-    case "take":
-      return "Took the " + objectName + ".";
-    case "leave":
-      return "Left the " + objectName + " in " + roomName + ".";
-    case "sit":
-      return "Sat in " + roomName + ".";
-    case "return":
-      return event.from === "hearth"
-        ? "Remained at the Hearth."
-        : "Returned to the Hearth.";
-    case "meet_threshold":
-      return "Met an unopened threshold.";
-    case "genesis_loop": {
-      const destination = getRoom(world, state, event.to, {
-        fallback: false
-      });
-      return (
-        "Genesis folded the frontier back toward " +
-        (destination ? destination.name : "known ground") +
-        "."
-      );
-    }
-    case "genesis_birth": {
-      const born = getRoom(world, state, event.room, { fallback: false });
-      const name = born ? born.name : "a room";
-
-      if (event.topology === "terminal") {
-        return "Genesis completed a path at " + name + ".";
-      }
-
-      if (event.topology === "branch") {
-        return "Genesis branched the frontier through " + name + ".";
-      }
-
-      return "Genesis gave shape to " + name + ".";
-    }
-    case "witness":
-      return roomName + " was witnessed and became canon.";
-    default:
-      return "Something happened quietly.";
+  if (!echoes.length) {
+    root.append(empty("This room has not learned any echoes yet."));
+    return;
   }
+
+  echoes.forEach((event) => {
+    const item = document.createElement("li");
+    item.textContent = describeLocalEcho(event, state, world, roomId);
+    root.append(item);
+  });
 }
 
 function groupObjects(objects) {

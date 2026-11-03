@@ -1,4 +1,5 @@
 import { resolveRoomVisual } from "../genesis/chroma.js";
+import { roomMemoryWeight } from "../memory/mnemosyne.js";
 
 export function applyRoomVisual({ room, world, state, scene = null }) {
   const visual = resolveRoomVisual(room, world, scene);
@@ -20,14 +21,23 @@ export function applyRoomVisual({ room, world, state, scene = null }) {
   );
 
   document.body.dataset.phenomenon =
-    visual.phenomenon || (scene && scene.anomaly && scene.anomaly.phenomenon) || "authored";
+    visual.phenomenon ||
+    (scene && scene.anomaly && scene.anomaly.phenomenon) ||
+    "authored";
   document.body.dataset.atmosphere =
-    visual.atmosphere || (scene && scene.air && scene.air.atmosphere) || "authored";
+    visual.atmosphere ||
+    (scene && scene.air && scene.air.atmosphere) ||
+    "authored";
   document.body.dataset.material =
-    visual.material || (scene && scene.matter && scene.matter.material) || "authored";
+    visual.material ||
+    (scene && scene.matter && scene.matter.material) ||
+    "authored";
 
-  const patina = derivePatina(room, state, visual);
+  const memoryWeight = roomMemoryWeight(state, room.id);
+  const patina = derivePatina(room, state, visual, memoryWeight);
+
   root.style.setProperty("--room-patina", String(patina));
+  root.style.setProperty("--room-memory", String(memoryWeight));
 
   if (scene) {
     root.style.setProperty(
@@ -47,11 +57,18 @@ export function applyRoomVisual({ room, world, state, scene = null }) {
   return visual;
 }
 
-function derivePatina(room, state, visual) {
+function derivePatina(room, state, visual, memoryWeight) {
   const visits = Number(state.visits[room.id] || 0);
   const age = Number((visual.sensation && visual.sensation.age) || 0.5);
   const visitInfluence = Math.min(1, Math.log2(visits + 1) / 4);
-  return Math.min(1, 0.15 + age * 0.35 + visitInfluence * 0.5);
+
+  return Math.min(
+    1,
+    0.12 +
+      age * 0.28 +
+      visitInfluence * 0.28 +
+      memoryWeight * 0.32
+  );
 }
 
 function setVar(root, key, value) {

@@ -9,6 +9,7 @@ import {
 } from "./world.js";
 import { crossFrontier } from "./genesis/genesis.js";
 import { markWitnessed } from "./genesis/provenance.js";
+import { describeObjectTrail } from "./memory/language.js";
 
 export function performAction({ verb, target = null, state, world }) {
   const room = getRoom(world, state, state.location);
@@ -133,7 +134,10 @@ function inspect(objectId, state, world) {
     room: state.location
   });
 
-  return result(state, object.inspectText);
+  return result(
+    state,
+    object.inspectText + describeObjectTrail({ state, world, objectId })
+  );
 }
 
 function take(objectId, state, world) {
@@ -173,7 +177,10 @@ function leave(objectId, state, world) {
     room: state.location
   });
 
-  return result(state, "You leave the " + object.name + " here. The room accepts it without comment.");
+  return result(
+    state,
+    "You leave the " + object.name + " here. The room accepts it without comment."
+  );
 }
 
 function returnHome(state, world) {

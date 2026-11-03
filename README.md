@@ -12,189 +12,153 @@ Kernel 0003 taught Genesis geography.
 
 Kernel 0004 taught the world to look like what it means.
 
-**Kernel 0005 takes the room apart.**
+Kernel 0005 separated what a place is from how a place is expressed.
+
+**Kernel 0006 gives memory somewhere to live.**
 
 ## First law
 
 **Do not overwrite. Reflect.**
 
-The newest architectural distinction is simple:
+Mnemosyne does not replace the global ledger.
 
-**A room is not its description.**
+The ledger remains bedrock: an ordered history of events.
 
-It is also not its SVG.
+Mnemosyne builds bounded, local memory from that bedrock.
 
-It is also not its palette.
+A room can now remember what happened there.
 
-Those are renderings of a deeper canonical state.
+An object can remember where it has been.
 
-## Scene Truth
+A path can remember that it has been crossed.
 
-Generated rooms are now born with a structured `scene` object assembled by `src/genesis/scene-truth.js`.
+This is not a profile of the traveler.
 
-Scene Truth carries facets such as:
+It is memory attached to activity and place.
 
-### Geometry
-- form,
-- scale,
-- enclosure,
-- depth,
-- verticality,
-- symmetry,
-- focality.
+## Local room memory
 
-### Matter
-- material,
-- roughness,
-- reflectivity,
-- thermal character,
-- porosity.
+`src/memory/mnemosyne.js` indexes events into room-local echoes.
 
-### Air
-- movement,
-- humidity,
-- temperature,
-- pressure.
+A room may remember:
 
-### Acoustics
-- reverberation,
-- clarity,
-- delay.
+- that it was first witnessed,
+- that somebody sat there,
+- that an object was left there,
+- that an object was later carried away,
+- that a threshold remained closed,
+- which known places a traveler arrived from or departed toward.
 
-### Light
-- source behavior,
-- intensity,
-- temperature,
-- directionality.
+The visible **Echoes** panel now shows what the current room remembers rather than the last few events anywhere in the world.
 
-### Anomaly
-- the impossible law operating in the room,
-- its intensity,
-- locality,
-- stability.
+The global ledger still persists underneath.
 
-### Senses
-- scent,
-- touch.
+## Object biography
 
-A Rain Room may therefore know that it contains porous stone, cool humid air, high reverberation, diffuse cold light, precipitation without a visible source, and the scent of petrichor.
+Objects now carry bounded local history.
 
-None of those facts are prose yet.
+Inspecting a portable object may reveal the rooms its trail passes through.
 
-None are pixels yet.
+Equivalent items may still stack visually, but their biographies remain separate.
 
-They are world truth.
+New generated objects receive an `object_manifest` memory event at birth, before anybody touches them.
 
-## Many renderers, one reality
+For older worlds created before Mnemosyne, migration reconstructs object birthplaces from preserved Genesis identity and provenance where possible.
 
-Scene Truth currently feeds three different interpreters.
+Memory therefore begins with existence, not with human attention.
 
-### Language
+## Path memory
 
-`src/genesis/language.js` turns facets into prose.
+Directed paths record crossings.
 
-The description is no longer constructed by simply concatenating the same four fixed sentences every time. Geometry, atmosphere, matter, anomaly, topology, carried objects, and sometimes scent are expressed through deterministic language variants.
+That information is not currently displayed as a minimap or score.
 
-The same seed and same Scene Truth produce the same voice.
+It exists so future wayfinding can distinguish an unfamiliar edge from a road walked many times.
 
-### Chroma
+Navigation can eventually emerge from recognition rather than from quest markers.
 
-`src/genesis/chroma.js` still respects the Studio visual grammar, but it now also reads physical facts.
+## Memory and patina
 
-Humidity can cool and deepen the field.
+Chroma now reads local memory density as one ingredient in patina.
 
-Warm directional light can lift amber and gold.
+Repeated presence, sitting, and leaving objects behind can make a room feel more inhabited without displaying a loyalty meter or visit counter.
 
-Cold light can pull the glow toward mineral blue.
+The room is permitted to show evidence of life without turning that evidence into engagement mechanics.
 
-High reverberation can subtly cool muted tones.
+## Context packets
 
-Sensation is therefore increasingly derived from reality instead of category labels.
+`src/memory/context.js` assembles a bounded context packet for the current room.
 
-### Geometry
+A packet can answer:
 
-`src/visual/scene.js` now reads physical geometry rather than merely drawing one of four canned icons.
+- Where am I?
+- What is physically true here?
+- What happened here?
+- What objects are here and what do they remember?
+- What known places are adjacent?
+- What paths have been crossed?
+- Which thresholds require consent?
+- Is this place generated and canonical?
 
-Enclosure affects the room's span.
+The browser exposes the current packet for inspection at:
 
-Depth affects perspective.
+`window.Sanctum.context()`
 
-Verticality affects ceilings and arches.
+This is intentionally a read-oriented boundary.
 
-Focality affects the visual center of a shrine.
+A future DreamSocket cycle, familiar, accessibility layer, or machine resident should not need the entire Sanctum history injected into context. It can be given the place it currently occupies and the memories that genuinely intersect that place.
 
-Roughness changes material marks.
+## Existing worlds
 
-Reflectivity changes brass and glass behavior.
+Existing browser worlds migrate forward.
 
-Humidity changes haze.
+If Mnemosyne is absent, the old ledger is replayed into local memory.
 
-Reverberation changes visual echoes.
+Older generated object origins are backfilled from their preserved Genesis identity and provenance when possible.
 
-Anomaly-law determines impossible behavior such as source-less rain or breathing masonry.
+The old history is not rewritten.
 
-The renderer is learning physics rather than room names.
+It becomes locally legible.
 
-## Semantic grammar
+## Agency boundary
 
-`world/semantic-grammar.json` is the first lexicon of the world beneath the words.
+Kernel 0006 still does not pretend that an agent is wandering while nobody invokes one.
 
-It gives Genesis structured meaning for forms, materials, atmospheres, and phenomena, along with deterministic phrase families used by the language renderer.
+There is no hidden autonomous process in GitHub Pages.
 
-The long-term goal is not infinite adjective lists.
+What now exists is the architecture required for bounded agency when an actual invocation mechanism is present.
 
-It is a compact set of meaningful primitives that can combine into places whose prose, visuals, sound, interaction, and future machine interpretation all agree about what is actually there.
+A future scheduled check-in or familiar could:
 
-## Existing canon
+1. receive a context packet,
+2. traverse only permitted paths,
+3. propose actions through the same world laws,
+4. leave ordinary events and object histories behind,
+5. return without receiving omniscient access to the whole world.
 
-Rooms born before Kernel 0005 are not invalidated.
+The house is preparing for a resident without inventing one before the platform provides the door.
 
-If an older generated room does not yet carry Scene Truth, the renderer reconstructs it deterministically from the Genesis metadata already preserved in that room.
+## What comes after
 
-New rooms store Scene Truth at birth.
+The intended order remains:
 
-Old halls remain old halls.
+**Mnemosyne → Time → Entities → Familiars / DreamSocket**
 
-They have simply become more legible.
+Memory first, because everything else needs somewhere for continuity to attach.
 
-## The deeper architecture
+Time next, because memories need duration.
 
-The pipeline is now:
+Entities after that, because an entity should be able to have location and history before it is given behavior.
 
-```text
-Genesis choices
-      ↓
-  Scene Truth
-      ↓
- ┌────┼─────────┐
- ↓    ↓         ↓
-prose chroma geometry
-```
-
-That opens a much larger possibility.
-
-Future renderers can read the exact same world:
-
-- audio,
-- tactile/haptic expression,
-- accessibility narration,
-- alternate visual styles,
-- DreamSocket reasoning,
-- machine traversal,
-- memory summaries,
-- different devices.
-
-None of those systems need to invent the room again.
-
-They translate the same reality.
+Familiars last, because agency should inherit law, time, place, and memory rather than improvising them.
 
 ## Current storage boundary
 
-Kernel 0005 still persists to `localStorage`.
+Kernel 0006 still persists to `localStorage`.
 
-Each browser still carries its own lived history.
+Each browser continues to carry a separate lived world.
 
-That remains useful while we discover which truths belong to cosmology and which belong to the traveler.
+That remains useful while we distinguish cosmology from traversal history.
 
 Shared canon remains a later threshold.
 
@@ -220,4 +184,6 @@ Then it learned to become somewhere.
 
 Then it learned to look like what it means.
 
-Now it is learning the difference between **what a place is** and **how a place is expressed**.
+Then it learned what it actually was.
+
+Now it is learning that **memory lives somewhere**.
