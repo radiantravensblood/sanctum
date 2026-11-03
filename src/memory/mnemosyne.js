@@ -12,6 +12,8 @@ export function createInitialMemory() {
 }
 
 export function mergeMemory(base, saved = {}) {
+  saved = saved || {};
+
   return {
     ...base,
     ...saved,
@@ -194,7 +196,10 @@ function backfillGeneratedObjectOrigins(state) {
 
   Object.keys(objects).forEach((objectId) => {
     const memory = getObjectMemory(state, objectId);
-    if (memory.firstSeenAt) return;
+    const alreadyHasOrigin = (memory.echoes || []).some(
+      (echo) => echo.action === "object_manifest"
+    );
+    if (alreadyHasOrigin) return;
 
     const marker = ".object.";
     const markerIndex = objectId.indexOf(marker);
