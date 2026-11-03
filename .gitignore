@@ -3,3 +3,6 @@
 .venv/
 __pycache__/
 *.pyc
+
+# Cloud Atelier handoffs remain ephemeral
+authoring/inbox/*.velastra.json
