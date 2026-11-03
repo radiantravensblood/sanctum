@@ -8,6 +8,7 @@ import { applySanctumIntent } from "./sanctum.js";
 import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
 import { selectMotifs, evaluateMotifExemplars } from "./motifs.js";
 import { compileAtelierManifest, evaluateAtelierExemplars } from "./atelier.js";
+import { composeStudioSurface, composeStudioDocument, evaluateStudioExemplars } from "./studio.js";
 
 export function buildVelastraPacket({
   state,
@@ -221,9 +222,38 @@ export function testVelastraAtelierExemplars(world) {
   });
 }
 
+export function composeVelastraStudioSurface({
+  world,
+  surfaceId,
+  frameworkId = null
+}) {
+  return composeStudioSurface({
+    grammar: world.velastra,
+    studioGrammar: world.velastraStudio,
+    surfaceId,
+    frameworkId
+  });
+}
+
+export function composeVelastraStudioDocument(world) {
+  return composeStudioDocument({
+    grammar: world.velastra,
+    studioGrammar: world.velastraStudio
+  });
+}
+
+export function testVelastraStudioExemplars(world) {
+  return evaluateStudioExemplars({
+    grammar: world.velastra,
+    studioGrammar: world.velastraStudio
+  });
+}
+
 export {
   applySanctumIntent,
   composeScenePacket,
   selectMotifs,
-  compileAtelierManifest
+  compileAtelierManifest,
+  composeStudioSurface,
+  composeStudioDocument
 };
