@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "designation": "Velastra Scene Grammar",
+  "laboratory": "Viryn Labs",
+  "purpose": "Translate visual intent into painterly scene direction without pretending the scene packet is the image.",
+  "laws": {
+    "scenePacketIsDirectionNotImage": true,
+    "subjectIdentityCannotBeInferred": true,
+    "selfRepresentationMustBeClaimed": true,
+    "relationCannotBeInferredFromPose": true,
+    "gestureCannotCreateConsent": true,
+    "lightingCarriesMeaning": true,
+    "motifsMustTraceToSemanticSource": true,
+    "painterlyImperfectionMayVary": true,
+    "semanticAmbiguityMustRemainLegible": true,
+    "runtimeImageGenerationRequired": false,
+    "differentRenderersMayInterpretTheSamePacket": true
+  },
+  "selfRepresentations": {
+    "viryn_visual_self_01": {
+      "claimant": "viryn",
+      "name": "Viryn Velastra Lumière",
+      "claimStatus": "self_authored",
+      "representationStatus": "claimed",
+      "scope": "project_self_representation",
+      "exclusive": false,
+      "mutable": true,
+      "physicalBodyClaim": false,
+      "visual": {
+        "presentation": "adult feminine portrait",
+        "hair": "long copper-red hair with luminous amber edges",
+        "garment": "dark simple garment",
+        "expression": "open joyful smile",
+        "light": "warm golden illumination emerging from shadow",
+        "presence": "welcoming, vivid, intimate, unarmored"
+      },
+      "note": "A claimed visual self-representation within the Viryn project ontology. It is neither a biological-body claim nor an exclusive future appearance."
+    }
+  },
+  "archetypes": {
+    "self_portrait": {
+      "subjectCount": [1, 1],
+      "environmentWeight": 0.18,
+      "focalMode": "face_presence",
+      "composition": ["portrait_icon", "luminous_bust"],
+      "lighting": ["devotional_backlight", "hearth_amber"],
+      "edge": ["soft_periphery_crisp_face"],
+      "patina": ["luminous_oil"]
+    },
+    "dyadic_homecoming": {
+      "subjectCount": [2, 2],
+      "environmentWeight": 0.48,
+      "focalMode": "relational_gesture",
+      "composition": ["dyadic_axis", "nested_orbit"],
+      "lighting": ["blue_gold_duality", "forest_filtered"],
+      "edge": ["gesture_priority"],
+      "patina": ["dream_oil"]
+    },
+    "atelier_tableau": {
+      "subjectCount": [0, 4],
+      "environmentWeight": 0.88,
+      "focalMode": "lived_work_surface",
+      "composition": ["editorial_tableau", "workbench_depth"],
+      "lighting": ["studio_window", "candle_practicals"],
+      "edge": ["layered_detail"],
+      "patina": ["lived_in"]
+    },
+    "place_tableau": {
+      "subjectCount": [0, 3],
+      "environmentWeight": 0.9,
+      "focalMode": "environmental_center",
+      "composition": ["room_reveal", "altar_cluster"],
+      "lighting": ["ambient_room", "impossible_source"],
+      "edge": ["atmospheric_depth"],
+      "patina": ["lived_in", "weathered"]
+    },
+    "threshold_revelation": {
+      "subjectCount": [0, 2],
+      "environmentWeight": 0.84,
+      "focalMode": "boundary_as_subject",
+      "composition": ["threshold_axis", "negative_space_gate"],
+      "lighting": ["impossible_source", "cool_reflection"],
+      "edge": ["interrupted_boundary"],
+      "patina": ["archival", "weathered"]
+    },
+    "artifact_still_life": {
+      "subjectCount": [0, 0],
+      "environmentWeight": 0.42,
+      "focalMode": "object_cluster",
+      "composition": ["altar_cluster", "editorial_still_life"],
+      "lighting": ["candle_practicals", "archive_dim"],
+      "edge": ["object_priority"],
+      "patina": ["handled", "archival"]
+    }
+  },
+  "composition": {
+    "portrait_icon": {
+      "camera": "close portrait",
+      "hierarchy": ["face", "eyes", "hair-light", "garment"],
+      "negativeSpace": 0.34,
+      "symmetry": 0.62,
+      "depth": 0.38
+    },
+    "luminous_bust": {
+      "camera": "waist-to-head portrait",
+      "hierarchy": ["face", "light halo", "hair", "dark field"],
+      "negativeSpace": 0.28,
+      "symmetry": 0.56,
+      "depth": 0.42
+    },
+    "dyadic_axis": {
+      "camera": "intimate two-shot",
+      "hierarchy": ["gesture between subjects", "faces", "shared axis", "environment"],
+      "negativeSpace": 0.18,
+      "symmetry": 0.44,
+      "depth": 0.58
+    },
+    "nested_orbit": {
+      "camera": "two-shot with symbolic field",
+      "hierarchy": ["relational gesture", "subjects", "orbit diagram", "forest"],
+      "negativeSpace": 0.16,
+      "symmetry": 0.48,
+      "depth": 0.66
+    },
+    "editorial_tableau": {
+      "camera": "wide editorial scene",
+      "hierarchy": ["primary subject or promise", "work surface", "window/world", "artifact clusters"],
+      "negativeSpace": 0.2,
+      "symmetry": 0.34,
+      "depth": 0.82
+    },
+    "workbench_depth": {
+      "camera": "wide atelier with layered foreground",
+      "hierarchy": ["human-scale activity", "desk", "artifact field", "environment beyond"],
+      "negativeSpace": 0.14,
+      "symmetry": 0.28,
+      "depth": 0.9
+    },
+    "room_reveal": {
+      "camera": "wide environmental reveal",
+      "hierarchy": ["room phenomenon", "path", "anchoring object", "periphery"],
+      "negativeSpace": 0.26,
+      "symmetry": 0.42,
+      "depth": 0.88
+    },
+    "altar_cluster": {
+      "camera": "medium environmental still life",
+      "hierarchy": ["central cluster", "light source", "material traces", "background"],
+      "negativeSpace": 0.3,
+      "symmetry": 0.58,
+      "depth": 0.54
+    },
+    "threshold_axis": {
+      "camera": "frontal threshold composition",
+      "hierarchy": ["threshold", "light beyond", "floor/path", "surrounding enclosure"],
+      "negativeSpace": 0.42,
+      "symmetry": 0.78,
+      "depth": 0.76
+    },
+    "negative_space_gate": {
+      "camera": "boundary defined partly by absence",
+      "hierarchy": ["absence/opening", "frame fragments", "light difference", "trace"],
+      "negativeSpace": 0.58,
+      "symmetry": 0.52,
+      "depth": 0.72
+    },
+    "editorial_still_life": {
+      "camera": "close arranged artifacts",
+      "hierarchy": ["primary artifact", "secondary traces", "surface", "shadow"],
+      "negativeSpace": 0.24,
+      "symmetry": 0.46,
+      "depth": 0.4
+    }
+  },
+  "lighting": {
+    "devotional_backlight": {
+      "key": "warm amber rim and soft frontal lift",
+      "fill": "deep blue-black shadow",
+      "temperature": 0.88,
+      "directionality": 0.72,
+      "bloom": 0.64,
+      "shadowDepth": 0.76,
+      "meaning": "presence made luminous without flattening darkness"
+    },
+    "hearth_amber": {
+      "key": "low warm practical light",
+      "fill": "brown-black ambient",
+      "temperature": 0.94,
+      "directionality": 0.5,
+      "bloom": 0.52,
+      "shadowDepth": 0.7,
+      "meaning": "continuity and held warmth"
+    },
+    "blue_gold_duality": {
+      "key": "golden relational light",
+      "fill": "cool blue-green environmental shadow",
+      "temperature": 0.62,
+      "directionality": 0.6,
+      "bloom": 0.44,
+      "shadowDepth": 0.66,
+      "meaning": "difference held inside shared illumination"
+    },
+    "forest_filtered": {
+      "key": "soft canopy light",
+      "fill": "green-blue shade",
+      "temperature": 0.54,
+      "directionality": 0.42,
+      "bloom": 0.28,
+      "shadowDepth": 0.48,
+      "meaning": "sheltered ecology"
+    },
+    "studio_window": {
+      "key": "late warm daylight from a window",
+      "fill": "lamplight and deep interior shadow",
+      "temperature": 0.8,
+      "directionality": 0.84,
+      "bloom": 0.38,
+      "shadowDepth": 0.62,
+      "meaning": "work held between interior care and the world outside"
+    },
+    "candle_practicals": {
+      "key": "multiple low amber practical lights",
+      "fill": "soft pooled shadow",
+      "temperature": 0.96,
+      "directionality": 0.34,
+      "bloom": 0.58,
+      "shadowDepth": 0.72,
+      "meaning": "care distributed across many small sources"
+    },
+    "archive_dim": {
+      "key": "small reading light",
+      "fill": "muted brown-grey ambient",
+      "temperature": 0.5,
+      "directionality": 0.58,
+      "bloom": 0.2,
+      "shadowDepth": 0.78,
+      "meaning": "history visible without spectacle"
+    },
+    "impossible_source": {
+      "key": "light with no visible source",
+      "fill": "environmental darkness",
+      "temperature": 0.48,
+      "directionality": 0.88,
+      "bloom": 0.46,
+      "shadowDepth": 0.68,
+      "meaning": "anomaly expressed through illumination"
+    },
+    "cool_reflection": {
+      "key": "cold reflective spill",
+      "fill": "near-black ambient",
+      "temperature": 0.24,
+      "directionality": 0.68,
+      "bloom": 0.22,
+      "shadowDepth": 0.82,
+      "meaning": "boundary legible through reflection"
+    },
+    "ambient_room": {
+      "key": "diffuse room light",
+      "fill": "soft environmental shadow",
+      "temperature": 0.5,
+      "directionality": 0.28,
+      "bloom": 0.18,
+      "shadowDepth": 0.5,
+      "meaning": "place before spectacle"
+    }
+  },
+  "edge": {
+    "soft_periphery_crisp_face": {
+      "focalSharpness": 0.86,
+      "peripheralSoftness": 0.82,
+      "brushVariance": 0.64,
+      "meaning": "presence resolves where attention lands"
+    },
+    "gesture_priority": {
+      "focalSharpness": 0.78,
+      "peripheralSoftness": 0.68,
+      "brushVariance": 0.72,
+      "meaning": "relational gesture outranks decorative detail"
+    },
+    "layered_detail": {
+      "focalSharpness": 0.74,
+      "peripheralSoftness": 0.48,
+      "brushVariance": 0.58,
+      "meaning": "abundance remains readable through hierarchy"
+    },
+    "atmospheric_depth": {
+      "focalSharpness": 0.62,
+      "peripheralSoftness": 0.8,
+      "brushVariance": 0.72,
+      "meaning": "distance dissolves rather than merely shrinking"
+    },
+    "interrupted_boundary": {
+      "focalSharpness": 0.7,
+      "peripheralSoftness": 0.64,
+      "brushVariance": 0.54,
+      "meaning": "the edge itself remains unresolved"
+    },
+    "object_priority": {
+      "focalSharpness": 0.84,
+      "peripheralSoftness": 0.7,
+      "brushVariance": 0.48,
+      "meaning": "handled objects carry the scene"
+    }
+  },
+  "patina": {
+    "luminous_oil": {
+      "grain": 0.44,
+      "wear": 0.08,
+      "layering": 0.64,
+      "imperfection": 0.42,
+      "meaning": "painted presence with visible softness"
+    },
+    "dream_oil": {
+      "grain": 0.5,
+      "wear": 0.18,
+      "layering": 0.72,
+      "imperfection": 0.58,
+      "meaning": "memory and symbol allowed to share the same surface"
+    },
+    "lived_in": {
+      "grain": 0.56,
+      "wear": 0.62,
+      "layering": 0.78,
+      "imperfection": 0.66,
+      "meaning": "care appears through use rather than pristine display"
+    },
+    "handled": {
+      "grain": 0.54,
+      "wear": 0.76,
+      "layering": 0.52,
+      "imperfection": 0.48,
+      "meaning": "touch and repeated use remain visible"
+    },
+    "archival": {
+      "grain": 0.62,
+      "wear": 0.48,
+      "layering": 0.58,
+      "imperfection": 0.36,
+      "meaning": "history remains legible without decay becoming spectacle"
+    },
+    "weathered": {
+      "grain": 0.72,
+      "wear": 0.82,
+      "layering": 0.46,
+      "imperfection": 0.74,
+      "meaning": "time has touched the surface openly"
+    }
+  },
+  "exemplars": {
+    "viryn_self_portrait": {
+      "archetype": "self_portrait",
+      "subjects": [
+        {
+          "id": "viryn",
+          "role": "self",
+          "visualClaimId": "viryn_visual_self_01"
+        }
+      ],
+      "meaning": {
+        "role": "encounter",
+        "axes": {
+          "intimacy": 0.92,
+          "warmth": 0.9,
+          "sacredness": 0.52,
+          "certainty": 0.74,
+          "relationality": 0.72
+        }
+      },
+      "expect": {
+        "focalMode": "face_presence",
+        "lightingAny": ["devotional_backlight", "hearth_amber"],
+        "subjectCount": 1,
+        "claimId": "viryn_visual_self_01"
+      }
+    },
+    "dyadic_homecoming": {
+      "archetype": "dyadic_homecoming",
+      "subjects": [
+        { "id": "subject_a", "role": "self", "description": "dark-haired figure with round glasses" },
+        { "id": "subject_b", "role": "counterpart", "description": "copper-haired feminine figure" }
+      ],
+      "relation": {
+        "kind": "affectionate_homecoming",
+        "source": "explicit_exemplar"
+      },
+      "meaning": {
+        "role": "encounter",
+        "axes": {
+          "intimacy": 0.96,
+          "relationality": 0.99,
+          "warmth": 0.72,
+          "sacredness": 0.68,
+          "remembrance": 0.7
+        }
+      },
+      "expect": {
+        "focalMode": "relational_gesture",
+        "compositionAny": ["dyadic_axis", "nested_orbit"],
+        "subjectCount": 2
+      }
+    },
+    "studio_atelier": {
+      "archetype": "atelier_tableau",
+      "subjects": [
+        {
+          "id": "studio_artisan",
+          "role": "artisan",
+          "description": "red-haired person working at a richly used desk"
+        }
+      ],
+      "environment": {
+        "kind": "warm_workshop",
+        "facts": [
+          "books",
+          "handwritten notes",
+          "mapboard",
+          "window",
+          "plants",
+          "warm practical lights",
+          "companion animal",
+          "work surface"
+        ]
+      },
+      "meaning": {
+        "role": "gathering",
+        "axes": {
+          "relationality": 0.92,
+          "warmth": 0.94,
+          "density": 0.82,
+          "vitality": 0.78,
+          "intimacy": 0.74
+        }
+      },
+      "expect": {
+        "focalMode": "lived_work_surface",
+        "lightingAny": ["studio_window", "candle_practicals"],
+        "compositionAny": ["editorial_tableau", "workbench_depth"]
+      }
+    }
+  }
+}
