@@ -7,9 +7,10 @@ import {
 import { createInitialTime, mergeTime } from "./time/chronos.js";
 import { createInitialEntityState, mergeEntityState } from "./entities/entities.js";
 import { seedRelationsFromLegacy } from "./entities/relation.js";
+import { createInitialAccordState, mergeAccordState } from "./interactions/accord.js";
 
 const STORAGE_KEY = "sanctum.kernel.v1";
-const VERSION = 8;
+const VERSION = 9;
 
 export function loadState(world) {
   const base = createInitialState(world);
@@ -44,7 +45,8 @@ export function loadState(world) {
       genesis: mergeGenesis(base.genesis, parsed.genesis),
       memory: mergeMemory(base.memory, parsed.memory),
       time: mergeTime(base.time, parsed.time),
-      entities: mergeEntityState(base.entities, parsed.entities)
+      entities: mergeEntityState(base.entities, parsed.entities),
+      accord: mergeAccordState(base.accord, parsed.accord)
     };
 
     if (!parsed.memory || !Object.keys(parsed.memory.rooms || {}).length) {
@@ -80,7 +82,8 @@ export function createInitialState(world) {
     genesis: createInitialGenesis(world),
     memory: createInitialMemory(),
     time: createInitialTime(),
-    entities: createInitialEntityState(world)
+    entities: createInitialEntityState(world),
+    accord: createInitialAccordState()
   };
 
   appendEvent(state, {
@@ -160,6 +163,7 @@ function migrateState(saved, world) {
     memory: saved.memory || null,
     time: saved.time || null,
     entities: saved.entities || null,
+    accord: saved.accord || null,
     genesis: {
       ...createInitialGenesis(world),
       ...(saved.genesis || {}),
