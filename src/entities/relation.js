@@ -1,5 +1,30 @@
 const PHASE_ORDER = ["unfamiliar", "familiar", "companionate", "friends"];
 
+
+export function buildRelationPacket({ state, world }) {
+  const relations = Object.values(ensureRelationState(state))
+    .map((relation) => describeRelation(relation, world))
+    .filter(Boolean)
+    .sort((a, b) => {
+      const phaseDelta =
+        PHASE_ORDER.indexOf(b.phase) - PHASE_ORDER.indexOf(a.phase);
+      if (phaseDelta) return phaseDelta;
+      return new Date(b.lastEvidenceAt).getTime() -
+        new Date(a.lastEvidenceAt).getTime();
+    });
+
+  return {
+    version: 1,
+    law: {
+      labelsRequireEvidence:
+        Boolean(world.entities.laws.relationshipLabelsRequireEvidence),
+      relationshipsMayInfluenceChoice:
+        Boolean(world.entities.laws.relationshipsMayInfluenceChoice)
+    },
+    relations
+  };
+}
+
 export function relationKey(a, b) {
   return [a, b].sort().join("::");
 }
