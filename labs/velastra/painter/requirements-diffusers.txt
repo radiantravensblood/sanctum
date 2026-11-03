@@ -1,0 +1,7 @@
+# Authoring-only dependencies for the optional Diffusers backend.
+# Install PyTorch separately using the build appropriate to the authoring machine.
+diffusers>=0.42.1,<0.43
+transformers
+accelerate
+safetensors
+Pillow
