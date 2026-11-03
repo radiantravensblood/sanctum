@@ -180,6 +180,10 @@ async function ignite() {
       JSON.parse(
         JSON.stringify(world.velastraBrushes)
       ),
+    style: () =>
+      JSON.parse(
+        JSON.stringify(world.velastraStyle)
+      ),
     studio: (surfaceId, frameworkId = null) =>
       composeVelastraStudioSurface({
         world,
@@ -335,6 +339,8 @@ async function ignite() {
       JSON.parse(JSON.stringify(world.velastraAssets)),
     brushes: () =>
       JSON.parse(JSON.stringify(world.velastraBrushes)),
+    style: () =>
+      JSON.parse(JSON.stringify(world.velastraStyle)),
     studioGrammar: () =>
       JSON.parse(JSON.stringify(world.velastraStudio))
   });
