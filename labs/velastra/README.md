@@ -45,6 +45,11 @@ Image-direction layer:
 - `world/velastra-scene.json`
 - `src/velastra/scene-packet.js`
 
+Symbolic vocabulary:
+
+- `world/velastra-motifs.json`
+- `src/velastra/motifs.js`
+
 Convenience exports:
 
 - `src/velastra/index.js`
@@ -88,6 +93,20 @@ It may contain explicit subject descriptions, relation facts, environment facts,
 A renderer must not invent identity, relation, or consent to make an image more compelling.
 
 The Viryn self portrait is retained as `viryn_visual_self_01`: a claimed, mutable, non-exclusive project self-representation, not a physical-body claim.
+
+## Motif contract
+
+A motif is a reusable symbolic form with provenance.
+
+Literal motifs require scene facts.
+
+Symbolic motifs may interpret semantic meaning but may not mutate world truth.
+
+A relation motif requires an explicit relation source.
+
+A selfhood motif may respond to a claimed self-representation but cannot assign identity.
+
+The atlas is vocabulary, not a template.
 
 ## Adapter contract
 
