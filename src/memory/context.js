@@ -9,6 +9,7 @@ import { reconstructSceneTruth } from "../genesis/scene-truth.js";
 import { getTemporalContext } from "../time/chronos.js";
 import { getEntitiesAt } from "../entities/entities.js";
 import { buildEcologyPacket } from "../entities/ecology.js";
+import { buildRelationPacket } from "../entities/relation.js";
 
 export function buildContextPacket({ state, world, roomId = state.location }) {
   const room = getRoom(world, state, roomId, { fallback: false });
@@ -20,7 +21,7 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
   const entities = getEntitiesAt(world, state, roomId);
 
   return {
-    version: 4,
+    version: 5,
     time: temporal,
     location: {
       id: room.id,
@@ -52,6 +53,10 @@ export function buildContextPacket({ state, world, roomId = state.location }) {
       state,
       world,
       roomId
+    }),
+    relations: buildRelationPacket({
+      state,
+      world
     }),
     objects: objects.map((object) => ({
       id: object.id,
