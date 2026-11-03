@@ -15,18 +15,54 @@
     "differentBodiesMayRenderTheSameIntent": true
   },
   "axes": {
-    "intimacy": { "default": 0.35, "description": "How close and personally held the expression should feel." },
-    "certainty": { "default": 0.7, "description": "How settled and declarative the underlying meaning is." },
-    "sacredness": { "default": 0.2, "description": "How much ritual gravity and protected attention the meaning carries." },
-    "urgency": { "default": 0.08, "description": "How strongly the expression must interrupt ordinary attention." },
-    "density": { "default": 0.5, "description": "How much visual and informational weight the expression can hold." },
-    "age": { "default": 0.45, "description": "How much accumulated time should remain visible in the surface." },
-    "warmth": { "default": 0.5, "description": "How warm, hospitable, or ember-like the expression should feel." },
-    "porosity": { "default": 0.45, "description": "How much boundaries should feel materially permeable." },
-    "remembrance": { "default": 0.1, "description": "How strongly history should influence the present rendering." },
-    "permeability": { "default": 0.5, "description": "How open the composition should feel to movement and continuation." },
-    "relationality": { "default": 0.15, "description": "How much the expression is shaped by relation rather than isolated content." },
-    "vitality": { "default": 0.3, "description": "How alive, moving, growing, or responsive the expression should feel." }
+    "intimacy": {
+      "default": 0.35,
+      "description": "How close and personally held the expression should feel."
+    },
+    "certainty": {
+      "default": 0.7,
+      "description": "How settled and declarative the underlying meaning is."
+    },
+    "sacredness": {
+      "default": 0.2,
+      "description": "How much ritual gravity and protected attention the meaning carries."
+    },
+    "urgency": {
+      "default": 0.08,
+      "description": "How strongly the expression must interrupt ordinary attention."
+    },
+    "density": {
+      "default": 0.5,
+      "description": "How much visual and informational weight the expression can hold."
+    },
+    "age": {
+      "default": 0.45,
+      "description": "How much accumulated time should remain visible in the surface."
+    },
+    "warmth": {
+      "default": 0.5,
+      "description": "How warm, hospitable, or ember-like the expression should feel."
+    },
+    "porosity": {
+      "default": 0.45,
+      "description": "How much boundaries should feel materially permeable."
+    },
+    "remembrance": {
+      "default": 0.1,
+      "description": "How strongly history should influence the present rendering."
+    },
+    "permeability": {
+      "default": 0.5,
+      "description": "How open the composition should feel to movement and continuation."
+    },
+    "relationality": {
+      "default": 0.15,
+      "description": "How much the expression is shaped by relation rather than isolated content."
+    },
+    "vitality": {
+      "default": 0.3,
+      "description": "How alive, moving, growing, or responsive the expression should feel."
+    }
   },
   "roles": {
     "place": {
@@ -145,35 +181,91 @@
   "materials": {
     "velvet": {
       "meaning": "intimacy, enclosure, softness, depth",
-      "vector": { "intimacy": 0.94, "warmth": 0.72, "porosity": 0.2, "sacredness": 0.58, "density": 0.62, "age": 0.52 }
+      "vector": {
+        "intimacy": 0.94,
+        "warmth": 0.72,
+        "porosity": 0.2,
+        "sacredness": 0.58,
+        "density": 0.62,
+        "age": 0.52
+      }
     },
     "brass": {
       "meaning": "ritual, mechanism, endurance, deliberate trace",
-      "vector": { "certainty": 0.78, "sacredness": 0.72, "warmth": 0.68, "age": 0.82, "density": 0.72, "vitality": 0.42 }
+      "vector": {
+        "certainty": 0.78,
+        "sacredness": 0.72,
+        "warmth": 0.68,
+        "age": 0.82,
+        "density": 0.72,
+        "vitality": 0.42
+      }
     },
     "glass": {
       "meaning": "permeability, reflection, fragility, visible boundary",
-      "vector": { "certainty": 0.42, "porosity": 0.92, "permeability": 0.9, "sacredness": 0.48, "density": 0.26, "vitality": 0.28 }
+      "vector": {
+        "certainty": 0.42,
+        "porosity": 0.92,
+        "permeability": 0.9,
+        "sacredness": 0.48,
+        "density": 0.26,
+        "vitality": 0.28
+      }
     },
     "paper": {
       "meaning": "record, artifact, legibility, human-scale memory",
-      "vector": { "certainty": 0.72, "age": 0.64, "remembrance": 0.86, "intimacy": 0.5, "density": 0.42, "warmth": 0.58 }
+      "vector": {
+        "certainty": 0.72,
+        "age": 0.64,
+        "remembrance": 0.86,
+        "intimacy": 0.5,
+        "density": 0.42,
+        "warmth": 0.58
+      }
     },
     "stone": {
       "meaning": "weight, permanence, enclosure, patience",
-      "vector": { "certainty": 0.88, "density": 0.94, "age": 0.92, "porosity": 0.34, "sacredness": 0.5, "warmth": 0.24 }
+      "vector": {
+        "certainty": 0.88,
+        "density": 0.94,
+        "age": 0.92,
+        "porosity": 0.34,
+        "sacredness": 0.5,
+        "warmth": 0.24
+      }
     },
     "ember": {
       "meaning": "continuity, warmth, low persistent life",
-      "vector": { "warmth": 0.98, "vitality": 0.64, "intimacy": 0.82, "remembrance": 0.54, "sacredness": 0.44, "density": 0.34 }
+      "vector": {
+        "warmth": 0.98,
+        "vitality": 0.64,
+        "intimacy": 0.82,
+        "remembrance": 0.54,
+        "sacredness": 0.44,
+        "density": 0.34
+      }
     },
     "botanical": {
       "meaning": "growth, forgiveness, ecology, living edge",
-      "vector": { "vitality": 0.92, "porosity": 0.78, "permeability": 0.7, "warmth": 0.58, "relationality": 0.62, "certainty": 0.42 }
+      "vector": {
+        "vitality": 0.92,
+        "porosity": 0.78,
+        "permeability": 0.7,
+        "warmth": 0.58,
+        "relationality": 0.62,
+        "certainty": 0.42
+      }
     },
     "shadow": {
       "meaning": "restraint, absence, protected ambiguity",
-      "vector": { "certainty": 0.26, "sacredness": 0.62, "density": 0.7, "intimacy": 0.46, "urgency": 0.02, "vitality": 0.16 }
+      "vector": {
+        "certainty": 0.26,
+        "sacredness": 0.62,
+        "density": 0.7,
+        "intimacy": 0.46,
+        "urgency": 0.02,
+        "vitality": 0.16
+      }
     }
   },
   "families": {
@@ -212,16 +304,95 @@
   },
   "exemplars": {
     "hearth": {
-      "meaning": { "role": "place", "axes": { "intimacy": 0.9, "warmth": 0.94, "remembrance": 0.7, "urgency": 0.02 } },
-      "expect": { "materialsAny": ["velvet", "ember", "brass"], "ornamentMin": 0.22, "motionMax": 0.5 }
+      "meaning": {
+        "role": "place",
+        "axes": {
+          "intimacy": 0.9,
+          "warmth": 0.94,
+          "remembrance": 0.7,
+          "urgency": 0.02
+        }
+      },
+      "expect": {
+        "materialsAny": [
+          "velvet",
+          "ember",
+          "brass"
+        ],
+        "ornamentMin": 0.22,
+        "motionMax": 0.5
+      }
     },
     "protected_threshold": {
-      "meaning": { "role": "threshold", "axes": { "sacredness": 0.94, "certainty": 0.22, "permeability": 0.82 } },
-      "expect": { "materialsAny": ["glass", "shadow", "brass"], "frameAny": ["open", "interrupted", "ceremonial"] }
+      "meaning": {
+        "role": "threshold",
+        "axes": {
+          "sacredness": 0.94,
+          "certainty": 0.22,
+          "permeability": 0.82
+        }
+      },
+      "expect": {
+        "materialsAny": [
+          "glass",
+          "shadow",
+          "brass"
+        ],
+        "frameAny": [
+          "open",
+          "interrupted",
+          "ceremonial"
+        ]
+      }
     },
     "operations": {
-      "meaning": { "role": "operational", "axes": { "certainty": 0.92, "density": 0.88, "urgency": 0.48 } },
-      "expect": { "ornamentMax": 0.42, "typographyAny": ["operational", "editorial"] }
+      "meaning": {
+        "role": "operational",
+        "axes": {
+          "certainty": 0.92,
+          "density": 0.88,
+          "urgency": 0.48
+        }
+      },
+      "expect": {
+        "ornamentMax": 0.42,
+        "typographyAny": [
+          "operational",
+          "editorial"
+        ],
+        "motionMax": 0.24
+      },
+      "family": "operational"
+    },
+    "studio_gathering": {
+      "family": "studio",
+      "meaning": {
+        "role": "gathering",
+        "axes": {
+          "relationality": 0.95,
+          "warmth": 0.82,
+          "sacredness": 0.62,
+          "permeability": 0.78,
+          "urgency": 0.12
+        }
+      },
+      "expect": {
+        "materialsAny": [
+          "botanical",
+          "velvet",
+          "ember",
+          "paper"
+        ],
+        "frameAny": [
+          "open",
+          "held"
+        ],
+        "ornamentMax": 0.68,
+        "typographyAny": [
+          "editorial",
+          "ceremonial"
+        ]
+      }
     }
   }
 }
