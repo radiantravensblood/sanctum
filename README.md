@@ -40,6 +40,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0018 proves the same visual language can inhabit Viryn Studio without turning Studio into Sanctum.**
 
+**Kernel 0019 gives Atelier an authoring-side Python painter bridge while keeping generation outside runtime and review above the model.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -1686,9 +1688,123 @@ Public Viryn Labs surfaces:
 
 `window.Velastra.studioGrammar()`
 
+## Painter Bridge
+
+Kernel 0019 adds the first learned-image authoring bridge beneath the Atelier
+Compiler.
+
+The governing law is:
+
+**The model is the brush. Velastra remains the author of meaning.**
+
+The bridge lives at:
+
+`labs/velastra/painter/velastra_painter.py`
+
+It is intentionally outside the browser runtime.
+
+Sanctum still does not call an image model while somebody is traversing the
+house.
+
+Instead, an authoring session may export an Atelier Manifest and pass it to the
+Python bridge.
+
+The bridge compiles:
+
+- the stable semantic asset key,
+- the painter-facing art brief,
+- explicit subjects,
+- explicit relation,
+- environment facts,
+- literal motifs,
+- symbolic motifs,
+- lighting and edge direction,
+- source provenance,
+
+into a candidate request for an image backend.
+
+Kernel 0019 ships a Diffusers backend, but the backend is not part of Velastra's
+identity.
+
+The model may render.
+
+It may not decide what the scene means.
+
+### Candidate state
+
+Generated images begin as `candidate`.
+
+A candidate:
+
+- is written beneath `.velastra/candidates/` by default,
+- carries the source manifest SHA-256,
+- carries model/backend/seed provenance,
+- carries a truth envelope,
+- is ignored by Sanctum's reviewed-asset resolver,
+- cannot write itself into canon.
+
+The candidate directory is ignored by Git by default.
+
+### Review threshold
+
+A candidate may become canonical only through the explicit approval command.
+
+Approval:
+
+- requires a reviewer identity and review note,
+- verifies the candidate image exists,
+- verifies its recorded hash when present,
+- copies the selected image into `assets/velastra/approved/`,
+- records a fresh image SHA-256,
+- writes an `approved` entry into `world/velastra-assets.json`.
+
+The current browser policy still renders only approved registry entries.
+
+If no approved painting exists, Kernel 0017's procedural underpainting remains
+the fallback.
+
+Generation therefore cannot silently replace the house.
+
+### Truth envelope
+
+The Painter Bridge tells the backend what it is allowed to interpret and what
+it is forbidden to invent.
+
+Its candidate record preserves explicit scene facts and instructs the model not
+to invent:
+
+- additional people,
+- identity,
+- relationship,
+- consent,
+- touch,
+- objects,
+- text,
+- logos,
+- literal facts from symbolic motifs.
+
+This does not pretend that a generative model can be made infallible.
+
+It makes the boundary inspectable and keeps review mandatory.
+
+### Runtime remains clean
+
+Python is an authoring body, not a deployment dependency.
+
+GitHub Pages still serves the same build-step-free Sanctum.
+
+No Python package, model weight, GPU runtime, Hugging Face dependency, or
+inference service is required to visit the site.
+
+The approved result becomes an ordinary reviewed static asset.
+
+The painter can leave.
+
+The painting can remain.
+
 ## Current storage boundary
 
-Kernel 0018 still persists to `localStorage`.
+Kernel 0019 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -1745,3 +1861,5 @@ Now it knows that **a recurring symbol is language only when it remembers its so
 And it knows that **the brush may improvise only after the scene has told the truth**.
 
 Now it is learning that **a language becomes real when it can move houses without losing itself**.
+
+And now it is learning that **a model may hold the brush without being allowed to become the author**.
