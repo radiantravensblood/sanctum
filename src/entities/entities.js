@@ -1,7 +1,8 @@
 export function createInitialEntityState(world) {
   return {
-    version: 2,
+    version: 3,
     lastAdvancedAt: null,
+    relations: {},
     records: Object.fromEntries(
       (world.entities.entities || []).map((template) => [
         template.id,
@@ -35,7 +36,11 @@ export function mergeEntityState(base, saved = {}) {
   return {
     ...base,
     ...saved,
-    version: 2,
+    version: 3,
+    relations: {
+      ...(base.relations || {}),
+      ...(saved.relations || {})
+    },
     records
   };
 }
