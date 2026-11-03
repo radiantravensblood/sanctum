@@ -408,8 +408,18 @@ function refreshAtelierDock({
   dock.dataset.transport =
     selection.transportId;
 
+  const styleLabel = manifest.style
+    ? (
+        (manifest.style.designation || "Virynism") +
+        " v" +
+        String(manifest.style.version || 1)
+      )
+    : "style unavailable";
+
   status.textContent =
     shortKey(manifest.assetKey) +
+    " · " +
+    styleLabel +
     " · " +
     selection.brushLabel +
     " · " +
