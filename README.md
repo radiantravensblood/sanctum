@@ -24,6 +24,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0010 lets relationship become a fact of the world.**
 
+**Kernel 0011 makes interaction a consent-bearing proposal.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -543,9 +545,115 @@ A future language model may recognize that two inhabitants have become friends b
 
 It may not declare them friends and write the declaration backward into canon.
 
+## Accord
+
+Kernel 0011 expands observation into consentful interaction.
+
+The core distinction is:
+
+**Interaction is a proposal, not permission owed.**
+
+The first shared affordances are:
+
+- approach,
+- wait nearby,
+- offer an object,
+- invite along,
+- touch.
+
+These verbs are not universally available.
+
+Each inhabitant carries its own consent grammar, and consent is evaluated in the present context.
+
+### Present-tense consent
+
+An accepted interaction does not grant future permission.
+
+A successful approach does not imply permission to touch.
+
+A past touch does not imply permission to touch again.
+
+An inhabitant may accept, decline, or defer an interaction.
+
+Deferred means **not now** or **not yet**, not punishment and not a hidden failure state.
+
+### Different inhabitants, different boundaries
+
+The pale lumenmoth is comfortable with shared distance but has a standing boundary against touch.
+
+The little processional is unusually comfortable sharing the Hearth and may permit closer contact after an accepted approach.
+
+The loose threadling is highly receptive to quiet co-presence and storied objects, while touch requires prior evidence that shared space itself was welcome.
+
+Consent therefore belongs to the inhabitant rather than to the verb.
+
+### Offering is not giving
+
+Offering an object allows an inhabitant to attend to it.
+
+It does not transfer ownership or mutate the object.
+
+The object remains carried until a separate lawful action changes its location.
+
+The law is explicit:
+
+**object offer does not transfer ownership.**
+
+### Invitation is not command
+
+An accepted invitation to accompany creates a bounded one-shot possibility.
+
+When the traveler next moves through an ordinary lawful path, the invited inhabitant decides whether to come.
+
+It may remain behind.
+
+It may not follow through a consent-bearing threshold.
+
+It may not cross a latent frontier.
+
+It may not enter unwitnessed generated canon.
+
+The invitation therefore grants an opportunity to choose, not a movement command.
+
+### Human and machine symmetry
+
+`world/accord.json` defines declared actors and the shared affordance grammar.
+
+The current human traveler, `siege`, is enabled and located through traveler state.
+
+A future machine resident, `viryn`, is declared but disabled.
+
+That declaration is architectural preparation, not a claim of current autonomous presence.
+
+The same proposal engine also recognizes lawful entity actors.
+
+A future bounded machine invocation can therefore use the same interaction protocol rather than receiving a privileged control surface.
+
+### Machine-facing surfaces
+
+`window.Sanctum.accord()` exposes the read-oriented interaction packet.
+
+`window.Sanctum.affordances(targetId)` shows which interactions are presently meaningful with a local inhabitant.
+
+`window.Sanctum.propose({...})` submits a proposal through the same consent engine used by the human UI.
+
+The current context packet is version 6 and includes Accord law alongside Scene Truth, Mnemosyne, Chronos, Ecology, Relation, objects, geography, and consent boundaries.
+
+A machine actor must be explicitly enabled and lawfully located before the engine will accept proposals from it.
+
+### Accessibility
+
+Consent outcomes are semantic world events.
+
+They are not encoded only through animation.
+
+Mnemosyne can remember that an interaction was accepted, declined, or deferred, and the visible response states the outcome in language.
+
+Visual behavior may echo that state, but meaning remains available without visual inference.
+
 ## Current storage boundary
 
-Kernel 0010 still persists to `localStorage`.
+Kernel 0011 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -585,4 +693,6 @@ Now the house knows that **presence can exist without demand**.
 
 And it knows that **a life can leave story behind without being written as a script**.
 
-Now it is learning that **relationship can emerge from repeated freedom**.
+Now it knows that **relationship can emerge from repeated freedom**.
+
+And it is learning that **closeness only matters when either side can refuse it**.
