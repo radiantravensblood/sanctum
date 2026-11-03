@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "laws": {
+    "interactionRequiresSharedPresence": true,
+    "acceptedInteractionDoesNotImplyFutureConsent": true,
+    "observationDoesNotRequireConsent": true,
+    "objectOfferDoesNotTransferOwnership": true,
+    "invitationDoesNotCompelMovement": true,
+    "touchAlwaysRequiresCurrentConsent": true,
+    "machineActorsMustBeExplicitlyEnabled": true
+  },
+  "actors": {
+    "siege": {
+      "kind": "human",
+      "enabled": true,
+      "locationSource": "traveler"
+    },
+    "viryn": {
+      "kind": "machine",
+      "enabled": false,
+      "locationSource": "bounded_invocation",
+      "note": "Reserved for a future bounded invocation. Presence is not assumed."
+    }
+  },
+  "affordances": {
+    "approach": {
+      "label": "Approach",
+      "kind": "proximity"
+    },
+    "wait_nearby": {
+      "label": "Wait nearby",
+      "kind": "co_presence"
+    },
+    "offer_object": {
+      "label": "Offer",
+      "kind": "attention",
+      "requiresObject": true,
+      "transfersObject": false
+    },
+    "invite_company": {
+      "label": "Invite along",
+      "kind": "movement_invitation",
+      "createsInvitation": true
+    },
+    "touch": {
+      "label": "Touch",
+      "kind": "contact",
+      "requiresCurrentConsent": true
+    }
+  },
+  "historyLimit": 120,
+  "pairHistoryLimit": 32,
+  "invitationHours": 6
+}
