@@ -1,19 +1,11 @@
 export function createInitialEntityState(world) {
   return {
-    version: 1,
+    version: 2,
     lastAdvancedAt: null,
     records: Object.fromEntries(
       (world.entities.entities || []).map((template) => [
         template.id,
-        {
-          id: template.id,
-          location: template.start,
-          status: "present",
-          createdAt: new Date().toISOString(),
-          lastMovedAt: null,
-          lastObservedAt: null,
-          history: []
-        }
+        createRecord(template)
       ])
     )
   };
@@ -28,8 +20,14 @@ export function mergeEntityState(base, saved = {}) {
     records[id] = {
       ...(records[id] || {}),
       ...record,
+      status: record.status || (records[id] && records[id].status) || "present",
+      focus: record.focus || null,
+      relations: {
+        ...((records[id] && records[id].relations) || {}),
+        ...(record.relations || {})
+      },
       history: Array.isArray(record.history)
-        ? record.history.slice(-24)
+        ? record.history.slice(-40)
         : (records[id] && records[id].history) || []
     };
   });
@@ -37,6 +35,7 @@ export function mergeEntityState(base, saved = {}) {
   return {
     ...base,
     ...saved,
+    version: 2,
     records
   };
 }
@@ -64,9 +63,28 @@ export function rememberEntity(record, event) {
   record.history = Array.isArray(record.history) ? record.history : [];
   record.history.push(event);
 
-  if (record.history.length > 24) {
-    record.history = record.history.slice(-24);
+  if (record.history.length > 40) {
+    record.history = record.history.slice(-40);
   }
+}
+
+export function rememberEncounter(record, otherId, event) {
+  record.relations = record.relations || {};
+
+  const relation = record.relations[otherId] || {
+    entity: otherId,
+    encounters: 0,
+    firstEncounterAt: null,
+    lastEncounterAt: null,
+    lastRoom: null
+  };
+
+  relation.encounters += 1;
+  relation.firstEncounterAt = relation.firstEncounterAt || event.at;
+  relation.lastEncounterAt = event.at;
+  relation.lastRoom = event.room;
+
+  record.relations[otherId] = relation;
 }
 
 export function describeEntity({ world, state, entityId }) {
@@ -82,9 +100,63 @@ export function describeEntity({ world, state, entityId }) {
   )) % template.observe.length;
 
   const observation = template.observe[index] || template.description;
+  const stateText = describeState(record, world, state);
   const trail = recentTrail(record, world, state);
 
-  return template.description + " " + observation + trail;
+  return template.description + " " + observation + stateText + trail;
+}
+
+function createRecord(template) {
+  return {
+    id: template.id,
+    location: template.start,
+    status: "present",
+    focus: null,
+    createdAt: new Date().toISOString(),
+    lastActedAt: null,
+    lastMovedAt: null,
+    lastObservedAt: null,
+    relations: {},
+    history: []
+  };
+}
+
+function describeState(record, world, state) {
+  switch (record.status) {
+    case "resting":
+      return " It is presently at rest.";
+    case "lingering":
+      return " It appears to have chosen to remain here for a while.";
+    case "attending_object": {
+      const object = getObject(state, world, record.focus);
+      return object
+        ? " Its attention has settled on the " + object.name + "."
+        : " Its attention is fixed on something no longer here.";
+    }
+    case "in_company": {
+      const other = getEntityTemplate(world, record.focus);
+      return other
+        ? " Its attention keeps returning to " + other.name + "."
+        : " It seems recently aware of another presence.";
+    }
+    case "wandering":
+      return " It seems to have arrived by way of its own wandering.";
+    default:
+      return "";
+  }
+}
+
+function getObject(state, world, objectId) {
+  if (!objectId) return null;
+
+  return (
+    (state.genesis &&
+      state.genesis.generated &&
+      state.genesis.generated.objects &&
+      state.genesis.generated.objects[objectId]) ||
+    world.objects[objectId] ||
+    null
+  );
 }
 
 function recentTrail(record, world, state) {
