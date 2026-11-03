@@ -1,9 +1,11 @@
 import argparse
 import importlib.util
 import json
+import os
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -166,13 +168,19 @@ class PainterBridgeTests(unittest.TestCase):
     def test_candidate_records_credential_name_not_secret(self):
         manifest = manifest_fixture()
         prompts = painter.compile_prompt_bundle(manifest)
-        spec = painter.build_render_spec(self.brush_args())
-        record = painter.build_candidate_record(
-            manifest,
-            prompts,
-            spec,
-            Path(".velastra/candidate.png"),
-        )
+
+        with mock.patch.dict(
+            os.environ,
+            {"HF_TOKEN": "hf_secret_example"},
+            clear=False,
+        ):
+            spec = painter.build_render_spec(self.brush_args())
+            record = painter.build_candidate_record(
+                manifest,
+                prompts,
+                spec,
+                Path(".velastra/candidate.png"),
+            )
 
         serialized = json.dumps(record)
         self.assertIn("HF_TOKEN", serialized)
