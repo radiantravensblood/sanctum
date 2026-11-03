@@ -12,11 +12,13 @@ import { reconstructSceneTruth } from "./genesis/scene-truth.js";
 import { getRoomMemory } from "./memory/mnemosyne.js";
 import { describeLocalEcho } from "./memory/language.js";
 import { buildOrientation } from "./time/orientation.js";
+import { getEntitiesAt } from "./entities/entities.js";
 
 export function render({ state, world, message, dispatch }) {
   const room = getRoom(world, state, state.location);
   const objects = getVisibleObjects(world, state);
   const inventory = getInventory(world, state);
+  const entities = getEntitiesAt(world, state, state.location);
   const scene = reconstructSceneTruth(room, world);
   const orientation = buildOrientation({ state, world });
   const visual = applyRoomVisual({ room, world, state, scene, temporal: orientation && orientation.now });
@@ -37,7 +39,8 @@ export function render({ state, world, message, dispatch }) {
   setText("scene-symbol", room.symbol || "◇");
 
   renderOrientation(orientation);
-  renderScene({ room, visual, scene, objects });
+  renderScene({ room, visual, scene, objects, entities });
+  renderEntities(entities, dispatch);
   renderObjects(objects, dispatch);
   renderExits(room, state, world, dispatch);
   renderInventory(inventory, dispatch);
@@ -63,6 +66,52 @@ function renderOrientation(orientation) {
     "time-secondary",
     temporal.local.date + " — " + orientation.prose
   );
+}
+
+function renderEntities(entities, dispatch) {
+  const root = document.getElementById("entity-list");
+  if (!root) return;
+
+  root.replaceChildren();
+
+  if (!entities.length) {
+    root.append(empty("No inhabitant is presently making itself obvious."));
+    return;
+  }
+
+  entities.forEach(({ template, record }) => {
+    const card = document.createElement("div");
+    card.className = "entity-card";
+
+    const identity = document.createElement("div");
+    identity.className = "entity-identity";
+
+    const symbol = document.createElement("span");
+    symbol.className = "entity-symbol";
+    symbol.setAttribute("aria-hidden", "true");
+    symbol.textContent = template.symbol || "·";
+
+    const copy = document.createElement("div");
+    copy.className = "entity-copy";
+
+    const name = document.createElement("span");
+    name.className = "entity-name";
+    name.textContent = template.name;
+
+    const kind = document.createElement("small");
+    kind.className = "entity-kind";
+    kind.textContent = template.kind.replaceAll("_", " ");
+
+    copy.append(name, kind);
+    identity.append(symbol, copy);
+
+    card.append(
+      identity,
+      button("Observe", () => dispatch("observe_entity", template.id))
+    );
+
+    root.append(card);
+  });
 }
 
 function renderObjects(objects, dispatch) {
