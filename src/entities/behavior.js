@@ -5,12 +5,17 @@ import {
   isGeneratedRoom
 } from "../world.js";
 import { getTemporalContext, durationBetween } from "../time/chronos.js";
-import { getPathMemory, getRoomMemory } from "../memory/mnemosyne.js";
+import {
+  getPathMemory,
+  getRoomMemory,
+  getObjectMemory
+} from "../memory/mnemosyne.js";
 import { createSeededRandom } from "../genesis/seed.js";
 import {
   getEntityRecord,
   getEntityTemplate,
-  rememberEntity
+  rememberEntity,
+  rememberEncounter
 } from "./entities.js";
 
 export function advanceEntities({
@@ -35,72 +40,70 @@ export function advanceEntities({
       30,
       Number(template.rhythm && template.rhythm.intervalMinutes) || 240
     );
-    const elapsed = durationBetween(
-      new Date(record.lastMovedAt || record.createdAt || baseline),
-      now
-    ).minutes;
 
-    if (elapsed < interval) continue;
-
-    const temporal = getTemporalContext({
-      state,
-      world,
-      roomId: record.location,
-      now
-    });
-
-    if (
-      Array.isArray(template.rhythm.active) &&
-      !template.rhythm.active.includes(temporal.local.dayPhase)
-    ) {
-      continue;
-    }
-
-    const due = Math.min(
-      Math.floor(elapsed / interval),
-      Number(template.rhythm.maxCatchupMoves || 1)
+    const origin = new Date(
+      record.lastActedAt ||
+      record.lastMovedAt ||
+      record.createdAt ||
+      baseline
     );
 
-    for (let step = 0; step < due; step += 1) {
-      const move = chooseMove({
+    const elapsed = durationBetween(origin, now).minutes;
+    const totalDue = Math.floor(elapsed / interval);
+
+    if (totalDue < 1) continue;
+
+    const maxCatchup = Number(
+      (template.rhythm && template.rhythm.maxCatchupActions) ||
+      (template.rhythm && template.rhythm.maxCatchupMoves) ||
+      1
+    );
+    const due = Math.min(totalDue, Math.max(1, maxCatchup));
+    const firstResolvedIndex = totalDue - due + 1;
+
+    for (let offset = 0; offset < due; offset += 1) {
+      const sequenceIndex = firstResolvedIndex + offset;
+      const actionAt = new Date(
+        origin.getTime() + sequenceIndex * interval * 60000
+      );
+
+      const temporal = getTemporalContext({
+        state,
+        world,
+        roomId: record.location,
+        now: actionAt
+      });
+
+      record.lastActedAt = actionAt.toISOString();
+
+      if (
+        Array.isArray(template.rhythm.active) &&
+        !template.rhythm.active.includes(temporal.local.dayPhase)
+      ) {
+        record.status = "resting";
+        record.focus = null;
+        continue;
+      }
+
+      const action = chooseAction({
         template,
         record,
         state,
         world,
-        now,
-        step
+        at: actionAt,
+        sequenceIndex
       });
 
-      if (!move) break;
-
-      const from = record.location;
-      record.location = move.target;
-      record.lastMovedAt = now.toISOString();
-
-      const entityEvent = {
-        at: now.toISOString(),
-        action: "entity_move",
-        from,
-        to: move.target,
-        entity: template.id,
-        reason: move.reason
-      };
-
-      rememberEntity(record, entityEvent);
-      appendEvent(state, {
-        actor: template.id,
-        action: "entity_move",
-        from,
-        to: move.target,
-        entity: template.id,
-        reason: move.reason
+      const change = executeAction({
+        action,
+        template,
+        record,
+        state,
+        world,
+        at: actionAt
       });
 
-      changes.push({
-        entity: template.id,
-        from,
-        to: move.target
-      });
+      if (change) changes.push(change);
     }
   }
 
@@ -108,27 +111,351 @@ export function advanceEntities({
   return changes;
 }
 
-function chooseMove({
+function chooseAction({
   template,
   record,
   state,
   world,
-  now,
-  step
+  at,
+  sequenceIndex
 }) {
-  const candidates = knownNeighbors(record.location, state, world);
-  if (!candidates.length) return null;
+  const roomObjects = objectsAt(state, record.location);
+  const peers = peersAt(state, template.id, record.location);
+  const neighbors = knownNeighbors(record.location, state, world);
+  const weights = {
+    move: 0.4,
+    linger: 0.2,
+    rest: 0.15,
+    notice_object: 0.15,
+    attend_entity: 0.1,
+    ...((template.behavior && template.behavior.weights) || {})
+  };
+
+  if (!neighbors.length) weights.move = 0;
+  if (!roomObjects.length) weights.notice_object = 0;
+  if (!peers.length) weights.attend_entity = 0;
 
   const seed = [
     world.genesis.worldSeed,
     template.id,
     record.location,
-    now.toISOString().slice(0, 13),
-    String(step),
+    at.toISOString(),
+    String(sequenceIndex),
     String(record.history.length)
   ].join(":");
 
   const random = createSeededRandom(seed);
+  const entries = Object.entries(weights)
+    .filter(([, weight]) => Number(weight) > 0);
+
+  const total = entries.reduce((sum, [, weight]) => sum + Number(weight), 0);
+
+  if (!total) {
+    return { type: "linger" };
+  }
+
+  let needle = random() * total;
+
+  for (const [type, weight] of entries) {
+    needle -= Number(weight);
+    if (needle <= 0) {
+      return {
+        type,
+        random,
+        neighbors,
+        roomObjects,
+        peers
+      };
+    }
+  }
+
+  return { type: "linger" };
+}
+
+function executeAction({
+  action,
+  template,
+  record,
+  state,
+  world,
+  at
+}) {
+  switch (action.type) {
+    case "move":
+      return moveEntity({
+        template,
+        record,
+        state,
+        world,
+        at,
+        candidates: action.neighbors
+      });
+
+    case "notice_object":
+      return noticeObject({
+        template,
+        record,
+        state,
+        world,
+        at,
+        objectIds: action.roomObjects,
+        random: action.random
+      });
+
+    case "attend_entity":
+      return encounterEntity({
+        template,
+        record,
+        state,
+        world,
+        at,
+        peerIds: action.peers,
+        random: action.random
+      });
+
+    case "rest":
+      return remain({
+        template,
+        record,
+        state,
+        at,
+        action: "entity_rest",
+        status: "resting"
+      });
+
+    case "linger":
+    default:
+      return remain({
+        template,
+        record,
+        state,
+        at,
+        action: "entity_linger",
+        status: "lingering"
+      });
+  }
+}
+
+function moveEntity({
+  template,
+  record,
+  state,
+  world,
+  at,
+  candidates
+}) {
+  const move = chooseMove({
+    template,
+    record,
+    state,
+    world,
+    at,
+    candidates
+  });
+
+  if (!move) {
+    return remain({
+      template,
+      record,
+      state,
+      at,
+      action: "entity_linger",
+      status: "lingering"
+    });
+  }
+
+  const from = record.location;
+  record.location = move.target;
+  record.lastMovedAt = at.toISOString();
+  record.status = "wandering";
+  record.focus = null;
+
+  const entityEvent = {
+    at: at.toISOString(),
+    action: "entity_move",
+    from,
+    to: move.target,
+    entity: template.id,
+    reason: move.reason
+  };
+
+  rememberEntity(record, entityEvent);
+  appendEvent(state, {
+    ...entityEvent,
+    actor: template.id
+  });
+
+  return {
+    action: "move",
+    entity: template.id,
+    from,
+    to: move.target
+  };
+}
+
+function remain({
+  template,
+  record,
+  state,
+  at,
+  action,
+  status
+}) {
+  record.status = status;
+  record.focus = null;
+
+  const entityEvent = {
+    at: at.toISOString(),
+    action,
+    room: record.location,
+    entity: template.id
+  };
+
+  rememberEntity(record, entityEvent);
+  appendEvent(state, {
+    ...entityEvent,
+    actor: template.id
+  });
+
+  return {
+    action,
+    entity: template.id,
+    room: record.location
+  };
+}
+
+function noticeObject({
+  template,
+  record,
+  state,
+  world,
+  at,
+  objectIds,
+  random
+}) {
+  if (!objectIds.length) return null;
+
+  const ranked = objectIds
+    .map((objectId) => {
+      const memory = getObjectMemory(state, objectId);
+      return {
+        objectId,
+        score:
+          (memory.echoes || []).length * 0.12 +
+          (memory.locations || []).length * 0.18 +
+          random() * 0.45
+      };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  const objectId = ranked[0].objectId;
+
+  record.status = "attending_object";
+  record.focus = objectId;
+
+  const entityEvent = {
+    at: at.toISOString(),
+    action: "entity_notice_object",
+    room: record.location,
+    entity: template.id,
+    object: objectId
+  };
+
+  rememberEntity(record, entityEvent);
+  appendEvent(state, {
+    ...entityEvent,
+    actor: template.id
+  });
+
+  return {
+    action: "notice_object",
+    entity: template.id,
+    room: record.location,
+    object: objectId
+  };
+}
+
+function encounterEntity({
+  template,
+  record,
+  state,
+  world,
+  at,
+  peerIds,
+  random
+}) {
+  if (!peerIds.length) return null;
+
+  const otherId = peerIds[Math.floor(random() * peerIds.length)];
+  const otherRecord = getEntityRecord(state, otherId);
+
+  if (!otherRecord || otherRecord.location !== record.location) {
+    return null;
+  }
+
+  record.status = "in_company";
+  record.focus = otherId;
+  otherRecord.status = otherRecord.status === "resting"
+    ? "resting"
+    : "in_company";
+  if (otherRecord.status === "in_company") {
+    otherRecord.focus = template.id;
+  }
+
+  const event = {
+    at: at.toISOString(),
+    room: record.location,
+    entity: template.id,
+    otherEntity: otherId
+  };
+
+  rememberEncounter(record, otherId, event);
+  rememberEncounter(otherRecord, template.id, event);
+
+  rememberEntity(record, {
+    ...event,
+    action: "entity_encounter"
+  });
+  rememberEntity(otherRecord, {
+    ...event,
+    action: "entity_encountered",
+    entity: otherId,
+    otherEntity: template.id
+  });
+
+  appendEvent(state, {
+    actor: template.id,
+    action: "entity_encounter",
+    ...event
+  });
+
+  return {
+    action: "encounter",
+    entity: template.id,
+    otherEntity: otherId,
+    room: record.location
+  };
+}
+
+function chooseMove({
+  template,
+  record,
+  state,
+  world,
+  at,
+  candidates
+}) {
+  if (!candidates.length) return null;
+
+  const random = createSeededRandom([
+    world.genesis.worldSeed,
+    template.id,
+    record.location,
+    at.toISOString(),
+    "move",
+    String(record.history.length)
+  ].join(":"));
+
   const scored = candidates.map((candidate) => ({
     ...candidate,
     score:
@@ -196,16 +523,21 @@ function affinityScore({
   const affinities = template.affinities || {};
   const room = getRoom(world, state, candidate.target, { fallback: false });
   const memory = getRoomMemory(state, candidate.target);
-  const path = getPathMemory(state, state.entities.records[template.id].location, candidate.target);
-  const objects = Object.values(state.objectLocations || {}).filter(
-    (location) => location === candidate.target
-  ).length;
+  const path = getPathMemory(
+    state,
+    state.entities.records[template.id].location,
+    candidate.target
+  );
+  const objects = objectsAt(state, candidate.target).length;
 
   let score = 0;
 
-  score += Math.min(1, memory.echoes.length / 12) * Number(affinities.memory || 0);
-  score += Math.min(1, path.crossings / 6) * Number(affinities.familiarPaths || 0);
-  score += Math.min(1, objects / 3) * Number(affinities.objects || 0);
+  score += Math.min(1, memory.echoes.length / 12) *
+    Number(affinities.memory || 0);
+  score += Math.min(1, path.crossings / 6) *
+    Number(affinities.familiarPaths || 0);
+  score += Math.min(1, objects / 3) *
+    Number(affinities.objects || 0);
 
   if (room && room.genesis) {
     const realm = world.realms[room.genesis.realm];
@@ -229,4 +561,18 @@ function affinityScore({
   }
 
   return score;
+}
+
+function objectsAt(state, roomId) {
+  return Object.entries(state.objectLocations || {})
+    .filter(([, location]) => location === roomId)
+    .map(([objectId]) => objectId);
+}
+
+function peersAt(state, entityId, roomId) {
+  return Object.values(
+    (state.entities && state.entities.records) || {}
+  )
+    .filter((record) => record.id !== entityId && record.location === roomId)
+    .map((record) => record.id);
 }
