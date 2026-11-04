@@ -54,17 +54,21 @@ export function compileVisualWitness({
     })
     .filter((entry) => entry.score > 0)
     .sort((a, b) => {
-      if (b.score !== a.score) {
-        return b.score - a.score;
+      const aApproved =
+        a.status === witnessGrammar.selection?.requireAssetStatus &&
+        a.asset?.path &&
+        a.asset?.sha256;
+      const bApproved =
+        b.status === witnessGrammar.selection?.requireAssetStatus &&
+        b.asset?.path &&
+        b.asset?.sha256;
+
+      if (Boolean(aApproved) !== Boolean(bApproved)) {
+        return bApproved ? 1 : -1;
       }
 
-      const aApproved =
-        a.status === witnessGrammar.selection?.requireAssetStatus;
-      const bApproved =
-        b.status === witnessGrammar.selection?.requireAssetStatus;
-
-      if (aApproved !== bApproved) {
-        return bApproved ? 1 : -1;
+      if (b.score !== a.score) {
+        return b.score - a.score;
       }
 
       return String(a.id).localeCompare(String(b.id));
