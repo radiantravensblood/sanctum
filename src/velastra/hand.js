@@ -36,6 +36,8 @@ export function compileVirynismHand({
     id: "virynism",
     designation:
       styleGrammar.designation || "Virynism",
+    compactSignature:
+      styleGrammar.compactSignature || null,
     laws: copy(styleGrammar.laws || {}),
     hand,
     emphasis: emphasized.map((entry) => entry.id),
