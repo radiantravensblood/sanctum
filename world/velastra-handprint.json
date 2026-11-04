@@ -18,7 +18,13 @@
     "handprintBuildMustRecordCorpusHashes": true,
     "handprintChangeMayChangeCandidateIdentity": true,
     "handprintChangeCannotChangeCanonicalPlaceIdentity": true,
-    "insufficientCorpusMustFailSoft": true
+    "insufficientCorpusMustFailSoft": true,
+    "handMayBeCoherentWithoutBeingUniform": true,
+    "facetsMustUseOnlyRoleReviewedWitnesses": true,
+    "singleWitnessFacetCannotBecomeCrossPortfolioLaw": true,
+    "facetVariationMustRemainVisible": true,
+    "sceneProjectionMaySelectFacetsButCannotRewriteThem": true,
+    "ablationMustRemainCandidateLocal": true
   },
   "minimumApprovedWitnesses": 3,
   "corpus": {
@@ -111,7 +117,7 @@
         "meanSaturation": 0.6753,
         "meanWarmth": 0.1113,
         "darkShare": 0.6853,
-        "highlightShare": 0.0,
+        "highlightShare": 0,
         "p10Luminance": 0.0431,
         "p90Luminance": 0.4863,
         "tonalSpan": 0.4431,
@@ -191,5 +197,11 @@
       "gallery_target_01": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331"
     },
     "note": "Pixel metrics are descriptive portfolio measurements, not semantic scene facts."
+  },
+  "facets": {
+    "version": 1,
+    "minimumWitnesses": 2,
+    "byRole": {},
+    "note": "Kernel 0028 requires one canonical handprint-build after merge to derive role-conditioned facets from the approved corpus."
   }
 }
