@@ -17,6 +17,14 @@ const witnessSource = await fs.readFile(
   "utf8"
 );
 
+const handprintSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/handprint.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
 const atelierSource = await fs.readFile(
   new URL(
     "../../../src/velastra/atelier.js",
@@ -33,6 +41,10 @@ const witnessModuleUrl =
   "data:text/javascript;base64," +
   Buffer.from(witnessSource).toString("base64");
 
+const handprintModuleUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(handprintSource).toString("base64");
+
 const standaloneAtelierSource =
   atelierSource
     .replace(
@@ -45,6 +57,12 @@ const standaloneAtelierSource =
       'import { compileVisualWitness } from "./witness.js";',
       'import { compileVisualWitness } from "' +
         witnessModuleUrl +
+        '";'
+    )
+    .replace(
+      'import { compileHandprint } from "./handprint.js";',
+      'import { compileHandprint } from "' +
+        handprintModuleUrl +
         '";'
     );
 
