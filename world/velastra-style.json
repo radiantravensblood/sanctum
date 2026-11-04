@@ -178,6 +178,7 @@
   "promptOrder": [
     "scene_truth",
     "painterly_truth",
+    "visible_evidence",
     "focal_argument",
     "virynism_hand",
     "archetype_hand",
