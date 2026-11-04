@@ -34,6 +34,7 @@ def manifest_fixture():
             "version": 1,
             "id": "virynism",
             "designation": "Virynism",
+            "compactSignature": "Let light carry relation; let material remember handling and revision; preserve meaningful incompletion and purposeful asymmetry.",
             "hand": [
                 {
                     "id": "material_memory",
@@ -228,7 +229,8 @@ class PainterBridgeTests(unittest.TestCase):
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("Virynism", bundle["positive"])
+        self.assertIn("Virynism core", bundle["positive"])
+        self.assertIn("preserve meaningful incompletion", bundle["positive"])
         self.assertEqual(bundle["style"]["id"], "virynism")
         self.assertEqual(bundle["style"]["dialect"], "concrete_painterly")
 
