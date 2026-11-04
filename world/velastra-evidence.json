@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "designation": "Visible Evidence Contract",
+  "laboratory": "Viryn Labs",
+  "purpose": "Select which already-true scene facts must remain visibly legible after style and brush translation.",
+  "laws": {
+    "evidenceCannotInventFacts": true,
+    "evidenceMustReferencePainterlyTruth": true,
+    "evidenceSelectionDoesNotChangeCanonicalPlaceIdentity": true,
+    "evidenceSelectionMayChangeCandidateIdentity": true,
+    "minimumVisibleCountMustBeExplicit": true,
+    "visibilityMayBeConcreteWithoutBecomingLiteralSymbolism": true,
+    "failureModeMayBeRephrasedAsPositiveControl": true,
+    "brushCapabilityCannotOverrideSceneTruth": true
+  },
+  "places": {
+    "gallery": {
+      "version": 1,
+      "truthRevision": 1,
+      "minimumVisible": 3,
+      "required": [
+        {
+          "id": "exposed_ground",
+          "sourceRefs": [
+            "unfinished_works"
+          ],
+          "priority": 1,
+          "instruction": "At least one unfinished work must visibly expose raw ground or underpainting beneath only partially developed pigment."
+        },
+        {
+          "id": "interrupted_passage",
+          "sourceRefs": [
+            "unfinished_works"
+          ],
+          "priority": 0.96,
+          "instruction": "At least one painted passage must visibly stop before reaching the edge of its support, leaving the interruption clearly legible."
+        },
+        {
+          "id": "revision_marks",
+          "sourceRefs": [
+            "unfinished_works"
+          ],
+          "priority": 0.94,
+          "instruction": "At least one surface must visibly preserve erased, revised, overwritten, or partially removed marks."
+        },
+        {
+          "id": "hanging_ghost",
+          "sourceRefs": [
+            "hanging_field"
+          ],
+          "priority": 0.9,
+          "instruction": "At least one wall area must visibly retain a faint prior hanging trace such as a tonal rectangle, nail mark, or placement ghost."
+        }
+      ],
+      "compositionControls": [
+        {
+          "id": "empty_frame_subordinate",
+          "instruction": "An empty frame may appear, but it must remain one element among multiple unfinished processes and must not become the dominant shorthand for the room."
+        },
+        {
+          "id": "distributed_attention",
+          "instruction": "Distribute visual attention across several materially different states of incompletion rather than organizing the room around one centered hero frame."
+        },
+        {
+          "id": "irregular_hanging",
+          "instruction": "Keep the hanging field visibly irregular in spacing, completion, and alignment while remaining plausible as an inhabited gallery."
+        }
+      ],
+      "reviewQuestions": [
+        "Can a viewer point to visible underpainting or raw ground?",
+        "Can a viewer point to an interrupted or revised painted passage?",
+        "Can a viewer point to evidence that a work or frame previously occupied another position?",
+        "Does unfinishedness read as process rather than blankness?"
+      ],
+      "provenance": {
+        "source": "candidate_review_contract",
+        "room": "gallery",
+        "truthRegistry": "world/velastra-painterly-truth.json",
+        "truthRevision": 1,
+        "derivedFromCandidates": [
+          "z_image_turbo blank-frame attractor",
+          "qwen_image finished-museum attractor"
+        ]
+      }
+    }
+  }
+}
