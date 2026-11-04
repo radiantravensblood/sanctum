@@ -61,7 +61,12 @@
     "handprintCannotOverrideVisibleEvidence": true,
     "handprintPixelMetricsMustRemainAuditable": true,
     "handprintCorpusMustUseApprovedSealedWitnesses": true,
-    "insufficientHandprintCorpusMustFailSoft": true
+    "insufficientHandprintCorpusMustFailSoft": true,
+    "handprintFacetProjectionMustRemainSceneRelevant": true,
+    "handprintFacetRangesCannotBeCollapsedIntoUniversalTargets": true,
+    "provisionalSingleWitnessFacetCannotDriveRender": true,
+    "renderAblationMustNotMutateManifestOrCanon": true,
+    "textFirstBrushCannotClaimUnsentWitnessPixels": true
   },
   "media": {
     "luminous_oil": {
@@ -210,7 +215,13 @@
     "witnessAdmissionCommand": "witness-register",
     "handprintRegistry": "world/velastra-handprint.json",
     "handprintSnapshotTravelsWithManifest": true,
-    "handprintBuildCommand": "handprint-build"
+    "handprintBuildCommand": "handprint-build",
+    "ablationControls": {
+      "withoutHandprint": "--without-handprint",
+      "withoutWitness": "--without-witness",
+      "candidateLocal": true,
+      "canonicalStateMutation": false
+    }
   },
   "livingCanvas": {
     "version": 1,

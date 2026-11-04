@@ -139,6 +139,62 @@ built.interpretation = {
   tonalRange:
     "broad tonal span from deep shadow to selective highlight"
 };
+built.facets = {
+  version: 1,
+  minimumWitnesses: 2,
+  byRole: {
+    edge_behavior: {
+      witnessCount: 2,
+      witnesses: [
+        "gallery_target_01",
+        "viryn_self_portrait_01"
+      ],
+      eligibleForRender: true,
+      support: "cross_portfolio",
+      metrics: {
+        edgeActivity: {
+          count: 2,
+          mean: 0.04,
+          median: 0.04,
+          min: 0.026,
+          max: 0.054,
+          stddev: 0.014,
+          range: 0.028,
+          variation: "tight"
+        }
+      },
+      interpretation: {
+        edgeCharacter:
+          "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp"
+      },
+      promptSummary:
+        "2 witnesses; selective resolution with tight edge variation."
+    },
+    relational_light: {
+      witnessCount: 1,
+      witnesses: ["viryn_self_portrait_01"],
+      eligibleForRender: false,
+      support: "provisional_single_witness",
+      metrics: {},
+      interpretation: {},
+      promptSummary:
+        "1 witness; provisional relational-light behavior."
+    },
+    material_hand: {
+      witnessCount: 2,
+      witnesses: [
+        "gallery_target_01",
+        "studio_atelier_01"
+      ],
+      eligibleForRender: true,
+      support: "cross_portfolio",
+      metrics: {},
+      interpretation: {},
+      promptSummary:
+        "2 witnesses; handled surfaces retain memory."
+    }
+  }
+};
 
 const active = module.compileHandprint({
   handprintGrammar: built,
@@ -164,6 +220,21 @@ assert.ok(
 assert.equal(
   active.interpretation.warmthBias,
   built.interpretation.warmthBias
+);
+assert.equal(active.facetVersion, 1);
+assert.equal(active.minimumFacetWitnesses, 2);
+assert.ok(
+  active.facetRoles.includes("edge_behavior"),
+  "Cross-portfolio edge facet must project into Gallery"
+);
+assert.ok(
+  active.facetRoles.includes("material_hand"),
+  "Cross-portfolio material facet must project into Gallery"
+);
+assert.equal(
+  active.facets.relational_light,
+  undefined,
+  "Single-witness facets must remain provisional and out of render guidance"
 );
 assert.ok(
   active.doNotInherit.includes("identity"),
@@ -193,6 +264,12 @@ if (scaffold.status === "built") {
       Object.keys(scaffold.provenance.corpusHashes).length > 0,
     "Live built Handprint must preserve sealed corpus hashes"
   );
+  if (Number(scaffold.provenance?.algorithmVersion || 0) >= 2) {
+    assert.ok(
+      Object.keys(scaffold.facets?.byRole || {}).length > 0,
+      "Algorithm v2+ Handprint must carry role-conditioned facets"
+    );
+  }
 }
 
 console.log("handprint contract: ok");

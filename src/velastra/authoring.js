@@ -451,7 +451,9 @@ function refreshAtelierDock({
   const handprintLabel = handprint?.active
     ? (
         "Handprint " +
-        String(handprint.witnessCount || 0)
+        String(handprint.witnessCount || 0) +
+        " · Facets " +
+        String((handprint.facetRoles || []).length)
       )
     : "Handprint pending";
 

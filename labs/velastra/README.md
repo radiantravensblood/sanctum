@@ -504,6 +504,33 @@ The law is:
 
 **what remains across the witnesses belongs to the hand.**
 
+## Handprint Facets + ablation
+
+Kernel 0028 derives role-conditioned metric distributions from only the
+witnesses explicitly reviewed to teach each role.
+
+Facet statistics preserve mean, median, min, max, population standard
+deviation, range, and a transparent variation class.
+
+Two approved supporting witnesses are required before a facet can drive
+rendering.
+
+Single-witness facets remain provisional.
+
+The painter also exposes candidate-local ablation flags:
+
+- `--without-handprint`
+- `--without-witness`
+
+Ablation never edits the authored manifest or canon.
+
+Reference-image claims are now capability-bound: text-first brushes do not
+receive Visual Witness prose when no witness image is actually sent.
+
+The law is:
+
+**the hand is coherent without being uniform.**
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.

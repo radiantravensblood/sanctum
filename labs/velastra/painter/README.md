@@ -409,6 +409,74 @@ It never changes the canonical room asset key.
 
 Candidate and approval provenance both retain the Handprint snapshot.
 
+## Handprint Facets + controlled ablation
+
+After merging Kernel 0028, rebuild Handprint once:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint-build \
+  --repo-root .
+```
+
+Then inspect the role support map:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint
+```
+
+The CLI prints each facet as either:
+
+- `cross-portfolio`, or
+- `provisional`.
+
+Only cross-portfolio facets travel into browser render guidance.
+
+### Gallery ablation protocol
+
+Use one fresh Gallery packet carrying the rebuilt Facets.
+
+#### A — Handprint only
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py render \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json" \
+  --brush qwen_image \
+  --transport huggingface \
+  --seed 190920
+```
+
+Base Qwen is text-first and therefore receives no Visual Witness image or
+Visual Witness claim.
+
+#### B — Witness only
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py render \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json" \
+  --brush qwen_image_edit \
+  --transport huggingface \
+  --without-handprint \
+  --attempt gallery-ablation-witness-only-001 \
+  --repo-root .
+```
+
+#### C — Combined
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py render \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json" \
+  --brush qwen_image_edit \
+  --transport huggingface \
+  --attempt gallery-ablation-combined-001 \
+  --repo-root .
+```
+
+Hosted image-edit runs remain attempt-identified because their transport does
+not promise deterministic seed control.
+
+The three candidate sidecars preserve which ablation state produced each
+image.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
