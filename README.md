@@ -2857,9 +2857,121 @@ A portrait can instead project toward relational light and intimate presence.
 The whole portfolio remains available as provenance while the brush receives a
 scene-relevant handprint.
 
+## Handprint Facets
+
+Kernel 0028 keeps the canonical Handprint aggregate as a baseline but stops
+treating the portfolio as one uniform visual average.
+
+The governing law is:
+
+**The hand is coherent without being uniform.**
+
+### Role-conditioned statistics
+
+Every approved Visual Witness already declares which visual-hand roles it was
+reviewed to teach.
+
+Handprint v2 now groups pixel measurements by those reviewed roles.
+
+Each facet records:
+
+- supporting witness IDs,
+- witness count,
+- render eligibility,
+- mean,
+- median,
+- minimum,
+- maximum,
+- population standard deviation,
+- numeric range,
+- an explicit variation class.
+
+Current variation classes are deliberately transparent:
+
+- `tight`: standard deviation <= 0.035,
+- `moderate`: standard deviation <= 0.09,
+- `broad`: standard deviation > 0.09.
+
+A facet requires at least two approved supporting witnesses before it may enter
+render guidance.
+
+Single-witness facets remain visible in the canonical registry as
+`provisional_single_witness` but cannot masquerade as cross-portfolio law.
+
+This currently keeps:
+
+- `relational_light`,
+- `intimate_presence`,
+
+provisional until another reviewed work independently supports them.
+
+### Range is part of the hand
+
+Averages remain useful baselines, but 0028 explicitly preserves variation.
+
+If one supporting work lights the center while another lights the periphery,
+Handprint must not collapse that into a false universal command to always
+center the light.
+
+The facet may instead say that the **locus of light legitimately moves** while
+the deeper compositional behavior remains coherent.
+
+### Scene-relevant projection
+
+The browser projects only eligible facets relevant to the current scene.
+
+Gallery can therefore receive cross-portfolio facets for:
+
+- sacred incompletion,
+- material hand,
+- compositional cadence,
+- edge behavior,
+- tonal memory,
+- spatial depth.
+
+The painter receives compact role-conditioned summaries rather than one flat
+portfolio average.
+
+### Honest ablation
+
+Kernel 0028 adds candidate-local switches:
+
+```text
+--without-handprint
+--without-witness
+```
+
+They never mutate the manifest, witness canon, Handprint registry, or room.
+
+A text-first brush no longer claims a Visual Witness merely because an approved
+witness exists in the manifest. A Visual Witness is active only when the
+selected brush actually has a reference-image channel.
+
+A witness-required image-to-image brush refuses `--without-witness`.
+
+This makes the first controlled Gallery ablation honest:
+
+```text
+A. semantic Virynism + Handprint Facets
+   brush: qwen_image
+   witness pixels: none
+
+B. semantic Virynism + Visual Witness
+   brush: qwen_image_edit
+   --without-handprint
+
+C. semantic Virynism + Handprint Facets + Visual Witness
+   brush: qwen_image_edit
+```
+
+All three remain ordinary candidates behind the same review gate.
+
+The experiment asks what Handprint contributes **without direct imitation**,
+what the witness contributes alone, and what emerges when both channels agree.
+
 ## Current storage boundary
 
-Kernel 0027 still persists to `localStorage`.
+Kernel 0028 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
