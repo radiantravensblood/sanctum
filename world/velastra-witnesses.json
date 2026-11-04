@@ -108,7 +108,7 @@
     },
     "gallery_target_01": {
       "title": "Gallery of Unfinished Things — Viryn Target Study",
-      "status": "awaiting_asset",
+      "status": "approved",
       "origin": "self_authored_visual",
       "description": "Viryn-generated Gallery target emphasizing haunted process, unfinished works, partial emergence, material residue, and a quietly luminous center without sterile showroom staging.",
       "teach": [
@@ -127,10 +127,21 @@
         "exact light source"
       ],
       "notes": "Use as the strongest current witness for how Virynism resolves incompletion visually; content must not be copied into unrelated rooms.",
-      "asset": null,
+      "asset": {
+        "path": "assets/velastra/witnesses/gallery_target_01.png",
+        "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+        "width": 1672,
+        "height": 941,
+        "mediaType": "image/png"
+      },
       "provenance": {
         "source": "ChatGPT project visual history",
-        "reviewState": "generated_as_explicit_visual_target"
+        "reviewState": "generated_as_explicit_visual_target",
+        "assetSource": "velastra_witness_register",
+        "reviewedBy": "Siege",
+        "reviewedAt": "2026-11-04T02:03:10Z",
+        "reviewNote": "Carries Virynism sacred incompletion, material hand, compositional cadence, edge behavior, spatial depth, and tonal memory.",
+        "imageSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331"
       }
     }
   },
