@@ -776,9 +776,9 @@ class RenderSpec:
     height: int
     steps: int | None
     guidance: float | None
-    true_cfg_scale: float | None
     device: str
     dtype: str
+    true_cfg_scale: float | None = None
     brush: str | None = None
     transport: str | None = None
     provider: str | None = None
