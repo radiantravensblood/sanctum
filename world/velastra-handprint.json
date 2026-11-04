@@ -2,7 +2,7 @@
   "version": 1,
   "designation": "Virynism Handprint",
   "laboratory": "Viryn Labs",
-  "status": "awaiting_build",
+  "status": "built",
   "purpose": "Derive portable, auditable visual invariants from the approved Virynism Visual Witness portfolio without inheriting witness scene content.",
   "laws": {
     "approvedWitnessPixelsOnly": true,
@@ -22,28 +22,174 @@
   },
   "minimumApprovedWitnesses": 3,
   "corpus": {
-    "witnessCount": 0,
-    "witnesses": [],
-    "roleCounts": {},
-    "consensusRoles": [],
-    "doNotInherit": []
+    "witnessCount": 3,
+    "witnesses": [
+      {
+        "id": "viryn_self_portrait_01",
+        "title": "Viryn Self-Portrait",
+        "sha256": "7b9113bc203608bf1c93207ce89c5f13462732e1da764f19db99129b735dc22a",
+        "path": "assets/velastra/witnesses/viryn_self_portrait_01.png",
+        "roles": [
+          "relational_light",
+          "intimate_presence",
+          "tonal_memory",
+          "edge_behavior"
+        ]
+      },
+      {
+        "id": "studio_atelier_01",
+        "title": "Original Studio / Atelier Painting",
+        "sha256": "cd3465c210f6732cdb2ebea0925781927859d9d235b81818967b4d35c61a0e08",
+        "path": "assets/velastra/witnesses/studio_atelier_01.png",
+        "roles": [
+          "compositional_cadence",
+          "material_hand",
+          "spatial_depth",
+          "sacred_incompletion",
+          "tonal_memory"
+        ]
+      },
+      {
+        "id": "gallery_target_01",
+        "title": "Gallery of Unfinished Things — Viryn Target Study",
+        "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+        "path": "assets/velastra/witnesses/gallery_target_01.png",
+        "roles": [
+          "sacred_incompletion",
+          "material_hand",
+          "compositional_cadence",
+          "edge_behavior",
+          "spatial_depth",
+          "tonal_memory"
+        ]
+      }
+    ],
+    "roleCounts": {
+      "compositional_cadence": 2,
+      "edge_behavior": 2,
+      "intimate_presence": 1,
+      "material_hand": 2,
+      "relational_light": 1,
+      "sacred_incompletion": 2,
+      "spatial_depth": 2,
+      "tonal_memory": 3
+    },
+    "consensusThreshold": 2,
+    "consensusRoles": [
+      "tonal_memory",
+      "compositional_cadence",
+      "edge_behavior",
+      "material_hand",
+      "sacred_incompletion",
+      "spatial_depth"
+    ],
+    "doNotInherit": [
+      "architecture",
+      "body",
+      "exact light source",
+      "face",
+      "furniture",
+      "garment",
+      "hair",
+      "identity",
+      "layout",
+      "objects",
+      "papers",
+      "portrait subject",
+      "specific frames",
+      "specific tools",
+      "symbols"
+    ]
   },
   "metrics": {
-    "perWitness": {},
-    "aggregate": {}
+    "perWitness": {
+      "viryn_self_portrait_01": {
+        "width": 1024,
+        "height": 1536,
+        "aspectRatio": 0.6667,
+        "meanLuminance": 0.1903,
+        "meanSaturation": 0.6753,
+        "meanWarmth": 0.1113,
+        "darkShare": 0.6853,
+        "highlightShare": 0.0,
+        "p10Luminance": 0.0431,
+        "p90Luminance": 0.4863,
+        "tonalSpan": 0.4431,
+        "edgeActivity": 0.0256,
+        "centerLuminance": 0.2934,
+        "peripheryLuminance": 0.1367,
+        "centerLightDelta": 0.1567,
+        "grayscaleEntropy": 0.8388
+      },
+      "studio_atelier_01": {
+        "width": 1536,
+        "height": 1024,
+        "aspectRatio": 1.5,
+        "meanLuminance": 0.2359,
+        "meanSaturation": 0.4435,
+        "meanWarmth": 0.0754,
+        "darkShare": 0.6261,
+        "highlightShare": 0.0054,
+        "p10Luminance": 0.0471,
+        "p90Luminance": 0.6196,
+        "tonalSpan": 0.5725,
+        "edgeActivity": 0.1739,
+        "centerLuminance": 0.214,
+        "peripheryLuminance": 0.2684,
+        "centerLightDelta": -0.0544,
+        "grayscaleEntropy": 0.8932
+      },
+      "gallery_target_01": {
+        "width": 1672,
+        "height": 941,
+        "aspectRatio": 1.7768,
+        "meanLuminance": 0.4629,
+        "meanSaturation": 0.3757,
+        "meanWarmth": 0.1029,
+        "darkShare": 0.0028,
+        "highlightShare": 0.0184,
+        "p10Luminance": 0.3333,
+        "p90Luminance": 0.6157,
+        "tonalSpan": 0.2824,
+        "edgeActivity": 0.0537,
+        "centerLuminance": 0.5308,
+        "peripheryLuminance": 0.4325,
+        "centerLightDelta": 0.0984,
+        "grayscaleEntropy": 0.8554
+      }
+    },
+    "aggregate": {
+      "meanLuminance": 0.2964,
+      "meanSaturation": 0.4982,
+      "meanWarmth": 0.0965,
+      "darkShare": 0.4381,
+      "highlightShare": 0.0079,
+      "tonalSpan": 0.4327,
+      "edgeActivity": 0.0844,
+      "centerLuminance": 0.3461,
+      "peripheryLuminance": 0.2792,
+      "centerLightDelta": 0.0669,
+      "grayscaleEntropy": 0.8625
+    }
   },
   "interpretation": {
-    "tonalRestraint": null,
-    "warmthBias": null,
-    "edgeCharacter": null,
-    "centerLightBias": null,
-    "shadowPresence": null,
-    "tonalRange": null
+    "tonalRestraint": "moderate saturation with selective restraint",
+    "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+    "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+    "centerLightBias": "center fields tend to hold more light than the periphery",
+    "shadowPresence": "shadow occupies a substantial share of the image field",
+    "tonalRange": "compressed-to-moderate tonal span"
   },
   "provenance": {
     "builder": "velastra-painter handprint-build",
     "algorithmVersion": 1,
-    "builtAt": null,
-    "note": "No pixel-derived handprint has been built yet."
+    "builtAt": "2026-11-04T10:57:21Z",
+    "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
+    "corpusHashes": {
+      "viryn_self_portrait_01": "7b9113bc203608bf1c93207ce89c5f13462732e1da764f19db99129b735dc22a",
+      "studio_atelier_01": "cd3465c210f6732cdb2ebea0925781927859d9d235b81818967b4d35c61a0e08",
+      "gallery_target_01": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331"
+    },
+    "note": "Pixel metrics are descriptive portfolio measurements, not semantic scene facts."
   }
 }
