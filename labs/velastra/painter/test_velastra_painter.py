@@ -81,7 +81,21 @@ def manifest_fixture():
                     "old basin",
                     "rain without visible sky",
                     "aged brass lines",
+                    "worked passage beside raw ground",
                 ],
+                "painterlyTruth": {
+                    "version": 1,
+                    "id": "painterly_truth",
+                    "designation": "Painterly Truth",
+                    "revision": 2,
+                    "room": "ceiling_storm",
+                    "fixedObjects": [
+                        {
+                            "id": "old_basin",
+                            "name": "old basin"
+                        }
+                    ],
+                },
             },
         },
         "motifs": [
@@ -138,6 +152,27 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertIn("rain_without_sky", truth["literalMotifs"][0])
         self.assertIn("thread_trace", truth["symbolicMotifs"][0])
         self.assertIn("Do not invent additional people", bundle["negative"])
+
+    def test_truth_envelope_records_painterly_truth_revision(self):
+        bundle = painter.compile_prompt_bundle(manifest_fixture())
+        truth = bundle["truthEnvelope"]
+
+        self.assertEqual(
+            truth["painterlyTruth"]["id"],
+            "painterly_truth",
+        )
+        self.assertEqual(
+            truth["painterlyTruth"]["revision"],
+            2,
+        )
+        self.assertEqual(
+            truth["painterlyTruth"]["fixedObjects"][0]["id"],
+            "old_basin",
+        )
+        self.assertIn(
+            "worked passage beside raw ground",
+            truth["environment"],
+        )
 
     def test_prompt_bundle_carries_virynism_hand(self):
         manifest = manifest_fixture()
