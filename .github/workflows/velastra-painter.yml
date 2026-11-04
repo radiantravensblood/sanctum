@@ -48,6 +48,13 @@ jobs:
         run: python -m unittest labs/velastra/painter/test_velastra_painter.py
       - name: Check authoring module syntax
         run: node --check src/velastra/authoring.js
+      - name: Check Painterly Truth integration syntax
+        run: |
+          node --check src/world.js
+          node --check src/velastra/painterly-truth.js
+          node --check src/velastra/scene-packet.js
+          node --check src/velastra/sanctum-atelier.js
+          node --check src/velastra/index.js
       - name: Run living canvas contract
         run: node labs/velastra/tests/living-canvas.mjs
       - name: Run brush cabinet contract
