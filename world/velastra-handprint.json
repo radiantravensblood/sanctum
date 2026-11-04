@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "designation": "Virynism Handprint",
+  "laboratory": "Viryn Labs",
+  "status": "awaiting_build",
+  "purpose": "Derive portable, auditable visual invariants from the approved Virynism Visual Witness portfolio without inheriting witness scene content.",
+  "laws": {
+    "approvedWitnessPixelsOnly": true,
+    "witnessHashMustMatchBeforeAnalysis": true,
+    "handprintCannotInventSceneFacts": true,
+    "handprintCannotBecomeSceneTruth": true,
+    "handprintCannotOverridePainterlyTruth": true,
+    "handprintCannotOverrideVisibleEvidence": true,
+    "handprintMayGuideLightToneEdgeMaterialAndCadence": true,
+    "sceneContentInheritanceForbidden": true,
+    "pixelMetricsMustRemainAuditable": true,
+    "semanticRolesRemainHumanCurated": true,
+    "handprintBuildMustRecordCorpusHashes": true,
+    "handprintChangeMayChangeCandidateIdentity": true,
+    "handprintChangeCannotChangeCanonicalPlaceIdentity": true,
+    "insufficientCorpusMustFailSoft": true
+  },
+  "minimumApprovedWitnesses": 3,
+  "corpus": {
+    "witnessCount": 0,
+    "witnesses": [],
+    "roleCounts": {},
+    "consensusRoles": [],
+    "doNotInherit": []
+  },
+  "metrics": {
+    "perWitness": {},
+    "aggregate": {}
+  },
+  "interpretation": {
+    "tonalRestraint": null,
+    "warmthBias": null,
+    "edgeCharacter": null,
+    "centerLightBias": null,
+    "shadowPresence": null,
+    "tonalRange": null
+  },
+  "provenance": {
+    "builder": "velastra-painter handprint-build",
+    "algorithmVersion": 1,
+    "builtAt": null,
+    "note": "No pixel-derived handprint has been built yet."
+  }
+}
