@@ -166,6 +166,51 @@ def manifest_fixture():
                 "shadowPresence": "shadow occupies a substantial share of the image field",
                 "tonalRange": "broad tonal span from deep shadow to selective highlight",
             },
+            "facets": {
+                "edge_behavior": {
+                    "witnessCount": 2,
+                    "witnesses": [
+                        "viryn_self_portrait_01",
+                        "gallery_target_01",
+                    ],
+                    "eligibleForRender": True,
+                    "support": "cross_portfolio",
+                    "metrics": {
+                        "edgeActivity": {
+                            "count": 2,
+                            "mean": 0.0397,
+                            "median": 0.0397,
+                            "min": 0.0256,
+                            "max": 0.0537,
+                            "stddev": 0.0141,
+                            "range": 0.0281,
+                            "variation": "tight",
+                        }
+                    },
+                    "interpretation": {
+                        "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+                    },
+                    "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; edge activity varies tight across the supporting works.",
+                },
+                "material_hand": {
+                    "witnessCount": 2,
+                    "witnesses": [
+                        "studio_atelier_01",
+                        "gallery_target_01",
+                    ],
+                    "eligibleForRender": True,
+                    "support": "cross_portfolio",
+                    "metrics": {},
+                    "interpretation": {
+                        "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+                    },
+                    "promptSummary": "2 witnesses; surfaces retain handled memory without copying inventory.",
+                },
+            },
+            "facetRoles": [
+                "edge_behavior",
+                "material_hand",
+            ],
             "doNotInherit": [
                 "identity",
                 "face",
@@ -371,6 +416,12 @@ class PainterBridgeTests(unittest.TestCase):
         )
         self.assertTrue(bundle["handprint"]["active"])
         self.assertEqual(bundle["handprint"]["witnessCount"], 3)
+        self.assertIn("ROLE-CONDITIONED FACETS", bundle["positive"])
+        self.assertIn("edge behavior", bundle["positive"])
+        self.assertIn(
+            "edge_behavior",
+            bundle["handprint"]["facetRoles"],
+        )
 
     def test_handprint_change_changes_candidate_not_asset_identity(self):
         manifest = manifest_fixture()
@@ -481,6 +532,29 @@ class PainterBridgeTests(unittest.TestCase):
             self.assertTrue(
                 built["interpretation"]["warmthBias"]
             )
+            self.assertEqual(
+                built["facets"]["version"],
+                1,
+            )
+            self.assertEqual(
+                built["facets"]["minimumWitnesses"],
+                2,
+            )
+            self.assertTrue(
+                built["facets"]["byRole"]["tonal_memory"]["eligibleForRender"]
+            )
+            self.assertEqual(
+                built["facets"]["byRole"]["tonal_memory"]["metrics"]["meanWarmth"]["count"],
+                3,
+            )
+            self.assertIn(
+                built["facets"]["byRole"]["tonal_memory"]["metrics"]["meanWarmth"]["variation"],
+                {"tight", "moderate", "broad"},
+            )
+            self.assertEqual(
+                built["provenance"]["algorithmVersion"],
+                2,
+            )
 
             bad = json.loads(json.dumps(witness_registry))
             bad["entries"]["one"]["asset"]["sha256"] = "wrong"
@@ -491,6 +565,82 @@ class PainterBridgeTests(unittest.TestCase):
                     root,
                     template,
                 )
+
+    def test_text_first_brush_does_not_claim_visual_witness(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "deadbeef",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertFalse(bundle["witness"]["active"])
+        self.assertNotIn("VISUAL WITNESS", bundle["positive"])
+        self.assertIn("HANDPRINT", bundle["positive"])
+
+    def test_handprint_ablation_changes_candidate_without_changing_asset(self):
+        manifest = manifest_fixture()
+        base_spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        ablated_spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image",
+                without_handprint=True,
+            )
+        )
+
+        base_bundle = painter.compile_prompt_bundle(manifest, base_spec)
+        ablated_bundle = painter.compile_prompt_bundle(
+            manifest,
+            ablated_spec,
+        )
+
+        self.assertTrue(base_bundle["handprint"]["active"])
+        self.assertFalse(ablated_bundle["handprint"]["active"])
+        self.assertEqual(
+            ablated_bundle["handprint"]["ablation"],
+            "disabled",
+        )
+        self.assertNotIn("HANDPRINT", ablated_bundle["positive"])
+        self.assertEqual(
+            manifest["assetKey"],
+            "velastra.place_tableau.test",
+        )
+        self.assertNotEqual(
+            painter.candidate_id(manifest, base_bundle, base_spec),
+            painter.candidate_id(
+                manifest,
+                ablated_bundle,
+                ablated_spec,
+            ),
+        )
+
+    def test_witness_required_brush_refuses_witness_ablation(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="ablation-test",
+                without_witness=True,
+            )
+        )
+
+        with self.assertRaises(painter.PainterError):
+            painter.compile_prompt_bundle(manifest, spec)
 
     def test_witness_brush_fails_without_approved_asset(self):
         manifest = manifest_fixture()
@@ -708,6 +858,8 @@ class PainterBridgeTests(unittest.TestCase):
             "brush": None,
             "transport": None,
             "witness": None,
+            "without_handprint": False,
+            "without_witness": False,
             "attempt": None,
             "repo_root": ".",
             "brush_registry": None,
