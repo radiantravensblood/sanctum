@@ -46,12 +46,21 @@ Apache-2.0
 default transport: huggingface / fal-ai
 ```
 
-The heavier alternate is:
+The heavier text-first alternate is:
 
 ```text
 qwen_image
 Qwen/Qwen-Image
 Apache-2.0
+```
+
+The first reference-capable witness translator is:
+
+```text
+qwen_image_edit
+Qwen/Qwen-Image-Edit
+Apache-2.0
+task: image_to_image
 ```
 
 A brush name is part of candidate provenance.
@@ -212,6 +221,103 @@ Candidate provenance records:
 - whether required material still exceeds the declared target.
 
 The system never silently claims a prompt fit when it did not.
+
+## Visual Witness
+
+Kernel 0026 lets a reference-capable brush receive one approved image as
+evidence of Virynism's visual hand.
+
+The witness packet is already carried inside a freshly exported Atelier
+Manifest.
+
+A witness contains:
+
+- selected hand roles,
+- explicit content non-inheritance boundaries,
+- reviewed asset path,
+- SHA-256,
+- dimensions,
+- provenance.
+
+### Inspect the canon
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py witnesses
+```
+
+### Admit an actual painting
+
+Place the source image temporarily under:
+
+`authoring/witnesses/`
+
+Then run:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py witness-register \
+  gallery_target_01 \
+  "authoring/witnesses/gallery-target.png" \
+  --reviewed-by "Siege" \
+  --review-note "Carries Virynism sacred incompletion, material hand, and spatial cadence."
+```
+
+Registration normalizes the source to PNG, writes it under
+`assets/velastra/witnesses/`, computes SHA-256, and updates the named registry
+entry.
+
+The registry and approved asset should then be reviewed and committed.
+
+A new browser handoff must be exported after that commit so the approved witness
+snapshot travels inside the manifest.
+
+### Witness rendering
+
+The first hosted reference brush is:
+
+`qwen_image_edit`
+
+backed by:
+
+`Qwen/Qwen-Image-Edit`
+
+The normal command is:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py render \
+  "authoring/inbox/<room>.velastra.json" \
+  --brush qwen_image_edit \
+  --transport huggingface
+```
+
+The bridge:
+
+1. requires an approved witness in the manifest,
+2. verifies the witness file is inside the repository,
+3. verifies its SHA-256,
+4. sends the image through Hugging Face image-to-image,
+5. keeps scene truth and visible evidence authoritative,
+6. records witness identity and roles in candidate provenance.
+
+The positive prompt explicitly says which visual-hand roles may be inherited
+and which depicted content may not.
+
+### Attempt identity
+
+Hosted image-to-image currently has no reliable seed-control contract.
+
+Therefore witness renders receive an attempt identity.
+
+This prevents two different provider outputs from sharing a candidate ID and
+silently overwriting one another.
+
+An explicit attempt can be supplied with:
+
+`--attempt <label>`
+
+Otherwise the bridge generates one for hosted reference runs.
+
+This differs from the deterministic text-to-image path and is recorded
+honestly in candidate provenance.
 
 ## Painterly Truth
 

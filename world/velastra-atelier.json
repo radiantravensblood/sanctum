@@ -43,7 +43,16 @@
     "visibleEvidenceMustUsePositivePromptChannel": true,
     "brushControlContractMustBeExplicit": true,
     "unsupportedNegativeChannelCannotCarryCriticalMeaning": true,
-    "promptBudgetMustPreserveSceneAndEvidence": true
+    "promptBudgetMustPreserveSceneAndEvidence": true,
+    "visualWitnessMustTravelInsideManifest": true,
+    "visualWitnessCannotChangeCanonicalPlaceIdentity": true,
+    "visualWitnessChangeMustChangeCandidateIdentity": true,
+    "witnessContentCannotBecomeSceneTruth": true,
+    "witnessAssetRequiresApprovalAndSha256": true,
+    "missingWitnessMustFallBackForTextBrushes": true,
+    "witnessBrushMustFailClosedWithoutApprovedAsset": true,
+    "nondeterministicWitnessRenderMustCarryAttemptIdentity": true,
+    "visualWitnessMayGuideHandButNotScene": true
   },
   "media": {
     "luminous_oil": {
@@ -185,7 +194,11 @@
     "painterlyTruthSnapshotTravelsWithManifest": true,
     "evidenceRegistry": "world/velastra-evidence.json",
     "evidenceSnapshotTravelsWithManifest": true,
-    "brushControlContractRequired": true
+    "brushControlContractRequired": true,
+    "witnessRegistry": "world/velastra-witnesses.json",
+    "witnessSnapshotTravelsWithManifest": true,
+    "witnessAssetRoot": "assets/velastra/witnesses",
+    "witnessAdmissionCommand": "witness-register"
   },
   "livingCanvas": {
     "version": 1,

@@ -435,6 +435,18 @@ function refreshAtelierDock({
       )
     : "Evidence 0/0";
 
+  const witnesses = manifest.witnesses;
+  const witnessLabel = witnesses?.active
+    ? (
+        "Witness " +
+        String(witnesses.approved?.[0]?.title || "ready")
+      )
+    : (
+        witnesses?.selected?.length
+          ? "Witness pending"
+          : "Witness none"
+      );
+
   status.textContent =
     shortKey(manifest.assetKey) +
     " · " +
@@ -443,6 +455,8 @@ function refreshAtelierDock({
     evidenceLabel +
     " · " +
     styleLabel +
+    " · " +
+    witnessLabel +
     " · " +
     selection.brushLabel +
     " · " +

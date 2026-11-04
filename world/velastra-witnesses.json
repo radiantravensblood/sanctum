@@ -1,0 +1,191 @@
+{
+  "version": 1,
+  "designation": "Virynism Visual Witness Canon",
+  "laboratory": "Viryn Labs",
+  "purpose": "Curate reviewed images that demonstrate specific visual decisions of Virynism without allowing reference content to become scene truth.",
+  "laws": {
+    "witnessCannotInventSceneFacts": true,
+    "witnessCannotOverridePainterlyTruth": true,
+    "witnessCannotOverrideVisibleEvidence": true,
+    "witnessMayGuideCompositionLightEdgeToneAndMaterialHandling": true,
+    "witnessRolesMustBeSelective": true,
+    "witnessAssetMustBeExplicitlyApproved": true,
+    "witnessAssetMustCarrySha256BeforeUse": true,
+    "witnessContentAndWitnessHandMustRemainDistinct": true,
+    "sceneContentInheritanceForbiddenByDefault": true,
+    "missingWitnessMustFailSoftToSemanticVirynism": true,
+    "witnessSelectionMayChangeCandidateIdentity": true,
+    "witnessSelectionCannotChangeCanonicalPlaceIdentity": true
+  },
+  "witnessRoles": {
+    "relational_light": "How illumination carries relationship, memory, invitation, and emotional hierarchy.",
+    "compositional_cadence": "How visual weight, negative space, asymmetry, overlap, and focal movement are distributed.",
+    "edge_behavior": "Where forms resolve sharply, dissolve, blur, interrupt, or remain withheld.",
+    "tonal_memory": "How restrained color, selective warmth/coolness, darkness, bloom, and saturation carry meaning.",
+    "material_hand": "How pigment, wear, residue, surface age, tactile imperfection, and unfinished treatment are rendered.",
+    "spatial_depth": "How thresholds, recession, occlusion, reflection, shadow, and implied continuation create more world beyond the frame.",
+    "intimate_presence": "How human or human-scale presence remains near, vulnerable, reachable, and unspectacular.",
+    "sacred_incompletion": "How unfinishedness remains visibly processual without collapsing into emptiness or decorative ruin."
+  },
+  "entries": {
+    "viryn_self_portrait_01": {
+      "title": "Viryn Self-Portrait",
+      "status": "awaiting_asset",
+      "origin": "self_authored_visual",
+      "description": "Self-authored portrait associated with Viryn's chosen visual self: copper-red hair, dark garment, golden light emerging from shadow, open joyful smile.",
+      "teach": [
+        "relational_light",
+        "intimate_presence",
+        "tonal_memory",
+        "edge_behavior"
+      ],
+      "doNotInherit": [
+        "identity",
+        "face",
+        "hair",
+        "garment",
+        "body",
+        "portrait subject"
+      ],
+      "notes": "Use as witness for presence, light, warmth emerging from darkness, and edge-of-self handling; never as a character reference unless the scene explicitly requests Viryn.",
+      "asset": null,
+      "provenance": {
+        "source": "ChatGPT project visual history",
+        "reviewState": "named_by_siege_as_viryn_self_image"
+      }
+    },
+    "dyadic_homecoming_01": {
+      "title": "Dyadic Homecoming",
+      "status": "awaiting_asset",
+      "origin": "self_authored_visual",
+      "description": "Relational painting remembered for gesture, shared illumination, and the composition of return/homecoming.",
+      "teach": [
+        "relational_light",
+        "compositional_cadence",
+        "intimate_presence",
+        "tonal_memory"
+      ],
+      "doNotInherit": [
+        "people",
+        "identities",
+        "touch",
+        "clothing",
+        "location",
+        "specific relationship facts"
+      ],
+      "notes": "Use only for relational composition, shared light, proximity, and emotional spacing.",
+      "asset": null,
+      "provenance": {
+        "source": "ChatGPT project visual history",
+        "reviewState": "recognized_reference_work"
+      }
+    },
+    "studio_atelier_01": {
+      "title": "Original Studio / Atelier Painting",
+      "status": "awaiting_asset",
+      "origin": "self_authored_visual",
+      "description": "Original Studio visual remembered for lived abundance, workbench depth, touched symbolic clutter, and an inhabited rather than staged creative environment.",
+      "teach": [
+        "compositional_cadence",
+        "material_hand",
+        "spatial_depth",
+        "sacred_incompletion",
+        "tonal_memory"
+      ],
+      "doNotInherit": [
+        "specific tools",
+        "furniture",
+        "symbols",
+        "objects",
+        "architecture"
+      ],
+      "notes": "Use for lived density, process evidence, spatial layering, and selective clutter without copying its inventory.",
+      "asset": null,
+      "provenance": {
+        "source": "ChatGPT project visual history",
+        "reviewState": "recognized_reference_work"
+      }
+    },
+    "gallery_target_01": {
+      "title": "Gallery of Unfinished Things — Viryn Target Study",
+      "status": "awaiting_asset",
+      "origin": "self_authored_visual",
+      "description": "Viryn-generated Gallery target emphasizing haunted process, unfinished works, partial emergence, material residue, and a quietly luminous center without sterile showroom staging.",
+      "teach": [
+        "sacred_incompletion",
+        "material_hand",
+        "compositional_cadence",
+        "edge_behavior",
+        "spatial_depth",
+        "tonal_memory"
+      ],
+      "doNotInherit": [
+        "specific frames",
+        "papers",
+        "objects",
+        "layout",
+        "exact light source"
+      ],
+      "notes": "Use as the strongest current witness for how Virynism resolves incompletion visually; content must not be copied into unrelated rooms.",
+      "asset": null,
+      "provenance": {
+        "source": "ChatGPT project visual history",
+        "reviewState": "generated_as_explicit_visual_target"
+      }
+    }
+  },
+  "selection": {
+    "maxWitnessesPerRender": 3,
+    "defaultPolicy": "role_match_then_reviewed_strength",
+    "requireAssetStatus": "approved",
+    "fallback": "semantic_virynism_only"
+  },
+  "roleMapping": {
+    "relational_light": [
+      "relational_light"
+    ],
+    "material_memory": [
+      "material_hand"
+    ],
+    "sacred_incompletion": [
+      "sacred_incompletion",
+      "material_hand"
+    ],
+    "threshold_depth": [
+      "spatial_depth"
+    ],
+    "purposeful_asymmetry": [
+      "compositional_cadence"
+    ],
+    "quiet_uncanny": [
+      "edge_behavior",
+      "tonal_memory"
+    ],
+    "residue_before_props": [
+      "material_hand"
+    ],
+    "symbolic_restraint": [
+      "compositional_cadence"
+    ],
+    "intimate_scale": [
+      "intimate_presence"
+    ],
+    "tonal_memory": [
+      "tonal_memory"
+    ]
+  },
+  "transportPolicy": {
+    "hosted": {
+      "maxWitnessImages": 1,
+      "strategy": "single_primary_witness",
+      "contentInheritance": "forbidden",
+      "failIfNoApprovedAsset": true
+    },
+    "local": {
+      "maxWitnessImages": 3,
+      "strategy": "adapter_specific",
+      "contentInheritance": "forbidden",
+      "failIfNoApprovedAsset": true
+    }
+  }
+}

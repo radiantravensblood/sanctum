@@ -93,6 +93,7 @@ export function compileSanctumAtelier({
     atelierGrammar: world.velastraAtelier,
     assetRegistry: world.velastraAssets,
     styleGrammar: world.velastraStyle,
+    witnessGrammar: world.velastraWitnesses,
     evidence,
     scenePacket,
     motifSelection,

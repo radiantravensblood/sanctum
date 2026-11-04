@@ -28,6 +28,9 @@ DEFAULT_HEIGHT = 864
 DEFAULT_BRUSH_REGISTRY = (
     Path(__file__).resolve().parents[3] / "world" / "velastra-brushes.json"
 )
+DEFAULT_WITNESS_REGISTRY = (
+    Path(__file__).resolve().parents[3] / "world" / "velastra-witnesses.json"
+)
 
 
 class PainterError(RuntimeError):
@@ -306,6 +309,126 @@ def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def witness_lines(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
+    block = manifest.get("witnesses")
+    control = spec.control_contract if spec and spec.control_contract else {}
+    reference_contract = control.get("referenceImages") or {}
+    required = reference_contract.get("required") is True
+
+    if not isinstance(block, Mapping):
+        if required:
+            raise PainterError(
+                "Selected brush requires an approved Visual Witness, "
+                "but this manifest carries no witness packet."
+            )
+        return {
+            "active": False,
+            "required": required,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+        }
+
+    approved = [
+        entry
+        for entry in (block.get("approved") or [])
+        if isinstance(entry, Mapping)
+        and isinstance(entry.get("asset"), Mapping)
+        and entry.get("asset", {}).get("path")
+        and entry.get("asset", {}).get("sha256")
+    ]
+
+    explicit = spec.witness_id if spec else None
+    selected = None
+
+    if explicit:
+        selected = next(
+            (
+                entry
+                for entry in approved
+                if entry.get("id") == explicit
+            ),
+            None,
+        )
+        if selected is None:
+            raise PainterError(
+                f"Requested witness is not approved in this manifest: {explicit}"
+            )
+    elif approved:
+        selected = approved[0]
+
+    if required and selected is None:
+        proposed = [
+            str(entry.get("id"))
+            for entry in (block.get("selected") or [])
+            if isinstance(entry, Mapping) and entry.get("id")
+        ]
+        suffix = (
+            " Selected but not yet approved: " + ", ".join(proposed)
+            if proposed
+            else ""
+        )
+        raise PainterError(
+            "Selected brush requires an approved Visual Witness asset."
+            + suffix
+        )
+
+    if selected is None:
+        return {
+            "active": False,
+            "required": required,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+        }
+
+    return {
+        "active": True,
+        "required": required,
+        "selected": selected.get("id"),
+        "title": selected.get("title"),
+        "roles": list(selected.get("matchedRoles") or selected.get("teach") or []),
+        "doNotInherit": list(selected.get("doNotInherit") or []),
+        "notes": selected.get("notes"),
+        "asset": dict(selected.get("asset") or {}),
+    }
+
+
+def resolve_witness_path(
+    witness: Mapping[str, Any],
+    repo_root: Path,
+) -> Path:
+    asset = witness.get("asset") or {}
+    raw = asset.get("path")
+    if not raw:
+        raise PainterError("Visual Witness has no approved asset path.")
+
+    path = (repo_root / str(raw)).resolve()
+    try:
+        path.relative_to(repo_root.resolve())
+    except ValueError as exc:
+        raise PainterError(
+            f"Visual Witness must live inside repository root: {path}"
+        ) from exc
+
+    if not path.exists():
+        raise PainterError(f"Visual Witness asset does not exist: {path}")
+
+    recorded = asset.get("sha256")
+    actual = sha256_file(path)
+    if not recorded or recorded != actual:
+        raise PainterError(
+            "Visual Witness hash does not match its registry record."
+        )
+
+    return path
+
+
 def estimate_prompt_tokens(text: str) -> int:
     if not text:
         return 0
@@ -368,6 +491,7 @@ def compile_prompt_bundle(
     truth = compile_truth_envelope(manifest)
     style = style_lines(manifest)
     evidence = evidence_lines(manifest)
+    witness = witness_lines(manifest, spec)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
     control = spec.control_contract if spec and spec.control_contract else {}
 
@@ -509,6 +633,22 @@ def compile_prompt_bundle(
             required=True,
         )
 
+    if witness["active"]:
+        roles = ", ".join(witness["roles"]) or "approved visual-hand roles"
+        exclusions = ", ".join(witness["doNotInherit"]) or "all depicted scene content"
+        add(
+            "visual_witness",
+            "VISUAL WITNESS — an input image accompanies this request. "
+            "Use it only as evidence for these visual-hand roles: "
+            + roles
+            + ". Rebuild the target image from the authoritative target scene. "
+            "Do not inherit witness content including: "
+            + exclusions
+            + ". Witness scene content is non-canonical.",
+            priority=115,
+            required=True,
+        )
+
     add(
         "medium",
         f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
@@ -640,6 +780,12 @@ def compile_prompt_bundle(
             "Virynism rejects: " + " | ".join(style["avoid"])
         )
 
+    if witness["active"] and witness["doNotInherit"]:
+        negative.append(
+            "Do not copy Visual Witness scene content: "
+            + " | ".join(witness["doNotInherit"])
+        )
+
     dialect_negative = [
         flatten_text(item)
         for item in (dialect.get("negativePriorities") or [])
@@ -671,6 +817,15 @@ def compile_prompt_bundle(
             "identityReframe": evidence["identityReframe"],
             "reviewQuestions": evidence["reviewQuestions"],
         },
+        "witness": {
+            "active": witness["active"],
+            "required": witness["required"],
+            "selected": witness.get("selected"),
+            "title": witness.get("title"),
+            "roles": witness.get("roles") or [],
+            "doNotInherit": witness.get("doNotInherit") or [],
+            "asset": witness.get("asset"),
+        },
         "style": {
             "id": (manifest.get("style") or {}).get("id"),
             "version": (manifest.get("style") or {}).get("version"),
@@ -698,6 +853,15 @@ def compile_prompt_bundle(
                     if (control.get("guidance") or {}).get("supportedByBasePipeline")
                     else "unsupported"
                 )
+            ),
+            "seedReliability": (
+                "unsupported"
+                if (
+                    spec
+                    and spec.transport == "huggingface"
+                    and (control.get("seedControl") or {}).get("providerSupported") is False
+                )
+                else "supported"
             ),
             "evidenceStrategy": control.get("evidenceStrategy"),
             "role": control.get("role"),
@@ -768,6 +932,16 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
     defaults = brush.get("defaults") or {}
     control = brush.get("controlContract") or {}
     guidance_contract = control.get("guidance") or {}
+    seed_contract = control.get("seedControl") or {}
+    attempt_required = (
+        seed_contract.get("candidateAttemptRequired") is True
+        and transport_id == "huggingface"
+    )
+    attempt_id = (
+        getattr(args, "attempt", None)
+        or (utc_now() if attempt_required else None)
+    )
+
     resolved_true_cfg = (
         args.true_cfg_scale
         if getattr(args, "true_cfg_scale", None) is not None
@@ -780,6 +954,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
 
     return RenderSpec(
         backend=args.backend or transport.get("backend") or "diffusers",
+        task=transport.get("task") or "text_to_image",
         model=args.model or brush.get("model"),
         seed=args.seed if args.seed is not None else int(defaults.get("seed", 190919)),
         width=args.width if args.width is not None else int(defaults.get("width", DEFAULT_WIDTH)),
@@ -796,6 +971,9 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         license=brush.get("license"),
         prompt_dialect=brush.get("promptDialect"),
         control_contract=brush.get("controlContract"),
+        witness_id=getattr(args, "witness", None),
+        repo_root=getattr(args, "repo_root", ".") or ".",
+        attempt_id=attempt_id,
     )
 
 
@@ -810,6 +988,7 @@ class RenderSpec:
     guidance: float | None
     device: str
     dtype: str
+    task: str = "text_to_image"
     true_cfg_scale: float | None = None
     brush: str | None = None
     transport: str | None = None
@@ -818,6 +997,9 @@ class RenderSpec:
     license: str | None = None
     prompt_dialect: Mapping[str, Any] | None = None
     control_contract: Mapping[str, Any] | None = None
+    witness_id: str | None = None
+    repo_root: str = "."
+    attempt_id: str | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -829,6 +1011,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "brush": spec.brush,
             "transport": spec.transport,
             "backend": spec.backend,
+            "task": spec.task,
             "provider": spec.provider,
             "model": spec.model,
             "seed": spec.seed,
@@ -837,6 +1020,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "steps": spec.steps,
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
+            "attemptId": spec.attempt_id,
         },
     }
     return sha256_bytes(canonical_json(identity))[:20]
@@ -864,10 +1048,12 @@ def build_candidate_record(
             "truthEnvelope": prompts["truthEnvelope"],
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
+            "witness": prompts.get("witness"),
             "promptBudget": prompts.get("budget"),
         },
         "render": {
             "backend": spec.backend,
+            "task": spec.task,
             "model": spec.model,
             "seed": spec.seed,
             "width": spec.width,
@@ -875,6 +1061,7 @@ def build_candidate_record(
             "steps": spec.steps,
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
+            "attemptId": spec.attempt_id,
             "device": spec.device,
             "dtype": spec.dtype,
             "brush": spec.brush,
@@ -938,6 +1125,11 @@ def render_diffusers(
     spec: RenderSpec,
     output_path: Path,
 ) -> dict[str, Any]:
+    if spec.task != "text_to_image":
+        raise PainterError(
+            f"Local Diffusers task not implemented for this brush: {spec.task}"
+        )
+
     try:
         import torch
         from diffusers import DiffusionPipeline
@@ -1032,29 +1224,186 @@ def render_huggingface(
         api_key=token,
     )
 
-    request: dict[str, Any] = {
-        "prompt": prompts["positive"],
-        "height": spec.height,
-        "width": spec.width,
-        "model": spec.model,
-        "seed": spec.seed,
-    }
-    if prompts.get("negative"):
-        request["negative_prompt"] = prompts["negative"]
-    if spec.steps is not None:
-        request["num_inference_steps"] = spec.steps
-    if spec.guidance is not None:
-        request["guidance_scale"] = spec.guidance
+    if spec.task == "text_to_image":
+        request: dict[str, Any] = {
+            "prompt": prompts["positive"],
+            "height": spec.height,
+            "width": spec.width,
+            "model": spec.model,
+            "seed": spec.seed,
+        }
+        if prompts.get("negative"):
+            request["negative_prompt"] = prompts["negative"]
+        if spec.steps is not None:
+            request["num_inference_steps"] = spec.steps
+        if spec.guidance is not None:
+            request["guidance_scale"] = spec.guidance
 
-    image = client.text_to_image(**request)
+        image = client.text_to_image(**request)
+        witness_runtime = None
+
+    elif spec.task == "image_to_image":
+        witness = prompts.get("witness") or {}
+        if not witness.get("active"):
+            raise PainterError(
+                "Image-to-image brush requires an active approved Visual Witness."
+            )
+
+        witness_path = resolve_witness_path(
+            witness,
+            Path(spec.repo_root),
+        )
+        input_image = witness_path.read_bytes()
+
+        method = client.image_to_image
+        signature = inspect.signature(method)
+        accepted = set(signature.parameters)
+        accepts_kwargs = any(
+            parameter.kind is inspect.Parameter.VAR_KEYWORD
+            for parameter in signature.parameters.values()
+        )
+
+        request = {
+            "prompt": prompts["positive"],
+            "model": spec.model,
+        }
+        if prompts.get("negative") and (
+            "negative_prompt" in accepted or accepts_kwargs
+        ):
+            request["negative_prompt"] = prompts["negative"]
+        if spec.steps is not None and (
+            "num_inference_steps" in accepted or accepts_kwargs
+        ):
+            request["num_inference_steps"] = spec.steps
+        if spec.guidance is not None and (
+            "guidance_scale" in accepted or accepts_kwargs
+        ):
+            request["guidance_scale"] = spec.guidance
+        if "target_size" in accepted or accepts_kwargs:
+            request["target_size"] = {
+                "width": spec.width,
+                "height": spec.height,
+            }
+
+        image = method(input_image, **request)
+        witness_runtime = {
+            "id": witness.get("selected"),
+            "path": str(witness_path.as_posix()),
+            "sha256": (witness.get("asset") or {}).get("sha256"),
+            "roles": witness.get("roles") or [],
+        }
+
+    else:
+        raise PainterError(
+            f"Unknown Hugging Face image task: {spec.task}"
+        )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG")
     return {
         "providerResolved": spec.provider or "auto",
         "transport": "huggingface",
+        "task": spec.task,
         "credentialEnv": token_env,
+        "witness": witness_runtime,
     }
+
+
+def load_witness_registry(path: Path | None = None) -> dict[str, Any]:
+    registry_path = path or DEFAULT_WITNESS_REGISTRY
+    registry = read_json(registry_path)
+    entries = registry.get("entries")
+    if not isinstance(entries, dict):
+        raise PainterError(
+            f"Visual Witness registry has no entries object: {registry_path}"
+        )
+    return registry
+
+
+def cmd_witnesses(args: argparse.Namespace) -> int:
+    registry_path = Path(args.registry) if args.registry else None
+    registry = load_witness_registry(registry_path)
+
+    if args.json:
+        print(json.dumps(registry, indent=2, ensure_ascii=False))
+        return 0
+
+    for witness_id, entry in registry.get("entries", {}).items():
+        roles = ", ".join(entry.get("teach") or [])
+        asset = entry.get("asset") or {}
+        path = asset.get("path") or "no approved asset"
+        print(
+            f"{witness_id}: {entry.get('title', witness_id)} | "
+            f"{entry.get('status', 'unknown')} | {roles} | {path}"
+        )
+    return 0
+
+
+def cmd_witness_register(args: argparse.Namespace) -> int:
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise PainterError(
+            "Witness registration requires Pillow. "
+            "Install labs/velastra/painter/requirements-provider.txt."
+        ) from exc
+
+    repo_root = Path(args.repo_root).resolve()
+    registry_path = Path(args.registry)
+    registry = load_witness_registry(registry_path)
+    entries = registry["entries"]
+    entry = entries.get(args.witness_id)
+
+    if not isinstance(entry, dict):
+        raise PainterError(
+            f"Unknown Visual Witness ID: {args.witness_id}"
+        )
+
+    source = Path(args.image)
+    if not source.exists():
+        raise PainterError(
+            f"Visual Witness source image does not exist: {source}"
+        )
+
+    final_dir = repo_root / "assets" / "velastra" / "witnesses"
+    final_dir.mkdir(parents=True, exist_ok=True)
+    final_path = final_dir / f"{args.witness_id}.png"
+
+    if final_path.exists() and not args.replace:
+        raise PainterError(
+            f"Visual Witness asset already exists: {final_path}. "
+            "Use --replace only after explicit review."
+        )
+
+    with Image.open(source) as image:
+        normalized = image.convert("RGB")
+        width, height = normalized.size
+        normalized.save(final_path, format="PNG")
+
+    final_sha = sha256_file(final_path)
+    entry["status"] = "approved"
+    entry["asset"] = {
+        "path": repo_relative_path(repo_root, final_path),
+        "sha256": final_sha,
+        "width": width,
+        "height": height,
+        "mediaType": "image/png",
+    }
+    provenance = entry.setdefault("provenance", {})
+    provenance.update({
+        "assetSource": "velastra_witness_register",
+        "reviewedBy": args.reviewed_by,
+        "reviewedAt": utc_now(),
+        "reviewNote": args.review_note,
+        "imageSha256": final_sha,
+    })
+
+    output_registry = Path(args.output_registry or registry_path)
+    write_json(output_registry, registry)
+
+    print(final_path)
+    print(output_registry)
+    return 0
 
 
 def cmd_brushes(args: argparse.Namespace) -> int:
@@ -1181,7 +1530,9 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "license": candidate.get("render", {}).get("license"),
             "promptDialect": candidate.get("render", {}).get("promptDialect"),
             "style": candidate.get("source", {}).get("style"),
+            "witness": candidate.get("source", {}).get("witness"),
             "seed": candidate.get("render", {}).get("seed"),
+            "attemptId": candidate.get("render", {}).get("attemptId"),
             "reviewedBy": args.reviewed_by,
             "reviewedAt": utc_now(),
             "reviewNote": args.review_note,
@@ -1212,6 +1563,9 @@ def cmd_approve(args: argparse.Namespace) -> int:
 def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
     parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
+    parser.add_argument("--witness", help="Explicit approved Visual Witness ID when the brush supports references.")
+    parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
+    parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
     parser.add_argument(
         "--backend",
@@ -1258,6 +1612,25 @@ def build_parser() -> argparse.ArgumentParser:
     brushes.add_argument("--brush-registry")
     brushes.add_argument("--json", action="store_true")
     brushes.set_defaults(func=cmd_brushes)
+
+    witnesses = sub.add_parser("witnesses", help="List curated Virynism Visual Witnesses.")
+    witnesses.add_argument("--registry", default="world/velastra-witnesses.json")
+    witnesses.add_argument("--json", action="store_true")
+    witnesses.set_defaults(func=cmd_witnesses)
+
+    witness_register = sub.add_parser(
+        "witness-register",
+        help="Approve and seal an image asset into the Visual Witness canon.",
+    )
+    witness_register.add_argument("witness_id")
+    witness_register.add_argument("image")
+    witness_register.add_argument("--registry", default="world/velastra-witnesses.json")
+    witness_register.add_argument("--repo-root", default=".")
+    witness_register.add_argument("--output-registry")
+    witness_register.add_argument("--reviewed-by", required=True)
+    witness_register.add_argument("--review-note", required=True)
+    witness_register.add_argument("--replace", action="store_true")
+    witness_register.set_defaults(func=cmd_witness_register)
 
     approve = sub.add_parser("approve", help="Promote a reviewed candidate into a registry copy.")
     approve.add_argument("candidate")

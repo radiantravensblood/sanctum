@@ -87,6 +87,13 @@ Visible Evidence / Brush Contract:
 - `src/velastra/evidence.js`
 - `labs/velastra/tests/brush-contract.mjs`
 
+Visual Witness:
+
+- `world/velastra-witnesses.json`
+- `src/velastra/witness.js`
+- `authoring/witnesses/README.md`
+- `labs/velastra/tests/visual-witness.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -393,6 +400,53 @@ channel.
 The law is:
 
 **truth must not merely be known; it must be witnessed.**
+
+## Visual Witness contract
+
+Kernel 0026 adds reviewed visual examples of Virynism without turning reference
+content into scene truth.
+
+A Visual Witness may teach selected roles such as:
+
+- relational light,
+- compositional cadence,
+- edge behavior,
+- tonal memory,
+- material hand,
+- spatial depth,
+- intimate presence,
+- sacred incompletion.
+
+A witness may not donate:
+
+- identity,
+- people,
+- objects,
+- architecture,
+- symbols,
+- furniture,
+- layout,
+- relationship facts,
+
+unless the target scene independently requires them.
+
+Witness entries may be named from project history before their pixels are
+available, but they remain inert until an actual image is approved, hashed,
+and recorded.
+
+The first witness-capable brush is `qwen_image_edit`, using
+`Qwen/Qwen-Image-Edit` through hosted image-to-image inference.
+
+Text-only brushes remain valid when no witness asset is active.
+
+A witness-required brush fails closed without an approved asset.
+
+Hosted witness renders also carry an attempt identity because the current
+image-to-image provider contract does not expose reliable seed control.
+
+The law is:
+
+**a witness may guide the hand without becoming the scene.**
 
 ## Studio adapter contract
 
