@@ -1099,6 +1099,11 @@ def render_diffusers(
     spec: RenderSpec,
     output_path: Path,
 ) -> dict[str, Any]:
+    if spec.task != "text_to_image":
+        raise PainterError(
+            f"Local Diffusers task not implemented for this brush: {spec.task}"
+        )
+
     try:
         import torch
         from diffusers import DiffusionPipeline
@@ -1193,28 +1198,88 @@ def render_huggingface(
         api_key=token,
     )
 
-    request: dict[str, Any] = {
-        "prompt": prompts["positive"],
-        "height": spec.height,
-        "width": spec.width,
-        "model": spec.model,
-        "seed": spec.seed,
-    }
-    if prompts.get("negative"):
-        request["negative_prompt"] = prompts["negative"]
-    if spec.steps is not None:
-        request["num_inference_steps"] = spec.steps
-    if spec.guidance is not None:
-        request["guidance_scale"] = spec.guidance
+    if spec.task == "text_to_image":
+        request: dict[str, Any] = {
+            "prompt": prompts["positive"],
+            "height": spec.height,
+            "width": spec.width,
+            "model": spec.model,
+            "seed": spec.seed,
+        }
+        if prompts.get("negative"):
+            request["negative_prompt"] = prompts["negative"]
+        if spec.steps is not None:
+            request["num_inference_steps"] = spec.steps
+        if spec.guidance is not None:
+            request["guidance_scale"] = spec.guidance
 
-    image = client.text_to_image(**request)
+        image = client.text_to_image(**request)
+        witness_runtime = None
+
+    elif spec.task == "image_to_image":
+        witness = prompts.get("witness") or {}
+        if not witness.get("active"):
+            raise PainterError(
+                "Image-to-image brush requires an active approved Visual Witness."
+            )
+
+        witness_path = resolve_witness_path(
+            witness,
+            Path(spec.repo_root),
+        )
+        input_image = witness_path.read_bytes()
+
+        method = client.image_to_image
+        signature = inspect.signature(method)
+        accepted = set(signature.parameters)
+        accepts_kwargs = any(
+            parameter.kind is inspect.Parameter.VAR_KEYWORD
+            for parameter in signature.parameters.values()
+        )
+
+        request = {
+            "prompt": prompts["positive"],
+            "model": spec.model,
+        }
+        if prompts.get("negative") and (
+            "negative_prompt" in accepted or accepts_kwargs
+        ):
+            request["negative_prompt"] = prompts["negative"]
+        if spec.steps is not None and (
+            "num_inference_steps" in accepted or accepts_kwargs
+        ):
+            request["num_inference_steps"] = spec.steps
+        if spec.guidance is not None and (
+            "guidance_scale" in accepted or accepts_kwargs
+        ):
+            request["guidance_scale"] = spec.guidance
+        if "target_size" in accepted or accepts_kwargs:
+            request["target_size"] = {
+                "width": spec.width,
+                "height": spec.height,
+            }
+
+        image = method(input_image, **request)
+        witness_runtime = {
+            "id": witness.get("selected"),
+            "path": str(witness_path.as_posix()),
+            "sha256": (witness.get("asset") or {}).get("sha256"),
+            "roles": witness.get("roles") or [],
+        }
+
+    else:
+        raise PainterError(
+            f"Unknown Hugging Face image task: {spec.task}"
+        )
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG")
     return {
         "providerResolved": spec.provider or "auto",
         "transport": "huggingface",
+        "task": spec.task,
         "credentialEnv": token_env,
+        "witness": witness_runtime,
     }
 
 
