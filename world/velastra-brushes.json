@@ -19,7 +19,8 @@
     "promptBudgetMustProtectSceneAndEvidence": true,
     "visualWitnessBrushMustFailWithoutApprovedWitness": true,
     "witnessContentInheritanceForbidden": true,
-    "referenceImageMustCarrySha256": true
+    "referenceImageMustCarrySha256": true,
+    "nondeterministicTransportMustCarryAttemptIdentity": true
   },
   "brushes": {
     "z_image_turbo": {
@@ -268,6 +269,12 @@
         "provenance": {
           "source": "Hugging Face Inference Providers image-to-image + Qwen Image Edit documentation",
           "verifiedAt": "2026-11-03"
+        },
+        "seedControl": {
+          "providerSupported": false,
+          "localSupported": null,
+          "candidateAttemptRequired": true,
+          "policy": "hosted image-to-image candidate identity must include a unique attempt because provider seed control is unavailable"
         }
       },
       "provenance": {
