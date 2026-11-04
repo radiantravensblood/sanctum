@@ -118,6 +118,66 @@ def manifest_fixture():
                 "Does unfinishedness read as process rather than blankness?",
             ],
         },
+        "handprint": {
+            "version": 1,
+            "id": "viryn_handprint",
+            "designation": "Virynism Handprint",
+            "status": "built",
+            "active": True,
+            "fallback": None,
+            "room": "gallery",
+            "archetype": "place_tableau",
+            "witnessCount": 3,
+            "minimumApprovedWitnesses": 3,
+            "desiredRoles": [
+                "sacred_incompletion",
+                "material_hand",
+                "compositional_cadence",
+                "edge_behavior",
+                "tonal_memory",
+            ],
+            "consensusRoles": [
+                "tonal_memory",
+                "material_hand",
+                "compositional_cadence",
+                "edge_behavior",
+                "sacred_incompletion",
+                "spatial_depth",
+            ],
+            "relevantRoleCounts": [
+                {"role": "tonal_memory", "count": 3},
+                {"role": "material_hand", "count": 2},
+            ],
+            "metrics": {
+                "meanLuminance": 0.42,
+                "meanSaturation": 0.31,
+                "meanWarmth": 0.08,
+                "darkShare": 0.3,
+                "highlightShare": 0.07,
+                "tonalSpan": 0.68,
+                "edgeActivity": 0.16,
+                "centerLightDelta": 0.09,
+            },
+            "interpretation": {
+                "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+                "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+                "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+                "centerLightBias": "center fields tend to hold more light than the periphery",
+                "shadowPresence": "shadow occupies a substantial share of the image field",
+                "tonalRange": "broad tonal span from deep shadow to selective highlight",
+            },
+            "doNotInherit": [
+                "identity",
+                "face",
+                "objects",
+                "layout",
+                "architecture",
+            ],
+            "provenance": {
+                "builder": "velastra-painter handprint-build",
+                "algorithmVersion": 1,
+            },
+        },
         "witnesses": {
             "version": 1,
             "id": "visual_witness",
@@ -297,6 +357,140 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertTrue(bundle["control"]["negativePromptActive"])
         self.assertIn("Virynism rejects", bundle["negative"])
         self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+
+    def test_prompt_bundle_carries_portfolio_handprint(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertIn("HANDPRINT", bundle["positive"])
+        self.assertIn("3 approved witnesses", bundle["positive"])
+        self.assertIn(
+            "warm-biased overall",
+            bundle["positive"],
+        )
+        self.assertTrue(bundle["handprint"]["active"])
+        self.assertEqual(bundle["handprint"]["witnessCount"], 3)
+
+    def test_handprint_change_changes_candidate_not_asset_identity(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        first_bundle = painter.compile_prompt_bundle(manifest, spec)
+        first_id = painter.candidate_id(manifest, first_bundle, spec)
+
+        changed = json.loads(json.dumps(manifest))
+        changed["handprint"]["interpretation"]["warmthBias"] = (
+            "near-balanced warm/cool field"
+        )
+        changed_bundle = painter.compile_prompt_bundle(changed, spec)
+        changed_id = painter.candidate_id(changed, changed_bundle, spec)
+
+        self.assertEqual(manifest["assetKey"], changed["assetKey"])
+        self.assertNotEqual(first_id, changed_id)
+
+    def test_candidate_records_handprint_provenance(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        prompts = painter.compile_prompt_bundle(manifest, spec)
+        record = painter.build_candidate_record(
+            manifest,
+            prompts,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+
+        self.assertTrue(record["source"]["handprint"]["active"])
+        self.assertEqual(
+            record["source"]["handprint"]["witnessCount"],
+            3,
+        )
+        self.assertIn(
+            "tonal_memory",
+            record["source"]["handprint"]["consensusRoles"],
+        )
+
+    def test_handprint_builder_uses_sealed_approved_pixels(self):
+        from PIL import Image
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            asset_dir = root / "assets" / "velastra" / "witnesses"
+            asset_dir.mkdir(parents=True)
+
+            entries = {}
+            specs = [
+                ("one", (60, 35, 20)),
+                ("two", (180, 120, 70)),
+                ("three", (220, 180, 120)),
+            ]
+
+            for witness_id, rgb in specs:
+                path = asset_dir / f"{witness_id}.png"
+                image = Image.new("RGB", (32, 24), rgb)
+                image.save(path, format="PNG")
+                entries[witness_id] = {
+                    "title": witness_id,
+                    "status": "approved",
+                    "teach": [
+                        "tonal_memory",
+                        "material_hand",
+                    ],
+                    "doNotInherit": ["objects", witness_id],
+                    "asset": {
+                        "path": str(path.relative_to(root).as_posix()),
+                        "sha256": painter.sha256_file(path),
+                        "width": 32,
+                        "height": 24,
+                        "mediaType": "image/png",
+                    },
+                }
+
+            witness_registry = {
+                "entries": entries,
+            }
+            template = {
+                "version": 1,
+                "designation": "Virynism Handprint",
+                "status": "awaiting_build",
+                "minimumApprovedWitnesses": 3,
+                "laws": {
+                    "pixelMetricsMustRemainAuditable": True,
+                },
+            }
+
+            built = painter.build_handprint_registry(
+                witness_registry,
+                root,
+                template,
+            )
+
+            self.assertEqual(built["status"], "built")
+            self.assertEqual(built["corpus"]["witnessCount"], 3)
+            self.assertEqual(
+                built["corpus"]["roleCounts"]["tonal_memory"],
+                3,
+            )
+            self.assertEqual(
+                len(built["provenance"]["corpusHashes"]),
+                3,
+            )
+            self.assertGreater(
+                built["metrics"]["aggregate"]["meanLuminance"],
+                0,
+            )
+            self.assertTrue(
+                built["interpretation"]["warmthBias"]
+            )
+
+            bad = json.loads(json.dumps(witness_registry))
+            bad["entries"]["one"]["asset"]["sha256"] = "wrong"
+
+            with self.assertRaises(painter.PainterError):
+                painter.build_handprint_registry(
+                    bad,
+                    root,
+                    template,
+                )
 
     def test_witness_brush_fails_without_approved_asset(self):
         manifest = manifest_fixture()

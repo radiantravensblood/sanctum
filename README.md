@@ -56,6 +56,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0026 adds a curated Visual Witness canon so reviewed paintings can teach the hand directly without allowing their depicted content to become scene truth.**
 
+**Kernel 0027 derives an auditable Handprint from the approved witness portfolio: recurring human-curated roles plus measurable pixel invariants that can guide new paintings without copying any witness scene.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2685,9 +2687,179 @@ actually supports and preserves that distinction.
 One honest witness is preferable to a collage pretending to be a memory
 architecture.
 
+## Handprint
+
+Kernel 0027 asks a different question from Visual Witness:
+
+**what remains across the witnesses belongs to the hand.**
+
+The Handprint registry lives at:
+
+`world/velastra-handprint.json`
+
+and the browser compiler lives at:
+
+`src/velastra/handprint.js`
+
+The authoring-side pixel builder is:
+
+`velastra-painter handprint-build`
+
+### Visual Witness versus Handprint
+
+A Visual Witness says:
+
+> this reviewed painting demonstrates these specific parts of the hand.
+
+Handprint asks:
+
+> across the approved portfolio, which reviewed roles recur, and what measurable
+> visual tendencies remain when the depicted scenes differ?
+
+The current architecture is:
+
+```text
+approved Visual Witness portfolio
+        ↓
+human-curated teaching roles
+        +
+sealed pixel measurements
+        ↓
+Virynism Handprint
+        ↓
+scene-relevant Handprint projection
+        ↓
+brush translation
+```
+
+Handprint is not scene truth.
+
+It cannot change a canonical room asset key.
+
+It may change candidate identity because the painter has received a different
+portfolio-derived visual instruction.
+
+### Pixel measurements
+
+Handprint v1 deliberately uses simple auditable image measurements rather than a
+black-box style classifier.
+
+For every approved witness it records:
+
+- mean luminance,
+- mean saturation,
+- warm/cool bias,
+- deep-shadow share,
+- highlight share,
+- 10th–90th percentile tonal span,
+- edge activity,
+- center luminance,
+- periphery luminance,
+- center/periphery light delta,
+- grayscale entropy,
+- source dimensions and aspect ratio.
+
+Aggregate portfolio metrics are means across the approved sealed corpus.
+
+Every source image hash is recorded.
+
+If a witness image no longer matches its approved SHA-256, Handprint refuses to
+build.
+
+### Human-curated roles remain authoritative
+
+Pixel statistics do not decide what a painting means.
+
+Witness roles such as:
+
+- relational light,
+- compositional cadence,
+- edge behavior,
+- tonal memory,
+- material hand,
+- spatial depth,
+- intimate presence,
+- sacred incompletion,
+
+remain human-reviewed metadata from the Visual Witness canon.
+
+Handprint counts recurrence across approved witnesses and marks a role
+consensus when it appears in at least the portfolio majority threshold.
+
+### Conservative interpretation
+
+The builder turns numeric aggregates into a small set of inspectable phrases
+for brush translation:
+
+- tonal restraint,
+- warmth bias,
+- edge character,
+- center/periphery light behavior,
+- shadow presence,
+- tonal range.
+
+These phrases are deterministic consequences of documented thresholds.
+
+They are not claims that these measurements exhaust Virynism.
+
+If one witness—such as a dense Studio interface painting—pushes edge activity
+upward, that influence remains visible in the per-witness metrics and can be
+challenged later.
+
+### Build ritual
+
+Handprint ships inactive until a sufficient approved portfolio exists.
+
+After witness admission:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint-build \
+  --repo-root .
+```
+
+Then inspect:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint
+```
+
+The generated `world/velastra-handprint.json` records:
+
+- corpus witness IDs,
+- each witness SHA-256,
+- role counts,
+- consensus roles,
+- union of content non-inheritance boundaries,
+- per-witness pixel metrics,
+- aggregate metrics,
+- deterministic interpretation,
+- build timestamp and algorithm version.
+
+That generated registry is reviewed and committed like any other authored law.
+
+### Scene-relevant projection
+
+The browser does not dump every portfolio tendency into every room.
+
+Virynism emphasis determines which recurring roles matter to the current scene.
+
+Gallery therefore projects toward:
+
+- sacred incompletion,
+- material hand,
+- compositional cadence,
+- edge behavior,
+- tonal memory,
+- spatial depth.
+
+A portrait can instead project toward relational light and intimate presence.
+
+The whole portfolio remains available as provenance while the brush receives a
+scene-relevant handprint.
+
 ## Current storage boundary
 
-Kernel 0026 still persists to `localStorage`.
+Kernel 0027 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2760,3 +2932,5 @@ And now it knows that **the hand deserves facts with texture, history, and edges
 And now it knows that **a true thing can still be lost in translation unless the painting is required to witness it**.
 
 And now it knows that **a witness may guide the hand without being allowed to become the scene**.
+
+And now it knows that **what remains across different witnesses can be measured, reviewed, and carried forward as the hand's portable handprint**.

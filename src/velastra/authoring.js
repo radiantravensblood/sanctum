@@ -447,6 +447,14 @@ function refreshAtelierDock({
           : "Witness none"
       );
 
+  const handprint = manifest.handprint;
+  const handprintLabel = handprint?.active
+    ? (
+        "Handprint " +
+        String(handprint.witnessCount || 0)
+      )
+    : "Handprint pending";
+
   status.textContent =
     shortKey(manifest.assetKey) +
     " · " +
@@ -457,6 +465,8 @@ function refreshAtelierDock({
     styleLabel +
     " · " +
     witnessLabel +
+    " · " +
+    handprintLabel +
     " · " +
     selection.brushLabel +
     " · " +

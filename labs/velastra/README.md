@@ -94,6 +94,12 @@ Visual Witness:
 - `authoring/witnesses/README.md`
 - `labs/velastra/tests/visual-witness.mjs`
 
+Handprint:
+
+- `world/velastra-handprint.json`
+- `src/velastra/handprint.js`
+- `labs/velastra/tests/handprint.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -447,6 +453,56 @@ image-to-image provider contract does not expose reliable seed control.
 The law is:
 
 **a witness may guide the hand without becoming the scene.**
+
+## Handprint contract
+
+Kernel 0027 derives a portable portfolio fingerprint from approved Visual
+Witnesses.
+
+Handprint combines two kinds of evidence:
+
+1. **human-curated recurring roles** from witness review,
+2. **auditable pixel measurements** from the sealed approved files.
+
+It does not use a black-box style classifier.
+
+Pixel analysis records luminance, saturation, warmth, shadow/highlight share,
+tonal span, edge activity, center/periphery light, and grayscale entropy.
+
+Every analyzed witness must still match its approved SHA-256.
+
+Handprint may guide:
+
+- tone,
+- light,
+- edge character,
+- material treatment,
+- compositional cadence.
+
+It may not:
+
+- invent scene facts,
+- contribute identity,
+- override Painterly Truth,
+- override Visible Evidence,
+- change canonical place identity.
+
+Handprint is rebuilt explicitly with:
+
+`velastra-painter handprint-build`
+
+and inspected with:
+
+`velastra-painter handprint`
+
+If fewer than the declared minimum approved witnesses exist, the build fails.
+
+If the browser receives an unbuilt Handprint registry, it falls back to
+semantic Virynism plus Visual Witness.
+
+The law is:
+
+**what remains across the witnesses belongs to the hand.**
 
 ## Studio adapter contract
 
