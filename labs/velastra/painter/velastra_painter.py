@@ -265,6 +265,92 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     }
 
 
+def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    evidence = manifest.get("evidence")
+    if not isinstance(evidence, Mapping):
+        return {
+            "id": None,
+            "version": None,
+            "minimumVisible": 0,
+            "required": [],
+            "controls": [],
+            "reviewQuestions": [],
+        }
+
+    required = [
+        flatten_text(entry.get("instruction"))
+        for entry in (evidence.get("required") or [])
+        if isinstance(entry, Mapping) and flatten_text(entry.get("instruction"))
+    ]
+    controls = [
+        flatten_text(entry.get("instruction"))
+        for entry in (evidence.get("compositionControls") or [])
+        if isinstance(entry, Mapping) and flatten_text(entry.get("instruction"))
+    ]
+
+    return {
+        "id": evidence.get("id"),
+        "version": evidence.get("version"),
+        "minimumVisible": int(evidence.get("minimumVisible") or 0),
+        "required": required,
+        "controls": controls,
+        "reviewQuestions": [
+            flatten_text(item)
+            for item in (evidence.get("reviewQuestions") or [])
+            if flatten_text(item)
+        ],
+    }
+
+
+def estimate_prompt_tokens(text: str) -> int:
+    if not text:
+        return 0
+    return max(1, (len(text) + 3) // 4)
+
+
+def compact_positive_sections(
+    sections: list[dict[str, Any]],
+    safe_target_tokens: int | None,
+) -> tuple[list[str], dict[str, Any]]:
+    active = [dict(section) for section in sections if section.get("text")]
+
+    def rendered() -> str:
+        return "\n".join(section["text"] for section in active)
+
+    before = estimate_prompt_tokens(rendered())
+    dropped: list[str] = []
+
+    if safe_target_tokens and safe_target_tokens > 0:
+        while estimate_prompt_tokens(rendered()) > safe_target_tokens:
+            optional = [
+                (index, section)
+                for index, section in enumerate(active)
+                if not section.get("required")
+            ]
+            if not optional:
+                break
+
+            index, section = min(
+                optional,
+                key=lambda pair: (
+                    int(pair[1].get("priority") or 0),
+                    -pair[0],
+                ),
+            )
+            dropped.append(str(section.get("id") or "unnamed"))
+            active.pop(index)
+
+    after = estimate_prompt_tokens(rendered())
+    return [section["text"] for section in active], {
+        "estimate": "characters_divided_by_four",
+        "beforeTokens": before,
+        "afterTokens": after,
+        "targetTokens": safe_target_tokens,
+        "droppedSections": dropped,
+        "requiredSectionsPreserved": True,
+    }
+
+
 def compile_prompt_bundle(
     manifest: Mapping[str, Any],
     spec: "RenderSpec | None" = None,
@@ -273,42 +359,138 @@ def compile_prompt_bundle(
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
     style = style_lines(manifest)
+    evidence = evidence_lines(manifest)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
+    control = spec.control_contract if spec and spec.control_contract else {}
 
-    positive_sections: list[str] = [
+    negative_contract = control.get("negativePrompt") or {}
+    negative_supported = (
+        negative_contract.get("supported") is True
+        or negative_contract.get("supportedByBasePipeline") is True
+    )
+    safe_target_tokens = (
+        (control.get("promptBudget") or {}).get("safeTargetTokens")
+    )
+
+    sections: list[dict[str, Any]] = []
+
+    def add(
+        section_id: str,
+        text: str,
+        *,
+        priority: int,
+        required: bool = False,
+    ) -> None:
+        if text and not text.endswith(": "):
+            sections.append({
+                "id": section_id,
+                "text": text,
+                "priority": priority,
+                "required": required,
+            })
+
+    add(
+        "assignment",
         "Create a finished painterly image from this authored scene direction.",
-        "Scene truth is authoritative. Style may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.",
+        priority=100,
+        required=True,
+    )
+    add(
+        "authority",
+        "Scene truth is authoritative. Style and brush translation may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.",
+        priority=100,
+        required=True,
+    )
+    add(
+        "focal_argument",
         f"Primary visual argument: {flatten_text(brief.get('thesis'))}",
-        f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
-    ]
+        priority=95,
+        required=True,
+    )
 
     subjects = truth["subjects"]
     if subjects:
-        positive_sections.append("Explicit subjects: " + " | ".join(subjects))
+        add(
+            "subjects",
+            "Explicit subjects: " + " | ".join(subjects),
+            priority=100,
+            required=True,
+        )
 
     if truth["relation"]:
-        positive_sections.append("Explicit relation: " + truth["relation"])
+        add(
+            "relation",
+            "Explicit relation: " + truth["relation"],
+            priority=100,
+            required=True,
+        )
 
     if truth["environment"]:
-        positive_sections.append("Environment facts: " + " | ".join(truth["environment"]))
+        add(
+            "environment",
+            "Environment facts: " + " | ".join(truth["environment"]),
+            priority=100,
+            required=True,
+        )
+
+    if evidence["required"]:
+        visible_count = min(
+            evidence["minimumVisible"],
+            len(evidence["required"]),
+        )
+        add(
+            "visible_evidence",
+            "VISIBLE EVIDENCE CONTRACT — the final image must make at least "
+            + str(visible_count)
+            + " of these already-true facts clearly perceptible: "
+            + " | ".join(evidence["required"]),
+            priority=110,
+            required=True,
+        )
+
+    if evidence["controls"]:
+        add(
+            "evidence_controls",
+            "POSITIVE COMPOSITION CONTROLS — satisfy these through what is visibly present: "
+            + " | ".join(evidence["controls"]),
+            priority=108,
+            required=True,
+        )
 
     hierarchy = flatten_text(brief.get("hierarchy"))
     if hierarchy:
-        positive_sections.append(f"Focal hierarchy: {hierarchy}")
+        add(
+            "hierarchy",
+            f"Focal hierarchy: {hierarchy}",
+            priority=90,
+            required=True,
+        )
+
+    add(
+        "medium",
+        f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
+        priority=70,
+    )
 
     if style["hand"]:
-        positive_sections.append(
-            "Virynism — handwriting laws: " + " | ".join(style["hand"])
+        add(
+            "virynism_hand",
+            "Virynism — handwriting laws: " + " | ".join(style["hand"]),
+            priority=62,
         )
 
     if style["archetype"]:
-        positive_sections.append(
-            "Virynism — archetype handling: " + " | ".join(style["archetype"])
+        add(
+            "virynism_archetype",
+            "Virynism — archetype handling: " + " | ".join(style["archetype"]),
+            priority=66,
         )
 
     if style["place"]:
-        positive_sections.append(
-            "Virynism — place-specific handling: " + " | ".join(style["place"])
+        add(
+            "virynism_place",
+            "Virynism — place-specific handling: " + " | ".join(style["place"]),
+            priority=72,
         )
 
     camera = flatten_text(
@@ -316,29 +498,50 @@ def compile_prompt_bundle(
         or (scene.get("composition") or {}).get("camera")
     )
     if camera:
-        positive_sections.append(f"Camera and composition: {camera}")
+        add(
+            "camera",
+            f"Camera and composition: {camera}",
+            priority=76,
+        )
 
     lighting = flatten_text(brief.get("lighting"))
     if lighting:
-        positive_sections.append("Lighting: " + lighting)
+        add(
+            "lighting",
+            "Lighting: " + lighting,
+            priority=74,
+        )
 
     edge = flatten_text(brief.get("edge"))
     if edge:
-        positive_sections.append("Edge behavior: " + edge)
+        add(
+            "edge",
+            "Edge behavior: " + edge,
+            priority=58,
+        )
 
     surface = flatten_text(brief.get("surface"))
     if surface:
-        positive_sections.append("Surface and patina: " + surface)
+        add(
+            "surface",
+            "Surface and patina: " + surface,
+            priority=78,
+        )
 
     if truth["literalMotifs"]:
-        positive_sections.append(
+        add(
+            "literal_motifs",
             "Literal motifs permitted by scene truth: "
-            + " | ".join(truth["literalMotifs"])
+            + " | ".join(truth["literalMotifs"]),
+            priority=80,
         )
+
     if truth["symbolicMotifs"]:
-        positive_sections.append(
+        add(
+            "symbolic_motifs",
             "Symbolic motifs must remain metaphorical or materially embedded: "
-            + " | ".join(truth["symbolicMotifs"])
+            + " | ".join(truth["symbolicMotifs"]),
+            priority=50,
         )
 
     directives = [
@@ -347,8 +550,10 @@ def compile_prompt_bundle(
     ]
     directives = [item for item in directives if item]
     if directives:
-        positive_sections.append(
-            "Scene art direction: " + " | ".join(directives)
+        add(
+            "scene_directives",
+            "Scene art direction: " + " | ".join(directives),
+            priority=68,
         )
 
     dialect_directives = [
@@ -359,14 +564,24 @@ def compile_prompt_bundle(
         item for item in dialect_directives if item
     ]
     if dialect_directives:
-        positive_sections.append(
+        add(
+            "brush_dialect",
             "Brush translation rules: "
-            + " | ".join(dialect_directives)
+            + " | ".join(dialect_directives),
+            priority=64,
         )
 
-    positive_sections.append(
-        "Let material, light, gesture, residue, atmosphere, negative space, "
-        "and painterly edges carry meaning. Preserve strangeness without spectacle."
+    add(
+        "closing",
+        "Let material, light, gesture, residue, atmosphere, negative space, and painterly edges carry meaning. Preserve strangeness without spectacle.",
+        priority=40,
+    )
+
+    positive_sections, budget = compact_positive_sections(
+        sections,
+        int(safe_target_tokens)
+        if safe_target_tokens is not None
+        else None,
     )
 
     negative = [
@@ -395,14 +610,23 @@ def compile_prompt_bundle(
             + " | ".join(dialect_negative)
         )
 
+    negative_text = (
+        "\n".join(negative)
+        if negative_supported
+        else ""
+    )
+
     return {
-        "positive": "\n".join(
-            section
-            for section in positive_sections
-            if section and not section.endswith(": ")
-        ),
-        "negative": "\n".join(negative),
+        "positive": "\n".join(positive_sections),
+        "negative": negative_text,
         "truthEnvelope": truth,
+        "evidence": {
+            "id": evidence["id"],
+            "version": evidence["version"],
+            "minimumVisible": evidence["minimumVisible"],
+            "requiredCount": len(evidence["required"]),
+            "reviewQuestions": evidence["reviewQuestions"],
+        },
         "style": {
             "id": (manifest.get("style") or {}).get("id"),
             "version": (manifest.get("style") or {}).get("version"),
@@ -410,6 +634,13 @@ def compile_prompt_bundle(
             "emphasis": (manifest.get("style") or {}).get("emphasis") or [],
             "dialect": dialect.get("mode"),
         },
+        "control": {
+            "negativePromptActive": negative_supported,
+            "guidanceMode": (control.get("guidance") or {}).get("mode"),
+            "evidenceStrategy": control.get("evidenceStrategy"),
+            "role": control.get("role"),
+        },
+        "budget": budget,
     }
 
 
@@ -490,6 +721,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         token_env=transport.get("tokenEnv"),
         license=brush.get("license"),
         prompt_dialect=brush.get("promptDialect"),
+        control_contract=brush.get("controlContract"),
     )
 
 
@@ -510,6 +742,7 @@ class RenderSpec:
     token_env: str | None = None
     license: str | None = None
     prompt_dialect: Mapping[str, Any] | None = None
+    control_contract: Mapping[str, Any] | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -554,6 +787,8 @@ def build_candidate_record(
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
             "style": prompts.get("style"),
+            "evidence": prompts.get("evidence"),
+            "promptBudget": prompts.get("budget"),
         },
         "render": {
             "backend": spec.backend,
@@ -575,6 +810,7 @@ def build_candidate_record(
                 if isinstance(spec.prompt_dialect, Mapping)
                 else None
             ),
+            "controlContract": prompts.get("control"),
         },
         "prompts": {
             "positive": prompts["positive"],
