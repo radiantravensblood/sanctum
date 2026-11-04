@@ -1,6 +1,7 @@
 import { composeScenePacket } from "./scene-packet.js";
 import { selectMotifs } from "./motifs.js";
 import { compileAtelierManifest } from "./atelier.js";
+import { compilePainterlyTruth } from "./painterly-truth.js";
 
 export function compileSanctumAtelier({
   state,
@@ -17,6 +18,12 @@ export function compileSanctumAtelier({
       ? "threshold_revelation"
       : "place_tableau";
 
+  const painterlyTruth = compilePainterlyTruth({
+    truthGrammar: world.velastraPainterlyTruth,
+    room,
+    objects
+  });
+
   const identityFacts = [
     room.name,
     room.region || null,
@@ -27,11 +34,14 @@ export function compileSanctumAtelier({
     sceneTruth?.matter?.material || null,
     sceneTruth?.anomaly?.law
       ? String(sceneTruth.anomaly.law).replaceAll("_", " ")
-      : null
+      : null,
+    ...(painterlyTruth.facts || [])
   ].filter(Boolean);
 
   const transientFacts = [
-    ...(objects || []).map((object) => object.name),
+    ...(objects || [])
+      .filter((object) => object?.portable === true)
+      .map((object) => object.name),
     ...(entities || []).map(({ template }) =>
       template ? template.name : null
     )
@@ -47,7 +57,8 @@ export function compileSanctumAtelier({
       kind: room.id,
       facts: [...identityFacts],
       identityFacts,
-      transientFacts
+      transientFacts,
+      painterlyTruth
     },
     seed:
       "sanctum:" +
@@ -58,7 +69,10 @@ export function compileSanctumAtelier({
       source: "sanctum_live_scene",
       room: room.id,
       assetScope: "place",
-      transientPresenceExcludedFromCanonicalPainting: true
+      transientPresenceExcludedFromCanonicalPainting: true,
+      fixedObjectsIncludedInCanonicalPainting: true,
+      painterlyTruthRevision:
+        painterlyTruth.revision || 0
     }
   });
 

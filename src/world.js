@@ -1,5 +1,5 @@
 export async function loadWorld() {
-  const [rooms, objects, thresholds, genesis, frontier, visualGrammar, semanticGrammar, time, entities, accord, hymnos, velastra, velastraScene, velastraMotifs, velastraAtelier, velastraAssets, velastraBrushes, velastraStyle, velastraStudio] = await Promise.all([
+  const [rooms, objects, thresholds, genesis, frontier, visualGrammar, semanticGrammar, time, entities, accord, hymnos, velastra, velastraScene, velastraMotifs, velastraAtelier, velastraAssets, velastraBrushes, velastraStyle, velastraPainterlyTruth, velastraStudio] = await Promise.all([
     fetch("./world/rooms.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/objects.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/thresholds.json").then(assertResponse).then((response) => response.json()),
@@ -18,6 +18,7 @@ export async function loadWorld() {
     fetch("./world/velastra-assets.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/velastra-brushes.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/velastra-style.json").then(assertResponse).then((response) => response.json()),
+    fetch("./world/velastra-painterly-truth.json").then(assertResponse).then((response) => response.json()),
     fetch("./world/velastra-studio.json").then(assertResponse).then((response) => response.json())
   ]);
 
@@ -39,6 +40,7 @@ export async function loadWorld() {
     velastraAssets,
     velastraBrushes,
     velastraStyle,
+    velastraPainterlyTruth,
     velastraStudio,
     realms: {
       [frontier.id]: frontier

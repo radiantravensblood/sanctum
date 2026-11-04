@@ -31,7 +31,12 @@
     "virynismMustTravelInsideManifest": true,
     "styleCannotChangeCanonicalPlaceIdentity": true,
     "styleChangeMustChangeCandidateIdentity": true,
-    "brushDialectMayTranslateButNotOverrideStyle": true
+    "brushDialectMayTranslateButNotOverrideStyle": true,
+    "painterlyTruthMustTravelInsideManifest": true,
+    "painterlyTruthMayChangeCanonicalPlaceIdentity": true,
+    "painterlyTruthCannotBeStyleDirective": true,
+    "portableObjectsCannotEnterCanonicalPlaceTruth": true,
+    "fixedObjectsMayEnterCanonicalPlaceTruth": true
   },
   "media": {
     "luminous_oil": {
@@ -168,7 +173,9 @@
       "handoffsIgnoredByGit": true
     },
     "styleRegistry": "world/velastra-style.json",
-    "styleSnapshotTravelsWithManifest": true
+    "styleSnapshotTravelsWithManifest": true,
+    "painterlyTruthRegistry": "world/velastra-painterly-truth.json",
+    "painterlyTruthSnapshotTravelsWithManifest": true
   },
   "livingCanvas": {
     "version": 1,

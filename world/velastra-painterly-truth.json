@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "designation": "Painterly Truth",
+  "laboratory": "Viryn Labs",
+  "purpose": "Describe stable, observable material and spatial facts that a painter may render without inventing scene content.",
+  "laws": {
+    "factsAreCanonicalSceneTruth": true,
+    "factsMayAffectPlaceAssetIdentity": true,
+    "factsMustBeObservableMaterialOrSpatial": true,
+    "factsCannotBeStyleDirectives": true,
+    "factsCannotNameTransientPresence": true,
+    "portableObjectsRemainRuntimeTruth": true,
+    "fixedObjectsMayEnterPlaceTruth": true,
+    "styleMayInterpretButNotContradictFacts": true,
+    "absenceMayBeCanonicalWhenExplicit": true,
+    "everyFactMustCarryAPlaceOrSemanticSource": true
+  },
+  "places": {
+    "gallery": {
+      "revision": 1,
+      "title": "The Gallery of Unfinished Things",
+      "surfaces": [
+        {
+          "id": "hanging_field",
+          "kind": "wall",
+          "facts": [
+            "Frames and unfinished works occupy the walls at varied heights and intervals.",
+            "Faint rectangles, nail traces, and tonal ghosts remain where some works or frames previously hung."
+          ]
+        },
+        {
+          "id": "unfinished_works",
+          "kind": "work",
+          "facts": [
+            "Some works expose raw ground or underpainting instead of a finished image.",
+            "Some painted passages stop abruptly before reaching the edge of their support.",
+            "Some surfaces preserve erased, revised, or overwritten marks.",
+            "Completion is uneven: worked passages may sit beside raw or barely begun areas."
+          ]
+        },
+        {
+          "id": "frames",
+          "kind": "fixed_object_field",
+          "facts": [
+            "At least one beautifully made empty frame is a fixed part of the room.",
+            "Empty and unfinished framed works are not arranged as a perfectly symmetrical salon display."
+          ]
+        }
+      ],
+      "traces": [
+        "The walls preserve evidence that works have been moved, reconsidered, and rehung.",
+        "Unfinishedness is physically visible in surfaces and marks, not only inferred from absence."
+      ],
+      "spatialFacts": [
+        "The room remains navigable toward the Hearth to the west and a quieter passage to the north.",
+        "Negative space between works is irregular rather than uniformly staged."
+      ],
+      "absences": [
+        "No label explains what an unfinished work is supposed to become.",
+        "Not every frame contains a completed image."
+      ],
+      "provenance": {
+        "source": "authored_place_truth",
+        "room": "gallery",
+        "derivedFrom": [
+          "world/rooms.json#gallery",
+          "world/objects.json#empty_frame",
+          "Viryn Labs candidate review 2026-11-03"
+        ]
+      }
+    }
+  }
+}

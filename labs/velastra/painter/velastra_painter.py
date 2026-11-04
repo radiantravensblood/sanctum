@@ -178,11 +178,23 @@ def motif_lines(manifest: Mapping[str, Any]) -> tuple[list[str], list[str]]:
 def compile_truth_envelope(manifest: Mapping[str, Any]) -> dict[str, Any]:
     scene = manifest.get("scene") or {}
     literal, symbolic = motif_lines(manifest)
+    painterly_truth = (
+        (scene.get("environment") or {}).get("painterlyTruth")
+        or None
+    )
+
     return {
         "assetKey": manifest["assetKey"],
         "subjects": subject_lines(scene),
         "relation": relation_line(scene) or None,
         "environment": environment_lines(scene),
+        "painterlyTruth": {
+            "id": painterly_truth.get("id"),
+            "version": painterly_truth.get("version"),
+            "revision": painterly_truth.get("revision"),
+            "room": painterly_truth.get("room"),
+            "fixedObjects": painterly_truth.get("fixedObjects") or [],
+        } if isinstance(painterly_truth, Mapping) else None,
         "literalMotifs": literal,
         "symbolicMotifs": symbolic,
         "laws": {

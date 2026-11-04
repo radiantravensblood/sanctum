@@ -75,6 +75,12 @@ Virynism handwriting:
 - `src/velastra/hand.js`
 - `labs/velastra/tests/virynism-hand.mjs`
 
+Painterly Truth:
+
+- `world/velastra-painterly-truth.json`
+- `src/velastra/painterly-truth.js`
+- `labs/velastra/tests/painterly-truth.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -312,6 +318,37 @@ The candidate sidecar records both style identity/version and dialect mode.
 The law is:
 
 **the brush may vary; the hand must remain.**
+
+## Painterly Truth contract
+
+Kernel 0024 inserts stable material facts between place identity and
+handwriting.
+
+Painterly Truth may provide:
+
+- canonical surfaces and marks,
+- fixed objects,
+- traces of use or prior placement,
+- stable spatial facts,
+- explicit material absences.
+
+It may not provide:
+
+- transient occupants,
+- portable objects,
+- style directives,
+- desired mood,
+- unsupported props.
+
+A Painterly Truth revision may change the canonical place asset key because it
+changes what is materially true of the place.
+
+A Virynism revision may not change that key because it changes treatment, not
+truth.
+
+The law is:
+
+**give the hand something honest to touch.**
 
 ## Studio adapter contract
 

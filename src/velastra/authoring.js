@@ -416,8 +416,19 @@ function refreshAtelierDock({
       )
     : "style unavailable";
 
+  const truth = manifest.scene?.environment?.painterlyTruth;
+  const truthLabel = truth
+    ? (
+        (truth.designation || "Painterly Truth") +
+        " r" +
+        String(truth.revision || 0)
+      )
+    : "truth unavailable";
+
   status.textContent =
     shortKey(manifest.assetKey) +
+    " · " +
+    truthLabel +
     " · " +
     styleLabel +
     " · " +
