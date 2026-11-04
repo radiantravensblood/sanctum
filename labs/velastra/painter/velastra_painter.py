@@ -926,7 +926,7 @@ def render_diffusers(
     )
     kwargs: dict[str, Any] = {}
 
-    if "negative_prompt" in accepted or accepts_kwargs:
+    if prompts.get("negative") and ("negative_prompt" in accepted or accepts_kwargs):
         kwargs["negative_prompt"] = prompts["negative"]
     if "width" in accepted or accepts_kwargs:
         kwargs["width"] = spec.width
@@ -983,16 +983,21 @@ def render_huggingface(
         api_key=token,
     )
 
-    image = client.text_to_image(
-        prompt=prompts["positive"],
-        negative_prompt=prompts["negative"],
-        height=spec.height,
-        width=spec.width,
-        num_inference_steps=spec.steps,
-        guidance_scale=spec.guidance,
-        model=spec.model,
-        seed=spec.seed,
-    )
+    request: dict[str, Any] = {
+        "prompt": prompts["positive"],
+        "height": spec.height,
+        "width": spec.width,
+        "model": spec.model,
+        "seed": spec.seed,
+    }
+    if prompts.get("negative"):
+        request["negative_prompt"] = prompts["negative"]
+    if spec.steps is not None:
+        request["num_inference_steps"] = spec.steps
+    if spec.guidance is not None:
+        request["guidance_scale"] = spec.guidance
+
+    image = client.text_to_image(**request)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG")
