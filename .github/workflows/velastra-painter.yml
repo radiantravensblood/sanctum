@@ -13,6 +13,7 @@ on:
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
       - "world/velastra-style.json"
+      - "world/velastra-painterly-truth.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -28,6 +29,7 @@ on:
       - "world/velastra-assets.json"
       - "world/velastra-brushes.json"
       - "world/velastra-style.json"
+      - "world/velastra-painterly-truth.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -54,3 +56,5 @@ jobs:
         run: node labs/velastra/tests/cloud-atelier.mjs
       - name: Run Virynism hand contract
         run: node labs/velastra/tests/virynism-hand.mjs
+      - name: Run painterly truth contract
+        run: node labs/velastra/tests/painterly-truth.mjs
