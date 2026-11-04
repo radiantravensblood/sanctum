@@ -12,7 +12,11 @@
     "transportMustBeExplicit": true,
     "credentialsNeverEnterSceneOrCandidateProvenance": true,
     "unsupportedBrushFailsClosed": true,
-    "reviewStillRequiredAfterGeneration": true
+    "reviewStillRequiredAfterGeneration": true,
+    "brushMustDeclareControlContract": true,
+    "unheardControlMustNotCarryCriticalMeaning": true,
+    "visibleEvidenceMustUsePositiveChannel": true,
+    "promptBudgetMustProtectSceneAndEvidence": true
   },
   "brushes": {
     "z_image_turbo": {
@@ -72,6 +76,32 @@
           "clean staged interior photography",
           "decorative mystical iconography"
         ]
+      },
+      "controlContract": {
+        "version": 1,
+        "role": "structural_scout",
+        "negativePrompt": {
+          "supported": false,
+          "policy": "do_not_rely_on_negative_channel"
+        },
+        "guidance": {
+          "supported": false,
+          "mode": "distilled_no_cfg",
+          "expected": 0
+        },
+        "promptBudget": {
+          "observedMaxTokens": 512,
+          "safeTargetTokens": 420,
+          "estimate": "characters_divided_by_four",
+          "overflowPolicy": "drop_low_priority_style_before_scene_or_evidence"
+        },
+        "diversity": "low",
+        "evidenceStrategy": "positive_mandatory",
+        "refusalStrategy": "express_required_alternative_positively",
+        "provenance": {
+          "source": "Tongyi-MAI/Z-Image-Turbo prompting guide and Z-Image model comparison",
+          "verifiedAt": "2026-11-03"
+        }
       }
     },
     "qwen_image": {
@@ -126,6 +156,33 @@
           "sterile symmetry",
           "photographic showroom polish"
         ]
+      },
+      "controlContract": {
+        "version": 1,
+        "role": "interpretive_painter",
+        "negativePrompt": {
+          "supportedByBasePipeline": true,
+          "providerTransport": "best_effort",
+          "policy": "never_make_critical_evidence_depend_on_negative_channel"
+        },
+        "guidance": {
+          "supportedByBasePipeline": true,
+          "mode": "classifier_free_guidance_when_enabled",
+          "providerTransport": "best_effort"
+        },
+        "promptBudget": {
+          "observedMaxTokens": null,
+          "safeTargetTokens": null,
+          "estimate": "characters_divided_by_four",
+          "overflowPolicy": "evidence_first_compaction"
+        },
+        "diversity": "exploratory",
+        "evidenceStrategy": "positive_mandatory",
+        "refusalStrategy": "use_negative_channel_when_available_but_keep_evidence_positive",
+        "provenance": {
+          "source": "Diffusers QwenImage pipeline documentation",
+          "verifiedAt": "2026-11-03"
+        }
       }
     }
   },
