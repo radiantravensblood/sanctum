@@ -22,6 +22,7 @@ export function compileVisibleEvidence({
       room: placeId,
       truthRevision: painterlyTruth.revision || 0,
       minimumVisible: 0,
+      identityReframe: null,
       required: [],
       compositionControls: [],
       reviewQuestions: [],
@@ -91,6 +92,7 @@ export function compileVisibleEvidence({
     room: placeId,
     truthRevision: painterlyTruth.revision || 0,
     minimumVisible,
+    identityReframe: place.identityReframe || null,
     required,
     compositionControls: copy(
       place.compositionControls || []
