@@ -168,7 +168,9 @@
         "guidance": {
           "supportedByBasePipeline": true,
           "mode": "classifier_free_guidance_when_enabled",
-          "providerTransport": "best_effort"
+          "providerTransport": "best_effort",
+          "diffusersParameter": "true_cfg_scale",
+          "diffusersDefault": 4
         },
         "promptBudget": {
           "observedMaxTokens": null,
