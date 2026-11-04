@@ -44,8 +44,17 @@ const evidence = {
   room: "gallery"
 };
 
+const dormantRegistry = structuredClone(registry);
+
+for (const entry of Object.values(
+  dormantRegistry.entries || {}
+)) {
+  entry.status = "awaiting_asset";
+  entry.asset = null;
+}
+
 const dormant = module.compileVisualWitness({
-  witnessGrammar: registry,
+  witnessGrammar: dormantRegistry,
   style,
   scenePacket: scene,
   evidence
@@ -72,7 +81,7 @@ assert.equal(
   "Named memories must remain inert until an actual asset is approved"
 );
 
-const approvedRegistry = structuredClone(registry);
+const approvedRegistry = structuredClone(dormantRegistry);
 approvedRegistry.entries.gallery_target_01.status = "approved";
 approvedRegistry.entries.gallery_target_01.asset = {
   path: "assets/velastra/witnesses/gallery_target_01.png",
@@ -91,6 +100,16 @@ const active = module.compileVisualWitness({
 
 assert.equal(active.active, true);
 assert.equal(active.approved.length, 1);
+
+assert.equal(
+  registry.entries.gallery_target_01.status,
+  "approved",
+  "Live canon should contain the newly admitted Gallery witness"
+);
+assert.ok(
+  registry.entries.gallery_target_01.asset?.sha256,
+  "Live admitted witness must carry a sealed hash"
+);
 assert.equal(
   active.approved[0].id,
   "gallery_target_01"
