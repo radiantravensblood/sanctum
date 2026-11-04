@@ -301,11 +301,18 @@ class PainterBridgeTests(unittest.TestCase):
     def test_witness_brush_fails_without_approved_asset(self):
         manifest = manifest_fixture()
         spec = painter.build_render_spec(
-            self.brush_args(brush="qwen_image_edit")
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="witness-test-attempt",
+            )
         )
 
         self.assertEqual(spec.task, "image_to_image")
         self.assertEqual(spec.model, "Qwen/Qwen-Image-Edit")
+        self.assertEqual(spec.attempt_id, "witness-test-attempt")
+        self.assertFalse(
+            spec.control_contract["seedControl"]["providerSupported"]
+        )
 
         with self.assertRaises(painter.PainterError):
             painter.compile_prompt_bundle(manifest, spec)
@@ -326,7 +333,10 @@ class PainterBridgeTests(unittest.TestCase):
         manifest["witnesses"]["active"] = True
 
         spec = painter.build_render_spec(
-            self.brush_args(brush="qwen_image_edit")
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="witness-test-attempt",
+            )
         )
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
@@ -372,7 +382,10 @@ class PainterBridgeTests(unittest.TestCase):
         manifest["witnesses"]["active"] = True
 
         spec = painter.build_render_spec(
-            self.brush_args(brush="qwen_image_edit")
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="witness-test-attempt",
+            )
         )
         prompts = painter.compile_prompt_bundle(manifest, spec)
         record = painter.build_candidate_record(
@@ -393,6 +406,14 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(
             record["source"]["witness"]["asset"]["sha256"],
             "cafebabe",
+        )
+        self.assertEqual(
+            record["render"]["attemptId"],
+            "witness-test-attempt",
+        )
+        self.assertEqual(
+            record["render"]["controlContract"]["seedReliability"],
+            "unsupported",
         )
 
     def test_evidence_change_changes_candidate_not_asset_identity(self):
@@ -493,6 +514,7 @@ class PainterBridgeTests(unittest.TestCase):
             "brush": None,
             "transport": None,
             "witness": None,
+            "attempt": None,
             "repo_root": ".",
             "brush_registry": None,
             "backend": None,
