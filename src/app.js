@@ -196,6 +196,10 @@ async function ignite() {
       JSON.parse(
         JSON.stringify(world.velastraWitnesses)
       ),
+    handprint: () =>
+      JSON.parse(
+        JSON.stringify(world.velastraHandprint)
+      ),
     studio: (surfaceId, frameworkId = null) =>
       composeVelastraStudioSurface({
         world,
@@ -359,6 +363,8 @@ async function ignite() {
       JSON.parse(JSON.stringify(world.velastraEvidence)),
     witnesses: () =>
       JSON.parse(JSON.stringify(world.velastraWitnesses)),
+    handprint: () =>
+      JSON.parse(JSON.stringify(world.velastraHandprint)),
     studioGrammar: () =>
       JSON.parse(JSON.stringify(world.velastraStudio))
   });
