@@ -697,6 +697,151 @@ def mean_metric(records: Sequence[Mapping[str, Any]], key: str) -> float:
     return round(sum(values) / len(values), 4) if values else 0.0
 
 
+def metric_distribution(
+    records: Sequence[Mapping[str, Any]],
+    key: str,
+) -> dict[str, Any]:
+    values = sorted(
+        float(record[key])
+        for record in records
+        if record.get(key) is not None
+    )
+    if not values:
+        return {
+            "count": 0,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "unknown",
+        }
+
+    spread = statistics.pstdev(values) if len(values) > 1 else 0.0
+    if spread <= 0.035:
+        variation = "tight"
+    elif spread <= 0.09:
+        variation = "moderate"
+    else:
+        variation = "broad"
+
+    return {
+        "count": len(values),
+        "mean": round(statistics.fmean(values), 4),
+        "median": round(statistics.median(values), 4),
+        "min": round(min(values), 4),
+        "max": round(max(values), 4),
+        "stddev": round(spread, 4),
+        "range": round(max(values) - min(values), 4),
+        "variation": variation,
+    }
+
+
+def facet_prompt_summary(
+    role: str,
+    stats: Mapping[str, Any],
+    interpretation: Mapping[str, Any],
+) -> str:
+    witness_count = int(
+        next(iter(stats.values())).get("count", 0)
+        if stats
+        else 0
+    )
+
+    def phrase(key: str) -> str:
+        return flatten_text(interpretation.get(key))
+
+    if role == "edge_behavior":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("edgeCharacter")
+            + "; edge activity varies "
+            + str((stats.get("edgeActivity") or {}).get("variation", "unknown"))
+            + " across the supporting works."
+        )
+
+    if role == "tonal_memory":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("warmthBias")
+            + "; "
+            + phrase("tonalRestraint")
+            + "; "
+            + phrase("tonalRange")
+            + "."
+        )
+
+    if role == "compositional_cadence":
+        center = stats.get("centerLightDelta") or {}
+        crosses_zero = (
+            float(center.get("min", 0)) < 0
+            and float(center.get("max", 0)) > 0
+        )
+        light_note = (
+            "the locus of light legitimately moves between center and periphery"
+            if crosses_zero
+            else phrase("centerLightBias")
+        )
+        return (
+            f"{witness_count} witnesses; "
+            + light_note
+            + "; preserve purposeful imbalance rather than a fixed composition."
+        )
+
+    if role == "spatial_depth":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("shadowPresence")
+            + "; "
+            + phrase("centerLightBias")
+            + "; depth may be carried by recession, threshold, occlusion, or light."
+        )
+
+    if role == "material_hand":
+        entropy = stats.get("grayscaleEntropy") or {}
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("edgeCharacter")
+            + "; information density remains "
+            + str(entropy.get("variation", "unknown"))
+            + " in variation while surfaces retain handled memory."
+        )
+
+    if role == "sacred_incompletion":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("edgeCharacter")
+            + "; "
+            + phrase("tonalRange")
+            + "; incompletion should remain processual rather than blank."
+        )
+
+    if role == "relational_light":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("centerLightBias")
+            + "; "
+            + phrase("shadowPresence")
+            + "; illumination must carry relation rather than decoration."
+        )
+
+    if role == "intimate_presence":
+        return (
+            f"{witness_count} witnesses; "
+            + phrase("edgeCharacter")
+            + "; preserve nearness and selective resolution without importing identity."
+        )
+
+    return (
+        f"{witness_count} witnesses; "
+        + phrase("warmthBias")
+        + "; "
+        + phrase("edgeCharacter")
+        + "."
+    )
+
+
 def interpret_handprint(aggregate: Mapping[str, Any]) -> dict[str, str]:
     saturation = float(aggregate.get("meanSaturation") or 0)
     warmth = float(aggregate.get("meanWarmth") or 0)
@@ -836,6 +981,55 @@ def build_handprint_registry(
         key: mean_metric(metric_records, key)
         for key in aggregate_keys
     }
+    aggregate_distribution = {
+        key: metric_distribution(metric_records, key)
+        for key in aggregate_keys
+    }
+
+    facet_minimum = 2
+    facets_by_role: dict[str, Any] = {}
+    for role in sorted(role_counts):
+        supporting = [
+            record
+            for record in witness_records
+            if role in (record.get("roles") or [])
+        ]
+        supporting_ids = [
+            str(record["id"])
+            for record in supporting
+        ]
+        supporting_metrics = [
+            per_witness[witness_id]
+            for witness_id in supporting_ids
+            if witness_id in per_witness
+        ]
+        distributions = {
+            key: metric_distribution(supporting_metrics, key)
+            for key in aggregate_keys
+        }
+        means = {
+            key: distributions[key]["mean"]
+            for key in aggregate_keys
+        }
+        facet_interpretation = interpret_handprint(means)
+
+        facets_by_role[role] = {
+            "witnessCount": len(supporting_ids),
+            "witnesses": supporting_ids,
+            "eligibleForRender": len(supporting_ids) >= facet_minimum,
+            "support": (
+                "cross_portfolio"
+                if len(supporting_ids) >= facet_minimum
+                else "provisional_single_witness"
+            ),
+            "metrics": distributions,
+            "interpretation": facet_interpretation,
+            "promptSummary": facet_prompt_summary(
+                role,
+                distributions,
+                facet_interpretation,
+            ),
+        }
 
     consensus_threshold = max(2, (len(approved) // 2) + 1)
     consensus_roles = [
@@ -860,11 +1054,22 @@ def build_handprint_registry(
     output["metrics"] = {
         "perWitness": per_witness,
         "aggregate": aggregate,
+        "distribution": aggregate_distribution,
     }
     output["interpretation"] = interpret_handprint(aggregate)
+    output["facets"] = {
+        "version": 1,
+        "minimumWitnesses": facet_minimum,
+        "byRole": facets_by_role,
+        "note": (
+            "Facet statistics are conditioned only on witnesses explicitly "
+            "reviewed to teach each role. Single-witness facets remain "
+            "provisional and are not projected into render guidance."
+        ),
+    }
     output["provenance"] = {
         "builder": "velastra-painter handprint-build",
-        "algorithmVersion": 1,
+        "algorithmVersion": 2,
         "builtAt": utc_now(),
         "witnessRegistrySha256": sha256_bytes(
             canonical_json(witness_registry)
