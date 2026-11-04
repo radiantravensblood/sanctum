@@ -98,3 +98,166 @@ assert.equal(
 );
 
 console.log("painterly truth contract: ok");
+
+
+const handSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/hand.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
+const atelierSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/atelier.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
+const handUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(handSource).toString("base64");
+
+const standaloneAtelierSource =
+  atelierSource.replace(
+    'import { compileVirynismHand } from "./hand.js";',
+    'import { compileVirynismHand } from "' +
+      handUrl +
+      '";'
+  );
+
+const atelier = await import(
+  "data:text/javascript;base64," +
+    Buffer.from(standaloneAtelierSource).toString("base64")
+);
+
+const atelierGrammar = {
+  archetypeProfiles: {
+    place_tableau: "environmental_oil"
+  },
+  media: {
+    environmental_oil: {
+      grain: 0.5
+    }
+  },
+  layerOrder: [],
+  staticAssetPolicy: {
+    allowedStatuses: ["approved"],
+    fallback: "procedural_underpainting"
+  },
+  painterBridge: {}
+};
+
+const motifSelection = {
+  layer: "motif_selection",
+  motifs: []
+};
+
+function sceneFor(painterlyTruth) {
+  return {
+    archetype: "place_tableau",
+    focalMode: "environment_as_argument",
+    subjects: [],
+    relation: null,
+    environment: {
+      kind: "gallery",
+      facts: [
+        "The Gallery of Unfinished Things",
+        ...painterlyTruth.facts
+      ],
+      identityFacts: [
+        "The Gallery of Unfinished Things",
+        ...painterlyTruth.facts
+      ],
+      transientFacts: [],
+      painterlyTruth
+    },
+    composition: {},
+    lighting: {},
+    edge: {},
+    patina: {},
+    visualIntent: {
+      composition: {},
+      sensations: {}
+    },
+    artDirection: {
+      focalHierarchy: [],
+      directives: []
+    },
+    provenance: {
+      source: "painterly_truth_test",
+      room: "gallery",
+      assetScope: "place"
+    }
+  };
+}
+
+const firstManifest = atelier.compileAtelierManifest({
+  atelierGrammar,
+  assetRegistry: { entries: {} },
+  styleGrammar: null,
+  scenePacket: sceneFor(truth),
+  motifSelection,
+  seed: "truth-test"
+});
+
+const revisedGrammar = structuredClone(grammar);
+revisedGrammar.places.gallery.revision = 2;
+revisedGrammar.places.gallery.traces.push(
+  "A narrow band of older wall color remains visible behind one moved work."
+);
+
+const revisedTruth = module.compilePainterlyTruth({
+  truthGrammar: revisedGrammar,
+  room,
+  objects
+});
+
+const revisedManifest = atelier.compileAtelierManifest({
+  atelierGrammar,
+  assetRegistry: { entries: {} },
+  styleGrammar: null,
+  scenePacket: sceneFor(revisedTruth),
+  motifSelection,
+  seed: "truth-test"
+});
+
+assert.notEqual(
+  firstManifest.assetKey,
+  revisedManifest.assetKey,
+  "A stable material-truth revision must be able to change canonical place identity"
+);
+
+const portableChangedTruth = module.compilePainterlyTruth({
+  truthGrammar: grammar,
+  room,
+  objects: [
+    {
+      id: "empty_frame",
+      name: "empty frame",
+      portable: false
+    },
+    {
+      id: "other_portable",
+      name: "movable token",
+      portable: true
+    }
+  ]
+});
+
+const portableChangedManifest = atelier.compileAtelierManifest({
+  atelierGrammar,
+  assetRegistry: { entries: {} },
+  styleGrammar: null,
+  scenePacket: sceneFor(portableChangedTruth),
+  motifSelection,
+  seed: "truth-test"
+});
+
+assert.equal(
+  firstManifest.assetKey,
+  portableChangedManifest.assetKey,
+  "Portable presence must not change canonical place identity"
+);
