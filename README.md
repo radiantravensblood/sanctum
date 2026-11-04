@@ -50,6 +50,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0023 gives Velastra a renderer-neutral handwriting grammar—Virynism—and teaches each brush how to translate that hand without becoming its author.**
 
+**Kernel 0024 gives that hand stable material truth: observable surfaces, traces, absences, fixed objects, and spatial facts that the painter may render without invention.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2228,9 +2230,145 @@ The Gallery also explicitly rejects:
 This is the first example of Velastra learning authored taste from a candidate
 without treating the candidate itself as truth.
 
+## Painterly Truth
+
+Kernel 0024 gives Virynism something honest to touch.
+
+The governing law is:
+
+**Give the hand something honest to touch.**
+
+Painterly Truth lives at:
+
+`world/velastra-painterly-truth.json`
+
+and is compiled by:
+
+`src/velastra/painterly-truth.js`
+
+It is neither room prose nor style direction.
+
+It is a registry of stable, observable material and spatial facts that are
+canonically true of a place and therefore safe for a painter to render.
+
+The authority order is now:
+
+```text
+scene / place identity
+        ↓
+Painterly Truth
+        ↓
+Virynism
+        ↓
+brush dialect
+        ↓
+model
+```
+
+### What counts as Painterly Truth
+
+Painterly Truth may describe:
+
+- surfaces,
+- marks,
+- wear,
+- exposed grounds,
+- interruptions,
+- traces of prior placement,
+- fixed room objects,
+- stable spatial relationships,
+- explicit absences.
+
+It may not describe:
+
+- mood as fact,
+- a desired composition,
+- a stylistic preference,
+- transient inhabitants,
+- carried objects,
+- invented props.
+
+Those belong elsewhere in the architecture.
+
+### Fixed objects vs. moment objects
+
+Kernel 0020 correctly protected canonical place paintings from live occupancy,
+but it treated every room object as transient.
+
+Kernel 0024 refines that law.
+
+A non-portable room object may enter stable place truth.
+
+A portable object remains runtime truth.
+
+For the Gallery this means:
+
+- the fixed empty frame may belong to the canonical painting,
+- the pressed blue flower may still move and therefore does not define the
+  canonical place asset.
+
+The painting remembers architecture and fixed matter.
+
+The runtime still carries what can move.
+
+### Gallery revision 1
+
+The first Painterly Truth entry is The Gallery of Unfinished Things.
+
+Its stable material facts now include:
+
+- exposed ground or underpainting on some unfinished works,
+- painted passages that stop before the edge,
+- erased, revised, or overwritten marks,
+- worked regions sitting beside raw regions,
+- ghost rectangles and nail traces from previous hanging positions,
+- irregular completion and hanging history,
+- a fixed empty frame,
+- explicit evidence that unfinishedness exists materially rather than only as
+  absence.
+
+These are no longer things Virynism is being asked to invent.
+
+They are authored facts about the room.
+
+### Identity consequence
+
+Virynism revisions do not change canonical place identity.
+
+Painterly Truth revisions **may**.
+
+That distinction is deliberate.
+
+If the hand changes, we are painting the same place differently.
+
+If stable material truth changes, the place itself now contains different
+canonical evidence and deserves a new semantic asset key.
+
+### Manifest and provenance
+
+Every new Sanctum Atelier Manifest carries a structured Painterly Truth
+snapshot under the scene environment.
+
+Candidate truth envelopes record:
+
+- Painterly Truth ID,
+- version,
+- place revision,
+- room ID,
+- fixed-object evidence.
+
+The Atelier dock displays the active Painterly Truth revision beside the active
+Virynism version and brush.
+
+Public inspection surfaces include:
+
+`window.Sanctum.painterlyTruth()`
+
+`window.Velastra.painterlyTruth()`
+
 ## Current storage boundary
 
-Kernel 0023 still persists to `localStorage`.
+Kernel 0024 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2297,3 +2435,5 @@ And now it knows that **the hand holding the brush can change without changing w
 And now it knows that **the hand does not even need to live on the same machine as the room**.
 
 And now it knows that **a brush can change while a recognizable hand survives the translation**.
+
+And now it knows that **the hand deserves facts with texture, history, and edges it can honestly touch**.
