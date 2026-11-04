@@ -272,6 +272,7 @@ def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "id": None,
             "version": None,
             "minimumVisible": 0,
+            "identityReframe": None,
             "required": [],
             "controls": [],
             "reviewQuestions": [],
@@ -292,6 +293,7 @@ def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
         "id": evidence.get("id"),
         "version": evidence.get("version"),
         "minimumVisible": int(evidence.get("minimumVisible") or 0),
+        "identityReframe": flatten_text(evidence.get("identityReframe")) or None,
         "required": required,
         "controls": controls,
         "reviewQuestions": [
@@ -365,8 +367,12 @@ def compile_prompt_bundle(
 
     negative_contract = control.get("negativePrompt") or {}
     negative_supported = (
-        negative_contract.get("supported") is True
-        or negative_contract.get("supportedByBasePipeline") is True
+        True
+        if spec is None
+        else (
+            negative_contract.get("supported") is True
+            or negative_contract.get("supportedByBasePipeline") is True
+        )
     )
     safe_target_tokens = (
         (control.get("promptBudget") or {}).get("safeTargetTokens")
@@ -426,10 +432,33 @@ def compile_prompt_bundle(
         )
 
     if truth["environment"]:
+        painterly_truth = (
+            (scene.get("environment") or {}).get("painterlyTruth")
+            or {}
+        )
+        painterly_facts = {
+            flatten_text(item)
+            for item in (painterly_truth.get("facts") or [])
+            if flatten_text(item)
+        }
+        core_environment = [
+            item
+            for item in truth["environment"]
+            if item not in painterly_facts
+        ]
+        if core_environment:
+            add(
+                "environment",
+                "Environment facts: " + " | ".join(core_environment),
+                priority=100,
+                required=True,
+            )
+
+    if evidence["identityReframe"]:
         add(
-            "environment",
-            "Environment facts: " + " | ".join(truth["environment"]),
-            priority=100,
+            "identity_reframe",
+            "IDENTITY REFRAME — " + evidence["identityReframe"],
+            priority=112,
             required=True,
         )
 
@@ -625,6 +654,7 @@ def compile_prompt_bundle(
             "version": evidence["version"],
             "minimumVisible": evidence["minimumVisible"],
             "requiredCount": len(evidence["required"]),
+            "identityReframe": evidence["identityReframe"],
             "reviewQuestions": evidence["reviewQuestions"],
         },
         "style": {
