@@ -753,7 +753,7 @@ def build_handprint_registry(
         for key in aggregate_keys
     }
 
-    consensus_threshold = max(2, (len(approved) + 1) // 2)
+    consensus_threshold = max(2, (len(approved) // 2) + 1)
     consensus_roles = [
         role
         for role, count in sorted(
