@@ -1149,7 +1149,7 @@ def compile_prompt_bundle(
     style = style_lines(manifest)
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
-    handprint = handprint_lines(manifest)
+    handprint = handprint_lines(manifest, spec)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
     control = spec.control_contract if spec and spec.control_contract else {}
 
@@ -1486,9 +1486,12 @@ def compile_prompt_bundle(
         },
         "handprint": {
             "active": handprint["active"],
+            "ablation": handprint.get("ablation"),
             "witnessCount": handprint.get("witnessCount", 0),
             "desiredRoles": handprint.get("desiredRoles") or [],
             "consensusRoles": handprint.get("consensusRoles") or [],
+            "facetRoles": handprint.get("facetRoles") or [],
+            "facets": handprint.get("facets") or {},
             "interpretation": handprint.get("interpretation") or {},
             "metrics": handprint.get("metrics") or {},
         },
@@ -1500,6 +1503,7 @@ def compile_prompt_bundle(
             "roles": witness.get("roles") or [],
             "doNotInherit": witness.get("doNotInherit") or [],
             "asset": witness.get("asset"),
+            "ablation": witness.get("ablation"),
         },
         "style": {
             "id": (manifest.get("style") or {}).get("id"),
@@ -1649,6 +1653,8 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         witness_id=getattr(args, "witness", None),
         repo_root=getattr(args, "repo_root", ".") or ".",
         attempt_id=attempt_id,
+        disable_handprint=bool(getattr(args, "without_handprint", False)),
+        disable_witness=bool(getattr(args, "without_witness", False)),
     )
 
 
@@ -1675,6 +1681,8 @@ class RenderSpec:
     witness_id: str | None = None
     repo_root: str = "."
     attempt_id: str | None = None
+    disable_handprint: bool = False
+    disable_witness: bool = False
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -1696,6 +1704,10 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
             "attemptId": spec.attempt_id,
+            "ablation": {
+                "withoutHandprint": spec.disable_handprint,
+                "withoutWitness": spec.disable_witness,
+            },
         },
     }
     return sha256_bytes(canonical_json(identity))[:20]
@@ -1738,6 +1750,10 @@ def build_candidate_record(
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
             "attemptId": spec.attempt_id,
+            "ablation": {
+                "withoutHandprint": spec.disable_handprint,
+                "withoutWitness": spec.disable_witness,
+            },
             "device": spec.device,
             "dtype": spec.dtype,
             "brush": spec.brush,
@@ -2290,6 +2306,8 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
     parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
     parser.add_argument("--witness", help="Explicit approved Visual Witness ID when the brush supports references.")
+    parser.add_argument("--without-handprint", action="store_true", help="Ablation: omit Handprint guidance while preserving the rest of the manifest.")
+    parser.add_argument("--without-witness", action="store_true", help="Ablation: omit Visual Witness guidance when the selected brush does not require an input image.")
     parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
     parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
