@@ -2047,6 +2047,27 @@ def cmd_handprint(args: argparse.Namespace) -> int:
     for key, value in (registry.get("interpretation") or {}).items():
         if value:
             print(f"{key}: {value}")
+
+    facets = (registry.get("facets") or {}).get("byRole") or {}
+    if facets:
+        print("facets:")
+        for role, facet in sorted(facets.items()):
+            witnesses = ", ".join(facet.get("witnesses") or [])
+            status = (
+                "cross-portfolio"
+                if facet.get("eligibleForRender")
+                else "provisional"
+            )
+            print(
+                "  "
+                + role
+                + " | "
+                + status
+                + " | "
+                + str(facet.get("witnessCount") or 0)
+                + " witnesses | "
+                + witnesses
+            )
     return 0
 
 
