@@ -246,6 +246,7 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(bundle["control"]["role"], "structural_scout")
         self.assertEqual(bundle["budget"]["targetTokens"], 420)
         self.assertTrue(bundle["budget"]["requiredSectionsPreserved"])
+        self.assertIsInstance(bundle["budget"]["overTarget"], bool)
 
     def test_qwen_retains_negative_channel_as_best_effort(self):
         manifest = manifest_fixture()
@@ -382,6 +383,8 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(spec.steps, 9)
         self.assertEqual(spec.guidance, 0)
         self.assertEqual(spec.token_env, "HF_TOKEN")
+        self.assertIsNone(spec.true_cfg_scale)
+        self.assertFalse(spec.control_contract["negativePrompt"]["supported"])
 
     def test_alternate_brush_can_use_local_diffusers(self):
         spec = painter.build_render_spec(
@@ -396,6 +399,11 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(spec.model, "Qwen/Qwen-Image")
         self.assertEqual(spec.license, "apache-2.0")
         self.assertEqual(spec.steps, 40)
+        self.assertEqual(spec.true_cfg_scale, 4.0)
+        self.assertEqual(
+            spec.control_contract["guidance"]["diffusersParameter"],
+            "true_cfg_scale",
+        )
 
     def test_candidate_records_credential_name_not_secret(self):
         manifest = manifest_fixture()
