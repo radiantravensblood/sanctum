@@ -1966,6 +1966,7 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "license": candidate.get("render", {}).get("license"),
             "promptDialect": candidate.get("render", {}).get("promptDialect"),
             "style": candidate.get("source", {}).get("style"),
+            "handprint": candidate.get("source", {}).get("handprint"),
             "witness": candidate.get("source", {}).get("witness"),
             "seed": candidate.get("render", {}).get("seed"),
             "attemptId": candidate.get("render", {}).get("attemptId"),
