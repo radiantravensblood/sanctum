@@ -670,7 +670,25 @@ def compile_prompt_bundle(
         },
         "control": {
             "negativePromptActive": negative_supported,
+            "negativePromptReliability": (
+                negative_contract.get("providerTransport")
+                if spec and spec.transport == "huggingface"
+                else (
+                    "supported"
+                    if negative_supported
+                    else "unsupported"
+                )
+            ),
             "guidanceMode": (control.get("guidance") or {}).get("mode"),
+            "guidanceReliability": (
+                (control.get("guidance") or {}).get("providerTransport")
+                if spec and spec.transport == "huggingface"
+                else (
+                    "supported"
+                    if (control.get("guidance") or {}).get("supportedByBasePipeline")
+                    else "unsupported"
+                )
+            ),
             "evidenceStrategy": control.get("evidenceStrategy"),
             "role": control.get("role"),
         },
