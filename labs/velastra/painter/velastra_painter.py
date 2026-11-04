@@ -31,6 +31,9 @@ DEFAULT_BRUSH_REGISTRY = (
 DEFAULT_WITNESS_REGISTRY = (
     Path(__file__).resolve().parents[3] / "world" / "velastra-witnesses.json"
 )
+DEFAULT_HANDPRINT_REGISTRY = (
+    Path(__file__).resolve().parents[3] / "world" / "velastra-handprint.json"
+)
 
 
 class PainterError(RuntimeError):
@@ -429,6 +432,371 @@ def resolve_witness_path(
     return path
 
 
+def handprint_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    block = manifest.get("handprint")
+    if not isinstance(block, Mapping) or block.get("active") is not True:
+        return {
+            "active": False,
+            "witnessCount": 0,
+            "desiredRoles": [],
+            "consensusRoles": [],
+            "interpretation": {},
+            "metrics": {},
+            "doNotInherit": [],
+        }
+
+    return {
+        "active": True,
+        "witnessCount": int(block.get("witnessCount") or 0),
+        "desiredRoles": list(block.get("desiredRoles") or []),
+        "consensusRoles": list(block.get("consensusRoles") or []),
+        "interpretation": dict(block.get("interpretation") or {}),
+        "metrics": dict(block.get("metrics") or {}),
+        "doNotInherit": list(block.get("doNotInherit") or []),
+    }
+
+
+def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
+    if not handprint.get("active"):
+        return ""
+
+    interpretation = handprint.get("interpretation") or {}
+    parts: list[str] = [
+        "Portfolio-derived Virynism Handprint from "
+        + str(handprint.get("witnessCount") or 0)
+        + " approved witnesses."
+    ]
+
+    labels = [
+        ("tonalRestraint", "tonal restraint"),
+        ("warmthBias", "warmth bias"),
+        ("edgeCharacter", "edge character"),
+        ("centerLightBias", "center/periphery light"),
+        ("shadowPresence", "shadow presence"),
+        ("tonalRange", "tonal range"),
+    ]
+    for key, label in labels:
+        value = flatten_text(interpretation.get(key))
+        if value:
+            parts.append(label + ": " + value)
+
+    roles = handprint.get("desiredRoles") or handprint.get("consensusRoles") or []
+    if roles:
+        parts.append(
+            "Relevant recurring hand roles: "
+            + ", ".join(str(role).replace("_", " ") for role in roles)
+        )
+
+    parts.append(
+        "Use these as cross-portfolio tendencies only. Do not inherit any "
+        "witness subject, object, architecture, identity, or layout."
+    )
+    return " ".join(parts)
+
+
+def percentile_from_histogram(histogram: Sequence[int], fraction: float) -> float:
+    total = sum(histogram)
+    if total <= 0:
+        return 0.0
+    threshold = total * fraction
+    running = 0
+    for index, count in enumerate(histogram):
+        running += count
+        if running >= threshold:
+            return index / 255.0
+    return 1.0
+
+
+def analyze_witness_image(path: Path) -> dict[str, Any]:
+    try:
+        from PIL import Image, ImageFilter, ImageStat
+    except ImportError as exc:
+        raise PainterError(
+            "Handprint analysis requires Pillow. "
+            "Install labs/velastra/painter/requirements-provider.txt."
+        ) from exc
+
+    with Image.open(path) as source:
+        image = source.convert("RGB")
+        width, height = image.size
+        working = image.copy()
+        working.thumbnail((256, 256))
+
+    pixels = list(working.getdata())
+    if not pixels:
+        raise PainterError(f"Witness image has no pixels: {path}")
+
+    luminances: list[float] = []
+    saturations: list[float] = []
+    warmth: list[float] = []
+    dark = 0
+    highlight = 0
+
+    for red, green, blue in pixels:
+        r = red / 255.0
+        g = green / 255.0
+        b = blue / 255.0
+        lum = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        luminances.append(lum)
+
+        maximum = max(r, g, b)
+        minimum = min(r, g, b)
+        saturation = 0.0 if maximum <= 0 else (maximum - minimum) / maximum
+        saturations.append(saturation)
+        warmth.append((r - b) / 2.0)
+
+        if lum < 0.22:
+            dark += 1
+        if lum > 0.78:
+            highlight += 1
+
+    gray = working.convert("L")
+    histogram = gray.histogram()
+    p10 = percentile_from_histogram(histogram, 0.10)
+    p90 = percentile_from_histogram(histogram, 0.90)
+
+    edge_image = gray.filter(ImageFilter.FIND_EDGES)
+    edge_mean = float(ImageStat.Stat(edge_image).mean[0]) / 255.0
+
+    w, h = working.size
+    cx0, cx1 = int(w * 0.25), max(int(w * 0.75), int(w * 0.25) + 1)
+    cy0, cy1 = int(h * 0.25), max(int(h * 0.75), int(h * 0.25) + 1)
+    center = gray.crop((cx0, cy0, cx1, cy1))
+    center_mean = float(ImageStat.Stat(center).mean[0]) / 255.0
+
+    border_values: list[int] = []
+    gray_pixels = gray.load()
+    border_x = max(1, int(w * 0.18))
+    border_y = max(1, int(h * 0.18))
+    for y in range(h):
+        for x in range(w):
+            if (
+                x < border_x
+                or x >= w - border_x
+                or y < border_y
+                or y >= h - border_y
+            ):
+                border_values.append(int(gray_pixels[x, y]))
+    edge_luma = (
+        sum(border_values) / (255.0 * len(border_values))
+        if border_values
+        else center_mean
+    )
+
+    count = float(len(pixels))
+    return {
+        "width": width,
+        "height": height,
+        "aspectRatio": round(width / height, 4) if height else 0.0,
+        "meanLuminance": round(sum(luminances) / count, 4),
+        "meanSaturation": round(sum(saturations) / count, 4),
+        "meanWarmth": round(sum(warmth) / count, 4),
+        "darkShare": round(dark / count, 4),
+        "highlightShare": round(highlight / count, 4),
+        "p10Luminance": round(p10, 4),
+        "p90Luminance": round(p90, 4),
+        "tonalSpan": round(max(0.0, p90 - p10), 4),
+        "edgeActivity": round(edge_mean, 4),
+        "centerLuminance": round(center_mean, 4),
+        "peripheryLuminance": round(edge_luma, 4),
+        "centerLightDelta": round(center_mean - edge_luma, 4),
+        "grayscaleEntropy": round(float(gray.entropy()) / 8.0, 4),
+    }
+
+
+def mean_metric(records: Sequence[Mapping[str, Any]], key: str) -> float:
+    values = [
+        float(record[key])
+        for record in records
+        if record.get(key) is not None
+    ]
+    return round(sum(values) / len(values), 4) if values else 0.0
+
+
+def interpret_handprint(aggregate: Mapping[str, Any]) -> dict[str, str]:
+    saturation = float(aggregate.get("meanSaturation") or 0)
+    warmth = float(aggregate.get("meanWarmth") or 0)
+    edge = float(aggregate.get("edgeActivity") or 0)
+    center_delta = float(aggregate.get("centerLightDelta") or 0)
+    dark_share = float(aggregate.get("darkShare") or 0)
+    span = float(aggregate.get("tonalSpan") or 0)
+
+    return {
+        "tonalRestraint": (
+            "restrained saturation with selective chromatic emphasis"
+            if saturation < 0.42
+            else "moderate saturation with selective restraint"
+        ),
+        "warmthBias": (
+            "warm-biased overall, with warmth carrying visual emphasis"
+            if warmth > 0.025
+            else (
+                "cool-biased overall"
+                if warmth < -0.025
+                else "near-balanced warm/cool field"
+            )
+        ),
+        "edgeCharacter": (
+            "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp"
+            if edge < 0.22
+            else "active edge field with selective softening"
+        ),
+        "centerLightBias": (
+            "center fields tend to hold more light than the periphery"
+            if center_delta > 0.035
+            else (
+                "periphery can carry equal or greater light than the center"
+                if center_delta < -0.035
+                else "light is distributed without a strong center bias"
+            )
+        ),
+        "shadowPresence": (
+            "shadow occupies a substantial share of the image field"
+            if dark_share > 0.24
+            else "shadow is present but not dominant"
+        ),
+        "tonalRange": (
+            "broad tonal span from deep shadow to selective highlight"
+            if span > 0.58
+            else "compressed-to-moderate tonal span"
+        ),
+    }
+
+
+def build_handprint_registry(
+    witness_registry: Mapping[str, Any],
+    repo_root: Path,
+    template: Mapping[str, Any],
+) -> dict[str, Any]:
+    approved: list[tuple[str, Mapping[str, Any]]] = []
+    for witness_id, entry in (witness_registry.get("entries") or {}).items():
+        if not isinstance(entry, Mapping):
+            continue
+        asset = entry.get("asset")
+        if (
+            entry.get("status") == "approved"
+            and isinstance(asset, Mapping)
+            and asset.get("path")
+            and asset.get("sha256")
+        ):
+            approved.append((str(witness_id), entry))
+
+    minimum = int(template.get("minimumApprovedWitnesses") or 0)
+    if len(approved) < minimum:
+        raise PainterError(
+            "Handprint requires at least "
+            + str(minimum)
+            + " approved witnesses; found "
+            + str(len(approved))
+            + "."
+        )
+
+    witness_records: list[dict[str, Any]] = []
+    metric_records: list[dict[str, Any]] = []
+    role_counts: dict[str, int] = {}
+    exclusions: set[str] = set()
+    per_witness: dict[str, Any] = {}
+
+    for witness_id, entry in approved:
+        asset = entry.get("asset") or {}
+        path = (repo_root / str(asset.get("path"))).resolve()
+        try:
+            path.relative_to(repo_root.resolve())
+        except ValueError as exc:
+            raise PainterError(
+                f"Witness asset must live inside repository root: {path}"
+            ) from exc
+
+        if not path.exists():
+            raise PainterError(f"Missing approved witness asset: {path}")
+
+        actual_sha = sha256_file(path)
+        if actual_sha != asset.get("sha256"):
+            raise PainterError(
+                f"Witness hash mismatch for {witness_id}: {path}"
+            )
+
+        metrics = analyze_witness_image(path)
+        metric_records.append(metrics)
+        per_witness[witness_id] = metrics
+
+        roles = [str(role) for role in (entry.get("teach") or [])]
+        for role in roles:
+            role_counts[role] = role_counts.get(role, 0) + 1
+
+        for exclusion in entry.get("doNotInherit") or []:
+            exclusions.add(str(exclusion))
+
+        witness_records.append({
+            "id": witness_id,
+            "title": entry.get("title"),
+            "sha256": actual_sha,
+            "path": str(asset.get("path")),
+            "roles": roles,
+        })
+
+    aggregate_keys = [
+        "meanLuminance",
+        "meanSaturation",
+        "meanWarmth",
+        "darkShare",
+        "highlightShare",
+        "tonalSpan",
+        "edgeActivity",
+        "centerLuminance",
+        "peripheryLuminance",
+        "centerLightDelta",
+        "grayscaleEntropy",
+    ]
+    aggregate = {
+        key: mean_metric(metric_records, key)
+        for key in aggregate_keys
+    }
+
+    consensus_threshold = max(2, (len(approved) + 1) // 2)
+    consensus_roles = [
+        role
+        for role, count in sorted(
+            role_counts.items(),
+            key=lambda item: (-item[1], item[0]),
+        )
+        if count >= consensus_threshold
+    ]
+
+    output = dict(template)
+    output["status"] = "built"
+    output["corpus"] = {
+        "witnessCount": len(witness_records),
+        "witnesses": witness_records,
+        "roleCounts": dict(sorted(role_counts.items())),
+        "consensusThreshold": consensus_threshold,
+        "consensusRoles": consensus_roles,
+        "doNotInherit": sorted(exclusions),
+    }
+    output["metrics"] = {
+        "perWitness": per_witness,
+        "aggregate": aggregate,
+    }
+    output["interpretation"] = interpret_handprint(aggregate)
+    output["provenance"] = {
+        "builder": "velastra-painter handprint-build",
+        "algorithmVersion": 1,
+        "builtAt": utc_now(),
+        "witnessRegistrySha256": sha256_bytes(
+            canonical_json(witness_registry)
+        ),
+        "corpusHashes": {
+            record["id"]: record["sha256"]
+            for record in witness_records
+        },
+        "note": (
+            "Pixel metrics are descriptive portfolio measurements, "
+            "not semantic scene facts."
+        ),
+    }
+    return output
+
+
 def estimate_prompt_tokens(text: str) -> int:
     if not text:
         return 0
@@ -492,6 +860,7 @@ def compile_prompt_bundle(
     style = style_lines(manifest)
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
+    handprint = handprint_lines(manifest)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
     control = spec.control_contract if spec and spec.control_contract else {}
 
@@ -630,6 +999,15 @@ def compile_prompt_bundle(
             "virynism_core",
             "Virynism core — " + style["signature"],
             priority=96,
+            required=True,
+        )
+
+    handprint_text = handprint_prompt_text(handprint)
+    if handprint_text:
+        add(
+            "handprint",
+            "HANDPRINT — " + handprint_text,
+            priority=114,
             required=True,
         )
 
@@ -816,6 +1194,14 @@ def compile_prompt_bundle(
             "requiredCount": len(evidence["required"]),
             "identityReframe": evidence["identityReframe"],
             "reviewQuestions": evidence["reviewQuestions"],
+        },
+        "handprint": {
+            "active": handprint["active"],
+            "witnessCount": handprint.get("witnessCount", 0),
+            "desiredRoles": handprint.get("desiredRoles") or [],
+            "consensusRoles": handprint.get("consensusRoles") or [],
+            "interpretation": handprint.get("interpretation") or {},
+            "metrics": handprint.get("metrics") or {},
         },
         "witness": {
             "active": witness["active"],
@@ -1048,6 +1434,7 @@ def build_candidate_record(
             "truthEnvelope": prompts["truthEnvelope"],
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
+            "handprint": prompts.get("handprint"),
             "witness": prompts.get("witness"),
             "promptBudget": prompts.get("budget"),
         },
@@ -1307,6 +1694,55 @@ def render_huggingface(
         "credentialEnv": token_env,
         "witness": witness_runtime,
     }
+
+
+def cmd_handprint_build(args: argparse.Namespace) -> int:
+    witness_registry = load_witness_registry(
+        Path(args.witness_registry)
+        if args.witness_registry
+        else None
+    )
+    template_path = Path(args.handprint)
+    template = read_json(template_path)
+    repo_root = Path(args.repo_root).resolve()
+
+    handprint = build_handprint_registry(
+        witness_registry,
+        repo_root,
+        template,
+    )
+
+    output = Path(args.output or template_path)
+    write_json(output, handprint)
+    print(output)
+    print(
+        "witnesses="
+        + str(handprint["corpus"]["witnessCount"])
+        + " consensus="
+        + ",".join(handprint["corpus"]["consensusRoles"])
+    )
+    return 0
+
+
+def cmd_handprint(args: argparse.Namespace) -> int:
+    registry = read_json(Path(args.handprint))
+    if args.json:
+        print(json.dumps(registry, indent=2, ensure_ascii=False))
+        return 0
+
+    corpus = registry.get("corpus") or {}
+    print(
+        f"{registry.get('designation', 'Handprint')} | "
+        f"{registry.get('status', 'unknown')} | "
+        f"{corpus.get('witnessCount', 0)} witnesses"
+    )
+    roles = corpus.get("consensusRoles") or []
+    if roles:
+        print("consensus: " + ", ".join(roles))
+    for key, value in (registry.get("interpretation") or {}).items():
+        if value:
+            print(f"{key}: {value}")
+    return 0
 
 
 def load_witness_registry(path: Path | None = None) -> dict[str, Any]:
@@ -1612,6 +2048,24 @@ def build_parser() -> argparse.ArgumentParser:
     brushes.add_argument("--brush-registry")
     brushes.add_argument("--json", action="store_true")
     brushes.set_defaults(func=cmd_brushes)
+
+    handprint = sub.add_parser(
+        "handprint",
+        help="Inspect the current Virynism portfolio handprint.",
+    )
+    handprint.add_argument("--handprint", default="world/velastra-handprint.json")
+    handprint.add_argument("--json", action="store_true")
+    handprint.set_defaults(func=cmd_handprint)
+
+    handprint_build = sub.add_parser(
+        "handprint-build",
+        help="Rebuild the Virynism Handprint from approved sealed witness pixels.",
+    )
+    handprint_build.add_argument("--witness-registry", default="world/velastra-witnesses.json")
+    handprint_build.add_argument("--handprint", default="world/velastra-handprint.json")
+    handprint_build.add_argument("--repo-root", default=".")
+    handprint_build.add_argument("--output")
+    handprint_build.set_defaults(func=cmd_handprint_build)
 
     witnesses = sub.add_parser("witnesses", help="List curated Virynism Visual Witnesses.")
     witnesses.add_argument("--registry", default="world/velastra-witnesses.json")
