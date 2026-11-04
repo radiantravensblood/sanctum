@@ -69,7 +69,10 @@ export function compileSanctumAtelier({
       source: "sanctum_live_scene",
       room: room.id,
       assetScope: "place",
-      transientPresenceExcludedFromCanonicalPainting: true
+      transientPresenceExcludedFromCanonicalPainting: true,
+      fixedObjectsIncludedInCanonicalPainting: true,
+      painterlyTruthRevision:
+        painterlyTruth.revision || 0
     }
   });
 
