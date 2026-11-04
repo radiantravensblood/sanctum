@@ -211,6 +211,7 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     style = manifest.get("style")
     if not isinstance(style, Mapping):
         return {
+            "signature": "",
             "hand": [],
             "archetype": [],
             "place": [],
@@ -258,6 +259,7 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     ]
 
     return {
+        "signature": flatten_text(style.get("compactSignature")),
         "hand": hand,
         "archetype": archetype,
         "place": place,
@@ -496,6 +498,14 @@ def compile_prompt_bundle(
             "hierarchy",
             f"Focal hierarchy: {hierarchy}",
             priority=90,
+            required=True,
+        )
+
+    if style["signature"]:
+        add(
+            "virynism_core",
+            "Virynism core — " + style["signature"],
+            priority=96,
             required=True,
         )
 
