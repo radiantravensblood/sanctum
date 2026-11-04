@@ -319,6 +319,96 @@ Otherwise the bridge generates one for hosted reference runs.
 This differs from the deterministic text-to-image path and is recorded
 honestly in candidate provenance.
 
+## Handprint
+
+Kernel 0027 adds an auditable portfolio-derived visual fingerprint.
+
+Handprint is not produced during rendering.
+
+It is rebuilt explicitly from the approved Visual Witness corpus:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint-build \
+  --repo-root .
+```
+
+Inspect the result with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py handprint
+```
+
+The builder:
+
+1. loads only `approved` witness entries with an asset path and SHA-256,
+2. verifies every file remains inside the repository,
+3. re-hashes every witness before analysis,
+4. refuses any hash mismatch,
+5. measures each image with Pillow at a bounded analysis resolution,
+6. aggregates the metrics across the approved corpus,
+7. counts recurring human-reviewed witness roles,
+8. records the union of explicit content non-inheritance boundaries,
+9. writes the result to `world/velastra-handprint.json`.
+
+### Measured fields
+
+For each witness:
+
+- source width and height,
+- aspect ratio,
+- mean luminance,
+- mean saturation,
+- mean warm/cool bias,
+- deep-shadow share,
+- highlight share,
+- 10th percentile luminance,
+- 90th percentile luminance,
+- tonal span,
+- edge activity,
+- center luminance,
+- periphery luminance,
+- center/periphery light delta,
+- normalized grayscale entropy.
+
+The aggregate Handprint uses portfolio means for portable brush guidance.
+
+### Interpretation is deterministic and modest
+
+The bridge converts aggregate numbers into a small set of inspectable
+descriptions:
+
+- tonal restraint,
+- warmth bias,
+- edge character,
+- center-light behavior,
+- shadow presence,
+- tonal range.
+
+These descriptions use documented thresholds in the Python source.
+
+They are not a learned style embedding and they do not claim to exhaust
+Virynism.
+
+### Manifest behavior
+
+A built Handprint travels inside every newly exported Atelier Manifest.
+
+The browser projects it through the current scene's Virynism emphasis so the
+brush receives only relevant recurring roles.
+
+The Painter Bridge adds a required `HANDPRINT` section to its positive
+direction.
+
+This section explicitly says that portfolio tendencies are cross-witness
+guidance only and that witness subject/object/architecture/layout content
+remains forbidden.
+
+Changing Handprint may change candidate identity.
+
+It never changes the canonical room asset key.
+
+Candidate and approval provenance both retain the Handprint snapshot.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
@@ -642,8 +732,10 @@ The painter does not become sovereign over the scene.
 
 ## Contract tests
 
-The bridge contract uses only the Python standard library, so its safety and
-promotion tests do not require model weights or Diffusers:
+The bridge contract does not require model weights or Diffusers.
+
+Handprint pixel-analysis tests additionally require Pillow, the same lightweight
+dependency already used by witness admission:
 
 ```bash
 python -m py_compile labs/velastra/painter/velastra_painter.py
