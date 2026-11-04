@@ -117,7 +117,7 @@
         "meanSaturation": 0.6753,
         "meanWarmth": 0.1113,
         "darkShare": 0.6853,
-        "highlightShare": 0,
+        "highlightShare": 0.0,
         "p10Luminance": 0.0431,
         "p90Luminance": 0.4863,
         "tonalSpan": 0.4431,
@@ -176,6 +176,118 @@
       "peripheryLuminance": 0.2792,
       "centerLightDelta": 0.0669,
       "grayscaleEntropy": 0.8625
+    },
+    "distribution": {
+      "meanLuminance": {
+        "count": 3,
+        "mean": 0.2964,
+        "median": 0.2359,
+        "min": 0.1903,
+        "max": 0.4629,
+        "stddev": 0.1192,
+        "range": 0.2726,
+        "variation": "broad"
+      },
+      "meanSaturation": {
+        "count": 3,
+        "mean": 0.4982,
+        "median": 0.4435,
+        "min": 0.3757,
+        "max": 0.6753,
+        "stddev": 0.1283,
+        "range": 0.2996,
+        "variation": "broad"
+      },
+      "meanWarmth": {
+        "count": 3,
+        "mean": 0.0965,
+        "median": 0.1029,
+        "min": 0.0754,
+        "max": 0.1113,
+        "stddev": 0.0153,
+        "range": 0.0359,
+        "variation": "tight"
+      },
+      "darkShare": {
+        "count": 3,
+        "mean": 0.4381,
+        "median": 0.6261,
+        "min": 0.0028,
+        "max": 0.6853,
+        "stddev": 0.3087,
+        "range": 0.6825,
+        "variation": "broad"
+      },
+      "highlightShare": {
+        "count": 3,
+        "mean": 0.0079,
+        "median": 0.0054,
+        "min": 0.0,
+        "max": 0.0184,
+        "stddev": 0.0077,
+        "range": 0.0184,
+        "variation": "tight"
+      },
+      "tonalSpan": {
+        "count": 3,
+        "mean": 0.4327,
+        "median": 0.4431,
+        "min": 0.2824,
+        "max": 0.5725,
+        "stddev": 0.1187,
+        "range": 0.2901,
+        "variation": "broad"
+      },
+      "edgeActivity": {
+        "count": 3,
+        "mean": 0.0844,
+        "median": 0.0537,
+        "min": 0.0256,
+        "max": 0.1739,
+        "stddev": 0.0643,
+        "range": 0.1483,
+        "variation": "moderate"
+      },
+      "centerLuminance": {
+        "count": 3,
+        "mean": 0.3461,
+        "median": 0.2934,
+        "min": 0.214,
+        "max": 0.5308,
+        "stddev": 0.1346,
+        "range": 0.3168,
+        "variation": "broad"
+      },
+      "peripheryLuminance": {
+        "count": 3,
+        "mean": 0.2792,
+        "median": 0.2684,
+        "min": 0.1367,
+        "max": 0.4325,
+        "stddev": 0.121,
+        "range": 0.2958,
+        "variation": "broad"
+      },
+      "centerLightDelta": {
+        "count": 3,
+        "mean": 0.0669,
+        "median": 0.0984,
+        "min": -0.0544,
+        "max": 0.1567,
+        "stddev": 0.089,
+        "range": 0.2111,
+        "variation": "moderate"
+      },
+      "grayscaleEntropy": {
+        "count": 3,
+        "mean": 0.8625,
+        "median": 0.8554,
+        "min": 0.8388,
+        "max": 0.8932,
+        "stddev": 0.0228,
+        "range": 0.0544,
+        "variation": "tight"
+      }
     }
   },
   "interpretation": {
@@ -188,8 +300,8 @@
   },
   "provenance": {
     "builder": "velastra-painter handprint-build",
-    "algorithmVersion": 1,
-    "builtAt": "2026-11-04T10:57:21Z",
+    "algorithmVersion": 2,
+    "builtAt": "2026-11-04T18:33:17Z",
     "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
     "corpusHashes": {
       "viryn_self_portrait_01": "7b9113bc203608bf1c93207ce89c5f13462732e1da764f19db99129b735dc22a",
@@ -201,7 +313,1047 @@
   "facets": {
     "version": 1,
     "minimumWitnesses": 2,
-    "byRole": {},
-    "note": "Kernel 0028 requires one canonical handprint-build after merge to derive role-conditioned facets from the approved corpus."
+    "byRole": {
+      "compositional_cadence": {
+        "witnessCount": 2,
+        "witnesses": [
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 2,
+            "mean": 0.3494,
+            "median": 0.3494,
+            "min": 0.2359,
+            "max": 0.4629,
+            "stddev": 0.1135,
+            "range": 0.227,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 2,
+            "mean": 0.4096,
+            "median": 0.4096,
+            "min": 0.3757,
+            "max": 0.4435,
+            "stddev": 0.0339,
+            "range": 0.0678,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 2,
+            "mean": 0.0892,
+            "median": 0.0892,
+            "min": 0.0754,
+            "max": 0.1029,
+            "stddev": 0.0138,
+            "range": 0.0275,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 2,
+            "mean": 0.3145,
+            "median": 0.3145,
+            "min": 0.0028,
+            "max": 0.6261,
+            "stddev": 0.3116,
+            "range": 0.6233,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 2,
+            "mean": 0.0119,
+            "median": 0.0119,
+            "min": 0.0054,
+            "max": 0.0184,
+            "stddev": 0.0065,
+            "range": 0.013,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 2,
+            "mean": 0.4274,
+            "median": 0.4274,
+            "min": 0.2824,
+            "max": 0.5725,
+            "stddev": 0.1451,
+            "range": 0.2901,
+            "variation": "broad"
+          },
+          "edgeActivity": {
+            "count": 2,
+            "mean": 0.1138,
+            "median": 0.1138,
+            "min": 0.0537,
+            "max": 0.1739,
+            "stddev": 0.0601,
+            "range": 0.1202,
+            "variation": "moderate"
+          },
+          "centerLuminance": {
+            "count": 2,
+            "mean": 0.3724,
+            "median": 0.3724,
+            "min": 0.214,
+            "max": 0.5308,
+            "stddev": 0.1584,
+            "range": 0.3168,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 2,
+            "mean": 0.3505,
+            "median": 0.3505,
+            "min": 0.2684,
+            "max": 0.4325,
+            "stddev": 0.082,
+            "range": 0.1641,
+            "variation": "moderate"
+          },
+          "centerLightDelta": {
+            "count": 2,
+            "mean": 0.022,
+            "median": 0.022,
+            "min": -0.0544,
+            "max": 0.0984,
+            "stddev": 0.0764,
+            "range": 0.1528,
+            "variation": "moderate"
+          },
+          "grayscaleEntropy": {
+            "count": 2,
+            "mean": 0.8743,
+            "median": 0.8743,
+            "min": 0.8554,
+            "max": 0.8932,
+            "stddev": 0.0189,
+            "range": 0.0378,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "light is distributed without a strong center bias",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "2 witnesses; the locus of light legitimately moves between center and periphery; preserve purposeful imbalance rather than a fixed composition."
+      },
+      "edge_behavior": {
+        "witnessCount": 2,
+        "witnesses": [
+          "viryn_self_portrait_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 2,
+            "mean": 0.3266,
+            "median": 0.3266,
+            "min": 0.1903,
+            "max": 0.4629,
+            "stddev": 0.1363,
+            "range": 0.2726,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 2,
+            "mean": 0.5255,
+            "median": 0.5255,
+            "min": 0.3757,
+            "max": 0.6753,
+            "stddev": 0.1498,
+            "range": 0.2996,
+            "variation": "broad"
+          },
+          "meanWarmth": {
+            "count": 2,
+            "mean": 0.1071,
+            "median": 0.1071,
+            "min": 0.1029,
+            "max": 0.1113,
+            "stddev": 0.0042,
+            "range": 0.0084,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 2,
+            "mean": 0.3441,
+            "median": 0.3441,
+            "min": 0.0028,
+            "max": 0.6853,
+            "stddev": 0.3412,
+            "range": 0.6825,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 2,
+            "mean": 0.0092,
+            "median": 0.0092,
+            "min": 0.0,
+            "max": 0.0184,
+            "stddev": 0.0092,
+            "range": 0.0184,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 2,
+            "mean": 0.3628,
+            "median": 0.3628,
+            "min": 0.2824,
+            "max": 0.4431,
+            "stddev": 0.0804,
+            "range": 0.1607,
+            "variation": "moderate"
+          },
+          "edgeActivity": {
+            "count": 2,
+            "mean": 0.0396,
+            "median": 0.0396,
+            "min": 0.0256,
+            "max": 0.0537,
+            "stddev": 0.014,
+            "range": 0.0281,
+            "variation": "tight"
+          },
+          "centerLuminance": {
+            "count": 2,
+            "mean": 0.4121,
+            "median": 0.4121,
+            "min": 0.2934,
+            "max": 0.5308,
+            "stddev": 0.1187,
+            "range": 0.2374,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 2,
+            "mean": 0.2846,
+            "median": 0.2846,
+            "min": 0.1367,
+            "max": 0.4325,
+            "stddev": 0.1479,
+            "range": 0.2958,
+            "variation": "broad"
+          },
+          "centerLightDelta": {
+            "count": 2,
+            "mean": 0.1275,
+            "median": 0.1275,
+            "min": 0.0984,
+            "max": 0.1567,
+            "stddev": 0.0292,
+            "range": 0.0583,
+            "variation": "tight"
+          },
+          "grayscaleEntropy": {
+            "count": 2,
+            "mean": 0.8471,
+            "median": 0.8471,
+            "min": 0.8388,
+            "max": 0.8554,
+            "stddev": 0.0083,
+            "range": 0.0166,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "moderate saturation with selective restraint",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "center fields tend to hold more light than the periphery",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; edge activity varies tight across the supporting works."
+      },
+      "intimate_presence": {
+        "witnessCount": 1,
+        "witnesses": [
+          "viryn_self_portrait_01"
+        ],
+        "eligibleForRender": false,
+        "support": "provisional_single_witness",
+        "metrics": {
+          "meanLuminance": {
+            "count": 1,
+            "mean": 0.1903,
+            "median": 0.1903,
+            "min": 0.1903,
+            "max": 0.1903,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "meanSaturation": {
+            "count": 1,
+            "mean": 0.6753,
+            "median": 0.6753,
+            "min": 0.6753,
+            "max": 0.6753,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 1,
+            "mean": 0.1113,
+            "median": 0.1113,
+            "min": 0.1113,
+            "max": 0.1113,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 1,
+            "mean": 0.6853,
+            "median": 0.6853,
+            "min": 0.6853,
+            "max": 0.6853,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "highlightShare": {
+            "count": 1,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 1,
+            "mean": 0.4431,
+            "median": 0.4431,
+            "min": 0.4431,
+            "max": 0.4431,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "edgeActivity": {
+            "count": 1,
+            "mean": 0.0256,
+            "median": 0.0256,
+            "min": 0.0256,
+            "max": 0.0256,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "centerLuminance": {
+            "count": 1,
+            "mean": 0.2934,
+            "median": 0.2934,
+            "min": 0.2934,
+            "max": 0.2934,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "peripheryLuminance": {
+            "count": 1,
+            "mean": 0.1367,
+            "median": 0.1367,
+            "min": 0.1367,
+            "max": 0.1367,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "centerLightDelta": {
+            "count": 1,
+            "mean": 0.1567,
+            "median": 0.1567,
+            "min": 0.1567,
+            "max": 0.1567,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "grayscaleEntropy": {
+            "count": 1,
+            "mean": 0.8388,
+            "median": 0.8388,
+            "min": 0.8388,
+            "max": 0.8388,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "moderate saturation with selective restraint",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "center fields tend to hold more light than the periphery",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "1 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; preserve nearness and selective resolution without importing identity."
+      },
+      "material_hand": {
+        "witnessCount": 2,
+        "witnesses": [
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 2,
+            "mean": 0.3494,
+            "median": 0.3494,
+            "min": 0.2359,
+            "max": 0.4629,
+            "stddev": 0.1135,
+            "range": 0.227,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 2,
+            "mean": 0.4096,
+            "median": 0.4096,
+            "min": 0.3757,
+            "max": 0.4435,
+            "stddev": 0.0339,
+            "range": 0.0678,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 2,
+            "mean": 0.0892,
+            "median": 0.0892,
+            "min": 0.0754,
+            "max": 0.1029,
+            "stddev": 0.0138,
+            "range": 0.0275,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 2,
+            "mean": 0.3145,
+            "median": 0.3145,
+            "min": 0.0028,
+            "max": 0.6261,
+            "stddev": 0.3116,
+            "range": 0.6233,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 2,
+            "mean": 0.0119,
+            "median": 0.0119,
+            "min": 0.0054,
+            "max": 0.0184,
+            "stddev": 0.0065,
+            "range": 0.013,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 2,
+            "mean": 0.4274,
+            "median": 0.4274,
+            "min": 0.2824,
+            "max": 0.5725,
+            "stddev": 0.1451,
+            "range": 0.2901,
+            "variation": "broad"
+          },
+          "edgeActivity": {
+            "count": 2,
+            "mean": 0.1138,
+            "median": 0.1138,
+            "min": 0.0537,
+            "max": 0.1739,
+            "stddev": 0.0601,
+            "range": 0.1202,
+            "variation": "moderate"
+          },
+          "centerLuminance": {
+            "count": 2,
+            "mean": 0.3724,
+            "median": 0.3724,
+            "min": 0.214,
+            "max": 0.5308,
+            "stddev": 0.1584,
+            "range": 0.3168,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 2,
+            "mean": 0.3505,
+            "median": 0.3505,
+            "min": 0.2684,
+            "max": 0.4325,
+            "stddev": 0.082,
+            "range": 0.1641,
+            "variation": "moderate"
+          },
+          "centerLightDelta": {
+            "count": 2,
+            "mean": 0.022,
+            "median": 0.022,
+            "min": -0.0544,
+            "max": 0.0984,
+            "stddev": 0.0764,
+            "range": 0.1528,
+            "variation": "moderate"
+          },
+          "grayscaleEntropy": {
+            "count": 2,
+            "mean": 0.8743,
+            "median": 0.8743,
+            "min": 0.8554,
+            "max": 0.8932,
+            "stddev": 0.0189,
+            "range": 0.0378,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "light is distributed without a strong center bias",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; information density remains tight in variation while surfaces retain handled memory."
+      },
+      "relational_light": {
+        "witnessCount": 1,
+        "witnesses": [
+          "viryn_self_portrait_01"
+        ],
+        "eligibleForRender": false,
+        "support": "provisional_single_witness",
+        "metrics": {
+          "meanLuminance": {
+            "count": 1,
+            "mean": 0.1903,
+            "median": 0.1903,
+            "min": 0.1903,
+            "max": 0.1903,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "meanSaturation": {
+            "count": 1,
+            "mean": 0.6753,
+            "median": 0.6753,
+            "min": 0.6753,
+            "max": 0.6753,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 1,
+            "mean": 0.1113,
+            "median": 0.1113,
+            "min": 0.1113,
+            "max": 0.1113,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 1,
+            "mean": 0.6853,
+            "median": 0.6853,
+            "min": 0.6853,
+            "max": 0.6853,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "highlightShare": {
+            "count": 1,
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 1,
+            "mean": 0.4431,
+            "median": 0.4431,
+            "min": 0.4431,
+            "max": 0.4431,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "edgeActivity": {
+            "count": 1,
+            "mean": 0.0256,
+            "median": 0.0256,
+            "min": 0.0256,
+            "max": 0.0256,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "centerLuminance": {
+            "count": 1,
+            "mean": 0.2934,
+            "median": 0.2934,
+            "min": 0.2934,
+            "max": 0.2934,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "peripheryLuminance": {
+            "count": 1,
+            "mean": 0.1367,
+            "median": 0.1367,
+            "min": 0.1367,
+            "max": 0.1367,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "centerLightDelta": {
+            "count": 1,
+            "mean": 0.1567,
+            "median": 0.1567,
+            "min": 0.1567,
+            "max": 0.1567,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          },
+          "grayscaleEntropy": {
+            "count": 1,
+            "mean": 0.8388,
+            "median": 0.8388,
+            "min": 0.8388,
+            "max": 0.8388,
+            "stddev": 0.0,
+            "range": 0.0,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "moderate saturation with selective restraint",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "center fields tend to hold more light than the periphery",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "1 witnesses; center fields tend to hold more light than the periphery; shadow occupies a substantial share of the image field; illumination must carry relation rather than decoration."
+      },
+      "sacred_incompletion": {
+        "witnessCount": 2,
+        "witnesses": [
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 2,
+            "mean": 0.3494,
+            "median": 0.3494,
+            "min": 0.2359,
+            "max": 0.4629,
+            "stddev": 0.1135,
+            "range": 0.227,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 2,
+            "mean": 0.4096,
+            "median": 0.4096,
+            "min": 0.3757,
+            "max": 0.4435,
+            "stddev": 0.0339,
+            "range": 0.0678,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 2,
+            "mean": 0.0892,
+            "median": 0.0892,
+            "min": 0.0754,
+            "max": 0.1029,
+            "stddev": 0.0138,
+            "range": 0.0275,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 2,
+            "mean": 0.3145,
+            "median": 0.3145,
+            "min": 0.0028,
+            "max": 0.6261,
+            "stddev": 0.3116,
+            "range": 0.6233,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 2,
+            "mean": 0.0119,
+            "median": 0.0119,
+            "min": 0.0054,
+            "max": 0.0184,
+            "stddev": 0.0065,
+            "range": 0.013,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 2,
+            "mean": 0.4274,
+            "median": 0.4274,
+            "min": 0.2824,
+            "max": 0.5725,
+            "stddev": 0.1451,
+            "range": 0.2901,
+            "variation": "broad"
+          },
+          "edgeActivity": {
+            "count": 2,
+            "mean": 0.1138,
+            "median": 0.1138,
+            "min": 0.0537,
+            "max": 0.1739,
+            "stddev": 0.0601,
+            "range": 0.1202,
+            "variation": "moderate"
+          },
+          "centerLuminance": {
+            "count": 2,
+            "mean": 0.3724,
+            "median": 0.3724,
+            "min": 0.214,
+            "max": 0.5308,
+            "stddev": 0.1584,
+            "range": 0.3168,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 2,
+            "mean": 0.3505,
+            "median": 0.3505,
+            "min": 0.2684,
+            "max": 0.4325,
+            "stddev": 0.082,
+            "range": 0.1641,
+            "variation": "moderate"
+          },
+          "centerLightDelta": {
+            "count": 2,
+            "mean": 0.022,
+            "median": 0.022,
+            "min": -0.0544,
+            "max": 0.0984,
+            "stddev": 0.0764,
+            "range": 0.1528,
+            "variation": "moderate"
+          },
+          "grayscaleEntropy": {
+            "count": 2,
+            "mean": 0.8743,
+            "median": 0.8743,
+            "min": 0.8554,
+            "max": 0.8932,
+            "stddev": 0.0189,
+            "range": 0.0378,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "light is distributed without a strong center bias",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; compressed-to-moderate tonal span; incompletion should remain processual rather than blank."
+      },
+      "spatial_depth": {
+        "witnessCount": 2,
+        "witnesses": [
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 2,
+            "mean": 0.3494,
+            "median": 0.3494,
+            "min": 0.2359,
+            "max": 0.4629,
+            "stddev": 0.1135,
+            "range": 0.227,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 2,
+            "mean": 0.4096,
+            "median": 0.4096,
+            "min": 0.3757,
+            "max": 0.4435,
+            "stddev": 0.0339,
+            "range": 0.0678,
+            "variation": "tight"
+          },
+          "meanWarmth": {
+            "count": 2,
+            "mean": 0.0892,
+            "median": 0.0892,
+            "min": 0.0754,
+            "max": 0.1029,
+            "stddev": 0.0138,
+            "range": 0.0275,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 2,
+            "mean": 0.3145,
+            "median": 0.3145,
+            "min": 0.0028,
+            "max": 0.6261,
+            "stddev": 0.3116,
+            "range": 0.6233,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 2,
+            "mean": 0.0119,
+            "median": 0.0119,
+            "min": 0.0054,
+            "max": 0.0184,
+            "stddev": 0.0065,
+            "range": 0.013,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 2,
+            "mean": 0.4274,
+            "median": 0.4274,
+            "min": 0.2824,
+            "max": 0.5725,
+            "stddev": 0.1451,
+            "range": 0.2901,
+            "variation": "broad"
+          },
+          "edgeActivity": {
+            "count": 2,
+            "mean": 0.1138,
+            "median": 0.1138,
+            "min": 0.0537,
+            "max": 0.1739,
+            "stddev": 0.0601,
+            "range": 0.1202,
+            "variation": "moderate"
+          },
+          "centerLuminance": {
+            "count": 2,
+            "mean": 0.3724,
+            "median": 0.3724,
+            "min": 0.214,
+            "max": 0.5308,
+            "stddev": 0.1584,
+            "range": 0.3168,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 2,
+            "mean": 0.3505,
+            "median": 0.3505,
+            "min": 0.2684,
+            "max": 0.4325,
+            "stddev": 0.082,
+            "range": 0.1641,
+            "variation": "moderate"
+          },
+          "centerLightDelta": {
+            "count": 2,
+            "mean": 0.022,
+            "median": 0.022,
+            "min": -0.0544,
+            "max": 0.0984,
+            "stddev": 0.0764,
+            "range": 0.1528,
+            "variation": "moderate"
+          },
+          "grayscaleEntropy": {
+            "count": 2,
+            "mean": 0.8743,
+            "median": 0.8743,
+            "min": 0.8554,
+            "max": 0.8932,
+            "stddev": 0.0189,
+            "range": 0.0378,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "light is distributed without a strong center bias",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "2 witnesses; shadow occupies a substantial share of the image field; light is distributed without a strong center bias; depth may be carried by recession, threshold, occlusion, or light."
+      },
+      "tonal_memory": {
+        "witnessCount": 3,
+        "witnesses": [
+          "viryn_self_portrait_01",
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "eligibleForRender": true,
+        "support": "cross_portfolio",
+        "metrics": {
+          "meanLuminance": {
+            "count": 3,
+            "mean": 0.2964,
+            "median": 0.2359,
+            "min": 0.1903,
+            "max": 0.4629,
+            "stddev": 0.1192,
+            "range": 0.2726,
+            "variation": "broad"
+          },
+          "meanSaturation": {
+            "count": 3,
+            "mean": 0.4982,
+            "median": 0.4435,
+            "min": 0.3757,
+            "max": 0.6753,
+            "stddev": 0.1283,
+            "range": 0.2996,
+            "variation": "broad"
+          },
+          "meanWarmth": {
+            "count": 3,
+            "mean": 0.0965,
+            "median": 0.1029,
+            "min": 0.0754,
+            "max": 0.1113,
+            "stddev": 0.0153,
+            "range": 0.0359,
+            "variation": "tight"
+          },
+          "darkShare": {
+            "count": 3,
+            "mean": 0.4381,
+            "median": 0.6261,
+            "min": 0.0028,
+            "max": 0.6853,
+            "stddev": 0.3087,
+            "range": 0.6825,
+            "variation": "broad"
+          },
+          "highlightShare": {
+            "count": 3,
+            "mean": 0.0079,
+            "median": 0.0054,
+            "min": 0.0,
+            "max": 0.0184,
+            "stddev": 0.0077,
+            "range": 0.0184,
+            "variation": "tight"
+          },
+          "tonalSpan": {
+            "count": 3,
+            "mean": 0.4327,
+            "median": 0.4431,
+            "min": 0.2824,
+            "max": 0.5725,
+            "stddev": 0.1187,
+            "range": 0.2901,
+            "variation": "broad"
+          },
+          "edgeActivity": {
+            "count": 3,
+            "mean": 0.0844,
+            "median": 0.0537,
+            "min": 0.0256,
+            "max": 0.1739,
+            "stddev": 0.0643,
+            "range": 0.1483,
+            "variation": "moderate"
+          },
+          "centerLuminance": {
+            "count": 3,
+            "mean": 0.3461,
+            "median": 0.2934,
+            "min": 0.214,
+            "max": 0.5308,
+            "stddev": 0.1346,
+            "range": 0.3168,
+            "variation": "broad"
+          },
+          "peripheryLuminance": {
+            "count": 3,
+            "mean": 0.2792,
+            "median": 0.2684,
+            "min": 0.1367,
+            "max": 0.4325,
+            "stddev": 0.121,
+            "range": 0.2958,
+            "variation": "broad"
+          },
+          "centerLightDelta": {
+            "count": 3,
+            "mean": 0.0669,
+            "median": 0.0984,
+            "min": -0.0544,
+            "max": 0.1567,
+            "stddev": 0.089,
+            "range": 0.2111,
+            "variation": "moderate"
+          },
+          "grayscaleEntropy": {
+            "count": 3,
+            "mean": 0.8625,
+            "median": 0.8554,
+            "min": 0.8388,
+            "max": 0.8932,
+            "stddev": 0.0228,
+            "range": 0.0544,
+            "variation": "tight"
+          }
+        },
+        "interpretation": {
+          "tonalRestraint": "moderate saturation with selective restraint",
+          "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+          "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+          "centerLightBias": "center fields tend to hold more light than the periphery",
+          "shadowPresence": "shadow occupies a substantial share of the image field",
+          "tonalRange": "compressed-to-moderate tonal span"
+        },
+        "promptSummary": "3 witnesses; warm-biased overall, with warmth carrying visual emphasis; moderate saturation with selective restraint; compressed-to-moderate tonal span."
+      }
+    },
+    "note": "Facet statistics are conditioned only on witnesses explicitly reviewed to teach each role. Single-witness facets remain provisional and are not projected into render guidance."
   }
 }
