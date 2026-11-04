@@ -139,5 +139,53 @@
     "defaultPolicy": "role_match_then_reviewed_strength",
     "requireAssetStatus": "approved",
     "fallback": "semantic_virynism_only"
+  },
+  "roleMapping": {
+    "relational_light": [
+      "relational_light"
+    ],
+    "material_memory": [
+      "material_hand"
+    ],
+    "sacred_incompletion": [
+      "sacred_incompletion",
+      "material_hand"
+    ],
+    "threshold_depth": [
+      "spatial_depth"
+    ],
+    "purposeful_asymmetry": [
+      "compositional_cadence"
+    ],
+    "quiet_uncanny": [
+      "edge_behavior",
+      "tonal_memory"
+    ],
+    "residue_before_props": [
+      "material_hand"
+    ],
+    "symbolic_restraint": [
+      "compositional_cadence"
+    ],
+    "intimate_scale": [
+      "intimate_presence"
+    ],
+    "tonal_memory": [
+      "tonal_memory"
+    ]
+  },
+  "transportPolicy": {
+    "hosted": {
+      "maxWitnessImages": 1,
+      "strategy": "single_primary_witness",
+      "contentInheritance": "forbidden",
+      "failIfNoApprovedAsset": true
+    },
+    "local": {
+      "maxWitnessImages": 3,
+      "strategy": "adapter_specific",
+      "contentInheritance": "forbidden",
+      "failIfNoApprovedAsset": true
+    }
   }
 }
