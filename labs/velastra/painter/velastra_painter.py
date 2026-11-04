@@ -734,6 +734,17 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         registry_path=registry_path,
     )
     defaults = brush.get("defaults") or {}
+    control = brush.get("controlContract") or {}
+    guidance_contract = control.get("guidance") or {}
+    resolved_true_cfg = (
+        args.true_cfg_scale
+        if getattr(args, "true_cfg_scale", None) is not None
+        else (
+            guidance_contract.get("diffusersDefault")
+            if transport_id == "diffusers"
+            else None
+        )
+    )
 
     return RenderSpec(
         backend=args.backend or transport.get("backend") or "diffusers",
@@ -743,6 +754,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         height=args.height if args.height is not None else int(defaults.get("height", DEFAULT_HEIGHT)),
         steps=args.steps if args.steps is not None else defaults.get("steps"),
         guidance=args.guidance if args.guidance is not None else defaults.get("guidance"),
+        true_cfg_scale=resolved_true_cfg,
         device=args.device or transport.get("device") or "auto",
         dtype=args.dtype or transport.get("dtype") or "auto",
         brush=brush_id,
@@ -764,6 +776,7 @@ class RenderSpec:
     height: int
     steps: int | None
     guidance: float | None
+    true_cfg_scale: float | None
     device: str
     dtype: str
     brush: str | None = None
@@ -791,6 +804,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "height": spec.height,
             "steps": spec.steps,
             "guidance": spec.guidance,
+            "trueCfgScale": spec.true_cfg_scale,
         },
     }
     return sha256_bytes(canonical_json(identity))[:20]
@@ -828,6 +842,7 @@ def build_candidate_record(
             "height": spec.height,
             "steps": spec.steps,
             "guidance": spec.guidance,
+            "trueCfgScale": spec.true_cfg_scale,
             "device": spec.device,
             "dtype": spec.dtype,
             "brush": spec.brush,
@@ -936,6 +951,8 @@ def render_diffusers(
         kwargs["num_inference_steps"] = spec.steps
     if spec.guidance is not None and ("guidance_scale" in accepted or accepts_kwargs):
         kwargs["guidance_scale"] = spec.guidance
+    if spec.true_cfg_scale is not None and ("true_cfg_scale" in accepted or accepts_kwargs):
+        kwargs["true_cfg_scale"] = spec.true_cfg_scale
     if "generator" in accepted or accepts_kwargs:
         kwargs["generator"] = generator
 
@@ -1175,6 +1192,11 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--height", type=int)
     parser.add_argument("--steps", type=int)
     parser.add_argument("--guidance", type=float)
+    parser.add_argument(
+        "--true-cfg-scale",
+        type=float,
+        help="Traditional CFG scale for pipelines such as Qwen Image when supported.",
+    )
     parser.add_argument("--device")
     parser.add_argument(
         "--dtype",
