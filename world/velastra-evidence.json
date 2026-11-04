@@ -81,7 +81,8 @@
           "z_image_turbo blank-frame attractor",
           "qwen_image finished-museum attractor"
         ]
-      }
+      },
+      "identityReframe": "Paint a chamber defined first by visible revision, partial completion, and hanging history; it functions as a gallery, but it must not read as a conventional museum of finished pictures."
     }
   }
 }
