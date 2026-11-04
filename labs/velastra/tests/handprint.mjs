@@ -44,8 +44,30 @@ const evidence = {
   room: "gallery"
 };
 
+const dormantGrammar = structuredClone(scaffold);
+dormantGrammar.status = "awaiting_build";
+dormantGrammar.corpus = {
+  witnessCount: 0,
+  witnesses: [],
+  roleCounts: {},
+  consensusRoles: [],
+  doNotInherit: []
+};
+dormantGrammar.metrics = {
+  perWitness: {},
+  aggregate: {}
+};
+dormantGrammar.interpretation = {
+  tonalRestraint: null,
+  warmthBias: null,
+  edgeCharacter: null,
+  centerLightBias: null,
+  shadowPresence: null,
+  tonalRange: null
+};
+
 const dormant = module.compileHandprint({
-  handprintGrammar: scaffold,
+  handprintGrammar: dormantGrammar,
   style,
   scenePacket: scene,
   evidence
@@ -59,7 +81,7 @@ assert.equal(
 );
 assert.equal(dormant.metrics && Object.keys(dormant.metrics).length, 0);
 
-const built = structuredClone(scaffold);
+const built = structuredClone(dormantGrammar);
 built.status = "built";
 built.corpus = {
   witnessCount: 3,
@@ -155,5 +177,22 @@ assert.equal(
   active.laws.pixelMetricsMustRemainAuditable,
   true
 );
+
+if (scaffold.status === "built") {
+  assert.ok(
+    Number(scaffold.corpus?.witnessCount || 0) >=
+      Number(scaffold.minimumApprovedWitnesses || 0),
+    "Live built Handprint must satisfy its minimum corpus"
+  );
+  assert.ok(
+    Object.keys(scaffold.metrics?.aggregate || {}).length > 0,
+    "Live built Handprint must carry aggregate pixel metrics"
+  );
+  assert.ok(
+    scaffold.provenance?.corpusHashes &&
+      Object.keys(scaffold.provenance.corpusHashes).length > 0,
+    "Live built Handprint must preserve sealed corpus hashes"
+  );
+}
 
 console.log("handprint contract: ok");
