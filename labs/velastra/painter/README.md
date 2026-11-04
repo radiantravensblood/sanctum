@@ -141,6 +141,42 @@ Candidate PNGs and sidecars still land under:
 
 and remain outside canon until explicitly approved.
 
+## Painterly Truth
+
+Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
+Virynism is applied.
+
+The authority order is:
+
+```text
+scene identity
+    ↓
+Painterly Truth
+    ↓
+Virynism handwriting
+    ↓
+brush dialect
+    ↓
+model
+```
+
+Painterly Truth is already embedded in the exported Atelier Manifest.
+
+The bridge therefore needs no separate registry lookup in Codespaces.
+
+Its environment facts become part of the positive scene direction before
+handwriting directives are added.
+
+The candidate truth envelope also records the Painterly Truth identity,
+revision, room, and fixed-object summary.
+
+This keeps critique precise:
+
+- if truth was wrong, revise Painterly Truth,
+- if treatment was wrong, revise Virynism,
+- if translation was wrong, revise the brush dialect,
+- if execution was weak, compare the brush.
+
 ## Virynism and brush dialects
 
 Kernel 0023 makes the Painter Bridge consume the style snapshot already carried
