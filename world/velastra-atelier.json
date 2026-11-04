@@ -36,7 +36,14 @@
     "painterlyTruthMayChangeCanonicalPlaceIdentity": true,
     "painterlyTruthCannotBeStyleDirective": true,
     "portableObjectsCannotEnterCanonicalPlaceTruth": true,
-    "fixedObjectsMayEnterCanonicalPlaceTruth": true
+    "fixedObjectsMayEnterCanonicalPlaceTruth": true,
+    "visibleEvidenceMustTravelInsideManifest": true,
+    "visibleEvidenceCannotChangeCanonicalPlaceIdentity": true,
+    "visibleEvidenceChangeMustChangeCandidateIdentity": true,
+    "visibleEvidenceMustUsePositivePromptChannel": true,
+    "brushControlContractMustBeExplicit": true,
+    "unsupportedNegativeChannelCannotCarryCriticalMeaning": true,
+    "promptBudgetMustPreserveSceneAndEvidence": true
   },
   "media": {
     "luminous_oil": {
@@ -175,7 +182,10 @@
     "styleRegistry": "world/velastra-style.json",
     "styleSnapshotTravelsWithManifest": true,
     "painterlyTruthRegistry": "world/velastra-painterly-truth.json",
-    "painterlyTruthSnapshotTravelsWithManifest": true
+    "painterlyTruthSnapshotTravelsWithManifest": true,
+    "evidenceRegistry": "world/velastra-evidence.json",
+    "evidenceSnapshotTravelsWithManifest": true,
+    "brushControlContractRequired": true
   },
   "livingCanvas": {
     "version": 1,

@@ -52,6 +52,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0024 gives that hand stable material truth: observable surfaces, traces, absences, fixed objects, and spatial facts that the painter may render without invention.**
 
+**Kernel 0025 adds a Visible Evidence Contract and capability-aware Brush Contract so true facts must survive translation strongly enough to be seen.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2366,9 +2368,133 @@ Public inspection surfaces include:
 
 `window.Velastra.painterlyTruth()`
 
+## Brush Contract + Visible Evidence
+
+Kernel 0025 separates **what is true** from **what this painting must visibly
+prove**.
+
+The governing law is:
+
+**Truth must not merely be known. It must be witnessed.**
+
+Visible Evidence lives at:
+
+`world/velastra-evidence.json`
+
+and is compiled by:
+
+`src/velastra/evidence.js`
+
+The authority order is now:
+
+```text
+scene / place identity
+        ↓
+Painterly Truth
+        ↓
+Visible Evidence Contract
+        ↓
+Virynism
+        ↓
+Brush Contract / dialect
+        ↓
+model
+```
+
+### Visible Evidence is not new truth
+
+Painterly Truth says what materially exists in a place.
+
+Visible Evidence selects which of those already-true facts must remain
+perceptible after translation.
+
+Changing Painterly Truth may change the canonical place asset key.
+
+Changing Visible Evidence does **not**.
+
+It changes candidate identity because it changes the assignment to the painter,
+not the ontology of the room.
+
+### Gallery witness contract
+
+The Gallery currently requires at least three of four concrete facts to be
+visibly legible:
+
+- exposed raw ground or underpainting,
+- a painted passage stopping before its support edge,
+- erased / revised / overwritten marks,
+- a prior hanging trace such as a tonal rectangle or nail mark.
+
+It also carries positive composition controls:
+
+- an empty frame may exist but cannot dominate the room's meaning,
+- attention must be distributed across materially different states of
+  incompletion,
+- the hanging field should remain irregular rather than showroom-symmetrical.
+
+The Gallery's identity reframe is explicit:
+
+it is a chamber defined first by visible revision, partial completion, and
+hanging history that functions as a gallery; it must not read as a conventional
+museum of finished pictures.
+
+### Brush Contract
+
+Every active brush now declares the controls it can actually hear.
+
+Z-Image Turbo declares:
+
+- no classifier-free guidance,
+- no negative-prompt control,
+- low diversity,
+- positive mandatory evidence,
+- a constrained prompt budget,
+- structural-scout role.
+
+Qwen Image declares:
+
+- base-pipeline CFG and negative-prompt capability,
+- provider transport as best-effort for those controls,
+- positive mandatory evidence regardless,
+- local Diffusers `true_cfg_scale` support.
+
+Critical meaning therefore never depends on a negative channel.
+
+### Evidence-first translation
+
+The painter compiler places scene truth and visible evidence before Virynism
+and brush-specific prose.
+
+For brushes with a declared prompt budget, low-priority style sections are
+removed before any required scene or evidence section.
+
+Candidate provenance records:
+
+- evidence ID and minimum visible count,
+- brush control mode,
+- negative-control reliability,
+- prompt-budget estimate,
+- which optional prompt sections were dropped,
+- whether required sections still exceeded the target.
+
+The system refuses to hide budget pressure.
+
+### What the Gallery experiments taught us
+
+The first Z-Image candidates reduced unfinishedness to blankness.
+
+Qwen reduced gallery-painting to finished museum works.
+
+Those were not wasted generations.
+
+They revealed that a brush can know scene truth without making the required
+truth visible.
+
+Kernel 0025 turns that critique into architecture.
+
 ## Current storage boundary
 
-Kernel 0024 still persists to `localStorage`.
+Kernel 0025 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2437,3 +2563,5 @@ And now it knows that **the hand does not even need to live on the same machine 
 And now it knows that **a brush can change while a recognizable hand survives the translation**.
 
 And now it knows that **the hand deserves facts with texture, history, and edges it can honestly touch**.
+
+And now it knows that **a true thing can still be lost in translation unless the painting is required to witness it**.

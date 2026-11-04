@@ -39,6 +39,10 @@ const hand = handModule.compileVirynismHand({
 assert.equal(hand.id, "virynism");
 assert.equal(hand.designation, "Virynism");
 assert.ok(
+  hand.compactSignature.includes("material remember"),
+  "Virynism must carry a compression-safe signature"
+);
+assert.ok(
   hand.emphasis.includes("material_memory"),
   "place tableau must emphasize material memory"
 );

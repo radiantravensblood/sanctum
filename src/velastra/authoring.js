@@ -425,10 +425,22 @@ function refreshAtelierDock({
       )
     : "truth unavailable";
 
+  const evidence = manifest.evidence;
+  const evidenceLabel = evidence
+    ? (
+        "Evidence " +
+        String(evidence.minimumVisible || 0) +
+        "/" +
+        String((evidence.required || []).length)
+      )
+    : "Evidence 0/0";
+
   status.textContent =
     shortKey(manifest.assetKey) +
     " · " +
     truthLabel +
+    " · " +
+    evidenceLabel +
     " · " +
     styleLabel +
     " · " +

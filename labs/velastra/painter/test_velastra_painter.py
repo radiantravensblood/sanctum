@@ -34,6 +34,7 @@ def manifest_fixture():
             "version": 1,
             "id": "virynism",
             "designation": "Virynism",
+            "compactSignature": "Let light carry relation; let material remember handling and revision; preserve meaningful incompletion and purposeful asymmetry.",
             "hand": [
                 {
                     "id": "material_memory",
@@ -66,6 +67,55 @@ def manifest_fixture():
             "antiPatterns": [
                 "tasteful showroom minimalism",
                 "generic cinematic concept art",
+            ],
+        },
+        "evidence": {
+            "version": 1,
+            "id": "visible_evidence",
+            "designation": "Visible Evidence Contract",
+            "room": "gallery",
+            "truthRevision": 1,
+            "minimumVisible": 3,
+            "identityReframe": "Paint a chamber defined first by visible revision and partial completion; it functions as a gallery but not as a conventional museum of finished pictures.",
+            "required": [
+                {
+                    "id": "exposed_ground",
+                    "sourceRefs": ["unfinished_works"],
+                    "priority": 1,
+                    "instruction": "At least one unfinished work must visibly expose raw ground or underpainting beneath partial pigment.",
+                },
+                {
+                    "id": "interrupted_passage",
+                    "sourceRefs": ["unfinished_works"],
+                    "priority": 0.96,
+                    "instruction": "At least one painted passage must visibly stop before the support edge.",
+                },
+                {
+                    "id": "revision_marks",
+                    "sourceRefs": ["unfinished_works"],
+                    "priority": 0.94,
+                    "instruction": "At least one surface must visibly preserve erased or overwritten marks.",
+                },
+                {
+                    "id": "hanging_ghost",
+                    "sourceRefs": ["hanging_field"],
+                    "priority": 0.9,
+                    "instruction": "At least one wall area must visibly retain a prior hanging trace.",
+                },
+            ],
+            "compositionControls": [
+                {
+                    "id": "empty_frame_subordinate",
+                    "instruction": "An empty frame may appear but must remain subordinate to visible unfinished processes.",
+                },
+                {
+                    "id": "distributed_attention",
+                    "instruction": "Distribute attention across several states of incompletion rather than one centered hero frame.",
+                },
+            ],
+            "reviewQuestions": [
+                "Can a viewer point to visible underpainting or raw ground?",
+                "Does unfinishedness read as process rather than blankness?",
             ],
         },
         "scene": {
@@ -179,13 +229,81 @@ class PainterBridgeTests(unittest.TestCase):
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("Virynism — handwriting laws", bundle["positive"])
-        self.assertIn("inhabited memory-field", bundle["positive"])
-        self.assertIn("process and becoming", bundle["positive"])
-        self.assertIn("tasteful showroom minimalism", bundle["negative"])
-        self.assertIn("tasteful empty-frame arrangement", bundle["negative"])
+        self.assertIn("Virynism core", bundle["positive"])
+        self.assertIn("preserve meaningful incompletion", bundle["positive"])
         self.assertEqual(bundle["style"]["id"], "virynism")
         self.assertEqual(bundle["style"]["dialect"], "concrete_painterly")
+
+    def test_z_turbo_uses_positive_evidence_and_no_negative_channel(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertIn("IDENTITY REFRAME", bundle["positive"])
+        self.assertIn("raw ground or underpainting", bundle["positive"])
+        self.assertIn("empty frame may appear", bundle["positive"])
+        self.assertEqual(bundle["negative"], "")
+        self.assertFalse(bundle["control"]["negativePromptActive"])
+        self.assertEqual(bundle["control"]["role"], "structural_scout")
+        self.assertEqual(bundle["budget"]["targetTokens"], 420)
+        self.assertTrue(bundle["budget"]["requiredSectionsPreserved"])
+        self.assertIsInstance(bundle["budget"]["overTarget"], bool)
+
+    def test_qwen_retains_negative_channel_as_best_effort(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertTrue(bundle["control"]["negativePromptActive"])
+        self.assertIn("Virynism rejects", bundle["negative"])
+        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+
+    def test_evidence_change_changes_candidate_not_asset_identity(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        first_bundle = painter.compile_prompt_bundle(manifest, spec)
+        first_id = painter.candidate_id(manifest, first_bundle, spec)
+
+        changed = json.loads(json.dumps(manifest))
+        changed["evidence"]["compositionControls"].append({
+            "id": "new_control",
+            "instruction": "Keep one unfinished work visibly off-center.",
+        })
+        changed_bundle = painter.compile_prompt_bundle(changed, spec)
+        changed_id = painter.candidate_id(changed, changed_bundle, spec)
+
+        self.assertEqual(manifest["assetKey"], changed["assetKey"])
+        self.assertNotEqual(first_id, changed_id)
+
+    def test_candidate_records_evidence_control_and_prompt_budget(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(self.brush_args())
+        prompts = painter.compile_prompt_bundle(manifest, spec)
+        record = painter.build_candidate_record(
+            manifest,
+            prompts,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+
+        self.assertEqual(
+            record["source"]["evidence"]["id"],
+            "visible_evidence",
+        )
+        self.assertEqual(
+            record["source"]["evidence"]["minimumVisible"],
+            3,
+        )
+        self.assertFalse(
+            record["render"]["controlContract"]["negativePromptActive"]
+        )
+        self.assertEqual(
+            record["source"]["promptBudget"]["targetTokens"],
+            420,
+        )
 
     def test_style_change_changes_candidate_not_asset_identity(self):
         manifest = manifest_fixture()
@@ -267,6 +385,8 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(spec.steps, 9)
         self.assertEqual(spec.guidance, 0)
         self.assertEqual(spec.token_env, "HF_TOKEN")
+        self.assertIsNone(spec.true_cfg_scale)
+        self.assertFalse(spec.control_contract["negativePrompt"]["supported"])
 
     def test_alternate_brush_can_use_local_diffusers(self):
         spec = painter.build_render_spec(
@@ -281,6 +401,11 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertEqual(spec.model, "Qwen/Qwen-Image")
         self.assertEqual(spec.license, "apache-2.0")
         self.assertEqual(spec.steps, 40)
+        self.assertEqual(spec.true_cfg_scale, 4.0)
+        self.assertEqual(
+            spec.control_contract["guidance"]["diffusersParameter"],
+            "true_cfg_scale",
+        )
 
     def test_candidate_records_credential_name_not_secret(self):
         manifest = manifest_fixture()

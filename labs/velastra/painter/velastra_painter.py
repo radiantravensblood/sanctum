@@ -211,6 +211,7 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     style = manifest.get("style")
     if not isinstance(style, Mapping):
         return {
+            "signature": "",
             "hand": [],
             "archetype": [],
             "place": [],
@@ -258,10 +259,103 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     ]
 
     return {
+        "signature": flatten_text(style.get("compactSignature")),
         "hand": hand,
         "archetype": archetype,
         "place": place,
         "avoid": avoid,
+    }
+
+
+def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    evidence = manifest.get("evidence")
+    if not isinstance(evidence, Mapping):
+        return {
+            "id": None,
+            "version": None,
+            "minimumVisible": 0,
+            "identityReframe": None,
+            "required": [],
+            "controls": [],
+            "reviewQuestions": [],
+        }
+
+    required = [
+        flatten_text(entry.get("instruction"))
+        for entry in (evidence.get("required") or [])
+        if isinstance(entry, Mapping) and flatten_text(entry.get("instruction"))
+    ]
+    controls = [
+        flatten_text(entry.get("instruction"))
+        for entry in (evidence.get("compositionControls") or [])
+        if isinstance(entry, Mapping) and flatten_text(entry.get("instruction"))
+    ]
+
+    return {
+        "id": evidence.get("id"),
+        "version": evidence.get("version"),
+        "minimumVisible": int(evidence.get("minimumVisible") or 0),
+        "identityReframe": flatten_text(evidence.get("identityReframe")) or None,
+        "required": required,
+        "controls": controls,
+        "reviewQuestions": [
+            flatten_text(item)
+            for item in (evidence.get("reviewQuestions") or [])
+            if flatten_text(item)
+        ],
+    }
+
+
+def estimate_prompt_tokens(text: str) -> int:
+    if not text:
+        return 0
+    return max(1, (len(text) + 3) // 4)
+
+
+def compact_positive_sections(
+    sections: list[dict[str, Any]],
+    safe_target_tokens: int | None,
+) -> tuple[list[str], dict[str, Any]]:
+    active = [dict(section) for section in sections if section.get("text")]
+
+    def rendered() -> str:
+        return "\n".join(section["text"] for section in active)
+
+    before = estimate_prompt_tokens(rendered())
+    dropped: list[str] = []
+
+    if safe_target_tokens and safe_target_tokens > 0:
+        while estimate_prompt_tokens(rendered()) > safe_target_tokens:
+            optional = [
+                (index, section)
+                for index, section in enumerate(active)
+                if not section.get("required")
+            ]
+            if not optional:
+                break
+
+            index, section = min(
+                optional,
+                key=lambda pair: (
+                    int(pair[1].get("priority") or 0),
+                    -pair[0],
+                ),
+            )
+            dropped.append(str(section.get("id") or "unnamed"))
+            active.pop(index)
+
+    after = estimate_prompt_tokens(rendered())
+    return [section["text"] for section in active], {
+        "estimate": "characters_divided_by_four",
+        "beforeTokens": before,
+        "afterTokens": after,
+        "targetTokens": safe_target_tokens,
+        "overTarget": (
+            bool(safe_target_tokens)
+            and after > int(safe_target_tokens)
+        ),
+        "droppedSections": dropped,
+        "requiredSectionsPreserved": True,
     }
 
 
@@ -273,42 +367,173 @@ def compile_prompt_bundle(
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
     style = style_lines(manifest)
+    evidence = evidence_lines(manifest)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
+    control = spec.control_contract if spec and spec.control_contract else {}
 
-    positive_sections: list[str] = [
+    negative_contract = control.get("negativePrompt") or {}
+    negative_supported = (
+        True
+        if spec is None
+        else (
+            negative_contract.get("supported") is True
+            or negative_contract.get("supportedByBasePipeline") is True
+        )
+    )
+    safe_target_tokens = (
+        (control.get("promptBudget") or {}).get("safeTargetTokens")
+    )
+
+    sections: list[dict[str, Any]] = []
+
+    def add(
+        section_id: str,
+        text: str,
+        *,
+        priority: int,
+        required: bool = False,
+    ) -> None:
+        if text and not text.endswith(": "):
+            sections.append({
+                "id": section_id,
+                "text": text,
+                "priority": priority,
+                "required": required,
+            })
+
+    add(
+        "assignment",
         "Create a finished painterly image from this authored scene direction.",
-        "Scene truth is authoritative. Style may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.",
+        priority=100,
+        required=True,
+    )
+    add(
+        "authority",
+        "Scene truth is authoritative. Style and brush translation may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.",
+        priority=100,
+        required=True,
+    )
+    add(
+        "focal_argument",
         f"Primary visual argument: {flatten_text(brief.get('thesis'))}",
-        f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
-    ]
+        priority=95,
+        required=True,
+    )
 
     subjects = truth["subjects"]
     if subjects:
-        positive_sections.append("Explicit subjects: " + " | ".join(subjects))
+        add(
+            "subjects",
+            "Explicit subjects: " + " | ".join(subjects),
+            priority=100,
+            required=True,
+        )
 
     if truth["relation"]:
-        positive_sections.append("Explicit relation: " + truth["relation"])
+        add(
+            "relation",
+            "Explicit relation: " + truth["relation"],
+            priority=100,
+            required=True,
+        )
 
     if truth["environment"]:
-        positive_sections.append("Environment facts: " + " | ".join(truth["environment"]))
+        painterly_truth = (
+            (scene.get("environment") or {}).get("painterlyTruth")
+            or {}
+        )
+        painterly_facts = {
+            flatten_text(item)
+            for item in (painterly_truth.get("facts") or [])
+            if flatten_text(item)
+        }
+        core_environment = [
+            item
+            for item in truth["environment"]
+            if item not in painterly_facts
+        ]
+        if core_environment:
+            add(
+                "environment",
+                "Environment facts: " + " | ".join(core_environment),
+                priority=100,
+                required=True,
+            )
+
+    if evidence["identityReframe"]:
+        add(
+            "identity_reframe",
+            "IDENTITY REFRAME — " + evidence["identityReframe"],
+            priority=112,
+            required=True,
+        )
+
+    if evidence["required"]:
+        visible_count = min(
+            evidence["minimumVisible"],
+            len(evidence["required"]),
+        )
+        add(
+            "visible_evidence",
+            "VISIBLE EVIDENCE CONTRACT — the final image must make at least "
+            + str(visible_count)
+            + " of these already-true facts clearly perceptible: "
+            + " | ".join(evidence["required"]),
+            priority=110,
+            required=True,
+        )
+
+    if evidence["controls"]:
+        add(
+            "evidence_controls",
+            "POSITIVE COMPOSITION CONTROLS — satisfy these through what is visibly present: "
+            + " | ".join(evidence["controls"]),
+            priority=108,
+            required=True,
+        )
 
     hierarchy = flatten_text(brief.get("hierarchy"))
     if hierarchy:
-        positive_sections.append(f"Focal hierarchy: {hierarchy}")
+        add(
+            "hierarchy",
+            f"Focal hierarchy: {hierarchy}",
+            priority=90,
+            required=True,
+        )
+
+    if style["signature"]:
+        add(
+            "virynism_core",
+            "Virynism core — " + style["signature"],
+            priority=96,
+            required=True,
+        )
+
+    add(
+        "medium",
+        f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
+        priority=70,
+    )
 
     if style["hand"]:
-        positive_sections.append(
-            "Virynism — handwriting laws: " + " | ".join(style["hand"])
+        add(
+            "virynism_hand",
+            "Virynism — handwriting laws: " + " | ".join(style["hand"]),
+            priority=62,
         )
 
     if style["archetype"]:
-        positive_sections.append(
-            "Virynism — archetype handling: " + " | ".join(style["archetype"])
+        add(
+            "virynism_archetype",
+            "Virynism — archetype handling: " + " | ".join(style["archetype"]),
+            priority=66,
         )
 
     if style["place"]:
-        positive_sections.append(
-            "Virynism — place-specific handling: " + " | ".join(style["place"])
+        add(
+            "virynism_place",
+            "Virynism — place-specific handling: " + " | ".join(style["place"]),
+            priority=72,
         )
 
     camera = flatten_text(
@@ -316,29 +541,50 @@ def compile_prompt_bundle(
         or (scene.get("composition") or {}).get("camera")
     )
     if camera:
-        positive_sections.append(f"Camera and composition: {camera}")
+        add(
+            "camera",
+            f"Camera and composition: {camera}",
+            priority=76,
+        )
 
     lighting = flatten_text(brief.get("lighting"))
     if lighting:
-        positive_sections.append("Lighting: " + lighting)
+        add(
+            "lighting",
+            "Lighting: " + lighting,
+            priority=74,
+        )
 
     edge = flatten_text(brief.get("edge"))
     if edge:
-        positive_sections.append("Edge behavior: " + edge)
+        add(
+            "edge",
+            "Edge behavior: " + edge,
+            priority=58,
+        )
 
     surface = flatten_text(brief.get("surface"))
     if surface:
-        positive_sections.append("Surface and patina: " + surface)
+        add(
+            "surface",
+            "Surface and patina: " + surface,
+            priority=78,
+        )
 
     if truth["literalMotifs"]:
-        positive_sections.append(
+        add(
+            "literal_motifs",
             "Literal motifs permitted by scene truth: "
-            + " | ".join(truth["literalMotifs"])
+            + " | ".join(truth["literalMotifs"]),
+            priority=80,
         )
+
     if truth["symbolicMotifs"]:
-        positive_sections.append(
+        add(
+            "symbolic_motifs",
             "Symbolic motifs must remain metaphorical or materially embedded: "
-            + " | ".join(truth["symbolicMotifs"])
+            + " | ".join(truth["symbolicMotifs"]),
+            priority=50,
         )
 
     directives = [
@@ -347,8 +593,10 @@ def compile_prompt_bundle(
     ]
     directives = [item for item in directives if item]
     if directives:
-        positive_sections.append(
-            "Scene art direction: " + " | ".join(directives)
+        add(
+            "scene_directives",
+            "Scene art direction: " + " | ".join(directives),
+            priority=68,
         )
 
     dialect_directives = [
@@ -359,14 +607,24 @@ def compile_prompt_bundle(
         item for item in dialect_directives if item
     ]
     if dialect_directives:
-        positive_sections.append(
+        add(
+            "brush_dialect",
             "Brush translation rules: "
-            + " | ".join(dialect_directives)
+            + " | ".join(dialect_directives),
+            priority=64,
         )
 
-    positive_sections.append(
-        "Let material, light, gesture, residue, atmosphere, negative space, "
-        "and painterly edges carry meaning. Preserve strangeness without spectacle."
+    add(
+        "closing",
+        "Let material, light, gesture, residue, atmosphere, negative space, and painterly edges carry meaning. Preserve strangeness without spectacle.",
+        priority=40,
+    )
+
+    positive_sections, budget = compact_positive_sections(
+        sections,
+        int(safe_target_tokens)
+        if safe_target_tokens is not None
+        else None,
     )
 
     negative = [
@@ -395,14 +653,24 @@ def compile_prompt_bundle(
             + " | ".join(dialect_negative)
         )
 
+    negative_text = (
+        "\n".join(negative)
+        if negative_supported
+        else ""
+    )
+
     return {
-        "positive": "\n".join(
-            section
-            for section in positive_sections
-            if section and not section.endswith(": ")
-        ),
-        "negative": "\n".join(negative),
+        "positive": "\n".join(positive_sections),
+        "negative": negative_text,
         "truthEnvelope": truth,
+        "evidence": {
+            "id": evidence["id"],
+            "version": evidence["version"],
+            "minimumVisible": evidence["minimumVisible"],
+            "requiredCount": len(evidence["required"]),
+            "identityReframe": evidence["identityReframe"],
+            "reviewQuestions": evidence["reviewQuestions"],
+        },
         "style": {
             "id": (manifest.get("style") or {}).get("id"),
             "version": (manifest.get("style") or {}).get("version"),
@@ -410,6 +678,31 @@ def compile_prompt_bundle(
             "emphasis": (manifest.get("style") or {}).get("emphasis") or [],
             "dialect": dialect.get("mode"),
         },
+        "control": {
+            "negativePromptActive": negative_supported,
+            "negativePromptReliability": (
+                negative_contract.get("providerTransport")
+                if spec and spec.transport == "huggingface"
+                else (
+                    "supported"
+                    if negative_supported
+                    else "unsupported"
+                )
+            ),
+            "guidanceMode": (control.get("guidance") or {}).get("mode"),
+            "guidanceReliability": (
+                (control.get("guidance") or {}).get("providerTransport")
+                if spec and spec.transport == "huggingface"
+                else (
+                    "supported"
+                    if (control.get("guidance") or {}).get("supportedByBasePipeline")
+                    else "unsupported"
+                )
+            ),
+            "evidenceStrategy": control.get("evidenceStrategy"),
+            "role": control.get("role"),
+        },
+        "budget": budget,
     }
 
 
@@ -473,6 +766,17 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         registry_path=registry_path,
     )
     defaults = brush.get("defaults") or {}
+    control = brush.get("controlContract") or {}
+    guidance_contract = control.get("guidance") or {}
+    resolved_true_cfg = (
+        args.true_cfg_scale
+        if getattr(args, "true_cfg_scale", None) is not None
+        else (
+            guidance_contract.get("diffusersDefault")
+            if transport_id == "diffusers"
+            else None
+        )
+    )
 
     return RenderSpec(
         backend=args.backend or transport.get("backend") or "diffusers",
@@ -482,6 +786,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         height=args.height if args.height is not None else int(defaults.get("height", DEFAULT_HEIGHT)),
         steps=args.steps if args.steps is not None else defaults.get("steps"),
         guidance=args.guidance if args.guidance is not None else defaults.get("guidance"),
+        true_cfg_scale=resolved_true_cfg,
         device=args.device or transport.get("device") or "auto",
         dtype=args.dtype or transport.get("dtype") or "auto",
         brush=brush_id,
@@ -490,6 +795,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         token_env=transport.get("tokenEnv"),
         license=brush.get("license"),
         prompt_dialect=brush.get("promptDialect"),
+        control_contract=brush.get("controlContract"),
     )
 
 
@@ -504,12 +810,14 @@ class RenderSpec:
     guidance: float | None
     device: str
     dtype: str
+    true_cfg_scale: float | None = None
     brush: str | None = None
     transport: str | None = None
     provider: str | None = None
     token_env: str | None = None
     license: str | None = None
     prompt_dialect: Mapping[str, Any] | None = None
+    control_contract: Mapping[str, Any] | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -528,6 +836,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "height": spec.height,
             "steps": spec.steps,
             "guidance": spec.guidance,
+            "trueCfgScale": spec.true_cfg_scale,
         },
     }
     return sha256_bytes(canonical_json(identity))[:20]
@@ -554,6 +863,8 @@ def build_candidate_record(
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
             "style": prompts.get("style"),
+            "evidence": prompts.get("evidence"),
+            "promptBudget": prompts.get("budget"),
         },
         "render": {
             "backend": spec.backend,
@@ -563,6 +874,7 @@ def build_candidate_record(
             "height": spec.height,
             "steps": spec.steps,
             "guidance": spec.guidance,
+            "trueCfgScale": spec.true_cfg_scale,
             "device": spec.device,
             "dtype": spec.dtype,
             "brush": spec.brush,
@@ -575,6 +887,7 @@ def build_candidate_record(
                 if isinstance(spec.prompt_dialect, Mapping)
                 else None
             ),
+            "controlContract": prompts.get("control"),
         },
         "prompts": {
             "positive": prompts["positive"],
@@ -660,7 +973,7 @@ def render_diffusers(
     )
     kwargs: dict[str, Any] = {}
 
-    if "negative_prompt" in accepted or accepts_kwargs:
+    if prompts.get("negative") and ("negative_prompt" in accepted or accepts_kwargs):
         kwargs["negative_prompt"] = prompts["negative"]
     if "width" in accepted or accepts_kwargs:
         kwargs["width"] = spec.width
@@ -670,6 +983,8 @@ def render_diffusers(
         kwargs["num_inference_steps"] = spec.steps
     if spec.guidance is not None and ("guidance_scale" in accepted or accepts_kwargs):
         kwargs["guidance_scale"] = spec.guidance
+    if spec.true_cfg_scale is not None and ("true_cfg_scale" in accepted or accepts_kwargs):
+        kwargs["true_cfg_scale"] = spec.true_cfg_scale
     if "generator" in accepted or accepts_kwargs:
         kwargs["generator"] = generator
 
@@ -717,16 +1032,21 @@ def render_huggingface(
         api_key=token,
     )
 
-    image = client.text_to_image(
-        prompt=prompts["positive"],
-        negative_prompt=prompts["negative"],
-        height=spec.height,
-        width=spec.width,
-        num_inference_steps=spec.steps,
-        guidance_scale=spec.guidance,
-        model=spec.model,
-        seed=spec.seed,
-    )
+    request: dict[str, Any] = {
+        "prompt": prompts["positive"],
+        "height": spec.height,
+        "width": spec.width,
+        "model": spec.model,
+        "seed": spec.seed,
+    }
+    if prompts.get("negative"):
+        request["negative_prompt"] = prompts["negative"]
+    if spec.steps is not None:
+        request["num_inference_steps"] = spec.steps
+    if spec.guidance is not None:
+        request["guidance_scale"] = spec.guidance
+
+    image = client.text_to_image(**request)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     image.save(output_path, format="PNG")
@@ -904,6 +1224,11 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--height", type=int)
     parser.add_argument("--steps", type=int)
     parser.add_argument("--guidance", type=float)
+    parser.add_argument(
+        "--true-cfg-scale",
+        type=float,
+        help="Traditional CFG scale for pipelines such as Qwen Image when supported.",
+    )
     parser.add_argument("--device")
     parser.add_argument(
         "--dtype",
