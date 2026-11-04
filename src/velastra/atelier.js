@@ -4,6 +4,7 @@ export function compileAtelierManifest({
   atelierGrammar,
   assetRegistry,
   styleGrammar = null,
+  evidence = null,
   scenePacket,
   motifSelection,
   seed = "velastra-atelier"
@@ -56,6 +57,9 @@ export function compileAtelierManifest({
     },
     style: style
       ? copy(style)
+      : null,
+    evidence: evidence
+      ? copy(evidence)
       : null,
     render: {
       strategy,
@@ -125,6 +129,7 @@ export function evaluateAtelierExemplars({
   atelierGrammar,
   assetRegistry,
   styleGrammar = null,
+  evidenceByScene = null,
   scenePackets,
   motifSelections
 }) {
@@ -151,6 +156,9 @@ export function evaluateAtelierExemplars({
         atelierGrammar,
         assetRegistry,
         styleGrammar,
+        evidence:
+          evidenceByScene?.[scenePacket.provenance?.room] ||
+          null,
         scenePacket,
         motifSelection,
         seed: "atelier-exemplar:" + id
