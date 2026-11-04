@@ -14,6 +14,7 @@ import inspect
 import json
 import os
 import shutil
+import statistics
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -320,6 +321,39 @@ def witness_lines(
     control = spec.control_contract if spec and spec.control_contract else {}
     reference_contract = control.get("referenceImages") or {}
     required = reference_contract.get("required") is True
+    capable = bool(reference_contract)
+    disabled = bool(spec and spec.disable_witness)
+
+    if disabled:
+        if required:
+            raise PainterError(
+                "Selected brush requires a Visual Witness. "
+                "Use a text-first brush for a witness-free ablation."
+            )
+        return {
+            "active": False,
+            "required": required,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+            "ablation": "disabled",
+        }
+
+    if not capable:
+        if spec and spec.witness_id:
+            raise PainterError(
+                f"Brush {spec.brush or 'selected brush'} does not accept Visual Witness images."
+            )
+        return {
+            "active": False,
+            "required": False,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+            "ablation": None,
+        }
 
     if not isinstance(block, Mapping):
         if required:
@@ -399,6 +433,7 @@ def witness_lines(
         "doNotInherit": list(selected.get("doNotInherit") or []),
         "notes": selected.get("notes"),
         "asset": dict(selected.get("asset") or {}),
+        "ablation": None,
     }
 
 
@@ -432,8 +467,27 @@ def resolve_witness_path(
     return path
 
 
-def handprint_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
+def handprint_lines(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
+    disabled = bool(spec and spec.disable_handprint)
     block = manifest.get("handprint")
+
+    if disabled:
+        return {
+            "active": False,
+            "witnessCount": 0,
+            "desiredRoles": [],
+            "consensusRoles": [],
+            "interpretation": {},
+            "metrics": {},
+            "facets": {},
+            "facetRoles": [],
+            "doNotInherit": [],
+            "ablation": "disabled",
+        }
+
     if not isinstance(block, Mapping) or block.get("active") is not True:
         return {
             "active": False,
@@ -442,7 +496,10 @@ def handprint_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "consensusRoles": [],
             "interpretation": {},
             "metrics": {},
+            "facets": {},
+            "facetRoles": [],
             "doNotInherit": [],
+            "ablation": None,
         }
 
     return {
@@ -452,7 +509,10 @@ def handprint_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
         "consensusRoles": list(block.get("consensusRoles") or []),
         "interpretation": dict(block.get("interpretation") or {}),
         "metrics": dict(block.get("metrics") or {}),
+        "facets": dict(block.get("facets") or {}),
+        "facetRoles": list(block.get("facetRoles") or []),
         "doNotInherit": list(block.get("doNotInherit") or []),
+        "ablation": None,
     }
 
 
@@ -468,26 +528,50 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
     ]
 
     labels = [
-        ("tonalRestraint", "tonal restraint"),
-        ("warmthBias", "warmth bias"),
-        ("edgeCharacter", "edge character"),
-        ("centerLightBias", "center/periphery light"),
-        ("shadowPresence", "shadow presence"),
-        ("tonalRange", "tonal range"),
+        ("tonalRestraint", "global tonal restraint"),
+        ("warmthBias", "global warmth bias"),
+        ("edgeCharacter", "global edge character"),
+        ("shadowPresence", "global shadow presence"),
+        ("tonalRange", "global tonal range"),
     ]
     for key, label in labels:
         value = flatten_text(interpretation.get(key))
         if value:
             parts.append(label + ": " + value)
 
-    roles = handprint.get("desiredRoles") or handprint.get("consensusRoles") or []
-    if roles:
-        parts.append(
-            "Relevant recurring hand roles: "
-            + ", ".join(str(role).replace("_", " ") for role in roles)
+    facets = handprint.get("facets") or {}
+    if facets:
+        facet_parts: list[str] = []
+        for role in handprint.get("facetRoles") or list(facets):
+            facet = facets.get(role)
+            if not isinstance(facet, Mapping):
+                continue
+            summary = flatten_text(facet.get("promptSummary"))
+            if summary:
+                facet_parts.append(
+                    role.replace("_", " ") + " — " + summary
+                )
+        if facet_parts:
+            parts.append(
+                "ROLE-CONDITIONED FACETS — " + " | ".join(facet_parts)
+            )
+    else:
+        roles = (
+            handprint.get("desiredRoles")
+            or handprint.get("consensusRoles")
+            or []
         )
+        if roles:
+            parts.append(
+                "Relevant recurring hand roles: "
+                + ", ".join(
+                    str(role).replace("_", " ")
+                    for role in roles
+                )
+            )
 
     parts.append(
+        "Treat facet ranges as valid variation, not targets to average into one uniform look. "
         "Use these as cross-portfolio tendencies only. Do not inherit any "
         "witness subject, object, architecture, identity, or layout."
     )
