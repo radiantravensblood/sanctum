@@ -14,6 +14,7 @@ on:
       - "world/velastra-brushes.json"
       - "world/velastra-style.json"
       - "world/velastra-painterly-truth.json"
+      - "world/velastra-evidence.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -30,6 +31,7 @@ on:
       - "world/velastra-brushes.json"
       - "world/velastra-style.json"
       - "world/velastra-painterly-truth.json"
+      - "world/velastra-evidence.json"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - ".gitignore"
@@ -52,6 +54,7 @@ jobs:
         run: |
           node --check src/world.js
           node --check src/velastra/painterly-truth.js
+          node --check src/velastra/evidence.js
           node --check src/velastra/scene-packet.js
           node --check src/velastra/sanctum-atelier.js
           node --check src/velastra/index.js
@@ -65,3 +68,5 @@ jobs:
         run: node labs/velastra/tests/virynism-hand.mjs
       - name: Run painterly truth contract
         run: node labs/velastra/tests/painterly-truth.mjs
+      - name: Run brush contract + visible evidence
+        run: node labs/velastra/tests/brush-contract.mjs
