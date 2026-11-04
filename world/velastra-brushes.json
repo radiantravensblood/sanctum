@@ -16,7 +16,10 @@
     "brushMustDeclareControlContract": true,
     "unheardControlMustNotCarryCriticalMeaning": true,
     "visibleEvidenceMustUsePositiveChannel": true,
-    "promptBudgetMustProtectSceneAndEvidence": true
+    "promptBudgetMustProtectSceneAndEvidence": true,
+    "visualWitnessBrushMustFailWithoutApprovedWitness": true,
+    "witnessContentInheritanceForbidden": true,
+    "referenceImageMustCarrySha256": true
   },
   "brushes": {
     "z_image_turbo": {
@@ -185,6 +188,91 @@
           "source": "Diffusers QwenImage pipeline documentation",
           "verifiedAt": "2026-11-03"
         }
+      }
+    },
+    "qwen_image_edit": {
+      "label": "Qwen Image Edit",
+      "status": "experimental_witness",
+      "model": "Qwen/Qwen-Image-Edit",
+      "license": "apache-2.0",
+      "role": "visual_witness_translator",
+      "notes": "Reference-capable brush for translating approved Virynism witnesses into a new scene without allowing witness content to become scene truth.",
+      "capabilities": [
+        "image_to_image",
+        "visual_witness"
+      ],
+      "defaults": {
+        "width": 1536,
+        "height": 864,
+        "steps": null,
+        "guidance": null,
+        "seed": 190919
+      },
+      "transports": {
+        "huggingface": {
+          "backend": "huggingface",
+          "task": "image_to_image",
+          "provider": "fal-ai",
+          "tokenEnv": "HF_TOKEN",
+          "recommended": true
+        }
+      },
+      "promptDialect": {
+        "mode": "witness_translation",
+        "philosophy": "Treat the input image as evidence of visual decision-making, never as scene content to preserve.",
+        "directives": [
+          "Rebuild the target scene from its authoritative scene truth and visible evidence contract.",
+          "Use the witness only for matched visual roles such as light, compositional cadence, edge behavior, tonal memory, material handling, spatial depth, intimate presence, or sacred incompletion.",
+          "Do not preserve witness subjects, identities, objects, architecture, symbols, furniture, or layout unless independently required by target scene truth.",
+          "When witness content conflicts with target scene truth, target scene truth wins completely.",
+          "Translate the witness hand through new material decisions rather than copying its composition."
+        ],
+        "negativePriorities": [
+          "copying witness subjects",
+          "copying witness objects",
+          "copying witness architecture",
+          "copying witness layout",
+          "identity leakage from witness",
+          "reference-image collage"
+        ]
+      },
+      "controlContract": {
+        "version": 1,
+        "role": "visual_witness_translator",
+        "negativePrompt": {
+          "supportedByBasePipeline": true,
+          "providerTransport": "best_effort",
+          "policy": "critical scene and inheritance boundaries remain positive"
+        },
+        "guidance": {
+          "supportedByBasePipeline": true,
+          "mode": "image_edit_guidance",
+          "providerTransport": "best_effort"
+        },
+        "referenceImages": {
+          "required": true,
+          "hostedMax": 1,
+          "localMax": 1,
+          "policy": "approved_visual_witness_only",
+          "contentInheritance": "forbidden"
+        },
+        "promptBudget": {
+          "observedMaxTokens": null,
+          "safeTargetTokens": null,
+          "estimate": "characters_divided_by_four",
+          "overflowPolicy": "scene_evidence_and_witness_boundaries_first"
+        },
+        "diversity": "interpretive",
+        "evidenceStrategy": "positive_mandatory",
+        "refusalStrategy": "state target facts and non-inheritance positively",
+        "provenance": {
+          "source": "Hugging Face Inference Providers image-to-image + Qwen Image Edit documentation",
+          "verifiedAt": "2026-11-03"
+        }
+      },
+      "provenance": {
+        "modelCard": "https://huggingface.co/Qwen/Qwen-Image-Edit",
+        "verifiedAt": "2026-11-03"
       }
     }
   },
