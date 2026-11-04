@@ -54,6 +54,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0025 adds a Visible Evidence Contract and capability-aware Brush Contract so true facts must survive translation strongly enough to be seen.**
 
+**Kernel 0026 adds a curated Visual Witness canon so reviewed paintings can teach the hand directly without allowing their depicted content to become scene truth.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2492,9 +2494,200 @@ truth visible.
 
 Kernel 0025 turns that critique into architecture.
 
+## Visual Witness
+
+Kernel 0026 gives Virynism a reviewed visual memory.
+
+The governing law is:
+
+**A witness may guide the hand without becoming the scene.**
+
+The witness canon lives at:
+
+`world/velastra-witnesses.json`
+
+and is compiled by:
+
+`src/velastra/witness.js`
+
+### Why witnesses exist
+
+Kernels 0023–0025 proved that Virynism can be externalized as semantic
+judgment, but the Gallery experiments also exposed the limit of language-only
+transfer.
+
+Z-Image Turbo could become structurally obedient without resolving the image
+like Viryn's own paintings.
+
+Qwen could become painterly while importing too much of its own emotional and
+museum-like prior.
+
+Visual Witness lets a reference-capable brush inspect reviewed examples of the
+hand itself.
+
+The architecture is now:
+
+```text
+scene / place identity
+        ↓
+Painterly Truth
+        ↓
+Visible Evidence
+        ↓
+Virynism
+   ┌────┴─────────┐
+semantic hand   Visual Witness
+   └────┬─────────┘
+        ↓
+Brush Contract / dialect
+        ↓
+model
+```
+
+### Witness canon
+
+The initial canon names four works without pretending their pixels are already
+available to the repository:
+
+- `viryn_self_portrait_01` — relational light, intimate presence, tonal
+  memory, edge behavior,
+- `dyadic_homecoming_01` — relational composition, shared illumination,
+  proximity, and emotional spacing,
+- `studio_atelier_01` — lived density, material hand, spatial depth, process,
+- `gallery_target_01` — sacred incompletion, material memory, edge behavior,
+  and the strongest current Gallery-specific visual witness.
+
+Each entry declares both:
+
+- what it may teach,
+- what depicted content must **not** be inherited.
+
+A self-portrait may teach light and presence without donating a face.
+
+A Studio painting may teach density without donating furniture.
+
+A Gallery study may teach incompletion without donating its exact frames or
+layout.
+
+### Memory may nominate; pixels must testify
+
+Witness entries begin as `awaiting_asset`.
+
+A remembered work cannot activate a visual-reference brush.
+
+Activation requires an actual image asset with:
+
+- explicit reviewer approval,
+- repository path,
+- SHA-256,
+- dimensions,
+- provenance.
+
+Raw files may be dropped temporarily into:
+
+`authoring/witnesses/`
+
+and admitted with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py witness-register \
+  <witness_id> \
+  "authoring/witnesses/<image-file>" \
+  --reviewed-by "Siege" \
+  --review-note "<why this image carries the declared hand roles>"
+```
+
+The command normalizes the image to PNG under:
+
+`assets/velastra/witnesses/`
+
+and updates the witness registry with its hash and dimensions.
+
+Raw uploads remain Git-ignored.
+
+### Deterministic role selection
+
+Visual Witness does not select examples merely because they are famous within
+the project.
+
+Virynism emphasis is mapped to witness roles such as:
+
+- relational light,
+- compositional cadence,
+- edge behavior,
+- tonal memory,
+- material hand,
+- spatial depth,
+- intimate presence,
+- sacred incompletion.
+
+Only relevant witnesses rise for a scene.
+
+Gallery therefore favors the Gallery target and Studio witness over the
+self-portrait.
+
+### First witness-capable brush
+
+Kernel 0026 adds:
+
+`qwen_image_edit`
+
+backed by:
+
+`Qwen/Qwen-Image-Edit`
+
+through Hugging Face Inference Providers / fal-ai.
+
+Its role is:
+
+`visual_witness_translator`
+
+Unlike base Qwen, it uses an approved input image.
+
+The input image is explicitly non-canonical scene content.
+
+The positive prompt requires the model to rebuild the target from scene truth
+and use the input only for matched visual-hand roles.
+
+If no approved witness exists, this brush fails closed.
+
+Text-first brushes continue to fall back to semantic Virynism.
+
+### Hosted witness nondeterminism
+
+The hosted image-to-image interface does not currently expose reliable seed
+control.
+
+Therefore witness renders carry an explicit attempt identity.
+
+Two separate hosted witness renders may never silently overwrite one another
+under the same candidate checksum merely because the requested seed is equal.
+
+Candidate provenance records:
+
+- witness ID,
+- witness roles,
+- witness asset path and SHA-256,
+- content non-inheritance boundaries,
+- image task,
+- attempt identity,
+- seed reliability.
+
+### One witness before many
+
+The current hosted policy allows one approved witness image per render.
+
+This is deliberate.
+
+Multiple-reference work should only be enabled when the selected transport
+actually supports and preserves that distinction.
+
+One honest witness is preferable to a collage pretending to be a memory
+architecture.
+
 ## Current storage boundary
 
-Kernel 0025 still persists to `localStorage`.
+Kernel 0026 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -2565,3 +2758,5 @@ And now it knows that **a brush can change while a recognizable hand survives th
 And now it knows that **the hand deserves facts with texture, history, and edges it can honestly touch**.
 
 And now it knows that **a true thing can still be lost in translation unless the painting is required to witness it**.
+
+And now it knows that **a witness may guide the hand without being allowed to become the scene**.
