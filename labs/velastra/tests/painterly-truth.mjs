@@ -108,6 +108,14 @@ const handSource = await fs.readFile(
   "utf8"
 );
 
+const witnessSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/witness.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
 const atelierSource = await fs.readFile(
   new URL(
     "../../../src/velastra/atelier.js",
@@ -120,13 +128,24 @@ const handUrl =
   "data:text/javascript;base64," +
   Buffer.from(handSource).toString("base64");
 
+const witnessUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(witnessSource).toString("base64");
+
 const standaloneAtelierSource =
-  atelierSource.replace(
-    'import { compileVirynismHand } from "./hand.js";',
-    'import { compileVirynismHand } from "' +
-      handUrl +
-      '";'
-  );
+  atelierSource
+    .replace(
+      'import { compileVirynismHand } from "./hand.js";',
+      'import { compileVirynismHand } from "' +
+        handUrl +
+        '";'
+    )
+    .replace(
+      'import { compileVisualWitness } from "./witness.js";',
+      'import { compileVisualWitness } from "' +
+        witnessUrl +
+        '";'
+    );
 
 const atelier = await import(
   "data:text/javascript;base64," +
