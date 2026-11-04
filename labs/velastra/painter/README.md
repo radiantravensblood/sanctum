@@ -141,6 +141,78 @@ Candidate PNGs and sidecars still land under:
 
 and remain outside canon until explicitly approved.
 
+## Brush Contract + Visible Evidence
+
+Kernel 0025 makes the prompt compiler capability-aware.
+
+The authority order is:
+
+```text
+scene truth
+    ↓
+Painterly Truth
+    ↓
+Visible Evidence Contract
+    ↓
+Virynism
+    ↓
+Brush Contract / dialect
+    ↓
+model
+```
+
+Visible Evidence is carried inside the Atelier Manifest.
+
+It does not create new scene facts.
+
+It selects already-true material facts that must remain visibly legible.
+
+For Gallery, the contract currently requires at least three visible signs of
+unfinished process from:
+
+- exposed ground / underpainting,
+- interrupted painted passage,
+- revision / erasure marks,
+- prior hanging trace.
+
+The same contract positively reframes Gallery away from a conventional museum
+of finished pictures.
+
+### Capability-aware negative control
+
+The bridge no longer assumes every brush can hear a negative prompt.
+
+Z-Image Turbo declares no CFG and no negative-prompt channel.
+
+Its critical constraints therefore remain entirely in the positive prompt.
+
+Qwen Image records base-pipeline negative/CFG support, but provider transport
+is marked best-effort. Critical evidence remains positive there too.
+
+Local Qwen Diffusers can use:
+
+`--true-cfg-scale`
+
+and the brush contract currently resolves a local default of `4.0`.
+
+### Prompt budget
+
+Brushes may declare a safe prompt target.
+
+For Z-Image Turbo, the compiler uses an approximate token estimate and removes
+lower-priority optional sections before dropping any required scene or visible
+evidence section.
+
+Candidate provenance records:
+
+- estimated tokens before compaction,
+- estimated tokens after compaction,
+- target tokens,
+- dropped optional sections,
+- whether required material still exceeds the declared target.
+
+The system never silently claims a prompt fit when it did not.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
@@ -405,12 +477,13 @@ before committing them.
 
 ## Backend contract
 
-Kernel 0019 ships one backend:
+The bridge currently supports:
 
-- `diffusers`
+- `diffusers` for local authoring,
+- `huggingface` for provider-hosted authoring.
 
-Future backends may be added if they preserve the same candidate and review
-contract.
+Any backend or transport must preserve the same candidate, truth, evidence,
+credential, and review contract.
 
 A backend may translate rendering instructions.
 
