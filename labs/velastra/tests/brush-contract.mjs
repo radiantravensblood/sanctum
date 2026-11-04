@@ -122,6 +122,8 @@ assert.equal(turbo.diversity, "low");
 const qwen = cabinet.brushes.qwen_image.controlContract;
 assert.equal(qwen.negativePrompt.supportedByBasePipeline, true);
 assert.equal(qwen.guidance.supportedByBasePipeline, true);
+assert.equal(qwen.guidance.diffusersParameter, "true_cfg_scale");
+assert.equal(qwen.guidance.diffusersDefault, 4.0);
 assert.equal(qwen.negativePrompt.providerTransport, "best_effort");
 
 console.log("brush contract + visible evidence: ok");
