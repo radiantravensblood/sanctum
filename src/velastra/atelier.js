@@ -1,9 +1,11 @@
 import { compileVirynismHand } from "./hand.js";
+import { compileVisualWitness } from "./witness.js";
 
 export function compileAtelierManifest({
   atelierGrammar,
   assetRegistry,
   styleGrammar = null,
+  witnessGrammar = null,
   evidence = null,
   scenePacket,
   motifSelection,
@@ -31,6 +33,16 @@ export function compileAtelierManifest({
         scenePacket
       })
     : null;
+
+  const witnesses =
+    witnessGrammar && style
+      ? compileVisualWitness({
+          witnessGrammar,
+          style,
+          scenePacket,
+          evidence
+        })
+      : null;
 
   const assetKey = buildAssetKey(scenePacket);
   const reviewedAsset = resolveReviewedAsset({
@@ -60,6 +72,9 @@ export function compileAtelierManifest({
       : null,
     evidence: evidence
       ? copy(evidence)
+      : null,
+    witnesses: witnesses
+      ? copy(witnesses)
       : null,
     render: {
       strategy,
@@ -129,6 +144,7 @@ export function evaluateAtelierExemplars({
   atelierGrammar,
   assetRegistry,
   styleGrammar = null,
+  witnessGrammar = null,
   evidenceByScene = null,
   scenePackets,
   motifSelections
@@ -156,6 +172,7 @@ export function evaluateAtelierExemplars({
         atelierGrammar,
         assetRegistry,
         styleGrammar,
+        witnessGrammar,
         evidence:
           evidenceByScene?.[scenePacket.provenance?.room] ||
           null,
