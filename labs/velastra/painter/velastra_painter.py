@@ -348,6 +348,10 @@ def compact_positive_sections(
         "beforeTokens": before,
         "afterTokens": after,
         "targetTokens": safe_target_tokens,
+        "overTarget": (
+            bool(safe_target_tokens)
+            and after > int(safe_target_tokens)
+        ),
         "droppedSections": dropped,
         "requiredSectionsPreserved": True,
     }
