@@ -2,6 +2,7 @@ import { composeScenePacket } from "./scene-packet.js";
 import { selectMotifs } from "./motifs.js";
 import { compileAtelierManifest } from "./atelier.js";
 import { compilePainterlyTruth } from "./painterly-truth.js";
+import { compileVisibleEvidence } from "./evidence.js";
 
 export function compileSanctumAtelier({
   state,
@@ -22,6 +23,11 @@ export function compileSanctumAtelier({
     truthGrammar: world.velastraPainterlyTruth,
     room,
     objects
+  });
+
+  const evidence = compileVisibleEvidence({
+    evidenceGrammar: world.velastraEvidence,
+    painterlyTruth
   });
 
   const identityFacts = [
@@ -87,6 +93,7 @@ export function compileSanctumAtelier({
     atelierGrammar: world.velastraAtelier,
     assetRegistry: world.velastraAssets,
     styleGrammar: world.velastraStyle,
+    evidence,
     scenePacket,
     motifSelection,
     seed: "sanctum-atelier:" + room.id
@@ -95,6 +102,7 @@ export function compileSanctumAtelier({
   return {
     scenePacket,
     motifSelection,
+    evidence,
     manifest,
     livePresence: {
       objects: (objects || []).map((object) => ({
