@@ -854,6 +854,15 @@ def compile_prompt_bundle(
                     else "unsupported"
                 )
             ),
+            "seedReliability": (
+                "unsupported"
+                if (
+                    spec
+                    and spec.transport == "huggingface"
+                    and (control.get("seedControl") or {}).get("providerSupported") is False
+                )
+                else "supported"
+            ),
             "evidenceStrategy": control.get("evidenceStrategy"),
             "role": control.get("role"),
         },
@@ -923,6 +932,16 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
     defaults = brush.get("defaults") or {}
     control = brush.get("controlContract") or {}
     guidance_contract = control.get("guidance") or {}
+    seed_contract = control.get("seedControl") or {}
+    attempt_required = (
+        seed_contract.get("candidateAttemptRequired") is True
+        and transport_id == "huggingface"
+    )
+    attempt_id = (
+        getattr(args, "attempt", None)
+        or (utc_now() if attempt_required else None)
+    )
+
     resolved_true_cfg = (
         args.true_cfg_scale
         if getattr(args, "true_cfg_scale", None) is not None
@@ -954,6 +973,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         control_contract=brush.get("controlContract"),
         witness_id=getattr(args, "witness", None),
         repo_root=getattr(args, "repo_root", ".") or ".",
+        attempt_id=attempt_id,
     )
 
 
@@ -979,6 +999,7 @@ class RenderSpec:
     control_contract: Mapping[str, Any] | None = None
     witness_id: str | None = None
     repo_root: str = "."
+    attempt_id: str | None = None
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -999,6 +1020,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "steps": spec.steps,
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
+            "attemptId": spec.attempt_id,
         },
     }
     return sha256_bytes(canonical_json(identity))[:20]
@@ -1039,6 +1061,7 @@ def build_candidate_record(
             "steps": spec.steps,
             "guidance": spec.guidance,
             "trueCfgScale": spec.true_cfg_scale,
+            "attemptId": spec.attempt_id,
             "device": spec.device,
             "dtype": spec.dtype,
             "brush": spec.brush,
@@ -1539,6 +1562,7 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
     parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
     parser.add_argument("--witness", help="Explicit approved Visual Witness ID when the brush supports references.")
+    parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
     parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
     parser.add_argument(
