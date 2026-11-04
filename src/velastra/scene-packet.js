@@ -356,7 +356,8 @@ function normalizeEnvironment(environment) {
       kind: null,
       facts: [],
       identityFacts: [],
-      transientFacts: []
+      transientFacts: [],
+      painterlyTruth: null
     };
   }
 
@@ -374,7 +375,10 @@ function normalizeEnvironment(environment) {
     kind: environment.kind || null,
     facts,
     identityFacts,
-    transientFacts
+    transientFacts,
+    painterlyTruth: copy(
+      environment.painterlyTruth || null
+    )
   };
 }
 
