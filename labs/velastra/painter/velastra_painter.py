@@ -306,6 +306,126 @@ def evidence_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def witness_lines(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
+    block = manifest.get("witnesses")
+    control = spec.control_contract if spec and spec.control_contract else {}
+    reference_contract = control.get("referenceImages") or {}
+    required = reference_contract.get("required") is True
+
+    if not isinstance(block, Mapping):
+        if required:
+            raise PainterError(
+                "Selected brush requires an approved Visual Witness, "
+                "but this manifest carries no witness packet."
+            )
+        return {
+            "active": False,
+            "required": required,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+        }
+
+    approved = [
+        entry
+        for entry in (block.get("approved") or [])
+        if isinstance(entry, Mapping)
+        and isinstance(entry.get("asset"), Mapping)
+        and entry.get("asset", {}).get("path")
+        and entry.get("asset", {}).get("sha256")
+    ]
+
+    explicit = spec.witness_id if spec else None
+    selected = None
+
+    if explicit:
+        selected = next(
+            (
+                entry
+                for entry in approved
+                if entry.get("id") == explicit
+            ),
+            None,
+        )
+        if selected is None:
+            raise PainterError(
+                f"Requested witness is not approved in this manifest: {explicit}"
+            )
+    elif approved:
+        selected = approved[0]
+
+    if required and selected is None:
+        proposed = [
+            str(entry.get("id"))
+            for entry in (block.get("selected") or [])
+            if isinstance(entry, Mapping) and entry.get("id")
+        ]
+        suffix = (
+            " Selected but not yet approved: " + ", ".join(proposed)
+            if proposed
+            else ""
+        )
+        raise PainterError(
+            "Selected brush requires an approved Visual Witness asset."
+            + suffix
+        )
+
+    if selected is None:
+        return {
+            "active": False,
+            "required": required,
+            "selected": None,
+            "roles": [],
+            "doNotInherit": [],
+            "asset": None,
+        }
+
+    return {
+        "active": True,
+        "required": required,
+        "selected": selected.get("id"),
+        "title": selected.get("title"),
+        "roles": list(selected.get("matchedRoles") or selected.get("teach") or []),
+        "doNotInherit": list(selected.get("doNotInherit") or []),
+        "notes": selected.get("notes"),
+        "asset": dict(selected.get("asset") or {}),
+    }
+
+
+def resolve_witness_path(
+    witness: Mapping[str, Any],
+    repo_root: Path,
+) -> Path:
+    asset = witness.get("asset") or {}
+    raw = asset.get("path")
+    if not raw:
+        raise PainterError("Visual Witness has no approved asset path.")
+
+    path = (repo_root / str(raw)).resolve()
+    try:
+        path.relative_to(repo_root.resolve())
+    except ValueError as exc:
+        raise PainterError(
+            f"Visual Witness must live inside repository root: {path}"
+        ) from exc
+
+    if not path.exists():
+        raise PainterError(f"Visual Witness asset does not exist: {path}")
+
+    recorded = asset.get("sha256")
+    actual = sha256_file(path)
+    if not recorded or recorded != actual:
+        raise PainterError(
+            "Visual Witness hash does not match its registry record."
+        )
+
+    return path
+
+
 def estimate_prompt_tokens(text: str) -> int:
     if not text:
         return 0
@@ -368,6 +488,7 @@ def compile_prompt_bundle(
     truth = compile_truth_envelope(manifest)
     style = style_lines(manifest)
     evidence = evidence_lines(manifest)
+    witness = witness_lines(manifest, spec)
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
     control = spec.control_contract if spec and spec.control_contract else {}
 
@@ -509,6 +630,22 @@ def compile_prompt_bundle(
             required=True,
         )
 
+    if witness["active"]:
+        roles = ", ".join(witness["roles"]) or "approved visual-hand roles"
+        exclusions = ", ".join(witness["doNotInherit"]) or "all depicted scene content"
+        add(
+            "visual_witness",
+            "VISUAL WITNESS — an input image accompanies this request. "
+            "Use it only as evidence for these visual-hand roles: "
+            + roles
+            + ". Rebuild the target image from the authoritative target scene. "
+            "Do not inherit witness content including: "
+            + exclusions
+            + ". Witness scene content is non-canonical.",
+            priority=115,
+            required=True,
+        )
+
     add(
         "medium",
         f"Medium direction: {flatten_text(brief.get('medium') or manifest.get('medium', {}).get('id'))}",
@@ -640,6 +777,12 @@ def compile_prompt_bundle(
             "Virynism rejects: " + " | ".join(style["avoid"])
         )
 
+    if witness["active"] and witness["doNotInherit"]:
+        negative.append(
+            "Do not copy Visual Witness scene content: "
+            + " | ".join(witness["doNotInherit"])
+        )
+
     dialect_negative = [
         flatten_text(item)
         for item in (dialect.get("negativePriorities") or [])
@@ -670,6 +813,15 @@ def compile_prompt_bundle(
             "requiredCount": len(evidence["required"]),
             "identityReframe": evidence["identityReframe"],
             "reviewQuestions": evidence["reviewQuestions"],
+        },
+        "witness": {
+            "active": witness["active"],
+            "required": witness["required"],
+            "selected": witness.get("selected"),
+            "title": witness.get("title"),
+            "roles": witness.get("roles") or [],
+            "doNotInherit": witness.get("doNotInherit") or [],
+            "asset": witness.get("asset"),
         },
         "style": {
             "id": (manifest.get("style") or {}).get("id"),
@@ -780,6 +932,7 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
 
     return RenderSpec(
         backend=args.backend or transport.get("backend") or "diffusers",
+        task=transport.get("task") or "text_to_image",
         model=args.model or brush.get("model"),
         seed=args.seed if args.seed is not None else int(defaults.get("seed", 190919)),
         width=args.width if args.width is not None else int(defaults.get("width", DEFAULT_WIDTH)),
@@ -796,12 +949,15 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         license=brush.get("license"),
         prompt_dialect=brush.get("promptDialect"),
         control_contract=brush.get("controlContract"),
+        witness_id=getattr(args, "witness", None),
+        repo_root=getattr(args, "repo_root", ".") or ".",
     )
 
 
 @dataclass(frozen=True)
 class RenderSpec:
     backend: str
+    task: str
     model: str | None
     seed: int
     width: int
@@ -818,6 +974,8 @@ class RenderSpec:
     license: str | None = None
     prompt_dialect: Mapping[str, Any] | None = None
     control_contract: Mapping[str, Any] | None = None
+    witness_id: str | None = None
+    repo_root: str = "."
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -829,6 +987,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "brush": spec.brush,
             "transport": spec.transport,
             "backend": spec.backend,
+            "task": spec.task,
             "provider": spec.provider,
             "model": spec.model,
             "seed": spec.seed,
@@ -864,10 +1023,12 @@ def build_candidate_record(
             "truthEnvelope": prompts["truthEnvelope"],
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
+            "witness": prompts.get("witness"),
             "promptBudget": prompts.get("budget"),
         },
         "render": {
             "backend": spec.backend,
+            "task": spec.task,
             "model": spec.model,
             "seed": spec.seed,
             "width": spec.width,
@@ -1212,6 +1373,8 @@ def cmd_approve(args: argparse.Namespace) -> int:
 def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
     parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
+    parser.add_argument("--witness", help="Explicit approved Visual Witness ID when the brush supports references.")
+    parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
     parser.add_argument(
         "--backend",
