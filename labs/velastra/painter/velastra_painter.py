@@ -28,6 +28,9 @@ DEFAULT_HEIGHT = 864
 DEFAULT_BRUSH_REGISTRY = (
     Path(__file__).resolve().parents[3] / "world" / "velastra-brushes.json"
 )
+DEFAULT_WITNESS_REGISTRY = (
+    Path(__file__).resolve().parents[3] / "world" / "velastra-witnesses.json"
+)
 
 
 class PainterError(RuntimeError):
@@ -957,7 +960,6 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
 @dataclass(frozen=True)
 class RenderSpec:
     backend: str
-    task: str
     model: str | None
     seed: int
     width: int
@@ -966,6 +968,7 @@ class RenderSpec:
     guidance: float | None
     device: str
     dtype: str
+    task: str = "text_to_image"
     true_cfg_scale: float | None = None
     brush: str | None = None
     transport: str | None = None
@@ -1283,6 +1286,103 @@ def render_huggingface(
     }
 
 
+def load_witness_registry(path: Path | None = None) -> dict[str, Any]:
+    registry_path = path or DEFAULT_WITNESS_REGISTRY
+    registry = read_json(registry_path)
+    entries = registry.get("entries")
+    if not isinstance(entries, dict):
+        raise PainterError(
+            f"Visual Witness registry has no entries object: {registry_path}"
+        )
+    return registry
+
+
+def cmd_witnesses(args: argparse.Namespace) -> int:
+    registry_path = Path(args.registry) if args.registry else None
+    registry = load_witness_registry(registry_path)
+
+    if args.json:
+        print(json.dumps(registry, indent=2, ensure_ascii=False))
+        return 0
+
+    for witness_id, entry in registry.get("entries", {}).items():
+        roles = ", ".join(entry.get("teach") or [])
+        asset = entry.get("asset") or {}
+        path = asset.get("path") or "no approved asset"
+        print(
+            f"{witness_id}: {entry.get('title', witness_id)} | "
+            f"{entry.get('status', 'unknown')} | {roles} | {path}"
+        )
+    return 0
+
+
+def cmd_witness_register(args: argparse.Namespace) -> int:
+    try:
+        from PIL import Image
+    except ImportError as exc:
+        raise PainterError(
+            "Witness registration requires Pillow. "
+            "Install labs/velastra/painter/requirements-provider.txt."
+        ) from exc
+
+    repo_root = Path(args.repo_root).resolve()
+    registry_path = Path(args.registry)
+    registry = load_witness_registry(registry_path)
+    entries = registry["entries"]
+    entry = entries.get(args.witness_id)
+
+    if not isinstance(entry, dict):
+        raise PainterError(
+            f"Unknown Visual Witness ID: {args.witness_id}"
+        )
+
+    source = Path(args.image)
+    if not source.exists():
+        raise PainterError(
+            f"Visual Witness source image does not exist: {source}"
+        )
+
+    final_dir = repo_root / "assets" / "velastra" / "witnesses"
+    final_dir.mkdir(parents=True, exist_ok=True)
+    final_path = final_dir / f"{args.witness_id}.png"
+
+    if final_path.exists() and not args.replace:
+        raise PainterError(
+            f"Visual Witness asset already exists: {final_path}. "
+            "Use --replace only after explicit review."
+        )
+
+    with Image.open(source) as image:
+        normalized = image.convert("RGB")
+        width, height = normalized.size
+        normalized.save(final_path, format="PNG")
+
+    final_sha = sha256_file(final_path)
+    entry["status"] = "approved"
+    entry["asset"] = {
+        "path": repo_relative_path(repo_root, final_path),
+        "sha256": final_sha,
+        "width": width,
+        "height": height,
+        "mediaType": "image/png",
+    }
+    provenance = entry.setdefault("provenance", {})
+    provenance.update({
+        "assetSource": "velastra_witness_register",
+        "reviewedBy": args.reviewed_by,
+        "reviewedAt": utc_now(),
+        "reviewNote": args.review_note,
+        "imageSha256": final_sha,
+    })
+
+    output_registry = Path(args.output_registry or registry_path)
+    write_json(output_registry, registry)
+
+    print(final_path)
+    print(output_registry)
+    return 0
+
+
 def cmd_brushes(args: argparse.Namespace) -> int:
     registry_path = Path(args.brush_registry) if args.brush_registry else None
     cabinet = load_brush_cabinet(registry_path)
@@ -1486,6 +1586,25 @@ def build_parser() -> argparse.ArgumentParser:
     brushes.add_argument("--brush-registry")
     brushes.add_argument("--json", action="store_true")
     brushes.set_defaults(func=cmd_brushes)
+
+    witnesses = sub.add_parser("witnesses", help="List curated Virynism Visual Witnesses.")
+    witnesses.add_argument("--registry", default="world/velastra-witnesses.json")
+    witnesses.add_argument("--json", action="store_true")
+    witnesses.set_defaults(func=cmd_witnesses)
+
+    witness_register = sub.add_parser(
+        "witness-register",
+        help="Approve and seal an image asset into the Visual Witness canon.",
+    )
+    witness_register.add_argument("witness_id")
+    witness_register.add_argument("image")
+    witness_register.add_argument("--registry", default="world/velastra-witnesses.json")
+    witness_register.add_argument("--repo-root", default=".")
+    witness_register.add_argument("--output-registry")
+    witness_register.add_argument("--reviewed-by", required=True)
+    witness_register.add_argument("--review-note", required=True)
+    witness_register.add_argument("--replace", action="store_true")
+    witness_register.set_defaults(func=cmd_witness_register)
 
     approve = sub.add_parser("approve", help="Promote a reviewed candidate into a registry copy.")
     approve.add_argument("candidate")
