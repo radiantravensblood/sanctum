@@ -126,4 +126,30 @@ assert.equal(qwen.guidance.diffusersParameter, "true_cfg_scale");
 assert.equal(qwen.guidance.diffusersDefault, 4.0);
 assert.equal(qwen.negativePrompt.providerTransport, "best_effort");
 
+const witnessBrush = cabinet.brushes.qwen_image_edit;
+assert.equal(witnessBrush.model, "Qwen/Qwen-Image-Edit");
+assert.ok(
+  witnessBrush.capabilities.includes("visual_witness")
+);
+assert.equal(
+  witnessBrush.transports.huggingface.task,
+  "image_to_image"
+);
+assert.equal(
+  witnessBrush.controlContract.referenceImages.required,
+  true
+);
+assert.equal(
+  witnessBrush.controlContract.referenceImages.hostedMax,
+  1
+);
+assert.equal(
+  witnessBrush.controlContract.seedControl.providerSupported,
+  false
+);
+assert.equal(
+  witnessBrush.controlContract.seedControl.candidateAttemptRequired,
+  true
+);
+
 console.log("brush contract + visible evidence: ok");
