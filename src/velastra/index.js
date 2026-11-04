@@ -12,6 +12,7 @@ import { compileVirynismHand } from "./hand.js";
 import { compilePainterlyTruth } from "./painterly-truth.js";
 import { compileVisibleEvidence } from "./evidence.js";
 import { compileVisualWitness } from "./witness.js";
+import { compileHandprint } from "./handprint.js";
 import { composeStudioSurface, composeStudioDocument, evaluateStudioExemplars } from "./studio.js";
 
 export function buildVelastraPacket({
@@ -182,6 +183,7 @@ export function compileVelastraAtelier({
       assetRegistry: world.velastraAssets,
       styleGrammar: world.velastraStyle,
       witnessGrammar: world.velastraWitnesses,
+      handprintGrammar: world.velastraHandprint,
       scenePacket: composed.scene,
       motifSelection: composed.selection,
       seed
@@ -225,6 +227,7 @@ export function testVelastraAtelierExemplars(world) {
     assetRegistry: world.velastraAssets,
     styleGrammar: world.velastraStyle,
     witnessGrammar: world.velastraWitnesses,
+    handprintGrammar: world.velastraHandprint,
     scenePackets,
     motifSelections
   });
@@ -266,6 +269,7 @@ export {
   compilePainterlyTruth,
   compileVisibleEvidence,
   compileVisualWitness,
+  compileHandprint,
   composeStudioSurface,
   composeStudioDocument
 };
