@@ -81,6 +81,12 @@ Painterly Truth:
 - `src/velastra/painterly-truth.js`
 - `labs/velastra/tests/painterly-truth.mjs`
 
+Visible Evidence / Brush Contract:
+
+- `world/velastra-evidence.json`
+- `src/velastra/evidence.js`
+- `labs/velastra/tests/brush-contract.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -349,6 +355,44 @@ truth.
 The law is:
 
 **give the hand something honest to touch.**
+
+## Brush Contract + Visible Evidence
+
+Kernel 0025 distinguishes between material truth and perceptible witness.
+
+Painterly Truth answers:
+
+**what is actually here?**
+
+Visible Evidence answers:
+
+**which already-true facts must survive translation strongly enough to be
+seen?**
+
+Evidence selection may change candidate identity.
+
+It may not change canonical place identity.
+
+Each evidence contract must point back to the Painterly Truth revision it was
+authored against and fails closed if that truth revision has moved.
+
+Every active brush must also declare a control contract.
+
+The control contract records:
+
+- whether negative prompts are actually supported,
+- whether guidance / CFG is available,
+- provider-vs-local reliability,
+- prompt-budget policy,
+- diversity role,
+- evidence strategy.
+
+Critical scene meaning and visible evidence must remain in the positive
+channel.
+
+The law is:
+
+**truth must not merely be known; it must be witnessed.**
 
 ## Studio adapter contract
 
