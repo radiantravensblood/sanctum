@@ -118,6 +118,43 @@ def manifest_fixture():
                 "Does unfinishedness read as process rather than blankness?",
             ],
         },
+        "witnesses": {
+            "version": 1,
+            "id": "visual_witness",
+            "designation": "Virynism Visual Witness Canon",
+            "room": "gallery",
+            "archetype": "place_tableau",
+            "desiredRoles": [
+                "sacred_incompletion",
+                "material_hand",
+            ],
+            "selected": [
+                {
+                    "id": "gallery_target_01",
+                    "title": "Gallery of Unfinished Things — Viryn Target Study",
+                    "status": "awaiting_asset",
+                    "matchedRoles": [
+                        "sacred_incompletion",
+                        "material_hand",
+                    ],
+                    "teach": [
+                        "sacred_incompletion",
+                        "material_hand",
+                    ],
+                    "doNotInherit": [
+                        "specific frames",
+                        "papers",
+                        "objects",
+                        "layout",
+                        "exact light source",
+                    ],
+                    "asset": None,
+                }
+            ],
+            "approved": [],
+            "active": False,
+            "fallback": "semantic_virynism_only",
+        },
         "scene": {
             "composition": {"camera": "wide intimate room tableau"},
             "lighting": {"meaning": "cool rain held by warm brass"},
@@ -261,6 +298,103 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertIn("Virynism rejects", bundle["negative"])
         self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
 
+    def test_witness_brush_fails_without_approved_asset(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image_edit")
+        )
+
+        self.assertEqual(spec.task, "image_to_image")
+        self.assertEqual(spec.model, "Qwen/Qwen-Image-Edit")
+
+        with self.assertRaises(painter.PainterError):
+            painter.compile_prompt_bundle(manifest, spec)
+
+    def test_witness_brush_uses_approved_reference_without_changing_asset_identity(self):
+        manifest = manifest_fixture()
+        manifest["witnesses"]["selected"][0]["status"] = "approved"
+        manifest["witnesses"]["selected"][0]["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "deadbeef",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(manifest["witnesses"]["selected"][0]))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image_edit")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertIn("VISUAL WITNESS", bundle["positive"])
+        self.assertIn("specific frames", bundle["positive"])
+        self.assertEqual(
+            bundle["witness"]["selected"],
+            "gallery_target_01",
+        )
+        self.assertEqual(
+            bundle["witness"]["asset"]["sha256"],
+            "deadbeef",
+        )
+
+        base_spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        base_bundle = painter.compile_prompt_bundle(manifest, base_spec)
+
+        self.assertEqual(
+            manifest["assetKey"],
+            "velastra.place_tableau.test",
+        )
+        self.assertNotEqual(
+            painter.candidate_id(manifest, bundle, spec),
+            painter.candidate_id(manifest, base_bundle, base_spec),
+        )
+
+    def test_candidate_records_visual_witness_provenance(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "cafebabe",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image_edit")
+        )
+        prompts = painter.compile_prompt_bundle(manifest, spec)
+        record = painter.build_candidate_record(
+            manifest,
+            prompts,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+
+        self.assertEqual(
+            record["source"]["witness"]["selected"],
+            "gallery_target_01",
+        )
+        self.assertEqual(
+            record["render"]["task"],
+            "image_to_image",
+        )
+        self.assertEqual(
+            record["source"]["witness"]["asset"]["sha256"],
+            "cafebabe",
+        )
+
     def test_evidence_change_changes_candidate_not_asset_identity(self):
         manifest = manifest_fixture()
         spec = painter.build_render_spec(self.brush_args())
@@ -358,6 +492,8 @@ class PainterBridgeTests(unittest.TestCase):
         values = {
             "brush": None,
             "transport": None,
+            "witness": None,
+            "repo_root": ".",
             "brush_registry": None,
             "backend": None,
             "model": None,
