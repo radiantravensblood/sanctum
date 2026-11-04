@@ -19,6 +19,7 @@ on:
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - "authoring/witnesses/README.md"
+      - "assets/velastra/witnesses/**"
       - ".gitignore"
   pull_request:
     paths:
@@ -38,6 +39,7 @@ on:
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - "authoring/witnesses/README.md"
+      - "assets/velastra/witnesses/**"
       - ".gitignore"
 
 jobs:
