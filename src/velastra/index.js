@@ -9,6 +9,7 @@ import { composeScenePacket, evaluateSceneExemplars } from "./scene-packet.js";
 import { selectMotifs, evaluateMotifExemplars } from "./motifs.js";
 import { compileAtelierManifest, evaluateAtelierExemplars } from "./atelier.js";
 import { compileVirynismHand } from "./hand.js";
+import { compilePainterlyTruth } from "./painterly-truth.js";
 import { composeStudioSurface, composeStudioDocument, evaluateStudioExemplars } from "./studio.js";
 
 export function buildVelastraPacket({
@@ -258,6 +259,7 @@ export {
   selectMotifs,
   compileAtelierManifest,
   compileVirynismHand,
+  compilePainterlyTruth,
   composeStudioSurface,
   composeStudioDocument
 };
