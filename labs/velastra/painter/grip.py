@@ -415,7 +415,6 @@ def derive_grip(
                 "witnessSha256"
             )
         ),
-        "trialSha256": sha256_json(trial),
         "humanReview": dict(review),
     }
     output["provenance"] = {
@@ -423,8 +422,17 @@ def derive_grip(
         "builder": "velastra-painter grip-build",
         "algorithmVersion": 1,
         "builtAt": utc_now(),
-        "trialSha256": sha256_json(trial),
-        "handprintSha256": sha256_json(handprint),
+        "sourceTrialId": trial.get("trialId"),
+        "manifestSha256": trial.get("manifestSha256"),
+        "handprintSha256": (
+            (trial.get("frozen") or {}).get("handprintSha256")
+        ),
+        "witnessRegistrySha256": (
+            (trial.get("frozen") or {}).get("witnessRegistrySha256")
+        ),
+        "witnessSha256": (
+            (trial.get("frozen") or {}).get("witnessSha256")
+        ),
         "classificationThresholds": thresholds,
         "note": (
             "Grip is a scoped interpretation of replicated pressure-trial "
