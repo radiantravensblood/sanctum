@@ -25,6 +25,14 @@ const handprintSource = await fs.readFile(
   "utf8"
 );
 
+const gripSource = await fs.readFile(
+  new URL(
+    "../../../src/velastra/grip.js",
+    import.meta.url
+  ),
+  "utf8"
+);
+
 const atelierSource = await fs.readFile(
   new URL(
     "../../../src/velastra/atelier.js",
@@ -45,6 +53,10 @@ const handprintModuleUrl =
   "data:text/javascript;base64," +
   Buffer.from(handprintSource).toString("base64");
 
+const gripModuleUrl =
+  "data:text/javascript;base64," +
+  Buffer.from(gripSource).toString("base64");
+
 const standaloneAtelierSource =
   atelierSource
     .replace(
@@ -63,6 +75,12 @@ const standaloneAtelierSource =
       'import { compileHandprint } from "./handprint.js";',
       'import { compileHandprint } from "' +
         handprintModuleUrl +
+        '";'
+    )
+    .replace(
+      'import { compileGrip } from "./grip.js";',
+      'import { compileGrip } from "' +
+        gripModuleUrl +
         '";'
     );
 
