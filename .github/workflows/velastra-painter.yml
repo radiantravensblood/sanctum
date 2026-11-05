@@ -6,7 +6,6 @@ on:
       - "labs/velastra/painter/**"
       - "labs/velastra/tests/**"
       - "labs/velastra/evidence/trials/**"
-      - "labs/velastra/evidence/trials/**"
       - "src/velastra/**"
       - "src/visual/scene.js"
       - "src/renderer.js"
@@ -19,6 +18,8 @@ on:
       - "world/velastra-evidence.json"
       - "world/velastra-witnesses.json"
       - "world/velastra-handprint.json"
+      - "world/velastra-grip.json"
+      - "src/world.js"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - "authoring/witnesses/README.md"
@@ -29,7 +30,6 @@ on:
       - "labs/velastra/painter/**"
       - "labs/velastra/tests/**"
       - "labs/velastra/evidence/trials/**"
-      - "labs/velastra/evidence/trials/**"
       - "src/velastra/**"
       - "src/visual/scene.js"
       - "src/renderer.js"
@@ -42,6 +42,8 @@ on:
       - "world/velastra-evidence.json"
       - "world/velastra-witnesses.json"
       - "world/velastra-handprint.json"
+      - "world/velastra-grip.json"
+      - "src/world.js"
       - ".devcontainer/**"
       - "authoring/inbox/README.md"
       - "authoring/witnesses/README.md"
@@ -60,12 +62,14 @@ jobs:
         run: |
           python -m py_compile labs/velastra/painter/velastra_painter.py
           python -m py_compile labs/velastra/painter/evaluation.py
+          python -m py_compile labs/velastra/painter/grip.py
       - name: Install handprint analysis dependency
         run: python -m pip install Pillow
       - name: Run painter contract tests
         run: |
           python -m unittest labs/velastra/painter/test_velastra_painter.py
           python -m unittest labs/velastra/painter/test_evaluation.py
+          python -m unittest labs/velastra/painter/test_grip.py
       - name: Check authoring module syntax
         run: node --check src/velastra/authoring.js
       - name: Check Painterly Truth integration syntax
@@ -75,6 +79,7 @@ jobs:
           node --check src/velastra/evidence.js
           node --check src/velastra/witness.js
           node --check src/velastra/handprint.js
+          node --check src/velastra/grip.js
           node --check src/velastra/scene-packet.js
           node --check src/velastra/sanctum-atelier.js
           node --check src/velastra/index.js
@@ -94,3 +99,5 @@ jobs:
         run: node labs/velastra/tests/visual-witness.mjs
       - name: Run handprint contract
         run: node labs/velastra/tests/handprint.mjs
+      - name: Run Handprint Grip contract
+        run: node labs/velastra/tests/grip.mjs
