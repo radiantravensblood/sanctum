@@ -19,13 +19,13 @@
     "oneSceneGripCannotBecomeGlobalLaw": true,
     "pendingHumanReviewCannotDriveRender": true,
     "motifOccurrenceCannotBecomeGripLawByItself": true,
-    "gripChangeMustChangeCandidateIdentity": true,
     "gripChangeCannotChangeCanonicalPlaceIdentity": true,
     "gripIsObservationOnlyInKernel0031": true,
     "humanReviewMayValidateObservationButCannotActivateRenderInKernel0031": true,
     "crossSceneReplicationRequiredBeforeRenderActivation": true,
     "observationalGripCannotChangeCandidateIdentity": true,
-    "gripMayTravelAsEvidenceButNotPrompt": true
+    "gripMayTravelAsEvidenceButNotPrompt": true,
+    "reviewedObservationCannotDriveRenderInKernel0031": true
   },
   "scope": {
     "mode": "scene_local_until_replicated_elsewhere",
