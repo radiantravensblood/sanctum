@@ -383,11 +383,13 @@ def derive_grip(
 
     output = json.loads(json.dumps(template))
     output["status"] = (
-        "built"
+        "reviewed_observation"
         if review_pass
         else "provisional_pending_human_review"
     )
-    output["renderEligible"] = bool(review_pass)
+    # Kernel 0031 is intentionally observational. Human review may validate
+    # the evidence, but one Gallery trial cannot make Grip a render law.
+    output["renderEligible"] = False
     output["dimensions"] = dimensions
     output["roleProjection"] = role_projection
     output["diagnostics"] = diagnostics
@@ -435,8 +437,9 @@ def derive_grip(
         ),
         "classificationThresholds": thresholds,
         "note": (
-            "Grip is a scoped interpretation of replicated pressure-trial "
-            "variance. It does not alter historical Handprint metrics."
+            "Grip is a scene-scoped interpretation of replicated pressure-trial "
+            "variance. Kernel 0031 keeps it observational: human review may validate "
+            "the evidence, but render activation requires future cross-scene replication."
         ),
     }
     return output
