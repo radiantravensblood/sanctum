@@ -98,7 +98,13 @@
     "handprintGripCannotDrivePainterPromptInKernel0031": true,
     "handprintGripCannotChangeCandidateIdentityWhileObservational": true,
     "handprintGripRenderActivationRequiresFutureCrossSceneReplication": true,
-    "gripObservationMustNotChangeCandidateIdentity": true
+    "gripObservationMustNotChangeCandidateIdentity": true,
+    "crossSceneGripReplicationMustHoldFrozenControls": true,
+    "crossSceneGripReplicationRequiresDifferentAssetIdentity": true,
+    "crossSceneGripMatchCannotActivateRenderLaw": true,
+    "crossSceneGripChangeMayIndicateSceneDependence": true,
+    "signatureLikeArtifactMustRemainHumanObservation": true,
+    "signatureLikeArtifactCannotEstablishAuthorship": true
   },
   "media": {
     "luminous_oil": {
@@ -286,6 +292,16 @@
       "promptInjectionInKernel0031": false,
       "candidateIdentityEffectInKernel0031": false,
       "sceneLocalUntilReplicatedElsewhere": true
+    },
+    "crossSceneGripReplication": {
+      "protocol": "velastra.grip_replication.v1",
+      "baselineTrial": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+      "replicationTrial": "labs/velastra/evidence/trials/hearth-pressure-0032.json",
+      "output": "labs/velastra/evidence/trials/grip-cross-scene-0032.json",
+      "comparator": "labs/velastra/painter/replication.py",
+      "command": "grip-replication",
+      "renderActivation": false,
+      "sameFrozenControlsRequired": true
     }
   },
   "livingCanvas": {
