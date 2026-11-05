@@ -95,6 +95,7 @@ export function compileSanctumAtelier({
     styleGrammar: world.velastraStyle,
     witnessGrammar: world.velastraWitnesses,
     handprintGrammar: world.velastraHandprint,
+    gripGrammar: world.velastraGrip,
     evidence,
     scenePacket,
     motifSelection,
