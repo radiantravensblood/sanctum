@@ -1292,7 +1292,7 @@ class PainterBridgeTests(unittest.TestCase):
                 2,
             )
             self.assertEqual(
-                len(trial["conditions"]["current_combined"]),
+                len(trial["conditions"]["original_witness_combined"]),
                 2,
             )
             self.assertEqual(
@@ -1320,7 +1320,7 @@ class PainterBridgeTests(unittest.TestCase):
                 ]["firewall"]["active"]
             )
             self.assertFalse(
-                trial["conditions"]["current_combined"][0][
+                trial["conditions"]["original_witness_combined"][0][
                     "witness"
                 ]["firewall"]["active"]
             )
