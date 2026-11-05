@@ -104,7 +104,14 @@
     "crossSceneGripMatchCannotActivateRenderLaw": true,
     "crossSceneGripChangeMayIndicateSceneDependence": true,
     "signatureLikeArtifactMustRemainHumanObservation": true,
-    "signatureLikeArtifactCannotEstablishAuthorship": true
+    "signatureLikeArtifactCannotEstablishAuthorship": true,
+    "painterlyTruthFixedObjectsMustReachPositivePrompt": true,
+    "sceneSovereigntyMustPrecedeWitnessTranslation": true,
+    "witnessMayTeachHandButCannotDonateRoom": true,
+    "witnessFirewallMustDestroyGlobalSemanticLayout": true,
+    "witnessFirewallCarrierMustRemainEphemeral": true,
+    "witnessFirewallCannotMutateWitnessCanon": true,
+    "sceneSovereigntyRequiresHumanSemanticReview": true
   },
   "media": {
     "luminous_oil": {
@@ -302,6 +309,21 @@
       "command": "grip-replication",
       "renderActivation": false,
       "sameFrozenControlsRequired": true
+    },
+    "sceneSovereignty": {
+      "protocol": "velastra.scene_sovereignty_trial.v1",
+      "command": "scene-sovereignty-trial",
+      "defaultRepeatsPerCondition": 2,
+      "conditions": [
+        "handprint_only",
+        "original_witness_combined",
+        "firewall_combined"
+      ],
+      "fixedObjectsPositiveRequired": true,
+      "firewallAlgorithm": "patch_shuffle_v1",
+      "firewallCarrierCanonical": false,
+      "humanSemanticReviewRequired": true,
+      "evidence": "labs/velastra/evidence/trials/hearth-sovereignty-0033.json"
     }
   },
   "livingCanvas": {
