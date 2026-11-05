@@ -484,6 +484,7 @@ def handprint_lines(
             "metrics": {},
             "facets": {},
             "facetRoles": [],
+            "pressure": {},
             "doNotInherit": [],
             "ablation": "disabled",
         }
@@ -498,6 +499,7 @@ def handprint_lines(
             "metrics": {},
             "facets": {},
             "facetRoles": [],
+            "pressure": {},
             "doNotInherit": [],
             "ablation": None,
         }
@@ -511,9 +513,120 @@ def handprint_lines(
         "metrics": dict(block.get("metrics") or {}),
         "facets": dict(block.get("facets") or {}),
         "facetRoles": list(block.get("facetRoles") or []),
+        "pressure": dict(block.get("pressure") or {}),
         "doNotInherit": list(block.get("doNotInherit") or []),
         "ablation": None,
     }
+
+
+def resolve_handprint_pressure(
+    handprint: Mapping[str, Any],
+    witness: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
+    if not handprint.get("active"):
+        return {
+            "active": False,
+            "profile": None,
+            "mode": None,
+            "priority": None,
+            "combined": False,
+            "directives": [],
+            "roleOrder": [],
+            "roleLaws": {},
+            "witnessTranslationLaw": None,
+        }
+
+    pressure = handprint.get("pressure") or {}
+    profiles = pressure.get("profiles") or {}
+    combined = bool(
+        witness.get("active")
+        and spec is not None
+        and spec.task == "image_to_image"
+    )
+
+    profile_id = (
+        pressure.get("combinedProfile")
+        if combined
+        else pressure.get("defaultProfile")
+    ) or (
+        "governing_translation"
+        if combined
+        else "descriptive_guidance"
+    )
+
+    profile = profiles.get(profile_id) or {}
+    return {
+        "active": True,
+        "profile": profile_id,
+        "mode": profile.get("mode") or profile_id,
+        "priority": int(profile.get("priority") or (123 if combined else 114)),
+        "combined": combined,
+        "purpose": flatten_text(profile.get("purpose")) or None,
+        "directives": [
+            flatten_text(item)
+            for item in (profile.get("directives") or [])
+            if flatten_text(item)
+        ],
+        "roleOrder": list(pressure.get("priorityRoleOrder") or []),
+        "roleLaws": dict(profile.get("nonNegotiableRoleLaws") or {}),
+        "witnessTranslationLaw": (
+            flatten_text(profile.get("witnessTranslationLaw"))
+            or None
+        ),
+        "version": pressure.get("version"),
+    }
+
+
+def handprint_pressure_text(
+    handprint: Mapping[str, Any],
+    pressure: Mapping[str, Any],
+) -> str:
+    if (
+        not pressure.get("active")
+        or pressure.get("mode") != "governing_translation"
+    ):
+        return ""
+
+    parts: list[str] = [
+        "GOVERNING HANDPRINT LAW — Handprint is the visual translation authority for this combined render. "
+        "Scene truth and Visible Evidence remain absolute semantic authority."
+    ]
+
+    directives = pressure.get("directives") or []
+    if directives:
+        parts.append(
+            "TRANSLATION DIRECTIVES — " + " | ".join(directives)
+        )
+
+    active_roles = set(handprint.get("facetRoles") or [])
+    role_laws = pressure.get("roleLaws") or {}
+    ordered = [
+        role
+        for role in (pressure.get("roleOrder") or [])
+        if role in active_roles and flatten_text(role_laws.get(role))
+    ]
+    remaining = [
+        role
+        for role in active_roles
+        if role not in ordered and flatten_text(role_laws.get(role))
+    ]
+    laws = [
+        role.replace("_", " ").upper()
+        + " LAW — "
+        + flatten_text(role_laws.get(role))
+        for role in ordered + sorted(remaining)
+    ]
+    if laws:
+        parts.append("NON-NEGOTIABLE HAND LAWS — " + " | ".join(laws))
+
+    witness_law = pressure.get("witnessTranslationLaw")
+    if witness_law:
+        parts.append(
+            "WITNESS TRANSLATION LAW — " + str(witness_law)
+        )
+
+    return " ".join(parts)
 
 
 def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
@@ -1150,6 +1263,11 @@ def compile_prompt_bundle(
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
     handprint = handprint_lines(manifest, spec)
+    handprint_pressure = resolve_handprint_pressure(
+        handprint,
+        witness,
+        spec,
+    )
     dialect = spec.prompt_dialect if spec and spec.prompt_dialect else {}
     control = spec.control_contract if spec and spec.control_contract else {}
 
@@ -1291,27 +1409,47 @@ def compile_prompt_bundle(
             required=True,
         )
 
+    pressure_text = handprint_pressure_text(
+        handprint,
+        handprint_pressure,
+    )
+    if pressure_text:
+        add(
+            "handprint_pressure",
+            pressure_text,
+            priority=int(handprint_pressure.get("priority") or 123),
+            required=True,
+        )
+
     handprint_text = handprint_prompt_text(handprint)
     if handprint_text:
         add(
             "handprint",
             "HANDPRINT — " + handprint_text,
-            priority=114,
+            priority=int(handprint_pressure.get("priority") or 114) - 1,
             required=True,
         )
 
     if witness["active"]:
         roles = ", ".join(witness["roles"]) or "approved visual-hand roles"
         exclusions = ", ".join(witness["doNotInherit"]) or "all depicted scene content"
-        add(
-            "visual_witness",
+        witness_direction = (
             "VISUAL WITNESS — an input image accompanies this request. "
             "Use it only as evidence for these visual-hand roles: "
             + roles
             + ". Rebuild the target image from the authoritative target scene. "
             "Do not inherit witness content including: "
             + exclusions
-            + ". Witness scene content is non-canonical.",
+            + ". Witness scene content is non-canonical."
+        )
+        if handprint_pressure.get("mode") == "governing_translation":
+            witness_direction += (
+                " In combined mode, do not treat the witness as the final visual authority: "
+                "recompose and repaint it through the governing Handprint laws above."
+            )
+        add(
+            "visual_witness",
+            witness_direction,
             priority=115,
             required=True,
         )
@@ -1494,6 +1632,15 @@ def compile_prompt_bundle(
             "facets": handprint.get("facets") or {},
             "interpretation": handprint.get("interpretation") or {},
             "metrics": handprint.get("metrics") or {},
+        },
+        "handprintPressure": {
+            "active": handprint_pressure.get("active"),
+            "profile": handprint_pressure.get("profile"),
+            "mode": handprint_pressure.get("mode"),
+            "version": handprint_pressure.get("version"),
+            "combined": handprint_pressure.get("combined"),
+            "priority": handprint_pressure.get("priority"),
+            "roleOrder": handprint_pressure.get("roleOrder") or [],
         },
         "witness": {
             "active": witness["active"],
@@ -1736,6 +1883,7 @@ def build_candidate_record(
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
             "handprint": prompts.get("handprint"),
+            "handprintPressure": prompts.get("handprintPressure"),
             "witness": prompts.get("witness"),
             "promptBudget": prompts.get("budget"),
         },
@@ -2293,6 +2441,7 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "promptDialect": candidate.get("render", {}).get("promptDialect"),
             "style": candidate.get("source", {}).get("style"),
             "handprint": candidate.get("source", {}).get("handprint"),
+            "handprintPressure": candidate.get("source", {}).get("handprintPressure"),
             "witness": candidate.get("source", {}).get("witness"),
             "seed": candidate.get("render", {}).get("seed"),
             "attemptId": candidate.get("render", {}).get("attemptId"),
