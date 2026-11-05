@@ -82,7 +82,23 @@
     "metricScoreCannotReplaceHumanReview": true,
     "spatialSimilarityCannotEstablishSemanticCopying": true,
     "trialPlanningCannotExecuteInference": true,
-    "trialResultsMustRemainAuthoringEvidence": true
+    "trialResultsMustRemainAuthoringEvidence": true,
+    "gripMustTravelInsideManifest": true,
+    "gripCannotChangeCanonicalPlaceIdentity": true,
+    "gripCannotBecomeSceneTruth": true,
+    "gripCannotOverridePainterlyTruth": true,
+    "gripCannotOverrideVisibleEvidence": true,
+    "gripCannotOverrideHumanReview": true,
+    "gripAnchorCannotFreezeExactValue": true,
+    "gripFreedomCannotBecomeRandomnessDirective": true,
+    "gripTendencyCannotBecomeCompulsoryMotif": true,
+    "oneSceneGripCannotBecomeGlobalLaw": true,
+    "pendingHumanReviewGripCannotDriveRender": true,
+    "handprintGripIsObservationOnlyInKernel0031": true,
+    "handprintGripCannotDrivePainterPromptInKernel0031": true,
+    "handprintGripCannotChangeCandidateIdentityWhileObservational": true,
+    "handprintGripRenderActivationRequiresFutureCrossSceneReplication": true,
+    "gripObservationMustNotChangeCandidateIdentity": true
   },
   "media": {
     "luminous_oil": {
@@ -258,6 +274,18 @@
       "explicitRenderFlag": "--render",
       "evaluator": "labs/velastra/painter/evaluation.py",
       "evidenceDirectory": "labs/velastra/evidence/trials"
+    },
+    "handprintGrip": {
+      "registry": "world/velastra-grip.json",
+      "sourceTrial": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+      "buildCommand": "grip-build",
+      "inspectCommand": "grip",
+      "snapshotTravelsWithManifest": true,
+      "humanReviewValidatesObservation": true,
+      "renderEligibleInKernel0031": false,
+      "promptInjectionInKernel0031": false,
+      "candidateIdentityEffectInKernel0031": false,
+      "sceneLocalUntilReplicatedElsewhere": true
     }
   },
   "livingCanvas": {

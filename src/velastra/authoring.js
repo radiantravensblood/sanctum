@@ -457,6 +457,23 @@ function refreshAtelierDock({
       )
     : "Handprint pending";
 
+  const grip = manifest.grip;
+  const gripLabel = grip?.observed
+    ? (
+        "Grip observed " +
+        String(Object.keys(grip.anchors || {}).length) +
+        "A/" +
+        String(Object.keys(grip.freedoms || {}).length) +
+        "F/" +
+        String(Object.keys(grip.tendencies || {}).length) +
+        "T"
+      )
+    : (
+        grip
+          ? "Grip " + String(grip.status || "provisional")
+          : "Grip unavailable"
+      );
+
   status.textContent =
     shortKey(manifest.assetKey) +
     " · " +
@@ -469,6 +486,8 @@ function refreshAtelierDock({
     witnessLabel +
     " · " +
     handprintLabel +
+    " · " +
+    gripLabel +
     " · " +
     selection.brushLabel +
     " · " +

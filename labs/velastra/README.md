@@ -100,6 +100,13 @@ Handprint:
 - `src/velastra/handprint.js`
 - `labs/velastra/tests/handprint.mjs`
 
+Handprint Grip:
+
+- `world/velastra-grip.json`
+- `src/velastra/grip.js`
+- `labs/velastra/painter/grip.py`
+- `labs/velastra/tests/grip.mjs`
+
 Sanctum living-canvas handoff:
 
 - `src/velastra/sanctum-painting.js`
@@ -584,6 +591,37 @@ The law is:
 
 **a single beautiful difference is an observation; a repeated difference may
 become evidence.**
+
+## Handprint Grip
+
+Kernel 0031 interprets replicated pressure behavior without mutating historical
+Handprint metrics.
+
+Grip divides measured dimensions into:
+
+- **anchors** — pressure-associated variance stabilization,
+- **freedoms** — protected or increased variation,
+- **tendencies** — directional context without compulsion.
+
+The first registry is derived only from Gallery Pressure Trial 0030 and remains
+scene-local.
+
+Kernel 0031 is observation-only.
+
+The browser compiler exposes scoped Grip evidence in the Atelier Manifest, and
+the painter carries the same snapshot in candidate provenance.
+
+Grip does **not** enter the painter prompt and does **not** change candidate
+identity while observational.
+
+Human review may validate the Gallery observation, but render activation
+requires replicated support across additional scenes and a future explicit
+kernel.
+
+The law is:
+
+**hold relationships in evidence, protect variation in evidence, and do not
+turn one scene into a self-fulfilling prompt.**
 
 ## Studio adapter contract
 

@@ -64,6 +64,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0030 calibrates that pressure through replicated stochastic trials, transparent candidate measurement, and frozen-canon comparison before any further gain is added.**
 
+**Kernel 0031 derives Handprint Grip: scene-scoped anchors, freedoms, and tendencies inferred from replicated pressure behavior without rewriting historical Handprint evidence.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -3141,9 +3143,139 @@ is in progress.
 
 Freeze first. Measure second. Expand afterward.
 
+## Handprint Grip
+
+Kernel 0031 follows the completed Gallery Pressure Calibration rather than
+raising pressure blindly.
+
+The governing law is:
+
+**The hand is not defined only by where the stroke lands, but by what it holds
+steady and what it permits to wander.**
+
+Grip is deliberately separate from the historical Handprint.
+
+Handprint answers:
+
+> what recurring behavior exists across approved witnesses?
+
+Grip answers:
+
+> under replicated pressure, which measured dimensions became more stable,
+> which retained or increased variation, and which remained merely directional?
+
+The first Grip registry lives at:
+
+`world/velastra-grip.json`
+
+and is derived reproducibly by:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip-build
+```
+
+### Three categories
+
+**Anchors** are dimensions whose stochastic spread falls substantially under
+governing pressure without a large condition-mean shift.
+
+An anchor is a relationship to hold in our interpretation of the evidence.
+
+It is not an exact numeric target.
+
+The first Gallery-local provisional anchors are:
+
+- overall luminance field,
+- dark-field occupancy,
+- peripheral luminance,
+- center/periphery light relationship.
+
+**Freedoms** are dimensions whose spread remains meaningfully larger under
+governing pressure.
+
+A freedom marks where variation survived or increased.
+
+It is not an instruction to add randomness.
+
+The first provisional freedoms are:
+
+- tonal-span breadth,
+- material and tonal information density.
+
+**Tendencies** are dimensions for which this trial established neither a strong
+anchor nor a strong freedom signal.
+
+They remain directional evidence rather than compulsory motifs or fixed
+outcomes.
+
+### Observation-only boundary
+
+Kernel 0031 is intentionally observational.
+
+The committed 0030 trial still has human review pending, so the seeded registry
+is:
+
+`provisional_pending_human_review`
+
+with:
+
+`renderEligible: false`
+
+A later human scene-truth review may validate the Gallery observation and move
+its evidence status to:
+
+`reviewed_observation`
+
+but **cannot make Grip render-active in Kernel 0031**.
+
+Grip may travel in the Atelier Manifest and candidate provenance so the
+evidence remains inspectable.
+
+It does not enter the painter prompt.
+
+It does not change candidate identity while observational.
+
+Render activation requires replicated support across additional scenes and a
+future explicit kernel.
+
+This prevents Gallery from teaching itself its own answer.
+
+### Scope
+
+The first Grip is intentionally narrow:
+
+- room: `gallery`,
+- asset: `velastra.place_tableau.5cms46`,
+- evidence: Gallery Pressure Trial 0030.
+
+One scene may not establish global Handprint Grip.
+
+### Motif boundary
+
+A one-off event such as a candle appearing in a threshold may be artistically
+interesting evidence.
+
+It is not an anchor, freedom, or tendency merely because it appeared once.
+
+Grip describes variance behavior.
+
+It does not canonize motifs.
+
+### Historical-growth boundary
+
+Older paintings gathered outside the current witness canon remain external to
+Grip construction for now.
+
+Later, a historical-growth corpus may test whether proposed anchors and
+tendencies persist across stylistic eras.
+
+It should interrogate Grip.
+
+It should not be allowed to retroactively manufacture it.
+
 ## Current storage boundary
 
-Kernel 0030 still persists to `localStorage`.
+Kernel 0031 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -3222,3 +3354,5 @@ And now it knows that **what remains across different witnesses can be measured,
 And now it knows that **the hand can remain coherent without being forced into one uniform average**.
 
 And now it knows that **a witness may show the way while the hand still decides how the scene is touched**.
+
+And now it is learning that **the hand may be recognized by what it holds steady and what it permits to wander**.

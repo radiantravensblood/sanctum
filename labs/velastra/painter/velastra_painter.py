@@ -36,6 +36,9 @@ DEFAULT_WITNESS_REGISTRY = (
 DEFAULT_HANDPRINT_REGISTRY = (
     Path(__file__).resolve().parents[3] / "world" / "velastra-handprint.json"
 )
+DEFAULT_GRIP_REGISTRY = (
+    Path(__file__).resolve().parents[3] / "world" / "velastra-grip.json"
+)
 
 
 class PainterError(RuntimeError):
@@ -1200,6 +1203,61 @@ def build_handprint_registry(
     return output
 
 
+def grip_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    block = manifest.get("grip")
+    if not isinstance(block, Mapping):
+        return {
+            "active": False,
+            "status": "missing",
+            "anchors": {},
+            "freedoms": {},
+            "tendencies": {},
+            "roleProjection": {},
+            "sourceTrial": {},
+            "laws": {},
+        }
+
+    observed = (
+        block.get("status") in {
+            "provisional_pending_human_review",
+            "reviewed_observation",
+        }
+    )
+    active = False
+    dimensions = block.get("dimensions") or {}
+
+    return {
+        "active": active,
+        "observed": observed,
+        "status": block.get("status"),
+        "renderEligible": block.get("renderEligible") is True,
+        "scope": dict(block.get("scope") or {}),
+        "anchors": dict(
+            dimensions.get("anchors")
+            or block.get("anchors")
+            or {}
+        ),
+        "freedoms": dict(
+            dimensions.get("freedoms")
+            or block.get("freedoms")
+            or {}
+        ),
+        "tendencies": dict(
+            dimensions.get("tendencies")
+            or block.get("tendencies")
+            or {}
+        ),
+        "roleProjection": dict(block.get("roleProjection") or {}),
+        "sourceTrial": dict(block.get("sourceTrial") or {}),
+        "laws": dict(block.get("laws") or {}),
+    }
+
+
+def grip_prompt_text(grip: Mapping[str, Any]) -> str:
+    """Kernel 0031 keeps Grip observational and therefore prompt-silent."""
+    return ""
+
+
 def estimate_prompt_tokens(text: str) -> int:
     if not text:
         return 0
@@ -1264,6 +1322,7 @@ def compile_prompt_bundle(
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
     handprint = handprint_lines(manifest, spec)
+    grip = grip_lines(manifest)
     handprint_pressure = resolve_handprint_pressure(
         handprint,
         witness,
@@ -1634,6 +1693,18 @@ def compile_prompt_bundle(
             "interpretation": handprint.get("interpretation") or {},
             "metrics": handprint.get("metrics") or {},
         },
+        "grip": {
+            "active": grip.get("active"),
+            "observed": grip.get("observed"),
+            "status": grip.get("status"),
+            "renderEligible": grip.get("renderEligible"),
+            "scope": grip.get("scope") or {},
+            "anchors": grip.get("anchors") or {},
+            "freedoms": grip.get("freedoms") or {},
+            "tendencies": grip.get("tendencies") or {},
+            "roleProjection": grip.get("roleProjection") or {},
+            "sourceTrial": grip.get("sourceTrial") or {},
+        },
         "handprintPressure": {
             "active": handprint_pressure.get("active"),
             "profile": handprint_pressure.get("profile"),
@@ -1834,10 +1905,15 @@ class RenderSpec:
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
+    identity_prompts = json.loads(json.dumps(prompts))
+    grip_snapshot = identity_prompts.get("grip") or {}
+    if grip_snapshot.get("active") is not True:
+        identity_prompts.pop("grip", None)
+
     identity = {
         "protocol": PROTOCOL,
         "assetKey": manifest["assetKey"],
-        "promptBundle": prompts,
+        "promptBundle": identity_prompts,
         "render": {
             "brush": spec.brush,
             "transport": spec.transport,
@@ -1884,6 +1960,7 @@ def build_candidate_record(
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
             "handprint": prompts.get("handprint"),
+            "grip": prompts.get("grip"),
             "handprintPressure": prompts.get("handprintPressure"),
             "witness": prompts.get("witness"),
             "promptBudget": prompts.get("budget"),
@@ -2363,6 +2440,77 @@ def load_evaluation_module() -> Any:
             f"Unable to initialize candidate evaluator: {exc}"
         ) from exc
     return module
+
+
+def load_grip_module() -> Any:
+    module_path = Path(__file__).with_name("grip.py")
+    spec = importlib.util.spec_from_file_location(
+        "velastra_grip",
+        module_path,
+    )
+    if spec is None or spec.loader is None:
+        raise PainterError(
+            f"Unable to load Grip derivation module: {module_path}"
+        )
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:
+        raise PainterError(
+            f"Unable to initialize Grip derivation: {exc}"
+        ) from exc
+    return module
+
+
+def cmd_grip(args: argparse.Namespace) -> int:
+    registry = read_json(Path(args.grip))
+    if args.json:
+        print(json.dumps(registry, indent=2))
+        return 0
+
+    module = load_grip_module()
+    for line in module.summarize_grip(registry):
+        print(line)
+
+    source = registry.get("sourceTrial") or {}
+    if source:
+        print(
+            "sourceTrial="
+            + str(source.get("trialId") or "unknown")
+            + " humanReview="
+            + str((source.get("humanReview") or {}).get("status"))
+        )
+    return 0
+
+
+def cmd_grip_build(args: argparse.Namespace) -> int:
+    module = load_grip_module()
+    evaluator = load_evaluation_module()
+
+    trial_path = Path(args.trial)
+    handprint_path = Path(args.handprint)
+    grip_path = Path(args.grip)
+
+    trial = read_json(trial_path)
+    handprint = read_json(handprint_path)
+    template = read_json(grip_path)
+
+    try:
+        built = module.derive_grip(
+            trial=trial,
+            handprint=handprint,
+            template=template,
+            role_metrics=evaluator.ROLE_METRICS,
+        )
+    except module.GripError as exc:
+        raise PainterError(str(exc)) from exc
+
+    output = Path(args.output or grip_path)
+    write_json(output, built)
+    print(output)
+    for line in module.summarize_grip(built):
+        print(line)
+    return 0
 
 
 def cmd_evaluate(args: argparse.Namespace) -> int:
@@ -2868,6 +3016,7 @@ def cmd_approve(args: argparse.Namespace) -> int:
             "promptDialect": candidate.get("render", {}).get("promptDialect"),
             "style": candidate.get("source", {}).get("style"),
             "handprint": candidate.get("source", {}).get("handprint"),
+            "grip": candidate.get("source", {}).get("grip"),
             "handprintPressure": candidate.get("source", {}).get("handprintPressure"),
             "witness": candidate.get("source", {}).get("witness"),
             "seed": candidate.get("render", {}).get("seed"),
@@ -2971,6 +3120,27 @@ def build_parser() -> argparse.ArgumentParser:
     handprint_build.add_argument("--repo-root", default=".")
     handprint_build.add_argument("--output")
     handprint_build.set_defaults(func=cmd_handprint_build)
+
+    grip = sub.add_parser(
+        "grip",
+        help="Inspect the current evidence-derived Virynism Handprint Grip.",
+    )
+    grip.add_argument("--grip", default="world/velastra-grip.json")
+    grip.add_argument("--json", action="store_true")
+    grip.set_defaults(func=cmd_grip)
+
+    grip_build = sub.add_parser(
+        "grip-build",
+        help="Derive scoped Handprint Grip from a completed replicated pressure trial.",
+    )
+    grip_build.add_argument(
+        "--trial",
+        default="labs/velastra/evidence/trials/gallery-pressure-0030.json",
+    )
+    grip_build.add_argument("--handprint", default="world/velastra-handprint.json")
+    grip_build.add_argument("--grip", default="world/velastra-grip.json")
+    grip_build.add_argument("--output")
+    grip_build.set_defaults(func=cmd_grip_build)
 
     witnesses = sub.add_parser("witnesses", help="List curated Virynism Visual Witnesses.")
     witnesses.add_argument("--registry", default="world/velastra-witnesses.json")

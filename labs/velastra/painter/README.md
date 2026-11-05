@@ -593,6 +593,88 @@ The evaluator cannot certify scene truth.
 
 Human review remains required.
 
+## Handprint Grip
+
+Kernel 0031 adds a separate, evidence-derived Grip registry:
+
+`world/velastra-grip.json`
+
+Inspect it with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip
+```
+
+Rebuild it reproducibly from the committed 0030 trial with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip-build
+```
+
+The builder classifies each shared candidate metric from witness-only B and
+governing C distributions.
+
+### Anchor rule
+
+A metric becomes an anchor only when:
+
+- witness-only baseline standard deviation is large enough to measure,
+- `C stddev / B stddev <= 0.67`,
+- the condition-mean shift remains within one B standard deviation.
+
+Anchors describe stabilization evidence, not fixed targets.
+
+### Freedom rule
+
+A metric becomes a freedom when:
+
+- baseline variance is measurable,
+- `C stddev / B stddev >= 1.5`.
+
+Freedom records where governing pressure preserved or increased variation.
+
+It is not an instruction to inject randomness.
+
+### Tendency rule
+
+Everything not supported strongly enough as anchor or freedom remains a
+tendency.
+
+Tiny baseline variance is specifically prevented from manufacturing a false
+freedom through a near-zero denominator.
+
+### Human review and render boundary
+
+`grip-build` may derive a provisional registry from a completed pressure
+trial whose human review is pending:
+
+```text
+status = provisional_pending_human_review
+renderEligible = false
+```
+
+If human review later records `sceneTruthPass: true`, the registry may become:
+
+```text
+status = reviewed_observation
+renderEligible = false
+```
+
+Kernel 0031 never makes Grip prompt-active.
+
+Grip remains inspectable in manifests and candidate provenance, but:
+
+- emits no `HANDPRINT GRIP` prompt section,
+- cannot alter candidate identity,
+- cannot steer generation,
+- cannot become render law from one Gallery trial.
+
+A future kernel may consider render activation only after comparable
+cross-scene replication.
+
+A single anomalous candle, frame, figure, or object can never become Grip law
+by itself.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
