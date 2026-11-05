@@ -96,6 +96,7 @@ export function compileHandprint({
     minimumFacetWitnesses,
     facets,
     facetRoles: Object.keys(facets),
+    pressure: copy(handprintGrammar.pressure || {}),
     doNotInherit: copy(
       handprintGrammar.corpus?.doNotInherit || []
     ),
