@@ -66,6 +66,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0031 derives Handprint Grip: scene-scoped anchors, freedoms, and tendencies inferred from replicated pressure behavior without rewriting historical Handprint evidence.**
 
+**Kernel 0032 tests whether that observed Grip survives a second place under frozen controls before any scene-local pattern may be treated as broader evidence.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -3272,6 +3274,59 @@ tendencies persist across stylistic eras.
 It should interrogate Grip.
 
 It should not be allowed to retroactively manufacture it.
+
+## Cross-Scene Grip Replication
+
+Kernel 0032 takes Gallery's observational Grip to a second canonical place
+without activating Grip as render guidance.
+
+The first replication target is **The Hearth**.
+
+Hearth is deliberately chosen before The Threshold because both Gallery and
+Hearth use the `place_tableau` archetype. The room changes while the
+archetype remains constant.
+
+The experiment repeats the same pressure protocol:
+
+- four B / witness-only candidates,
+- four C / governing-translation candidates,
+- alternating execution order,
+- Qwen Image Edit over Hugging Face,
+- the same sealed Handprint,
+- the same witness registry,
+- the same selected Visual Witness,
+- the same pressure schema.
+
+The cross-scene comparator refuses the experiment if those frozen controls do
+not match.
+
+It then classifies Hearth independently into anchors, freedoms, and tendencies
+using the exact 0031 thresholds and compares those classifications to Gallery.
+
+Matching categories become **replicated observations**.
+
+They do not become global render laws.
+
+Changed categories are not failures. They are evidence that a Grip behavior
+may depend on scene structure.
+
+The evidence files are:
+
+`labs/velastra/evidence/trials/hearth-pressure-0032.json`
+
+and:
+
+`labs/velastra/evidence/trials/grip-cross-scene-0032.json`
+
+Signature-like marks noticed in generated paintings may be recorded by human
+review in the replication ledger.
+
+They are not interpreted as authorship and do not become automatic visual
+metrics in Kernel 0032.
+
+The Ceiling Storm remains outside this first replication because it is not
+currently a canonical Sanctum scene. It may become a later stress test after
+the scene-local causal chain is established.
 
 ## Current storage boundary
 
