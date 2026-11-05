@@ -3179,7 +3179,7 @@ and is derived reproducibly by:
 **Anchors** are dimensions whose stochastic spread falls substantially under
 governing pressure without a large condition-mean shift.
 
-An anchor is a relationship to hold.
+An anchor is a relationship to hold in our interpretation of the evidence.
 
 It is not an exact numeric target.
 
@@ -3193,7 +3193,7 @@ The first Gallery-local provisional anchors are:
 **Freedoms** are dimensions whose spread remains meaningfully larger under
 governing pressure.
 
-A freedom protects room for variation.
+A freedom marks where variation survived or increased.
 
 It is not an instruction to add randomness.
 
@@ -3205,9 +3205,40 @@ The first provisional freedoms are:
 **Tendencies** are dimensions for which this trial established neither a strong
 anchor nor a strong freedom signal.
 
-They may guide direction.
+They remain directional evidence rather than compulsory motifs or fixed
+outcomes.
 
-They may not become compulsory motifs or fixed outcomes.
+### Observation-only boundary
+
+Kernel 0031 is intentionally observational.
+
+The committed 0030 trial still has human review pending, so the seeded registry
+is:
+
+`provisional_pending_human_review`
+
+with:
+
+`renderEligible: false`
+
+A later human scene-truth review may validate the Gallery observation and move
+its evidence status to:
+
+`reviewed_observation`
+
+but **cannot make Grip render-active in Kernel 0031**.
+
+Grip may travel in the Atelier Manifest and candidate provenance so the
+evidence remains inspectable.
+
+It does not enter the painter prompt.
+
+It does not change candidate identity while observational.
+
+Render activation requires replicated support across additional scenes and a
+future explicit kernel.
+
+This prevents Gallery from teaching itself its own answer.
 
 ### Scope
 
@@ -3218,27 +3249,6 @@ The first Grip is intentionally narrow:
 - evidence: Gallery Pressure Trial 0030.
 
 One scene may not establish global Handprint Grip.
-
-Grip can only become broader after comparable replication elsewhere.
-
-### Human-review gate
-
-The committed 0030 trial still has human review pending.
-
-Therefore the first derived Grip is:
-
-`provisional_pending_human_review`
-
-and:
-
-`renderEligible: false`
-
-The registry may be inspected, tested, and carried in provenance.
-
-It may not alter a painter prompt until scene truth has been explicitly
-reviewed and passed.
-
-This prevents statistical regularity from silently becoming artistic law.
 
 ### Motif boundary
 
