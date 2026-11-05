@@ -204,6 +204,10 @@ def compile_truth_envelope(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "version": painterly_truth.get("version"),
             "revision": painterly_truth.get("revision"),
             "room": painterly_truth.get("room"),
+            "facts": painterly_truth.get("facts") or [],
+            "spatialFacts": painterly_truth.get("spatialFacts") or [],
+            "absences": painterly_truth.get("absences") or [],
+            "traces": painterly_truth.get("traces") or [],
             "fixedObjects": painterly_truth.get("fixedObjects") or [],
         } if isinstance(painterly_truth, Mapping) else None,
         "literalMotifs": literal,
@@ -428,6 +432,27 @@ def witness_lines(
             "asset": None,
         }
 
+    asset = dict(selected.get("asset") or {})
+    firewall = {
+        "active": False,
+        "algorithm": None,
+        "version": None,
+        "sourceSha256": asset.get("sha256"),
+        "carrierId": None,
+        "tileSize": None,
+        "blurRadius": None,
+    }
+    if spec and spec.witness_firewall:
+        module = load_witness_firewall_module()
+        firewall = {
+            "active": True,
+            **module.descriptor(
+                str(asset.get("sha256") or ""),
+                tile_size=spec.firewall_tile_size,
+                blur_radius=spec.firewall_blur_radius,
+            ),
+        }
+
     return {
         "active": True,
         "required": required,
@@ -436,7 +461,8 @@ def witness_lines(
         "roles": list(selected.get("matchedRoles") or selected.get("teach") or []),
         "doNotInherit": list(selected.get("doNotInherit") or []),
         "notes": selected.get("notes"),
-        "asset": dict(selected.get("asset") or {}),
+        "asset": asset,
+        "firewall": firewall,
         "ablation": None,
     }
 
@@ -1420,6 +1446,41 @@ def compile_prompt_bundle(
                 required=True,
             )
 
+    painterly_truth = truth.get("painterlyTruth") or {}
+    sovereignty_facts: list[str] = []
+    for item in painterly_truth.get("facts") or []:
+        value = flatten_text(item)
+        if value and value not in sovereignty_facts:
+            sovereignty_facts.append(value)
+    for item in painterly_truth.get("spatialFacts") or []:
+        value = flatten_text(item)
+        if value and value not in sovereignty_facts:
+            sovereignty_facts.append(value)
+    for entry in painterly_truth.get("fixedObjects") or []:
+        if isinstance(entry, Mapping):
+            value = flatten_text(
+                entry.get("name") or entry.get("id")
+            )
+        else:
+            value = flatten_text(entry)
+        if value:
+            statement = "Fixed target object: " + value
+            if statement not in sovereignty_facts:
+                sovereignty_facts.append(statement)
+
+    if sovereignty_facts:
+        add(
+            "scene_sovereignty",
+            "SCENE SOVEREIGNTY GATE — Build the target room from these "
+            "canonical place facts before applying witness translation: "
+            + " | ".join(sovereignty_facts)
+            + ". These target facts must remain recognizable. "
+            "The witness may not substitute its architecture, object inventory, "
+            "furniture, layout, or exact light source for them.",
+            priority=126,
+            required=True,
+        )
+
     if evidence["identityReframe"]:
         add(
             "identity_reframe",
@@ -1513,6 +1574,21 @@ def compile_prompt_bundle(
             priority=115,
             required=True,
         )
+
+        if (witness.get("firewall") or {}).get("active"):
+            add(
+                "witness_firewall",
+                "WITNESS FIREWALL — the accompanying reference pixels have "
+                "been deliberately scrambled to destroy semantic layout. "
+                "Use the carrier only for local palette, pigment, texture, edge, "
+                "and material-hand memory. Do not infer or reconstruct the "
+                "original witness room, object inventory, architecture, frame "
+                "placement, papers, furniture, or exact light source. "
+                "Recover the target place only from Scene Sovereignty and "
+                "authoritative target truth.",
+                priority=125,
+                required=True,
+            )
 
     add(
         "medium",
@@ -1722,6 +1798,7 @@ def compile_prompt_bundle(
             "roles": witness.get("roles") or [],
             "doNotInherit": witness.get("doNotInherit") or [],
             "asset": witness.get("asset"),
+            "firewall": witness.get("firewall") or {},
             "ablation": witness.get("ablation"),
         },
         "style": {
@@ -1874,6 +1951,9 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         attempt_id=attempt_id,
         disable_handprint=bool(getattr(args, "without_handprint", False)),
         disable_witness=bool(getattr(args, "without_witness", False)),
+        witness_firewall=bool(getattr(args, "witness_firewall", False)),
+        firewall_tile_size=int(getattr(args, "firewall_tile_size", 32) or 32),
+        firewall_blur_radius=float(getattr(args, "firewall_blur_radius", 0.6) or 0.0),
     )
 
 
@@ -1902,6 +1982,9 @@ class RenderSpec:
     attempt_id: str | None = None
     disable_handprint: bool = False
     disable_witness: bool = False
+    witness_firewall: bool = False
+    firewall_tile_size: int = 32
+    firewall_blur_radius: float = 0.6
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -1931,6 +2014,7 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
             "ablation": {
                 "withoutHandprint": spec.disable_handprint,
                 "withoutWitness": spec.disable_witness,
+                "witnessFirewall": spec.witness_firewall,
             },
         },
     }
@@ -2171,7 +2255,48 @@ def render_huggingface(
             witness,
             Path(spec.repo_root),
         )
-        input_image = witness_path.read_bytes()
+        input_path = witness_path
+        firewall_runtime = None
+        firewall = witness.get("firewall") or {}
+        if firewall.get("active"):
+            module = load_witness_firewall_module()
+            carrier_id = str(firewall.get("carrierId") or "")
+            if not carrier_id:
+                raise PainterError(
+                    "Witness Firewall is active without a carrier identity."
+                )
+            carrier_path = (
+                Path(spec.repo_root)
+                / ".velastra"
+                / "firewall"
+                / str(witness.get("selected") or "witness")
+                / (carrier_id + ".png")
+            )
+            if not carrier_path.exists():
+                try:
+                    firewall_runtime = module.build_carrier(
+                        witness_path,
+                        carrier_path,
+                        firewall,
+                    )
+                except module.WitnessFirewallError as exc:
+                    raise PainterError(str(exc)) from exc
+            else:
+                firewall_runtime = {
+                    "algorithm": firewall.get("algorithm"),
+                    "version": firewall.get("version"),
+                    "carrierId": carrier_id,
+                    "source": witness_path.as_posix(),
+                    "output": carrier_path.as_posix(),
+                    "tileSize": firewall.get("tileSize"),
+                    "blurRadius": firewall.get("blurRadius"),
+                    "semanticLayoutDestroyed": True,
+                    "localPixelEvidencePreserved": True,
+                    "reused": True,
+                }
+            input_path = carrier_path
+
+        input_image = input_path.read_bytes()
 
         method = client.image_to_image
         signature = inspect.signature(method)
@@ -2209,6 +2334,17 @@ def render_huggingface(
             "path": str(witness_path.as_posix()),
             "sha256": (witness.get("asset") or {}).get("sha256"),
             "roles": witness.get("roles") or [],
+            "inputPath": str(input_path.as_posix()),
+            "firewall": (
+                {
+                    **dict(firewall_runtime or {}),
+                    "carrierSha256": sha256_file(input_path),
+                }
+                if firewall.get("active")
+                else {
+                    "active": False,
+                }
+            ),
         }
 
     else:
@@ -2420,6 +2556,26 @@ def cmd_brushes(args: argparse.Namespace) -> int:
             f"{brush.get('model')} | {brush.get('license')} | {transports}"
         )
     return 0
+
+
+def load_witness_firewall_module() -> Any:
+    module_path = Path(__file__).with_name("witness_firewall.py")
+    spec = importlib.util.spec_from_file_location(
+        "velastra_witness_firewall",
+        module_path,
+    )
+    if spec is None or spec.loader is None:
+        raise PainterError(
+            f"Unable to load Witness Firewall module: {module_path}"
+        )
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:
+        raise PainterError(
+            f"Unable to initialize Witness Firewall: {exc}"
+        ) from exc
+    return module
 
 
 def load_evaluation_module() -> Any:
@@ -3126,6 +3282,23 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--brush", help="Named brush from world/velastra-brushes.json.")
     parser.add_argument("--transport", help="Brush transport, such as huggingface or diffusers.")
     parser.add_argument("--witness", help="Explicit approved Visual Witness ID when the brush supports references.")
+    parser.add_argument(
+        "--witness-firewall",
+        action="store_true",
+        help="Use a deterministic semantic-scrubbed witness carrier instead of original witness layout pixels.",
+    )
+    parser.add_argument(
+        "--firewall-tile-size",
+        type=int,
+        default=32,
+        help="Witness Firewall patch size in pixels.",
+    )
+    parser.add_argument(
+        "--firewall-blur-radius",
+        type=float,
+        default=0.6,
+        help="Small seam-softening blur applied after witness patch shuffling.",
+    )
     parser.add_argument("--without-handprint", action="store_true", help="Ablation: omit Handprint guidance while preserving the rest of the manifest.")
     parser.add_argument("--without-witness", action="store_true", help="Ablation: omit Visual Witness guidance when the selected brush does not require an input image.")
     parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
