@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "protocol": "velastra.pressure_trial.v1",
+  "trialId": "hearth-pressure-0032",
+  "status": "awaiting_local_plan",
+  "createdAt": null,
+  "updatedAt": null,
+  "assetKey": null,
+  "manifest": null,
+  "manifestSha256": null,
+  "model": "Qwen/Qwen-Image-Edit",
+  "brush": "qwen_image_edit",
+  "transport": "huggingface",
+  "repeatsPerCondition": 4,
+  "facetRoles": [],
+  "frozen": {
+    "handprintPath": "world/velastra-handprint.json",
+    "handprintSha256": null,
+    "handprintAlgorithmVersion": 2,
+    "pressureSchemaVersion": 1,
+    "witnessRegistryPath": "world/velastra-witnesses.json",
+    "witnessRegistrySha256": null,
+    "witnessId": null,
+    "witnessSha256": null
+  },
+  "executionOrder": [],
+  "conditions": {
+    "witness_only": [],
+    "governing_translation": []
+  },
+  "summary": null,
+  "humanReview": {
+    "status": "pending",
+    "sceneTruthPass": null,
+    "notes": null
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "candidateEvaluationCannotPromoteAsset": true,
+    "metricScoreCannotReplaceHumanReview": true,
+    "stochasticTransportRequiresReplication": true,
+    "pressureCalibrationMustFreezeHandprintAndWitnessCanon": true
+  }
+}

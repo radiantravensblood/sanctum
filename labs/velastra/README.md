@@ -623,6 +623,51 @@ The law is:
 **hold relationships in evidence, protect variation in evidence, and do not
 turn one scene into a self-fulfilling prompt.**
 
+## Cross-Scene Grip Replication
+
+Kernel 0032 tests the observational Grip outside Gallery before any broader
+claim is permitted.
+
+The first replication room is Hearth.
+
+Gallery and Hearth share the `place_tableau` archetype, so this experiment
+changes place truth without changing archetype class.
+
+The comparator lives at:
+
+`labs/velastra/painter/replication.py`
+
+and is invoked with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip-replication
+```
+
+It requires matching frozen:
+
+- Handprint hash,
+- Handprint algorithm version,
+- pressure schema,
+- witness registry hash,
+- selected Visual Witness ID and SHA-256,
+- model,
+- brush,
+- transport,
+- repeat count.
+
+It also requires a different canonical asset key.
+
+The result distinguishes:
+
+- replicated anchors,
+- replicated freedoms,
+- replicated tendencies,
+- category changes that may indicate scene dependence.
+
+No result may activate Grip in Kernel 0032.
+
+Signature-like marks remain a human observation field only.
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.

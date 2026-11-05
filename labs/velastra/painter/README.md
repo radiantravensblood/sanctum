@@ -675,6 +675,47 @@ cross-scene replication.
 A single anomalous candle, frame, figure, or object can never become Grip law
 by itself.
 
+## Cross-Scene Grip Replication
+
+Kernel 0032 reuses `pressure-trial` rather than creating a different render
+path for Hearth.
+
+After exporting a fresh Hearth packet, plan:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/<fresh-hearth-packet>.velastra.json" \
+  --trial-id "hearth-pressure-0032" \
+  --output "labs/velastra/evidence/trials/hearth-pressure-0032.json"
+```
+
+Then, after inspecting the frozen plan:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/<fresh-hearth-packet>.velastra.json" \
+  --trial-id "hearth-pressure-0032" \
+  --output "labs/velastra/evidence/trials/hearth-pressure-0032.json" \
+  --render
+```
+
+Finally compare Gallery and Hearth:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip-replication
+```
+
+The comparison writes:
+
+`labs/velastra/evidence/trials/grip-cross-scene-0032.json`
+
+The comparator refuses to proceed if the two trials changed frozen Handprint,
+witness, model, brush, transport, pressure schema, or repeat count.
+
+A category match across Gallery and Hearth is evidence of replication.
+
+It is not render authority.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "protocol": "velastra.grip_replication.v1",
+  "status": "awaiting_replication_trial",
+  "baselinePath": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+  "replicationPath": "labs/velastra/evidence/trials/hearth-pressure-0032.json",
+  "baseline": null,
+  "replication": null,
+  "controls": null,
+  "comparison": null,
+  "humanObservations": {
+    "status": "pending",
+    "sceneTruthPass": {
+      "baseline": null,
+      "replication": null
+    },
+    "signatureLikeArtifacts": {
+      "baseline": [],
+      "replication": [],
+      "note": "Human-observed incidence only. Signature-like marks are not interpreted as authorship or Grip law."
+    },
+    "notes": null
+  },
+  "laws": {
+    "crossSceneComparisonCannotActivateGrip": true,
+    "sameFrozenControlsRequired": true,
+    "differentAssetKeyRequired": true,
+    "matchingCategoryIsReplicationNotGlobalLaw": true,
+    "changedCategoryMayIndicateSceneDependence": true,
+    "humanObservationCannotBecomeMetricWithoutSeparateDesign": true,
+    "signatureLikeArtifactCannotEstablishAuthorship": true
+  }
+}
