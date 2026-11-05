@@ -58,8 +58,8 @@ assert.equal(
 );
 
 const builtGrammar = structuredClone(scaffold);
-builtGrammar.status = "built";
-builtGrammar.renderEligible = true;
+builtGrammar.status = "reviewed_observation";
+builtGrammar.renderEligible = false;
 builtGrammar.dimensions = {
   anchors: {
     centerLightDelta: {
@@ -100,8 +100,12 @@ const active = module.compileGrip({
   assetKey: "velastra.place_tableau.5cms46"
 });
 
-assert.equal(active.active, true);
-assert.equal(active.fallback, null);
+assert.equal(active.active, false);
+assert.equal(active.observed, true);
+assert.equal(
+  active.fallback,
+  "reviewed_observation_only"
+);
 assert.ok(active.anchors.centerLightDelta);
 assert.ok(active.freedoms.tonalSpan);
 assert.ok(active.tendencies.edgeActivity);
@@ -148,6 +152,6 @@ assert.equal(noHandprint.active, false);
 assert.equal(noHandprint.fallback, "handprint_unavailable");
 
 console.log(
-  "Handprint Grip contract passed:",
+  "Handprint Grip observation contract passed:",
   active.activeRoles.join(", ")
 );
