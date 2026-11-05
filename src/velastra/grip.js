@@ -27,16 +27,20 @@ export function compileGrip({
     !scopedAssetKeys.length ||
     (assetKey && scopedAssetKeys.includes(assetKey));
 
-  const built = gripGrammar.status === "built";
-  const renderEligible =
-    gripGrammar.renderEligible === true;
-  const active = Boolean(
-    built &&
-    renderEligible &&
+  const reviewed =
+    gripGrammar.status === "reviewed_observation";
+  const provisional =
+    gripGrammar.status === "provisional_pending_human_review";
+  const inScope = Boolean(
     roomMatches &&
     assetMatches &&
     handprint?.active === true
   );
+  const observed = Boolean(
+    inScope && (reviewed || provisional)
+  );
+  const renderEligible = false;
+  const active = false;
 
   const facetRoles = new Set(
     handprint?.facetRoles || []
@@ -57,41 +61,43 @@ export function compileGrip({
     status: gripGrammar.status || "unknown",
     renderEligible,
     active,
-    fallback: active
-      ? null
-      : (
-          !renderEligible
-            ? "provisional_observation_only"
-            : (
-                !roomMatches || !assetMatches
-                  ? "out_of_scope"
-                  : "handprint_unavailable"
-              )
-        ),
+    observed,
+    fallback:
+      !inScope
+        ? (
+            !roomMatches || !assetMatches
+              ? "out_of_scope"
+              : "handprint_unavailable"
+          )
+        : (
+            reviewed
+              ? "reviewed_observation_only"
+              : "provisional_observation_only"
+          ),
     room,
     assetKey,
     scope: copy(scope),
     dimensions: {
-      anchors: active
+      anchors: observed
         ? copy(dimensions.anchors || {})
         : {},
-      freedoms: active
+      freedoms: observed
         ? copy(dimensions.freedoms || {})
         : {},
-      tendencies: active
+      tendencies: observed
         ? copy(dimensions.tendencies || {})
         : {}
     },
-    anchors: active
+    anchors: observed
       ? copy(dimensions.anchors || {})
       : {},
-    freedoms: active
+    freedoms: observed
       ? copy(dimensions.freedoms || {})
       : {},
-    tendencies: active
+    tendencies: observed
       ? copy(dimensions.tendencies || {})
       : {},
-    roleProjection: active
+    roleProjection: observed
       ? Object.fromEntries(
           activeRoles.map((role) => [
             role,
