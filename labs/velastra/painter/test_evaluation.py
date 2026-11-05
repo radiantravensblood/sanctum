@@ -140,7 +140,7 @@ class EvaluationContractTests(unittest.TestCase):
                 1.0,
             )
             self.assertIn(
-                "not semantic copying",
+                "does not establish semantic copying",
                 result["law"],
             )
 
