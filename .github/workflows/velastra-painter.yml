@@ -64,6 +64,7 @@ jobs:
           python -m py_compile labs/velastra/painter/evaluation.py
           python -m py_compile labs/velastra/painter/grip.py
           python -m py_compile labs/velastra/painter/replication.py
+          python -m py_compile labs/velastra/painter/witness_firewall.py
       - name: Install handprint analysis dependency
         run: python -m pip install Pillow
       - name: Run painter contract tests
@@ -72,6 +73,7 @@ jobs:
           python -m unittest labs/velastra/painter/test_evaluation.py
           python -m unittest labs/velastra/painter/test_grip.py
           python -m unittest labs/velastra/painter/test_replication.py
+          python -m unittest labs/velastra/painter/test_witness_firewall.py
       - name: Check authoring module syntax
         run: node --check src/velastra/authoring.js
       - name: Check Painterly Truth integration syntax
