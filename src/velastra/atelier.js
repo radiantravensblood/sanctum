@@ -1,6 +1,7 @@
 import { compileVirynismHand } from "./hand.js";
 import { compileVisualWitness } from "./witness.js";
 import { compileHandprint } from "./handprint.js";
+import { compileGrip } from "./grip.js";
 
 export function compileAtelierManifest({
   atelierGrammar,
@@ -8,6 +9,7 @@ export function compileAtelierManifest({
   styleGrammar = null,
   witnessGrammar = null,
   handprintGrammar = null,
+  gripGrammar = null,
   evidence = null,
   scenePacket,
   motifSelection,
@@ -36,6 +38,8 @@ export function compileAtelierManifest({
       })
     : null;
 
+  const assetKey = buildAssetKey(scenePacket);
+
   const witnesses =
     witnessGrammar && style
       ? compileVisualWitness({
@@ -56,7 +60,16 @@ export function compileAtelierManifest({
         })
       : null;
 
-  const assetKey = buildAssetKey(scenePacket);
+  const grip =
+    gripGrammar && handprint
+      ? compileGrip({
+          gripGrammar,
+          handprint,
+          scenePacket,
+          assetKey,
+          evidence
+        })
+      : null;
   const reviewedAsset = resolveReviewedAsset({
     registry: assetRegistry,
     assetKey,
@@ -90,6 +103,9 @@ export function compileAtelierManifest({
       : null,
     handprint: handprint
       ? copy(handprint)
+      : null,
+    grip: grip
+      ? copy(grip)
       : null,
     render: {
       strategy,
@@ -161,6 +177,7 @@ export function evaluateAtelierExemplars({
   styleGrammar = null,
   witnessGrammar = null,
   handprintGrammar = null,
+  gripGrammar = null,
   evidenceByScene = null,
   scenePackets,
   motifSelections
@@ -190,6 +207,7 @@ export function evaluateAtelierExemplars({
         styleGrammar,
         witnessGrammar,
         handprintGrammar,
+        gripGrammar,
         evidence:
           evidenceByScene?.[scenePacket.provenance?.room] ||
           null,
