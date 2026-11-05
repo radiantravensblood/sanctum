@@ -6,6 +6,7 @@ on:
       - "labs/velastra/painter/**"
       - "labs/velastra/tests/**"
       - "labs/velastra/evidence/trials/**"
+      - "labs/velastra/evidence/trials/**"
       - "src/velastra/**"
       - "src/visual/scene.js"
       - "src/renderer.js"
@@ -27,6 +28,7 @@ on:
     paths:
       - "labs/velastra/painter/**"
       - "labs/velastra/tests/**"
+      - "labs/velastra/evidence/trials/**"
       - "labs/velastra/evidence/trials/**"
       - "src/velastra/**"
       - "src/visual/scene.js"
