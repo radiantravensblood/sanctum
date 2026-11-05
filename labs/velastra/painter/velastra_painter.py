@@ -2462,6 +2462,26 @@ def load_grip_module() -> Any:
     return module
 
 
+def load_replication_module() -> Any:
+    module_path = Path(__file__).with_name("replication.py")
+    spec = importlib.util.spec_from_file_location(
+        "velastra_grip_replication",
+        module_path,
+    )
+    if spec is None or spec.loader is None:
+        raise PainterError(
+            f"Unable to load Grip replication module: {module_path}"
+        )
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:
+        raise PainterError(
+            f"Unable to initialize Grip replication: {exc}"
+        ) from exc
+    return module
+
+
 def cmd_grip(args: argparse.Namespace) -> int:
     registry = read_json(Path(args.grip))
     if args.json:
@@ -2510,6 +2530,60 @@ def cmd_grip_build(args: argparse.Namespace) -> int:
     print(output)
     for line in module.summarize_grip(built):
         print(line)
+    return 0
+
+
+def cmd_grip_replication(args: argparse.Namespace) -> int:
+    replication_module = load_replication_module()
+    grip_module = load_grip_module()
+    evaluator = load_evaluation_module()
+
+    baseline = read_json(Path(args.baseline))
+    replication = read_json(Path(args.replication))
+    handprint = read_json(Path(args.handprint))
+    grip_template = read_json(Path(args.grip))
+
+    try:
+        record = replication_module.build_replication_record(
+            baseline_trial=baseline,
+            replication_trial=replication,
+            handprint=handprint,
+            grip_template=grip_template,
+            role_metrics=evaluator.ROLE_METRICS,
+            grip_module=grip_module,
+        )
+    except replication_module.ReplicationError as exc:
+        raise PainterError(str(exc)) from exc
+
+    output = Path(args.output)
+    write_json(output, record)
+
+    comparison = record.get("comparison") or {}
+    print(output)
+    print(
+        "replicated_anchors="
+        + ",".join(
+            (comparison.get("replicated") or {}).get(
+                "anchor"
+            )
+            or []
+        )
+    )
+    print(
+        "replicated_freedoms="
+        + ",".join(
+            (comparison.get("replicated") or {}).get(
+                "freedom"
+            )
+            or []
+        )
+    )
+    print(
+        "changed="
+        + ",".join(
+            sorted((comparison.get("changed") or {}).keys())
+        )
+    )
     return 0
 
 
@@ -3141,6 +3215,32 @@ def build_parser() -> argparse.ArgumentParser:
     grip_build.add_argument("--grip", default="world/velastra-grip.json")
     grip_build.add_argument("--output")
     grip_build.set_defaults(func=cmd_grip_build)
+
+    grip_replication = sub.add_parser(
+        "grip-replication",
+        help="Compare Grip classifications across two frozen pressure trials.",
+    )
+    grip_replication.add_argument(
+        "--baseline",
+        default="labs/velastra/evidence/trials/gallery-pressure-0030.json",
+    )
+    grip_replication.add_argument(
+        "--replication",
+        default="labs/velastra/evidence/trials/hearth-pressure-0032.json",
+    )
+    grip_replication.add_argument(
+        "--handprint",
+        default="world/velastra-handprint.json",
+    )
+    grip_replication.add_argument(
+        "--grip",
+        default="world/velastra-grip.json",
+    )
+    grip_replication.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/grip-cross-scene-0032.json",
+    )
+    grip_replication.set_defaults(func=cmd_grip_replication)
 
     witnesses = sub.add_parser("witnesses", help="List curated Virynism Visual Witnesses.")
     witnesses.add_argument("--registry", default="world/velastra-witnesses.json")
