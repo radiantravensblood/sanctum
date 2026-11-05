@@ -622,7 +622,7 @@ A metric becomes an anchor only when:
 - `C stddev / B stddev <= 0.67`,
 - the condition-mean shift remains within one B standard deviation.
 
-Anchors therefore describe stabilization, not fixed targets.
+Anchors describe stabilization evidence, not fixed targets.
 
 ### Freedom rule
 
@@ -631,9 +631,9 @@ A metric becomes a freedom when:
 - baseline variance is measurable,
 - `C stddev / B stddev >= 1.5`.
 
-Freedom means the governing hand allowed meaningful variation.
+Freedom records where governing pressure preserved or increased variation.
 
-It does not mean noise should be injected deliberately.
+It is not an instruction to inject randomness.
 
 ### Tendency rule
 
@@ -641,31 +641,38 @@ Everything not supported strongly enough as anchor or freedom remains a
 tendency.
 
 Tiny baseline variance is specifically prevented from manufacturing a false
-freedom through division by a near-zero denominator.
+freedom through a near-zero denominator.
 
-### Human review
+### Human review and render boundary
 
 `grip-build` may derive a provisional registry from a completed pressure
-trial whose human review is pending.
-
-That registry is inspectable but receives:
+trial whose human review is pending:
 
 ```text
 status = provisional_pending_human_review
 renderEligible = false
 ```
 
-Only a reviewed trial with `sceneTruthPass: true` may produce an active Grip.
+If human review later records `sceneTruthPass: true`, the registry may become:
 
-### Painter prompt
+```text
+status = reviewed_observation
+renderEligible = false
+```
 
-When active and in scope, Grip emits:
+Kernel 0031 never makes Grip prompt-active.
 
-- **ANCHORS** — hold relationships comparatively steady,
-- **FREEDOMS** — permit meaningful local variation,
-- **TENDENCIES** — prefer direction without making motifs compulsory.
+Grip remains inspectable in manifests and candidate provenance, but:
 
-A single anomalous candle, frame, figure, or object can never become a Grip law
+- emits no `HANDPRINT GRIP` prompt section,
+- cannot alter candidate identity,
+- cannot steer generation,
+- cannot become render law from one Gallery trial.
+
+A future kernel may consider render activation only after comparable
+cross-scene replication.
+
+A single anomalous candle, frame, figure, or object can never become Grip law
 by itself.
 
 ## Painterly Truth
