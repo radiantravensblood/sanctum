@@ -593,6 +593,81 @@ The evaluator cannot certify scene truth.
 
 Human review remains required.
 
+## Handprint Grip
+
+Kernel 0031 adds a separate, evidence-derived Grip registry:
+
+`world/velastra-grip.json`
+
+Inspect it with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip
+```
+
+Rebuild it reproducibly from the committed 0030 trial with:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py grip-build
+```
+
+The builder classifies each shared candidate metric from witness-only B and
+governing C distributions.
+
+### Anchor rule
+
+A metric becomes an anchor only when:
+
+- witness-only baseline standard deviation is large enough to measure,
+- `C stddev / B stddev <= 0.67`,
+- the condition-mean shift remains within one B standard deviation.
+
+Anchors therefore describe stabilization, not fixed targets.
+
+### Freedom rule
+
+A metric becomes a freedom when:
+
+- baseline variance is measurable,
+- `C stddev / B stddev >= 1.5`.
+
+Freedom means the governing hand allowed meaningful variation.
+
+It does not mean noise should be injected deliberately.
+
+### Tendency rule
+
+Everything not supported strongly enough as anchor or freedom remains a
+tendency.
+
+Tiny baseline variance is specifically prevented from manufacturing a false
+freedom through division by a near-zero denominator.
+
+### Human review
+
+`grip-build` may derive a provisional registry from a completed pressure
+trial whose human review is pending.
+
+That registry is inspectable but receives:
+
+```text
+status = provisional_pending_human_review
+renderEligible = false
+```
+
+Only a reviewed trial with `sceneTruthPass: true` may produce an active Grip.
+
+### Painter prompt
+
+When active and in scope, Grip emits:
+
+- **ANCHORS** — hold relationships comparatively steady,
+- **FREEDOMS** — permit meaningful local variation,
+- **TENDENCIES** — prefer direction without making motifs compulsory.
+
+A single anomalous candle, frame, figure, or object can never become a Grip law
+by itself.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
