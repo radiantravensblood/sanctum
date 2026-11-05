@@ -48,13 +48,14 @@ const provisional = module.compileGrip({
 
 assert.equal(provisional.id, "viryn_handprint_grip");
 assert.equal(provisional.active, false);
+assert.equal(provisional.observed, true);
 assert.equal(
   provisional.fallback,
   "provisional_observation_only"
 );
-assert.equal(
-  Object.keys(provisional.anchors).length,
-  0
+assert.ok(
+  Object.keys(provisional.anchors).length > 0,
+  "Provisional Grip must remain inspectable as evidence."
 );
 
 const builtGrammar = structuredClone(scaffold);
