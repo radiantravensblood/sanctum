@@ -2,6 +2,7 @@ export function compileGrip({
   gripGrammar,
   handprint,
   scenePacket,
+  assetKey = null,
   evidence = null
 }) {
   if (!gripGrammar || !scenePacket) {
@@ -21,6 +22,11 @@ export function compileGrip({
     !scopedRooms.length ||
     (room && scopedRooms.includes(room));
 
+  const scopedAssetKeys = scope.assetKeys || [];
+  const assetMatches =
+    !scopedAssetKeys.length ||
+    (assetKey && scopedAssetKeys.includes(assetKey));
+
   const built = gripGrammar.status === "built";
   const renderEligible =
     gripGrammar.renderEligible === true;
@@ -28,6 +34,7 @@ export function compileGrip({
     built &&
     renderEligible &&
     roomMatches &&
+    assetMatches &&
     handprint?.active === true
   );
 
@@ -56,12 +63,13 @@ export function compileGrip({
           !renderEligible
             ? "provisional_observation_only"
             : (
-                !roomMatches
+                !roomMatches || !assetMatches
                   ? "out_of_scope"
                   : "handprint_unavailable"
               )
         ),
     room,
+    assetKey,
     scope: copy(scope),
     anchors: active
       ? copy(dimensions.anchors || {})
