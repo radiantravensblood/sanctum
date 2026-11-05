@@ -211,6 +211,36 @@ def manifest_fixture():
                 "edge_behavior",
                 "material_hand",
             ],
+            "pressure": {
+                "version": 1,
+                "defaultProfile": "descriptive_guidance",
+                "combinedProfile": "governing_translation",
+                "priorityRoleOrder": [
+                    "material_hand",
+                    "edge_behavior",
+                ],
+                "profiles": {
+                    "descriptive_guidance": {
+                        "mode": "descriptive_guidance",
+                        "priority": 114,
+                        "directives": [
+                            "Use eligible Handprint facets as strong painterly guidance."
+                        ],
+                    },
+                    "governing_translation": {
+                        "mode": "governing_translation",
+                        "priority": 123,
+                        "directives": [
+                            "Translate every inherited witness tendency through eligible Handprint facets."
+                        ],
+                        "nonNegotiableRoleLaws": {
+                            "material_hand": "Let surfaces retain handled memory rather than copying inventory.",
+                            "edge_behavior": "Keep resolution selective; avoid uniformly crisp object boundaries.",
+                        },
+                        "witnessTranslationLaw": "Use witness content only as provisional visual memory; recompose and repaint the target through Handprint law.",
+                    },
+                },
+            },
             "doNotInherit": [
                 "identity",
                 "face",
@@ -422,6 +452,15 @@ class PainterBridgeTests(unittest.TestCase):
             "edge_behavior",
             bundle["handprint"]["facetRoles"],
         )
+        self.assertEqual(
+            bundle["handprintPressure"]["profile"],
+            "descriptive_guidance",
+        )
+        self.assertFalse(bundle["handprintPressure"]["combined"])
+        self.assertNotIn(
+            "GOVERNING HANDPRINT LAW",
+            bundle["positive"],
+        )
 
     def test_handprint_change_changes_candidate_not_asset_identity(self):
         manifest = manifest_fixture()
@@ -507,6 +546,19 @@ class PainterBridgeTests(unittest.TestCase):
                 "laws": {
                     "pixelMetricsMustRemainAuditable": True,
                 },
+                "pressure": {
+                    "version": 1,
+                    "defaultProfile": "descriptive_guidance",
+                    "combinedProfile": "governing_translation",
+                    "profiles": {
+                        "descriptive_guidance": {
+                            "mode": "descriptive_guidance",
+                        },
+                        "governing_translation": {
+                            "mode": "governing_translation",
+                        },
+                    },
+                },
             }
 
             built = painter.build_handprint_registry(
@@ -554,6 +606,10 @@ class PainterBridgeTests(unittest.TestCase):
             self.assertEqual(
                 built["provenance"]["algorithmVersion"],
                 2,
+            )
+            self.assertEqual(
+                built["pressure"]["combinedProfile"],
+                "governing_translation",
             )
 
             bad = json.loads(json.dumps(witness_registry))
@@ -641,6 +697,88 @@ class PainterBridgeTests(unittest.TestCase):
 
         with self.assertRaises(painter.PainterError):
             painter.compile_prompt_bundle(manifest, spec)
+
+    def test_combined_image_edit_uses_governing_handprint_pressure(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "deadbeef",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="pressure-test",
+            )
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertEqual(
+            bundle["handprintPressure"]["profile"],
+            "governing_translation",
+        )
+        self.assertTrue(bundle["handprintPressure"]["combined"])
+        self.assertIn("GOVERNING HANDPRINT LAW", bundle["positive"])
+        self.assertIn("NON-NEGOTIABLE HAND LAWS", bundle["positive"])
+        self.assertIn("EDGE BEHAVIOR LAW", bundle["positive"])
+        self.assertIn("WITNESS TRANSLATION LAW", bundle["positive"])
+        self.assertIn(
+            "recompose and repaint it through the governing Handprint laws",
+            bundle["positive"],
+        )
+
+        record = painter.build_candidate_record(
+            manifest,
+            bundle,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+        self.assertEqual(
+            record["source"]["handprintPressure"]["profile"],
+            "governing_translation",
+        )
+        self.assertTrue(
+            record["source"]["handprintPressure"]["combined"]
+        )
+
+    def test_witness_only_ablation_has_no_governing_pressure(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "deadbeef",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                without_handprint=True,
+                attempt="witness-only-pressure-test",
+            )
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertFalse(bundle["handprintPressure"]["active"])
+        self.assertIsNone(bundle["handprintPressure"]["profile"])
+        self.assertNotIn("GOVERNING HANDPRINT LAW", bundle["positive"])
+        self.assertNotIn("NON-NEGOTIABLE HAND LAWS", bundle["positive"])
 
     def test_witness_brush_fails_without_approved_asset(self):
         manifest = manifest_fixture()

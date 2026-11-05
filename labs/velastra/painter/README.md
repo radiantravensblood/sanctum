@@ -477,6 +477,58 @@ not promise deterministic seed control.
 The three candidate sidecars preserve which ablation state produced each
 image.
 
+## Handprint Pressure
+
+Kernel 0029 adds authored pressure profiles to the Handprint packet.
+
+No new CLI switch is required.
+
+The Painter Bridge resolves pressure from the existing render context:
+
+- text-first Handprint → `descriptive_guidance`,
+- Handprint + active Visual Witness image edit → `governing_translation`,
+- `--without-handprint` → no Handprint pressure.
+
+Combined mode emits three distinct required layers:
+
+1. `GOVERNING HANDPRINT LAW`,
+2. `HANDPRINT`,
+3. `VISUAL WITNESS`.
+
+The governing layer contains imperative Facet laws and an explicit witness
+translation clause.
+
+It tells the image-edit brush to recompose and repaint through the Handprint
+instead of treating witness layout, object inventory, or finish as final visual
+authority.
+
+Scene truth and Visible Evidence remain sovereign throughout.
+
+### Pressure verification
+
+Run `plan` before inference and inspect the generated candidate sidecar.
+
+For a combined run, expect:
+
+```json
+"handprintPressure": {
+  "active": true,
+  "profile": "governing_translation",
+  "mode": "governing_translation",
+  "combined": true
+}
+```
+
+For witness-only ablation, expect pressure to be inactive.
+
+The clean follow-up experiment is therefore B-vs-C:
+
+- B: `qwen_image_edit --without-handprint`
+- C: `qwen_image_edit` with Handprint active
+
+The witness, scene truth, and model remain the same class of channel; the
+meaningful authored difference is Handprint pressure.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before

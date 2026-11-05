@@ -139,6 +139,29 @@ built.interpretation = {
   tonalRange:
     "broad tonal span from deep shadow to selective highlight"
 };
+built.pressure = {
+  version: 1,
+  defaultProfile: "descriptive_guidance",
+  combinedProfile: "governing_translation",
+  priorityRoleOrder: [
+    "sacred_incompletion",
+    "material_hand",
+    "edge_behavior"
+  ],
+  profiles: {
+    descriptive_guidance: {
+      mode: "descriptive_guidance",
+      priority: 114
+    },
+    governing_translation: {
+      mode: "governing_translation",
+      priority: 123,
+      witnessTranslationLaw:
+        "Recompose and repaint the target through Handprint law."
+    }
+  }
+};
+
 built.facets = {
   version: 1,
   minimumWitnesses: 2,
@@ -223,6 +246,15 @@ assert.equal(
 );
 assert.equal(active.facetVersion, 1);
 assert.equal(active.minimumFacetWitnesses, 2);
+assert.equal(active.pressure.version, 1);
+assert.equal(
+  active.pressure.defaultProfile,
+  "descriptive_guidance"
+);
+assert.equal(
+  active.pressure.combinedProfile,
+  "governing_translation"
+);
 assert.ok(
   active.facetRoles.includes("edge_behavior"),
   "Cross-portfolio edge facet must project into Gallery"
@@ -270,6 +302,21 @@ if (scaffold.status === "built") {
       "Algorithm v2+ Handprint must carry role-conditioned facets"
     );
   }
+  assert.equal(
+    scaffold.pressure?.defaultProfile,
+    "descriptive_guidance",
+    "Live Handprint must declare its default pressure profile"
+  );
+  assert.equal(
+    scaffold.pressure?.combinedProfile,
+    "governing_translation",
+    "Live Handprint must declare its combined pressure profile"
+  );
+  assert.equal(
+    scaffold.laws?.pressureCannotOverrideSceneTruth,
+    true,
+    "Pressure must remain subordinate to scene truth"
+  );
 }
 
 console.log("handprint contract: ok");

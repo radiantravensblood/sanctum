@@ -58,6 +58,10 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0027 derives an auditable Handprint from the approved witness portfolio: recurring human-curated roles plus measurable pixel invariants that can guide new paintings without copying any witness scene.**
 
+**Kernel 0028 turns that Handprint into role-conditioned Facets and adds honest ablation so the hand can be tested independently from direct visual witness imitation.**
+
+**Kernel 0029 makes Handprint an authored pressure system: descriptive in text-first mode, governing visual translation in combined witness mode.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -2862,6 +2866,8 @@ scene-relevant handprint.
 Kernel 0028 keeps the canonical Handprint aggregate as a baseline but stops
 treating the portfolio as one uniform visual average.
 
+**Kernel 0029 makes Handprint an authored pressure system: descriptive in text-first mode, governing visual translation in combined witness mode.**
+
 The governing law is:
 
 **The hand is coherent without being uniform.**
@@ -2969,9 +2975,84 @@ All three remain ordinary candidates behind the same review gate.
 The experiment asks what Handprint contributes **without direct imitation**,
 what the witness contributes alone, and what emerges when both channels agree.
 
+## Handprint Pressure
+
+Kernel 0029 follows the first committed Gallery ablation:
+
+`labs/velastra/evidence/gallery-ablation-001.md`
+
+That experiment established:
+
+- Handprint-only produced coherent Virynist structure without witness pixels,
+- witness-only strongly tracked the approved visual witness,
+- combined remained too close to witness-only.
+
+The governing law is:
+
+**The witness may show the way; the hand decides how it is touched.**
+
+### Authored pressure profiles
+
+Pressure lives in:
+
+`world/velastra-handprint.json`
+
+and travels inside the exported manifest.
+
+It is not an invisible Python tuning constant.
+
+The first profiles are:
+
+- `descriptive_guidance` — used when Handprint guides a text-first brush,
+- `governing_translation` — used when Handprint and an actual Visual Witness
+  are both active in image-edit mode.
+
+Scene truth and Visible Evidence remain above either profile.
+
+### Governing translation
+
+Combined mode adds a required `GOVERNING HANDPRINT LAW` section before the
+ordinary Handprint and Visual Witness sections.
+
+The law requires the brush to:
+
+- keep target scene truth and Visible Evidence sovereign,
+- treat the witness as source memory rather than final visual authority,
+- translate inherited witness tendencies through eligible Handprint Facets,
+- prefer Handprint law when literal witness reconstruction conflicts with
+  visual treatment law,
+- recompose and repaint rather than mechanically reconstruct the witness.
+
+Eligible Facets become imperative laws for:
+
+- sacred incompletion,
+- material hand,
+- edge behavior,
+- tonal memory,
+- spatial depth,
+- compositional cadence.
+
+Pressure may govern **how** a scene is painted.
+
+It may never invent **what** the scene contains.
+
+### Provenance
+
+Every candidate records:
+
+- pressure profile,
+- pressure mode,
+- pressure schema version,
+- whether combined mode was active,
+- facet-priority order.
+
+Approved provenance carries the same pressure record forward.
+
+Witness-only ablation carries no Handprint pressure.
+
 ## Current storage boundary
 
-Kernel 0028 still persists to `localStorage`.
+Kernel 0029 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -3046,3 +3127,7 @@ And now it knows that **a true thing can still be lost in translation unless the
 And now it knows that **a witness may guide the hand without being allowed to become the scene**.
 
 And now it knows that **what remains across different witnesses can be measured, reviewed, and carried forward as the hand's portable handprint**.
+
+And now it knows that **the hand can remain coherent without being forced into one uniform average**.
+
+And now it knows that **a witness may show the way while the hand still decides how the scene is touched**.
