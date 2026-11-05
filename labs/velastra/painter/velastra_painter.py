@@ -3139,6 +3139,432 @@ def cmd_pressure_trial(args: argparse.Namespace) -> int:
     return 0
 
 
+def sovereignty_render_args(
+    *,
+    manifest: str,
+    condition: str,
+    attempt: str,
+    repeat_index: int,
+    repo_root: str,
+    out_dir: str,
+    tile_size: int,
+    blur_radius: float,
+) -> argparse.Namespace:
+    if condition == "handprint_only":
+        brush = "qwen_image"
+        witness_firewall = False
+        seed = 190919 + repeat_index
+    elif condition == "current_combined":
+        brush = "qwen_image_edit"
+        witness_firewall = False
+        seed = None
+    elif condition == "firewall_combined":
+        brush = "qwen_image_edit"
+        witness_firewall = True
+        seed = None
+    else:
+        raise PainterError(
+            f"Unknown scene-sovereignty condition: {condition}"
+        )
+
+    return argparse.Namespace(
+        manifest=manifest,
+        brush=brush,
+        transport="huggingface",
+        witness=None,
+        witness_firewall=witness_firewall,
+        firewall_tile_size=tile_size,
+        firewall_blur_radius=blur_radius,
+        without_handprint=False,
+        without_witness=False,
+        attempt=attempt,
+        repo_root=repo_root,
+        brush_registry=None,
+        backend=None,
+        model=None,
+        seed=seed,
+        width=None,
+        height=None,
+        steps=None,
+        guidance=None,
+        true_cfg_scale=None,
+        device=None,
+        dtype=None,
+        out_dir=out_dir,
+    )
+
+
+def sovereignty_arm_plan(
+    *,
+    manifest: Mapping[str, Any],
+    args: argparse.Namespace,
+    condition: str,
+    repeat_index: int,
+) -> tuple[dict[str, Any], argparse.Namespace]:
+    suffix = {
+        "handprint_only": "a",
+        "current_combined": "c",
+        "firewall_combined": "d",
+    }[condition]
+    attempt = (
+        str(args.trial_id)
+        + "-"
+        + suffix
+        + "-"
+        + f"{repeat_index:02d}"
+    )
+    render_args = sovereignty_render_args(
+        manifest=args.manifest,
+        condition=condition,
+        attempt=attempt,
+        repeat_index=repeat_index,
+        repo_root=args.repo_root,
+        out_dir=args.out_dir,
+        tile_size=args.firewall_tile_size,
+        blur_radius=args.firewall_blur_radius,
+    )
+    spec = build_render_spec(render_args)
+    prompts = compile_prompt_bundle(manifest, spec)
+    cid = candidate_id(manifest, prompts, spec)
+    base = Path(args.out_dir) / manifest["assetKey"]
+    image_path = base / f"{cid}.png"
+    record_path = base / f"{cid}.candidate.json"
+
+    command = [
+        ".venv/bin/python",
+        "labs/velastra/painter/velastra_painter.py",
+        "render",
+        args.manifest,
+        "--brush",
+        str(render_args.brush),
+        "--transport",
+        "huggingface",
+        "--attempt",
+        attempt,
+        "--repo-root",
+        args.repo_root,
+    ]
+    if condition == "firewall_combined":
+        command.extend([
+            "--witness-firewall",
+            "--firewall-tile-size",
+            str(args.firewall_tile_size),
+            "--firewall-blur-radius",
+            str(args.firewall_blur_radius),
+        ])
+    if condition == "handprint_only":
+        command.extend([
+            "--seed",
+            str(render_args.seed),
+        ])
+
+    return ({
+        "condition": condition,
+        "repeat": repeat_index,
+        "attemptId": attempt,
+        "candidateId": cid,
+        "image": image_path.as_posix(),
+        "candidateRecord": record_path.as_posix(),
+        "brush": spec.brush,
+        "witness": prompts.get("witness"),
+        "handprintPressure": prompts.get("handprintPressure"),
+        "sceneSovereignty": {
+            "painterlyTruth": (
+                prompts.get("truthEnvelope") or {}
+            ).get("painterlyTruth"),
+        },
+        "status": (
+            "rendered"
+            if image_path.exists() and record_path.exists()
+            else "planned"
+        ),
+        "command": command,
+        "evaluation": None,
+    }, render_args)
+
+
+def cmd_scene_sovereignty_trial(
+    args: argparse.Namespace,
+) -> int:
+    if args.repeats < 1:
+        raise PainterError(
+            "Scene sovereignty trial requires at least 1 repeat per condition."
+        )
+
+    evaluator = load_evaluation_module()
+    repo_root = Path(args.repo_root).resolve()
+    manifest = unwrap_manifest(
+        read_json(Path(args.manifest))
+    )
+    require_manifest(manifest)
+
+    handprint = read_json(Path(args.handprint))
+    witness_registry = load_witness_registry(
+        Path(args.witness_registry)
+    )
+    manifest_sha = sha256_bytes(canonical_json(manifest))
+    handprint_sha = sha256_bytes(canonical_json(handprint))
+    witness_registry_sha = sha256_bytes(
+        canonical_json(witness_registry)
+    )
+
+    conditions = (
+        "handprint_only",
+        "current_combined",
+        "firewall_combined",
+    )
+    plans: dict[str, list[dict[str, Any]]] = {
+        condition: []
+        for condition in conditions
+    }
+    namespaces: dict[str, argparse.Namespace] = {}
+
+    for repeat_index in range(1, args.repeats + 1):
+        for condition in conditions:
+            arm, render_args = sovereignty_arm_plan(
+                manifest=manifest,
+                args=args,
+                condition=condition,
+                repeat_index=repeat_index,
+            )
+            plans[condition].append(arm)
+            namespaces[arm["attemptId"]] = render_args
+
+    a_first = plans["handprint_only"][0]
+    c_first = plans["current_combined"][0]
+    d_first = plans["firewall_combined"][0]
+    c_witness = c_first.get("witness") or {}
+    d_witness = d_first.get("witness") or {}
+
+    if (a_first.get("witness") or {}).get("active"):
+        raise PainterError(
+            "Condition A must be Handprint-only with no witness pixels."
+        )
+    if (
+        (c_first.get("handprintPressure") or {}).get("profile")
+        != "governing_translation"
+    ):
+        raise PainterError(
+            "Condition C must use current governing translation."
+        )
+    if (c_witness.get("firewall") or {}).get("active"):
+        raise PainterError(
+            "Condition C must use the original witness image."
+        )
+    if not (d_witness.get("firewall") or {}).get("active"):
+        raise PainterError(
+            "Condition D must use the Witness Firewall carrier."
+        )
+    if (
+        c_witness.get("selected") != d_witness.get("selected")
+        or (c_witness.get("asset") or {}).get("sha256")
+        != (d_witness.get("asset") or {}).get("sha256")
+    ):
+        raise PainterError(
+            "Conditions C and D must share the same sealed source witness."
+        )
+
+    trial_path = Path(args.output)
+    existing = read_json(trial_path) if trial_path.exists() else {}
+    prior_manifest_sha = existing.get("manifestSha256")
+    if (
+        prior_manifest_sha
+        and prior_manifest_sha != manifest_sha
+        and not args.replace_trial
+    ):
+        raise PainterError(
+            "Existing sovereignty trial was planned from a different manifest. "
+            "Use --replace-trial only after intentional review."
+        )
+
+    execution_order: list[str] = []
+    for repeat_index in range(1, args.repeats + 1):
+        order = (
+            list(conditions)
+            if repeat_index % 2 == 1
+            else list(reversed(conditions))
+        )
+        for condition in order:
+            execution_order.append(
+                plans[condition][repeat_index - 1][
+                    "attemptId"
+                ]
+            )
+
+    truth = compile_truth_envelope(manifest)
+    painterly_truth = truth.get("painterlyTruth") or {}
+    fixed_objects = []
+    for entry in painterly_truth.get("fixedObjects") or []:
+        if isinstance(entry, Mapping):
+            name = flatten_text(
+                entry.get("name") or entry.get("id")
+            )
+        else:
+            name = flatten_text(entry)
+        if name and name not in fixed_objects:
+            fixed_objects.append(name)
+
+    trial: dict[str, Any] = {
+        "version": 1,
+        "protocol": "velastra.scene_sovereignty_trial.v1",
+        "trialId": args.trial_id,
+        "status": "planned",
+        "createdAt": existing.get("createdAt") or utc_now(),
+        "updatedAt": utc_now(),
+        "assetKey": manifest["assetKey"],
+        "manifest": args.manifest,
+        "manifestSha256": manifest_sha,
+        "repeatsPerCondition": args.repeats,
+        "frozen": {
+            "handprintSha256": handprint_sha,
+            "handprintAlgorithmVersion": (
+                (handprint.get("provenance") or {}).get(
+                    "algorithmVersion"
+                )
+            ),
+            "witnessRegistrySha256": witness_registry_sha,
+            "witnessId": c_witness.get("selected"),
+            "witnessSha256": (
+                c_witness.get("asset") or {}
+            ).get("sha256"),
+            "firewall": d_witness.get("firewall") or {},
+        },
+        "executionOrder": execution_order,
+        "conditions": plans,
+        "summary": None,
+        "humanReview": {
+            "status": "pending",
+            "primaryQuestion": (
+                "Does the image read first as the target place rather than "
+                "as the Visual Witness scene?"
+            ),
+            "targetKind": (
+                ((manifest.get("scene") or {}).get("environment") or {})
+                .get("kind")
+            ),
+            "requiredFixedObjects": fixed_objects,
+            "witnessDoNotInherit": (
+                c_witness.get("doNotInherit") or []
+            ),
+            "candidateReviews": {},
+            "signatureLikeArtifacts": [],
+            "notes": None,
+        },
+        "laws": {
+            "sceneTruthMustRemainRecognizable": True,
+            "fixedObjectsMustReachPositivePrompt": True,
+            "witnessMayTeachHandButCannotDonateRoom": True,
+            "firewallCarrierCannotBecomeSceneTruth": True,
+            "semanticSuccessRequiresHumanReview": True,
+            "signatureLikeArtifactCannotEstablishAuthorship": True,
+            "trialCannotPromoteCandidate": True,
+        },
+    }
+    write_json(trial_path, trial)
+
+    if not args.render:
+        print(trial_path)
+        print(
+            "planned="
+            + str(args.repeats * 3)
+            + " renders; no inference executed"
+        )
+        return 0
+
+    trial["status"] = "running"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    by_attempt = {
+        arm["attemptId"]: arm
+        for arms in trial["conditions"].values()
+        for arm in arms
+    }
+
+    for attempt in execution_order:
+        arm = by_attempt[attempt]
+        render_args = namespaces[attempt]
+        image_path = Path(arm["image"])
+        record_path = Path(arm["candidateRecord"])
+
+        if not (image_path.exists() and record_path.exists()):
+            result = cmd_render(render_args)
+            if result != 0:
+                raise PainterError(
+                    f"Scene sovereignty render failed: {attempt}"
+                )
+
+        candidate = read_json(record_path)
+        try:
+            evaluation = evaluator.evaluate_candidate(
+                image_path=image_path,
+                candidate_record=candidate,
+                handprint=handprint,
+                witness_registry=witness_registry,
+                repo_root=repo_root,
+                roles=(
+                    (candidate.get("source") or {})
+                    .get("handprint", {})
+                    .get("facetRoles")
+                    or None
+                ),
+            )
+        except evaluator.EvaluationError as exc:
+            raise PainterError(str(exc)) from exc
+
+        arm["status"] = "evaluated"
+        arm["evaluation"] = evaluation
+        arm["runtime"] = (
+            (candidate.get("render") or {})
+            .get("runtime")
+        )
+        trial["humanReview"]["candidateReviews"][
+            arm["candidateId"]
+        ] = {
+            "condition": arm["condition"],
+            "targetPlaceRecognizable": None,
+            "fixedObjectsVisible": {
+                name: None
+                for name in fixed_objects
+            },
+            "witnessLayoutLeakage": None,
+            "unsupportedWitnessContent": [],
+            "signatureLikeArtifact": None,
+            "notes": None,
+        }
+        trial["updatedAt"] = utc_now()
+        write_json(trial_path, trial)
+
+    trial["summary"] = {
+        condition: evaluator.summarize_condition(
+            [
+                arm["evaluation"]
+                for arm in trial["conditions"][condition]
+                if arm.get("evaluation")
+            ]
+        )
+        for condition in conditions
+    }
+    trial["status"] = "complete"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    print(trial_path)
+    for condition in conditions:
+        summary = trial["summary"][condition]
+        print(
+            condition
+            + " witness_spatial_similarity="
+            + str(
+                (
+                    summary.get("witnessSpatialSimilarity")
+                    or {}
+                ).get("mean")
+            )
+        )
+    return 0
+
+
 def cmd_plan(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
@@ -3446,6 +3872,60 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--repo-root", default=".")
     evaluate.add_argument("--output")
     evaluate.set_defaults(func=cmd_evaluate)
+
+    sovereignty_trial = sub.add_parser(
+        "scene-sovereignty-trial",
+        help="Plan or explicitly render A/C/D target-place sovereignty ablation.",
+    )
+    sovereignty_trial.add_argument("manifest")
+    sovereignty_trial.add_argument(
+        "--trial-id",
+        default="hearth-sovereignty-0033",
+    )
+    sovereignty_trial.add_argument(
+        "--repeats",
+        type=int,
+        default=2,
+    )
+    sovereignty_trial.add_argument(
+        "--render",
+        action="store_true",
+        help="Explicitly execute A/C/D inference after reviewing the plan.",
+    )
+    sovereignty_trial.add_argument(
+        "--replace-trial",
+        action="store_true",
+    )
+    sovereignty_trial.add_argument("--repo-root", default=".")
+    sovereignty_trial.add_argument(
+        "--handprint",
+        default="world/velastra-handprint.json",
+    )
+    sovereignty_trial.add_argument(
+        "--witness-registry",
+        default="world/velastra-witnesses.json",
+    )
+    sovereignty_trial.add_argument(
+        "--out-dir",
+        default=".velastra/candidates",
+    )
+    sovereignty_trial.add_argument(
+        "--firewall-tile-size",
+        type=int,
+        default=32,
+    )
+    sovereignty_trial.add_argument(
+        "--firewall-blur-radius",
+        type=float,
+        default=0.6,
+    )
+    sovereignty_trial.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/hearth-sovereignty-0033.json",
+    )
+    sovereignty_trial.set_defaults(
+        func=cmd_scene_sovereignty_trial
+    )
 
     pressure_trial = sub.add_parser(
         "pressure-trial",
