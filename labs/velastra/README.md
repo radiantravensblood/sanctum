@@ -600,25 +600,28 @@ Handprint metrics.
 Grip divides measured dimensions into:
 
 - **anchors** — pressure-associated variance stabilization,
-- **freedoms** — protected variation,
+- **freedoms** — protected or increased variation,
 - **tendencies** — directional context without compulsion.
 
 The first registry is derived only from Gallery Pressure Trial 0030 and remains
 scene-local.
 
-It cannot drive rendering while that trial's human scene-truth review remains
-pending.
+Kernel 0031 is observation-only.
 
-The browser compiler enforces both room and asset-key scope.
+The browser compiler exposes scoped Grip evidence in the Atelier Manifest, and
+the painter carries the same snapshot in candidate provenance.
 
-The painter records Grip in candidate provenance and only emits a
-`HANDPRINT GRIP` prompt section when the registry is reviewed, built, scoped,
-and render-eligible.
+Grip does **not** enter the painter prompt and does **not** change candidate
+identity while observational.
+
+Human review may validate the Gallery observation, but render activation
+requires replicated support across additional scenes and a future explicit
+kernel.
 
 The law is:
 
-**hold relationships, not fixed values; protect variation without demanding
-randomness.**
+**hold relationships in evidence, protect variation in evidence, and do not
+turn one scene into a self-fulfilling prompt.**
 
 ## Studio adapter contract
 
