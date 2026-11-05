@@ -493,12 +493,13 @@ class PainterBridgeTests(unittest.TestCase):
         self.assertFalse(bundle["grip"]["active"])
         self.assertNotIn("HANDPRINT GRIP", bundle["positive"])
 
-    def test_reviewed_grip_holds_frees_and_suggests(self):
+    def test_reviewed_grip_remains_observational_and_identity_neutral(self):
         manifest = manifest_fixture()
         manifest["grip"] = {
-            "status": "built",
-            "renderEligible": True,
-            "active": True,
+            "status": "reviewed_observation",
+            "renderEligible": False,
+            "active": False,
+            "observed": True,
             "scope": {
                 "rooms": ["gallery"],
             },
@@ -507,11 +508,7 @@ class PainterBridgeTests(unittest.TestCase):
                     "centerLightDelta": {
                         "label": "center/periphery light relationship",
                         "direction": "higher",
-                    },
-                    "darkShare": {
-                        "label": "dark-field occupancy",
-                        "direction": "stable",
-                    },
+                    }
                 },
                 "freedoms": {
                     "tonalSpan": {
@@ -526,13 +523,7 @@ class PainterBridgeTests(unittest.TestCase):
                     }
                 },
             },
-            "roleProjection": {
-                "compositional_cadence": {
-                    "anchors": ["centerLightDelta"],
-                    "freedoms": [],
-                    "tendencies": [],
-                }
-            },
+            "roleProjection": {},
             "sourceTrial": {
                 "trialId": "gallery-pressure-0030",
             },
@@ -541,19 +532,9 @@ class PainterBridgeTests(unittest.TestCase):
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertTrue(bundle["grip"]["active"])
-        self.assertIn("HANDPRINT GRIP", bundle["positive"])
-        self.assertIn("ANCHORS", bundle["positive"])
-        self.assertIn("FREEDOMS", bundle["positive"])
-        self.assertIn("TENDENCIES", bundle["positive"])
-        self.assertIn(
-            "do not force repeated values",
-            bundle["positive"],
-        )
-        self.assertIn(
-            "not compulsory motifs",
-            bundle["positive"],
-        )
+        self.assertFalse(bundle["grip"]["active"])
+        self.assertTrue(bundle["grip"]["observed"])
+        self.assertNotIn("HANDPRINT GRIP", bundle["positive"])
 
         record = painter.build_candidate_record(
             manifest,
@@ -561,10 +542,23 @@ class PainterBridgeTests(unittest.TestCase):
             spec,
             Path(".velastra/candidate.png"),
         )
-        self.assertTrue(record["source"]["grip"]["active"])
+        self.assertFalse(record["source"]["grip"]["active"])
+        self.assertTrue(record["source"]["grip"]["observed"])
+
+        without_grip = json.loads(json.dumps(manifest))
+        without_grip.pop("grip", None)
+        bundle_without = painter.compile_prompt_bundle(
+            without_grip,
+            spec,
+        )
         self.assertEqual(
-            record["source"]["grip"]["sourceTrial"]["trialId"],
-            "gallery-pressure-0030",
+            painter.candidate_id(manifest, bundle, spec),
+            painter.candidate_id(
+                without_grip,
+                bundle_without,
+                spec,
+            ),
+            "Observation-only Grip must not alter candidate identity.",
         )
 
     def test_handprint_change_changes_candidate_not_asset_identity(self):
