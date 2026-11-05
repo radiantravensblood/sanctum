@@ -1222,19 +1222,27 @@ def grip_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
         and block.get("renderEligible") is True
         and block.get("status") == "built"
     )
+    dimensions = block.get("dimensions") or {}
+
     return {
         "active": active,
         "status": block.get("status"),
         "renderEligible": block.get("renderEligible") is True,
         "scope": dict(block.get("scope") or {}),
         "anchors": dict(
-            (block.get("dimensions") or {}).get("anchors") or {}
+            dimensions.get("anchors")
+            or block.get("anchors")
+            or {}
         ),
         "freedoms": dict(
-            (block.get("dimensions") or {}).get("freedoms") or {}
+            dimensions.get("freedoms")
+            or block.get("freedoms")
+            or {}
         ),
         "tendencies": dict(
-            (block.get("dimensions") or {}).get("tendencies") or {}
+            dimensions.get("tendencies")
+            or block.get("tendencies")
+            or {}
         ),
         "roleProjection": dict(block.get("roleProjection") or {}),
         "sourceTrial": dict(block.get("sourceTrial") or {}),
