@@ -2192,6 +2192,16 @@ def cmd_handprint(args: argparse.Namespace) -> int:
     roles = corpus.get("consensusRoles") or []
     if roles:
         print("consensus: " + ", ".join(roles))
+
+    pressure = registry.get("pressure") or {}
+    if pressure:
+        print(
+            "pressure: default="
+            + str(pressure.get("defaultProfile") or "none")
+            + " combined="
+            + str(pressure.get("combinedProfile") or "none")
+        )
+
     for key, value in (registry.get("interpretation") or {}).items():
         if value:
             print(f"{key}: {value}")
