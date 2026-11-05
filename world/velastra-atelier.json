@@ -94,7 +94,11 @@
     "gripFreedomCannotBecomeRandomnessDirective": true,
     "gripTendencyCannotBecomeCompulsoryMotif": true,
     "oneSceneGripCannotBecomeGlobalLaw": true,
-    "pendingHumanReviewGripCannotDriveRender": true
+    "pendingHumanReviewGripCannotDriveRender": true,
+    "handprintGripIsObservationOnlyInKernel0031": true,
+    "handprintGripCannotDrivePainterPromptInKernel0031": true,
+    "handprintGripCannotChangeCandidateIdentityWhileObservational": true,
+    "handprintGripRenderActivationRequiresFutureCrossSceneReplication": true
   },
   "media": {
     "luminous_oil": {
@@ -277,7 +281,10 @@
       "buildCommand": "grip-build",
       "inspectCommand": "grip",
       "snapshotTravelsWithManifest": true,
-      "humanReviewRequiredForRender": true,
+      "humanReviewValidatesObservation": true,
+      "renderEligibleInKernel0031": false,
+      "promptInjectionInKernel0031": false,
+      "candidateIdentityEffectInKernel0031": false,
       "sceneLocalUntilReplicatedElsewhere": true
     }
   },
