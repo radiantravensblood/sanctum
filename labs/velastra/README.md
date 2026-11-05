@@ -531,6 +531,29 @@ The law is:
 
 **the hand is coherent without being uniform.**
 
+## Handprint Pressure
+
+Kernel 0029 turns the result of Gallery Ablation 001 into an authored channel
+balance.
+
+Handprint pressure is declared in the canonical Handprint registry and travels
+through the manifest.
+
+Text-first rendering resolves to `descriptive_guidance`.
+
+Combined Handprint + Visual Witness image-edit rendering resolves to
+`governing_translation`.
+
+Governing translation may override literal witness reconstruction as a visual
+treatment decision, but it may never override scene truth or Visible Evidence.
+
+The candidate sidecar records the resolved pressure profile so B-vs-C
+comparisons remain inspectable.
+
+The law is:
+
+**the witness may show the way; the hand decides how it is touched.**
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.
