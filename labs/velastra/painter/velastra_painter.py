@@ -1217,15 +1217,18 @@ def grip_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "laws": {},
         }
 
-    active = (
-        block.get("active") is True
-        and block.get("renderEligible") is True
-        and block.get("status") == "built"
+    observed = (
+        block.get("status") in {
+            "provisional_pending_human_review",
+            "reviewed_observation",
+        }
     )
+    active = False
     dimensions = block.get("dimensions") or {}
 
     return {
         "active": active,
+        "observed": observed,
         "status": block.get("status"),
         "renderEligible": block.get("renderEligible") is True,
         "scope": dict(block.get("scope") or {}),
@@ -1522,15 +1525,6 @@ def compile_prompt_bundle(
             required=True,
         )
 
-    grip_text = grip_prompt_text(grip)
-    if grip_text:
-        add(
-            "handprint_grip",
-            grip_text,
-            priority=122,
-            required=True,
-        )
-
     handprint_text = handprint_prompt_text(handprint)
     if handprint_text:
         add(
@@ -1745,6 +1739,7 @@ def compile_prompt_bundle(
         },
         "grip": {
             "active": grip.get("active"),
+            "observed": grip.get("observed"),
             "status": grip.get("status"),
             "renderEligible": grip.get("renderEligible"),
             "scope": grip.get("scope") or {},
@@ -1954,10 +1949,15 @@ class RenderSpec:
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
+    identity_prompts = json.loads(json.dumps(prompts))
+    grip_snapshot = identity_prompts.get("grip") or {}
+    if grip_snapshot.get("active") is not True:
+        identity_prompts.pop("grip", None)
+
     identity = {
         "protocol": PROTOCOL,
         "assetKey": manifest["assetKey"],
-        "promptBundle": prompts,
+        "promptBundle": identity_prompts,
         "render": {
             "brush": spec.brush,
             "transport": spec.transport,
