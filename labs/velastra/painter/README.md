@@ -716,6 +716,71 @@ A category match across Gallery and Hearth is evidence of replication.
 
 It is not render authority.
 
+## Scene Sovereignty / Witness Firewall
+
+Kernel 0033 adds:
+
+`labs/velastra/painter/witness_firewall.py`
+
+and:
+
+```bash
+velastra-painter scene-sovereignty-trial <manifest>
+```
+
+The Scene Sovereignty Gate promotes Painterly Truth fixed objects into the
+required positive prompt before witness translation.
+
+For Hearth the gate explicitly carries the low fire and velvet cushion.
+
+The Witness Firewall derives an ephemeral carrier from the approved witness:
+
+- algorithm: `patch_shuffle_v1`,
+- tile size: 32px by default,
+- seam blur: 0.6px by default,
+- output: `.velastra/firewall/<witness>/<carrier>.png`.
+
+The carrier destroys global semantic layout while retaining local pixel
+evidence.
+
+It never mutates the witness registry.
+
+### Plan
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json"
+```
+
+This plans six renders and performs no inference.
+
+### Render
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --render
+```
+
+Execution order is balanced:
+
+```text
+A1 → C1 → D1 → D2 → C2 → A2
+```
+
+A is Handprint-only.
+
+C uses original witness pixels with the new Scene Sovereignty Gate.
+
+D uses the same source witness through the semantic firewall.
+
+The committed 0032 combined renders remain the pre-0033 control.
+
+The trial records Handprint and witness-similarity measurements, but semantic
+success is human-reviewed:
+
+**Does the image read first as the target place rather than as the witness?**
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before
