@@ -107,3 +107,45 @@ between scenes.
 Matching categories are replicated observations only.
 
 They cannot activate Grip for rendering.
+
+
+## Scene Sovereignty Trial
+
+Kernel 0033 tests whether a new room can remain itself while inheriting visual
+hand from an approved witness.
+
+The Hearth trial uses the fresh packet:
+
+`authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json`
+
+Plan:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json"
+```
+
+Planning performs no inference.
+
+Render:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --render
+```
+
+The default trial contains two repeats each for:
+
+- A / handprint_only,
+- C / original_witness_combined,
+- D / firewall_combined.
+
+The committed 0032 Hearth candidates remain the pre-sovereignty baseline.
+
+Human review must answer whether the candidate reads first as Hearth and whether
+its canonical fixed objects remain visible.
+
+Witness-layout leakage and signature-like artifacts are recorded separately.
+
+A semantic carrier may never be promoted to Visual Witness canon.
