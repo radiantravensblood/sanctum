@@ -797,6 +797,102 @@ class PainterBridgeTests(unittest.TestCase):
         with self.assertRaises(painter.PainterError):
             painter.compile_prompt_bundle(manifest, spec)
 
+    def test_scene_sovereignty_gate_promotes_fixed_place_truth(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(
+            manifest,
+            spec,
+        )
+
+        self.assertIn(
+            "SCENE SOVEREIGNTY GATE",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "Fixed target object: old basin",
+            bundle["positive"],
+        )
+        self.assertEqual(
+            bundle["truthEnvelope"]["painterlyTruth"][
+                "fixedObjects"
+            ][0]["name"],
+            "old basin",
+        )
+
+    def test_witness_firewall_is_prompt_visible_and_candidate_local(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a" * 64,
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        base_spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="firewall-base",
+            )
+        )
+        firewall_spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="firewall-test",
+                witness_firewall=True,
+                firewall_tile_size=32,
+                firewall_blur_radius=0.6,
+            )
+        )
+        base = painter.compile_prompt_bundle(
+            manifest,
+            base_spec,
+        )
+        firewalled = painter.compile_prompt_bundle(
+            manifest,
+            firewall_spec,
+        )
+
+        self.assertFalse(
+            base["witness"]["firewall"]["active"]
+        )
+        self.assertTrue(
+            firewalled["witness"]["firewall"]["active"]
+        )
+        self.assertEqual(
+            firewalled["witness"]["firewall"]["algorithm"],
+            "patch_shuffle_v1",
+        )
+        self.assertIn(
+            "WITNESS FIREWALL",
+            firewalled["positive"],
+        )
+        self.assertIn(
+            "destroy semantic layout",
+            firewalled["positive"],
+        )
+        self.assertNotEqual(
+            painter.candidate_id(
+                manifest,
+                base,
+                base_spec,
+            ),
+            painter.candidate_id(
+                manifest,
+                firewalled,
+                firewall_spec,
+            ),
+        )
+
     def test_combined_image_edit_uses_governing_handprint_pressure(self):
         manifest = manifest_fixture()
         approved = manifest["witnesses"]["selected"][0]
@@ -1095,6 +1191,9 @@ class PainterBridgeTests(unittest.TestCase):
             "brush": None,
             "transport": None,
             "witness": None,
+            "witness_firewall": False,
+            "firewall_tile_size": 32,
+            "firewall_blur_radius": 0.6,
             "without_handprint": False,
             "without_witness": False,
             "attempt": None,
@@ -1113,6 +1212,126 @@ class PainterBridgeTests(unittest.TestCase):
         }
         values.update(overrides)
         return argparse.Namespace(**values)
+
+    def test_scene_sovereignty_trial_plans_a_c_d_without_inference(self):
+        manifest = manifest_fixture()
+        selected = manifest["witnesses"]["selected"][0]
+        selected["status"] = "approved"
+        selected["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "b" * 64,
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(selected))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "hearth.velastra.json"
+            handprint_path = root / "handprint.json"
+            witnesses_path = root / "witnesses.json"
+            trial_path = root / "sovereignty.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "pressure": manifest["handprint"]["pressure"],
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                    "facets": {
+                        "byRole": {},
+                    },
+                },
+            )
+            painter.write_json(
+                witnesses_path,
+                {
+                    "version": 1,
+                    "entries": {
+                        "gallery_target_01": {
+                            "status": "approved",
+                            "asset": selected["asset"],
+                        }
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="hearth-sovereignty-0033-test",
+                repeats=2,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                witness_registry=str(witnesses_path),
+                out_dir=str(out_dir),
+                firewall_tile_size=32,
+                firewall_blur_radius=0.6,
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_scene_sovereignty_trial(
+                args
+            )
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(
+                len(trial["conditions"]["handprint_only"]),
+                2,
+            )
+            self.assertEqual(
+                len(trial["conditions"]["current_combined"]),
+                2,
+            )
+            self.assertEqual(
+                len(trial["conditions"]["firewall_combined"]),
+                2,
+            )
+            self.assertEqual(
+                trial["executionOrder"],
+                [
+                    "hearth-sovereignty-0033-test-a-01",
+                    "hearth-sovereignty-0033-test-c-01",
+                    "hearth-sovereignty-0033-test-d-01",
+                    "hearth-sovereignty-0033-test-d-02",
+                    "hearth-sovereignty-0033-test-c-02",
+                    "hearth-sovereignty-0033-test-a-02",
+                ],
+            )
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only sovereignty trial must not execute inference.",
+            )
+            self.assertTrue(
+                trial["conditions"]["firewall_combined"][0][
+                    "witness"
+                ]["firewall"]["active"]
+            )
+            self.assertFalse(
+                trial["conditions"]["current_combined"][0][
+                    "witness"
+                ]["firewall"]["active"]
+            )
+            self.assertEqual(
+                trial["humanReview"]["primaryQuestion"],
+                "Does the image read first as the target place rather than as the Visual Witness scene?",
+            )
+            self.assertIn(
+                "old basin",
+                trial["humanReview"]["requiredFixedObjects"],
+            )
 
     def test_pressure_trial_plans_replication_without_inference(self):
         manifest = manifest_fixture()
