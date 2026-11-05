@@ -106,7 +106,7 @@ assert.ok(active.anchors.centerLightDelta);
 assert.ok(active.freedoms.tonalSpan);
 assert.ok(active.tendencies.edgeActivity);
 assert.deepEqual(
-  active.activeRoles.sort(),
+  [...active.activeRoles].sort(),
   ["compositional_cadence", "material_hand"]
 );
 
