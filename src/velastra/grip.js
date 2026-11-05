@@ -71,6 +71,17 @@ export function compileGrip({
     room,
     assetKey,
     scope: copy(scope),
+    dimensions: {
+      anchors: active
+        ? copy(dimensions.anchors || {})
+        : {},
+      freedoms: active
+        ? copy(dimensions.freedoms || {})
+        : {},
+      tendencies: active
+        ? copy(dimensions.tendencies || {})
+        : {}
+    },
     anchors: active
       ? copy(dimensions.anchors || {})
       : {},
