@@ -1254,52 +1254,8 @@ def grip_lines(manifest: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def grip_prompt_text(grip: Mapping[str, Any]) -> str:
-    if not grip.get("active"):
-        return ""
-
-    def labels(records: Mapping[str, Any]) -> list[str]:
-        values: list[str] = []
-        for name, record in records.items():
-            if isinstance(record, Mapping):
-                label = flatten_text(record.get("label")) or name
-                direction = flatten_text(record.get("direction"))
-                if direction and direction != "stable":
-                    values.append(label + " (" + direction + " tendency)")
-                else:
-                    values.append(label)
-            else:
-                values.append(name)
-        return values
-
-    parts = [
-        "HANDPRINT GRIP — Grip governs variance behavior, not scene content and not exact numeric targets."
-    ]
-
-    anchors = labels(grip.get("anchors") or {})
-    if anchors:
-        parts.append(
-            "ANCHORS — hold these relationships comparatively steady across stochastic interpretation without freezing one exact value: "
-            + " | ".join(anchors)
-        )
-
-    freedoms = labels(grip.get("freedoms") or {})
-    if freedoms:
-        parts.append(
-            "FREEDOMS — permit meaningful variation here; do not force repeated values, identical local solutions, or witness-matching finish: "
-            + " | ".join(freedoms)
-        )
-
-    tendencies = labels(grip.get("tendencies") or {})
-    if tendencies:
-        parts.append(
-            "TENDENCIES — prefer these only as directional context; they are not compulsory motifs or fixed outcomes: "
-            + " | ".join(tendencies)
-        )
-
-    parts.append(
-        "A motif appearing once is not a Grip law. Preserve invention inside the freedoms while keeping anchors relational rather than literal."
-    )
-    return " ".join(parts)
+    """Kernel 0031 keeps Grip observational and therefore prompt-silent."""
+    return ""
 
 
 def estimate_prompt_tokens(text: str) -> int:
