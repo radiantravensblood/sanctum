@@ -462,6 +462,111 @@ class PainterBridgeTests(unittest.TestCase):
             bundle["positive"],
         )
 
+    def test_provisional_grip_remains_silent(self):
+        manifest = manifest_fixture()
+        manifest["grip"] = {
+            "status": "provisional_pending_human_review",
+            "renderEligible": False,
+            "active": False,
+            "dimensions": {
+                "anchors": {
+                    "centerLightDelta": {
+                        "label": "center/periphery light relationship",
+                    }
+                },
+                "freedoms": {
+                    "tonalSpan": {
+                        "label": "tonal-span breadth",
+                    }
+                },
+                "tendencies": {},
+            },
+            "roleProjection": {},
+            "sourceTrial": {
+                "trialId": "gallery-pressure-0030",
+            },
+        }
+
+        spec = painter.build_render_spec(self.brush_args())
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertFalse(bundle["grip"]["active"])
+        self.assertNotIn("HANDPRINT GRIP", bundle["positive"])
+
+    def test_reviewed_grip_holds_frees_and_suggests(self):
+        manifest = manifest_fixture()
+        manifest["grip"] = {
+            "status": "built",
+            "renderEligible": True,
+            "active": True,
+            "scope": {
+                "rooms": ["gallery"],
+            },
+            "dimensions": {
+                "anchors": {
+                    "centerLightDelta": {
+                        "label": "center/periphery light relationship",
+                        "direction": "higher",
+                    },
+                    "darkShare": {
+                        "label": "dark-field occupancy",
+                        "direction": "stable",
+                    },
+                },
+                "freedoms": {
+                    "tonalSpan": {
+                        "label": "tonal-span breadth",
+                        "direction": "higher",
+                    }
+                },
+                "tendencies": {
+                    "edgeActivity": {
+                        "label": "edge activity",
+                        "direction": "stable",
+                    }
+                },
+            },
+            "roleProjection": {
+                "compositional_cadence": {
+                    "anchors": ["centerLightDelta"],
+                    "freedoms": [],
+                    "tendencies": [],
+                }
+            },
+            "sourceTrial": {
+                "trialId": "gallery-pressure-0030",
+            },
+        }
+
+        spec = painter.build_render_spec(self.brush_args())
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertTrue(bundle["grip"]["active"])
+        self.assertIn("HANDPRINT GRIP", bundle["positive"])
+        self.assertIn("ANCHORS", bundle["positive"])
+        self.assertIn("FREEDOMS", bundle["positive"])
+        self.assertIn("TENDENCIES", bundle["positive"])
+        self.assertIn(
+            "do not force repeated values",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "not compulsory motifs",
+            bundle["positive"],
+        )
+
+        record = painter.build_candidate_record(
+            manifest,
+            bundle,
+            spec,
+            Path(".velastra/candidate.png"),
+        )
+        self.assertTrue(record["source"]["grip"]["active"])
+        self.assertEqual(
+            record["source"]["grip"]["sourceTrial"]["trialId"],
+            "gallery-pressure-0030",
+        )
+
     def test_handprint_change_changes_candidate_not_asset_identity(self):
         manifest = manifest_fixture()
         spec = painter.build_render_spec(self.brush_args())
