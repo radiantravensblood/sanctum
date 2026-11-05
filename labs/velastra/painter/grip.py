@@ -234,7 +234,11 @@ def classify_metric(
         "baselineVarianceReliable": (
             reliable_baseline_variance
         ),
-        "classification": category[:-1],
+        "classification": {
+            "anchors": "anchor",
+            "freedoms": "freedom",
+            "tendencies": "tendency",
+        }[category],
         "interpretation": interpretation,
     }
 
