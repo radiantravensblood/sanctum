@@ -546,6 +546,19 @@ class PainterBridgeTests(unittest.TestCase):
                 "laws": {
                     "pixelMetricsMustRemainAuditable": True,
                 },
+                "pressure": {
+                    "version": 1,
+                    "defaultProfile": "descriptive_guidance",
+                    "combinedProfile": "governing_translation",
+                    "profiles": {
+                        "descriptive_guidance": {
+                            "mode": "descriptive_guidance",
+                        },
+                        "governing_translation": {
+                            "mode": "governing_translation",
+                        },
+                    },
+                },
             }
 
             built = painter.build_handprint_registry(
@@ -593,6 +606,10 @@ class PainterBridgeTests(unittest.TestCase):
             self.assertEqual(
                 built["provenance"]["algorithmVersion"],
                 2,
+            )
+            self.assertEqual(
+                built["pressure"]["combinedProfile"],
+                "governing_translation",
             )
 
             bad = json.loads(json.dumps(witness_registry))
