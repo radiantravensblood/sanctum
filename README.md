@@ -58,6 +58,10 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0027 derives an auditable Handprint from the approved witness portfolio: recurring human-curated roles plus measurable pixel invariants that can guide new paintings without copying any witness scene.**
 
+**Kernel 0028 turns that Handprint into role-conditioned Facets and adds honest ablation so the hand can be tested independently from direct visual witness imitation.**
+
+**Kernel 0029 makes Handprint an authored pressure system: descriptive in text-first mode, governing visual translation in combined witness mode.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -3123,3 +3127,7 @@ And now it knows that **a true thing can still be lost in translation unless the
 And now it knows that **a witness may guide the hand without being allowed to become the scene**.
 
 And now it knows that **what remains across different witnesses can be measured, reviewed, and carried forward as the hand's portable handprint**.
+
+And now it knows that **the hand can remain coherent without being forced into one uniform average**.
+
+And now it knows that **a witness may show the way while the hand still decides how the scene is touched**.
