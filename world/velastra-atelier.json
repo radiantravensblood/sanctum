@@ -73,7 +73,16 @@
     "combinedWitnessMustYieldLiteralReconstructionToFacetLaw": true,
     "pressureModeMustEnterCandidateProvenance": true,
     "witnessOnlyAblationMustCarryNoHandprintPressure": true,
-    "textFirstHandprintMustRemainDescriptiveRatherThanPretendReferenceControl": true
+    "textFirstHandprintMustRemainDescriptiveRatherThanPretendReferenceControl": true,
+    "stochasticTransportRequiresReplicationForCalibration": true,
+    "pressureCalibrationMustFreezeHandprint": true,
+    "pressureCalibrationMustFreezeVisualWitnessCanon": true,
+    "pressureCalibrationMustFreezeSceneTruth": true,
+    "candidateEvaluationCannotPromoteAsset": true,
+    "metricScoreCannotReplaceHumanReview": true,
+    "spatialSimilarityCannotEstablishSemanticCopying": true,
+    "trialPlanningCannotExecuteInference": true,
+    "trialResultsMustRemainAuthoringEvidence": true
   },
   "media": {
     "luminous_oil": {
@@ -235,6 +244,20 @@
       "combinedProfile": "governing_translation",
       "candidateLocalResolution": true,
       "canonicalStateMutation": false
+    },
+    "pressureCalibration": {
+      "version": 1,
+      "trialProtocol": "velastra.pressure_trial.v1",
+      "defaultRepeatsPerCondition": 4,
+      "defaultConditions": [
+        "witness_only",
+        "governing_translation"
+      ],
+      "alternatingExecutionOrder": true,
+      "planOnlyByDefault": true,
+      "explicitRenderFlag": "--render",
+      "evaluator": "labs/velastra/painter/evaluation.py",
+      "evidenceDirectory": "labs/velastra/evidence/trials"
     }
   },
   "livingCanvas": {

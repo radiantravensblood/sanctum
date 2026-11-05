@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "protocol": "velastra.pressure_trial.v1",
+  "trialId": "gallery-pressure-0030",
+  "status": "awaiting_local_plan",
+  "createdAt": null,
+  "updatedAt": null,
+  "assetKey": "velastra.place_tableau.5cms46",
+  "manifest": "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json",
+  "manifestSha256": null,
+  "model": "Qwen/Qwen-Image-Edit",
+  "brush": "qwen_image_edit",
+  "transport": "huggingface",
+  "repeatsPerCondition": 4,
+  "facetRoles": [],
+  "frozen": {
+    "handprintPath": "world/velastra-handprint.json",
+    "handprintSha256": null,
+    "handprintAlgorithmVersion": 2,
+    "pressureSchemaVersion": 1,
+    "witnessRegistryPath": "world/velastra-witnesses.json",
+    "witnessRegistrySha256": null,
+    "witnessId": "gallery_target_01",
+    "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331"
+  },
+  "executionOrder": [],
+  "conditions": {
+    "witness_only": [],
+    "governing_translation": []
+  },
+  "summary": null,
+  "humanReview": {
+    "status": "pending",
+    "sceneTruthPass": null,
+    "notes": null
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "candidateEvaluationCannotPromoteAsset": true,
+    "metricScoreCannotReplaceHumanReview": true,
+    "stochasticTransportRequiresReplication": true,
+    "pressureCalibrationMustFreezeHandprintAndWitnessCanon": true
+  }
+}

@@ -529,6 +529,70 @@ The clean follow-up experiment is therefore B-vs-C:
 The witness, scene truth, and model remain the same class of channel; the
 meaningful authored difference is Handprint pressure.
 
+## Pressure Calibration
+
+Kernel 0030 adds two authoring commands.
+
+### Evaluate one candidate
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py evaluate \
+  ".velastra/candidates/<asset-key>/<candidate>.candidate.json" \
+  --repo-root .
+```
+
+The evaluator writes a sibling `.evaluation.json` file unless `--output` is
+supplied.
+
+It reports Handprint Facet-range adherence and coarse witness spatial
+similarity.
+
+Neither measurement is an aesthetic score.
+
+### Plan the replicated Gallery trial
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json"
+```
+
+Default behavior:
+
+- four B / witness-only attempts,
+- four C / governing-translation attempts,
+- alternating execution order,
+- frozen manifest/Handprint/witness hashes,
+- no inference.
+
+The plan is written to:
+
+`labs/velastra/evidence/trials/gallery-pressure-0030.json`
+
+### Explicitly execute it
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json" \
+  --render
+```
+
+Existing candidate image+sidecar pairs are reused.
+
+After all eight arms are evaluated, the trial records descriptive distributions
+for:
+
+- Handprint range adherence,
+- Handprint in-range rate,
+- witness spatial similarity.
+
+It also records C-minus-B directional deltas.
+
+Those deltas are not a significance test.
+
+The evaluator cannot certify scene truth.
+
+Human review remains required.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before

@@ -1,0 +1,65 @@
+# Velastra Calibration Trials
+
+This directory holds machine-readable authoring evidence.
+
+A trial is not canon.
+
+A trial may:
+
+- freeze the exact manifest, Handprint, witness registry, model, and transport,
+- plan replicated candidate attempts,
+- record candidate measurements,
+- compare stochastic output distributions,
+- preserve human review notes.
+
+A trial may not:
+
+- approve a candidate,
+- mutate scene truth,
+- mutate Handprint,
+- mutate Visual Witness canon,
+- promote an asset,
+- replace human review with a metric score.
+
+## Pressure Calibration
+
+Kernel 0030 introduces replicated B-vs-C pressure trials.
+
+The default Gallery calibration compares:
+
+- **B / witness_only** — Qwen Image Edit with Handprint disabled,
+- **C / governing_translation** — the same brush and witness with authored
+  Handprint pressure active.
+
+Because the hosted image-edit transport does not promise deterministic seed
+control, a single pair is an observation rather than causal evidence.
+
+The default trial therefore uses four repeats per condition and alternates
+execution order between pairs.
+
+Planning is free of inference:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json"
+```
+
+This writes the trial JSON but executes no generation.
+
+Rendering requires the explicit `--render` flag:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py pressure-trial \
+  "authoring/inbox/gallery--velastra.place_tableau.5cms46.velastra.json" \
+  --render
+```
+
+Already-rendered candidate IDs are reused rather than generated again.
+
+The resulting summary reports descriptive distributions and directional deltas.
+
+It is not a significance test and does not decide which image should be
+approved.
+
+**A single beautiful difference is an observation. A repeated difference may
+become evidence.**

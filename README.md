@@ -62,6 +62,8 @@ Kernel 0005 separated what a place is from how a place is expressed.
 
 **Kernel 0029 makes Handprint an authored pressure system: descriptive in text-first mode, governing visual translation in combined witness mode.**
 
+**Kernel 0030 calibrates that pressure through replicated stochastic trials, transparent candidate measurement, and frozen-canon comparison before any further gain is added.**
+
 ## First law
 
 **Do not overwrite. Reflect.**
@@ -3050,9 +3052,98 @@ Approved provenance carries the same pressure record forward.
 
 Witness-only ablation carries no Handprint pressure.
 
+## Pressure Calibration
+
+Kernel 0030 responds to an important limit discovered after B2/C2:
+
+hosted image-edit generation is stochastic.
+
+One visually interesting pair is an observation.
+
+It is not enough to attribute the difference to Handprint Pressure.
+
+The new governing law is:
+
+**A single beautiful difference is an observation. A repeated difference may become evidence.**
+
+### Candidate Evaluator
+
+`labs/velastra/painter/evaluation.py` measures candidates using the same
+bounded pixel vocabulary already used by Handprint:
+
+- luminance,
+- saturation,
+- warmth,
+- deep-shadow share,
+- highlight share,
+- tonal span,
+- edge activity,
+- center/periphery light,
+- grayscale entropy.
+
+It then compares those measurements against eligible Handprint Facet ranges.
+
+The evaluator reports:
+
+- Handprint range adherence,
+- in-range rate,
+- normalized distance from Facet medians,
+- coarse witness spatial similarity.
+
+These are measurements, not aesthetic judgments.
+
+Spatial similarity is built from transparent low-resolution RGB/luminance
+comparison plus difference-hash similarity. It does not establish semantic
+copying, authorship, or scene truth.
+
+### Replicated B-vs-C trial
+
+`velastra-painter pressure-trial` freezes:
+
+- the exported Atelier Manifest hash,
+- Handprint hash and algorithm version,
+- pressure schema version,
+- Visual Witness registry hash,
+- selected witness ID and SHA-256,
+- model, brush, and transport.
+
+It plans four repeats per condition by default:
+
+- B / witness_only,
+- C / governing_translation.
+
+Execution order alternates between pairs to reduce simple sequence bias.
+
+The command is plan-only unless `--render` is explicitly supplied.
+
+Already-existing candidate IDs are reused instead of regenerated.
+
+The resulting trial JSON lives under:
+
+`labs/velastra/evidence/trials/`
+
+and records each candidate evaluation plus descriptive B-vs-C distributions.
+
+It is not a significance test.
+
+It cannot approve a candidate.
+
+Human review still decides whether scene truth survived.
+
+### Historical paintings
+
+Historical paintings gathered outside the current three-witness canon should
+remain external during 0030.
+
+They may later become a separately reviewed historical growth corpus, but they
+must not change Handprint, Visual Witness canon, or pressure while calibration
+is in progress.
+
+Freeze first. Measure second. Expand afterward.
+
 ## Current storage boundary
 
-Kernel 0029 still persists to `localStorage`.
+Kernel 0030 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 

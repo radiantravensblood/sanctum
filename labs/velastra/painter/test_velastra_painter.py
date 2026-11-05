@@ -1015,6 +1015,115 @@ class PainterBridgeTests(unittest.TestCase):
         values.update(overrides)
         return argparse.Namespace(**values)
 
+    def test_pressure_trial_plans_replication_without_inference(self):
+        manifest = manifest_fixture()
+        selected = manifest["witnesses"]["selected"][0]
+        selected["status"] = "approved"
+        selected["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "sealed-gallery-witness",
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(selected))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "gallery.velastra.json"
+            handprint_path = root / "handprint.json"
+            witnesses_path = root / "witnesses.json"
+            trial_path = root / "trial.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "pressure": manifest["handprint"]["pressure"],
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                    "facets": {
+                        "byRole": {},
+                    },
+                },
+            )
+            painter.write_json(
+                witnesses_path,
+                {
+                    "version": 1,
+                    "entries": {
+                        "gallery_target_01": {
+                            "status": "approved",
+                            "asset": selected["asset"],
+                        }
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="gallery-pressure-0030-test",
+                repeats=4,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                witness_registry=str(witnesses_path),
+                out_dir=str(out_dir),
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_pressure_trial(args)
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(
+                trial["repeatsPerCondition"],
+                4,
+            )
+            self.assertEqual(
+                len(trial["conditions"]["witness_only"]),
+                4,
+            )
+            self.assertEqual(
+                len(
+                    trial["conditions"][
+                        "governing_translation"
+                    ]
+                ),
+                4,
+            )
+            self.assertEqual(
+                trial["executionOrder"][:4],
+                [
+                    "gallery-pressure-0030-test-b-01",
+                    "gallery-pressure-0030-test-c-01",
+                    "gallery-pressure-0030-test-c-02",
+                    "gallery-pressure-0030-test-b-02",
+                ],
+            )
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only pressure trial must not execute inference.",
+            )
+            self.assertTrue(
+                trial["laws"][
+                    "stochasticTransportRequiresReplication"
+                ]
+            )
+            self.assertEqual(
+                trial["frozen"]["witnessSha256"],
+                "sealed-gallery-witness",
+            )
+
     def test_default_brush_resolves_to_z_image_provider(self):
         spec = painter.build_render_spec(self.brush_args())
 
