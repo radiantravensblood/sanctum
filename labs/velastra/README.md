@@ -554,6 +554,37 @@ The law is:
 
 **the witness may show the way; the hand decides how it is touched.**
 
+## Pressure Calibration
+
+Kernel 0030 adds a non-authoritative evaluation layer and replicated trial
+protocol.
+
+The evaluator lives at:
+
+`labs/velastra/painter/evaluation.py`
+
+Calibration evidence lives at:
+
+`labs/velastra/evidence/trials/`
+
+The calibration contract freezes current Handprint, Visual Witness canon, scene
+truth, model, and transport while comparing stochastic witness-only and
+governing-translation candidates.
+
+Planning never executes inference.
+
+Metrics may describe distributional movement.
+
+They may not promote assets, replace human review, or become scene truth.
+
+Historical paintings remain outside the active witness corpus until calibration
+is complete.
+
+The law is:
+
+**a single beautiful difference is an observation; a repeated difference may
+become evidence.**
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.
