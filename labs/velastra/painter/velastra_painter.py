@@ -3154,7 +3154,7 @@ def sovereignty_render_args(
         brush = "qwen_image"
         witness_firewall = False
         seed = 190919 + repeat_index
-    elif condition == "current_combined":
+    elif condition == "original_witness_combined":
         brush = "qwen_image_edit"
         witness_firewall = False
         seed = None
@@ -3203,7 +3203,7 @@ def sovereignty_arm_plan(
 ) -> tuple[dict[str, Any], argparse.Namespace]:
     suffix = {
         "handprint_only": "a",
-        "current_combined": "c",
+        "original_witness_combined": "c",
         "firewall_combined": "d",
     }[condition]
     attempt = (
@@ -3310,7 +3310,7 @@ def cmd_scene_sovereignty_trial(
 
     conditions = (
         "handprint_only",
-        "current_combined",
+        "original_witness_combined",
         "firewall_combined",
     )
     plans: dict[str, list[dict[str, Any]]] = {
@@ -3331,7 +3331,7 @@ def cmd_scene_sovereignty_trial(
             namespaces[arm["attemptId"]] = render_args
 
     a_first = plans["handprint_only"][0]
-    c_first = plans["current_combined"][0]
+    c_first = plans["original_witness_combined"][0]
     d_first = plans["firewall_combined"][0]
     c_witness = c_first.get("witness") or {}
     d_witness = d_first.get("witness") or {}
