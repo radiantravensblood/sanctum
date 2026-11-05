@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "designation": "Virynism Handprint Grip",
+  "laboratory": "Viryn Labs",
+  "status": "awaiting_build",
+  "renderEligible": false,
+  "purpose": "Derive evidence-bounded distinctions between what Handprint Pressure stabilizes, what it permits to vary, and what remains directional without becoming compulsory.",
+  "laws": {
+    "gripIsDerivedFromReplicatedTrialEvidence": true,
+    "gripCannotRewriteHandprintHistory": true,
+    "gripCannotRewriteWitnessCanon": true,
+    "gripCannotBecomeSceneTruth": true,
+    "gripCannotOverridePainterlyTruth": true,
+    "gripCannotOverrideVisibleEvidence": true,
+    "gripCannotOverrideHumanReview": true,
+    "anchorMeansReducedVarianceNotFixedValue": true,
+    "freedomMeansPermittedVariationNotRandomness": true,
+    "tendencyMeansDirectionalPreferenceNotRequirement": true,
+    "oneSceneGripCannotBecomeGlobalLaw": true,
+    "pendingHumanReviewCannotDriveRender": true,
+    "motifOccurrenceCannotBecomeGripLawByItself": true,
+    "gripChangeMustChangeCandidateIdentity": true,
+    "gripChangeCannotChangeCanonicalPlaceIdentity": true
+  },
+  "scope": {
+    "mode": "scene_local_until_replicated_elsewhere",
+    "rooms": [
+      "gallery"
+    ],
+    "assetKeys": [
+      "velastra.place_tableau.5cms46"
+    ],
+    "promotionRule": "requires replicated evidence across additional scenes before any global Grip law"
+  },
+  "thresholds": {
+    "minimumRepeatsPerCondition": 4,
+    "minimumBaselineStddev": 0.001,
+    "anchorMaxStddevRatio": 0.67,
+    "anchorMaxMeanShiftInBaselineStddev": 1,
+    "freedomMinStddevRatio": 1.5,
+    "stableDirectionDeadbandInBaselineStddev": 0.25
+  },
+  "dimensions": {
+    "anchors": {},
+    "freedoms": {},
+    "tendencies": {}
+  },
+  "roleProjection": {},
+  "diagnostics": {},
+  "sourceTrial": {
+    "path": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+    "trialId": "gallery-pressure-0030",
+    "requiredStatus": "complete",
+    "humanReviewRequiredForRender": true
+  },
+  "provenance": {
+    "builder": "velastra-painter grip-build",
+    "algorithmVersion": 1,
+    "builtAt": null,
+    "note": "Grip classifies pressure-conditioned variance behavior. It does not define aesthetic quality or scene truth."
+  }
+}
