@@ -85,7 +85,6 @@
     "trialResultsMustRemainAuthoringEvidence": true,
     "gripMustTravelInsideManifest": true,
     "gripCannotChangeCanonicalPlaceIdentity": true,
-    "gripChangeMustChangeCandidateIdentity": true,
     "gripCannotBecomeSceneTruth": true,
     "gripCannotOverridePainterlyTruth": true,
     "gripCannotOverrideVisibleEvidence": true,
@@ -98,7 +97,8 @@
     "handprintGripIsObservationOnlyInKernel0031": true,
     "handprintGripCannotDrivePainterPromptInKernel0031": true,
     "handprintGripCannotChangeCandidateIdentityWhileObservational": true,
-    "handprintGripRenderActivationRequiresFutureCrossSceneReplication": true
+    "handprintGripRenderActivationRequiresFutureCrossSceneReplication": true,
+    "gripObservationMustNotChangeCandidateIdentity": true
   },
   "media": {
     "luminous_oil": {
