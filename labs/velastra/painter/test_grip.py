@@ -317,7 +317,7 @@ class GripContractTests(unittest.TestCase):
             built["dimensions"]["freedoms"],
         )
 
-    def test_reviewed_scene_truth_may_activate_scoped_grip(self):
+    def test_reviewed_scene_truth_validates_observation_without_render_activation(self):
         built = grip.derive_grip(
             trial=trial_fixture(reviewed=True),
             handprint=handprint_fixture(),
@@ -325,8 +325,11 @@ class GripContractTests(unittest.TestCase):
             role_metrics=ROLE_METRICS,
         )
 
-        self.assertEqual(built["status"], "built")
-        self.assertTrue(built["renderEligible"])
+        self.assertEqual(
+            built["status"],
+            "reviewed_observation",
+        )
+        self.assertFalse(built["renderEligible"])
         self.assertEqual(
             built["sourceTrial"]["humanReview"]["sceneTruthPass"],
             True,
