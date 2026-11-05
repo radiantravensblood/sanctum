@@ -2,7 +2,7 @@
   "version": 1,
   "designation": "Virynism Handprint Grip",
   "laboratory": "Viryn Labs",
-  "status": "awaiting_build",
+  "status": "provisional_pending_human_review",
   "renderEligible": false,
   "purpose": "Derive evidence-bounded distinctions between what Handprint Pressure stabilizes, what it permits to vary, and what remains directional without becoming compulsory.",
   "laws": {
@@ -41,22 +41,454 @@
     "stableDirectionDeadbandInBaselineStddev": 0.25
   },
   "dimensions": {
-    "anchors": {},
-    "freedoms": {},
-    "tendencies": {}
+    "anchors": {
+      "centerLightDelta": {
+        "metric": "centerLightDelta",
+        "label": "center/periphery light relationship",
+        "roles": [
+          "compositional_cadence",
+          "spatial_depth"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.1411,
+          "median": 0.1421,
+          "min": 0.1264,
+          "max": 0.1536,
+          "stddev": 0.0111
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.1486,
+          "median": 0.1488,
+          "min": 0.145,
+          "max": 0.1516,
+          "stddev": 0.0025
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0075,
+        "stddevRatioCombinedOverWitnessOnly": 0.2252,
+        "meanShiftInBaselineStddev": 0.6757,
+        "direction": "higher",
+        "baselineVarianceReliable": true,
+        "classification": "anchor",
+        "interpretation": "Governing pressure reduced stochastic spread while keeping the condition mean within the allowed calibration shift. Hold the relationship; do not freeze an exact numeric value."
+      },
+      "darkShare": {
+        "metric": "darkShare",
+        "label": "dark-field occupancy",
+        "roles": [
+          "spatial_depth"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.3777,
+          "median": 0.3783,
+          "min": 0.3032,
+          "max": 0.4511,
+          "stddev": 0.0554
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.3983,
+          "median": 0.396,
+          "min": 0.369,
+          "max": 0.4324,
+          "stddev": 0.0252
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0206,
+        "stddevRatioCombinedOverWitnessOnly": 0.4549,
+        "meanShiftInBaselineStddev": 0.3718,
+        "direction": "higher",
+        "baselineVarianceReliable": true,
+        "classification": "anchor",
+        "interpretation": "Governing pressure reduced stochastic spread while keeping the condition mean within the allowed calibration shift. Hold the relationship; do not freeze an exact numeric value."
+      },
+      "meanLuminance": {
+        "metric": "meanLuminance",
+        "label": "overall luminance field",
+        "roles": [],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.2926,
+          "median": 0.2942,
+          "min": 0.2695,
+          "max": 0.3124,
+          "stddev": 0.0167
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.2872,
+          "median": 0.2866,
+          "min": 0.2735,
+          "max": 0.3022,
+          "stddev": 0.011
+        },
+        "meanDeltaCombinedMinusWitnessOnly": -0.0054,
+        "stddevRatioCombinedOverWitnessOnly": 0.6587,
+        "meanShiftInBaselineStddev": 0.3234,
+        "direction": "lower",
+        "baselineVarianceReliable": true,
+        "classification": "anchor",
+        "interpretation": "Governing pressure reduced stochastic spread while keeping the condition mean within the allowed calibration shift. Hold the relationship; do not freeze an exact numeric value."
+      },
+      "peripheryLuminance": {
+        "metric": "peripheryLuminance",
+        "label": "peripheral luminance",
+        "roles": [
+          "compositional_cadence"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.2453,
+          "median": 0.2464,
+          "min": 0.2183,
+          "max": 0.2703,
+          "stddev": 0.0194
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.2381,
+          "median": 0.2367,
+          "min": 0.226,
+          "max": 0.2532,
+          "stddev": 0.0108
+        },
+        "meanDeltaCombinedMinusWitnessOnly": -0.0072,
+        "stddevRatioCombinedOverWitnessOnly": 0.5567,
+        "meanShiftInBaselineStddev": 0.3711,
+        "direction": "lower",
+        "baselineVarianceReliable": true,
+        "classification": "anchor",
+        "interpretation": "Governing pressure reduced stochastic spread while keeping the condition mean within the allowed calibration shift. Hold the relationship; do not freeze an exact numeric value."
+      }
+    },
+    "freedoms": {
+      "grayscaleEntropy": {
+        "metric": "grayscaleEntropy",
+        "label": "material and tonal information density",
+        "roles": [
+          "material_hand",
+          "sacred_incompletion"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.8725,
+          "median": 0.8716,
+          "min": 0.8707,
+          "max": 0.8761,
+          "stddev": 0.0021
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.8756,
+          "median": 0.8735,
+          "min": 0.8713,
+          "max": 0.884,
+          "stddev": 0.005
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0031,
+        "stddevRatioCombinedOverWitnessOnly": 2.381,
+        "meanShiftInBaselineStddev": 1.4762,
+        "direction": "higher",
+        "baselineVarianceReliable": true,
+        "classification": "freedom",
+        "interpretation": "Governing pressure preserved or increased variation. Permit exploration here; do not force repeatability or a single historical value."
+      },
+      "tonalSpan": {
+        "metric": "tonalSpan",
+        "label": "tonal-span breadth",
+        "roles": [
+          "material_hand",
+          "sacred_incompletion",
+          "spatial_depth",
+          "tonal_memory"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.3353,
+          "median": 0.3353,
+          "min": 0.3255,
+          "max": 0.3451,
+          "stddev": 0.0071
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.3422,
+          "median": 0.3353,
+          "min": 0.3216,
+          "max": 0.3765,
+          "stddev": 0.0217
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0069,
+        "stddevRatioCombinedOverWitnessOnly": 3.0563,
+        "meanShiftInBaselineStddev": 0.9718,
+        "direction": "higher",
+        "baselineVarianceReliable": true,
+        "classification": "freedom",
+        "interpretation": "Governing pressure preserved or increased variation. Permit exploration here; do not force repeatability or a single historical value."
+      }
+    },
+    "tendencies": {
+      "centerLuminance": {
+        "metric": "centerLuminance",
+        "label": "center luminance",
+        "roles": [
+          "compositional_cadence"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.3864,
+          "median": 0.3845,
+          "min": 0.3719,
+          "max": 0.4045,
+          "stddev": 0.0145
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.3867,
+          "median": 0.3876,
+          "min": 0.371,
+          "max": 0.4007,
+          "stddev": 0.0113
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0003,
+        "stddevRatioCombinedOverWitnessOnly": 0.7793,
+        "meanShiftInBaselineStddev": 0.0207,
+        "direction": "stable",
+        "baselineVarianceReliable": true,
+        "classification": "tendency",
+        "interpretation": "The replicated trial did not establish a strong variance anchor or freedom signal. Treat this as directional context, not a compulsory rule."
+      },
+      "edgeActivity": {
+        "metric": "edgeActivity",
+        "label": "edge activity",
+        "roles": [
+          "edge_behavior",
+          "material_hand",
+          "sacred_incompletion"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.0561,
+          "median": 0.0561,
+          "min": 0.053,
+          "max": 0.0594,
+          "stddev": 0.0029
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.0552,
+          "median": 0.0542,
+          "min": 0.0533,
+          "max": 0.0591,
+          "stddev": 0.0023
+        },
+        "meanDeltaCombinedMinusWitnessOnly": -0.0009,
+        "stddevRatioCombinedOverWitnessOnly": 0.7931,
+        "meanShiftInBaselineStddev": 0.3103,
+        "direction": "lower",
+        "baselineVarianceReliable": true,
+        "classification": "tendency",
+        "interpretation": "The replicated trial did not establish a strong variance anchor or freedom signal. Treat this as directional context, not a compulsory rule."
+      },
+      "highlightShare": {
+        "metric": "highlightShare",
+        "label": "highlight occupancy",
+        "roles": [
+          "tonal_memory"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.0062,
+          "median": 0.0061,
+          "min": 0.0057,
+          "max": 0.0069,
+          "stddev": 0.0005
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.0058,
+          "median": 0.0054,
+          "min": 0.005,
+          "max": 0.0072,
+          "stddev": 0.0009
+        },
+        "meanDeltaCombinedMinusWitnessOnly": -0.0004,
+        "stddevRatioCombinedOverWitnessOnly": null,
+        "meanShiftInBaselineStddev": null,
+        "direction": "lower",
+        "baselineVarianceReliable": false,
+        "classification": "tendency",
+        "interpretation": "The replicated trial did not establish a strong variance anchor or freedom signal. Treat this as directional context, not a compulsory rule."
+      },
+      "meanSaturation": {
+        "metric": "meanSaturation",
+        "label": "overall saturation",
+        "roles": [
+          "tonal_memory"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.5239,
+          "median": 0.519,
+          "min": 0.4977,
+          "max": 0.5602,
+          "stddev": 0.0249
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.5307,
+          "median": 0.5373,
+          "min": 0.4995,
+          "max": 0.5486,
+          "stddev": 0.0187
+        },
+        "meanDeltaCombinedMinusWitnessOnly": 0.0068,
+        "stddevRatioCombinedOverWitnessOnly": 0.751,
+        "meanShiftInBaselineStddev": 0.2731,
+        "direction": "higher",
+        "baselineVarianceReliable": true,
+        "classification": "tendency",
+        "interpretation": "The replicated trial did not establish a strong variance anchor or freedom signal. Treat this as directional context, not a compulsory rule."
+      },
+      "meanWarmth": {
+        "metric": "meanWarmth",
+        "label": "warmth bias",
+        "roles": [
+          "tonal_memory"
+        ],
+        "witnessOnly": {
+          "count": 4,
+          "mean": 0.0976,
+          "median": 0.0979,
+          "min": 0.0917,
+          "max": 0.103,
+          "stddev": 0.004
+        },
+        "governingTranslation": {
+          "count": 4,
+          "mean": 0.0969,
+          "median": 0.0963,
+          "min": 0.092,
+          "max": 0.1028,
+          "stddev": 0.004
+        },
+        "meanDeltaCombinedMinusWitnessOnly": -0.0007,
+        "stddevRatioCombinedOverWitnessOnly": 1,
+        "meanShiftInBaselineStddev": 0.175,
+        "direction": "stable",
+        "baselineVarianceReliable": true,
+        "classification": "tendency",
+        "interpretation": "The replicated trial did not establish a strong variance anchor or freedom signal. Treat this as directional context, not a compulsory rule."
+      }
+    }
   },
-  "roleProjection": {},
-  "diagnostics": {},
+  "roleProjection": {
+    "edge_behavior": {
+      "anchors": [],
+      "freedoms": [],
+      "tendencies": [
+        "edgeActivity"
+      ]
+    },
+    "tonal_memory": {
+      "anchors": [],
+      "freedoms": [
+        "tonalSpan"
+      ],
+      "tendencies": [
+        "highlightShare",
+        "meanSaturation",
+        "meanWarmth"
+      ]
+    },
+    "compositional_cadence": {
+      "anchors": [
+        "centerLightDelta",
+        "peripheryLuminance"
+      ],
+      "freedoms": [],
+      "tendencies": [
+        "centerLuminance"
+      ]
+    },
+    "material_hand": {
+      "anchors": [],
+      "freedoms": [
+        "grayscaleEntropy",
+        "tonalSpan"
+      ],
+      "tendencies": [
+        "edgeActivity"
+      ]
+    },
+    "spatial_depth": {
+      "anchors": [
+        "centerLightDelta",
+        "darkShare"
+      ],
+      "freedoms": [
+        "tonalSpan"
+      ],
+      "tendencies": []
+    },
+    "sacred_incompletion": {
+      "anchors": [],
+      "freedoms": [
+        "grayscaleEntropy",
+        "tonalSpan"
+      ],
+      "tendencies": [
+        "edgeActivity"
+      ]
+    }
+  },
+  "diagnostics": {
+    "handprintRangeAdherenceStddev": {
+      "witnessOnly": 0.0116,
+      "governingTranslation": 0.0022
+    },
+    "witnessSpatialSimilarityStddev": {
+      "witnessOnly": 0.0131,
+      "governingTranslation": 0.001
+    },
+    "note": "Diagnostics describe trial-level stabilization. They are not prompt laws."
+  },
   "sourceTrial": {
     "path": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
     "trialId": "gallery-pressure-0030",
     "requiredStatus": "complete",
-    "humanReviewRequiredForRender": true
+    "humanReviewRequiredForRender": true,
+    "status": "complete",
+    "assetKey": "velastra.place_tableau.5cms46",
+    "manifestSha256": "6c6861ead6d787e24c5b871cfc92c9dbf4ca74bf16e7473f1b7ca69c1b837b69",
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
+    "witnessId": "gallery_target_01",
+    "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+    "humanReview": {
+      "status": "pending",
+      "sceneTruthPass": null,
+      "notes": null
+    }
   },
   "provenance": {
     "builder": "velastra-painter grip-build",
     "algorithmVersion": 1,
     "builtAt": null,
-    "note": "Grip classifies pressure-conditioned variance behavior. It does not define aesthetic quality or scene truth."
+    "note": "Grip is a scoped interpretation of replicated pressure-trial variance. It does not alter historical Handprint metrics.",
+    "sourceTrialId": "gallery-pressure-0030",
+    "manifestSha256": "6c6861ead6d787e24c5b871cfc92c9dbf4ca74bf16e7473f1b7ca69c1b837b69",
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
+    "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+    "classificationThresholds": {
+      "minimumRepeatsPerCondition": 4,
+      "minimumBaselineStddev": 0.001,
+      "anchorMaxStddevRatio": 0.67,
+      "anchorMaxMeanShiftInBaselineStddev": 1,
+      "freedomMinStddevRatio": 1.5,
+      "stableDirectionDeadbandInBaselineStddev": 0.25
+    }
   }
 }
