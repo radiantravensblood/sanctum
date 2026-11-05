@@ -3328,9 +3328,74 @@ The Ceiling Storm remains outside this first replication because it is not
 currently a canonical Sanctum scene. It may become a later stress test after
 the scene-local causal chain is established.
 
+## Scene Sovereignty / Witness Firewall
+
+Kernel 0033 begins from the failure revealed by Hearth Pressure Trial 0032:
+
+the hand crossed the room boundary, but the witness did not.
+
+Hearth inherited Gallery frames, papers, studio inventory, and composition even
+though the witness contract explicitly forbade those scene contents.
+
+0033 therefore introduces two paired protections.
+
+### Scene Sovereignty Gate
+
+Painterly Truth fixed objects now enter the positive prompt as required target
+facts.
+
+For Hearth this includes:
+
+- low fire,
+- velvet cushion.
+
+The target place must remain recognizable before witness translation is
+allowed to influence treatment.
+
+### Witness Firewall
+
+The original approved witness remains sealed and unchanged.
+
+For the firewall arm only, its pixels are transformed into an ephemeral
+semantic carrier by deterministic 32px patch shuffling with a small seam blur.
+
+This intentionally destroys global witness layout while preserving local
+palette, pigment, texture, edge, and material evidence.
+
+The carrier:
+
+- is derived from the sealed witness SHA,
+- has its own deterministic carrier ID,
+- lives only under `.velastra/firewall/`,
+- cannot become Visual Witness canon,
+- cannot become scene truth,
+- cannot replace the source witness in provenance.
+
+### Hearth sovereignty ablation
+
+Kernel 0033 compares:
+
+- **A / handprint_only** — text-first Handprint plus Scene Sovereignty Gate,
+- **C / original_witness_combined** — original witness pixels plus the same
+  Scene Sovereignty Gate,
+- **D / firewall_combined** — semantically scrubbed witness carrier plus the
+  same Scene Sovereignty Gate.
+
+The default is two repeats per condition.
+
+The old Hearth 0032 combined renders remain the true pre-0033 baseline.
+
+The primary review question is deliberately human:
+
+**Does the image read first as Hearth rather than as Gallery?**
+
+Pixel metrics remain supporting evidence.
+
+They cannot decide semantic success.
+
 ## Current storage boundary
 
-Kernel 0031 still persists to `localStorage`.
+Kernel 0033 still persists to `localStorage`.
 
 Each browser continues to carry a separate lived world.
 
@@ -3410,4 +3475,4 @@ And now it knows that **the hand can remain coherent without being forced into o
 
 And now it knows that **a witness may show the way while the hand still decides how the scene is touched**.
 
-And now it is learning that **the hand may be recognized by what it holds steady and what it permits to wander**.
+And now it is learning that **the hand may be recognized by what it holds steady and what it permits to wander**.\n\nAnd now it knows that **a witness may teach the hand, but it may not donate the room**.

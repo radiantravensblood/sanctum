@@ -20,7 +20,10 @@
     "visualWitnessBrushMustFailWithoutApprovedWitness": true,
     "witnessContentInheritanceForbidden": true,
     "referenceImageMustCarrySha256": true,
-    "nondeterministicTransportMustCarryAttemptIdentity": true
+    "nondeterministicTransportMustCarryAttemptIdentity": true,
+    "witnessSemanticLayoutMustNotBecomeSceneAuthority": true,
+    "witnessFirewallMustPreserveSourceProvenance": true,
+    "witnessFirewallCarrierCannotBecomeCanon": true
   },
   "brushes": {
     "z_image_turbo": {
@@ -255,7 +258,14 @@
           "hostedMax": 1,
           "localMax": 1,
           "policy": "approved_visual_witness_only",
-          "contentInheritance": "forbidden"
+          "contentInheritance": "forbidden",
+          "semanticFirewall": {
+            "supported": true,
+            "mode": "patch_shuffle_v1",
+            "purpose": "destroy global witness layout while retaining local palette, pigment, texture, and edge evidence",
+            "carrierIsEphemeral": true,
+            "sourceWitnessRemainsSealedAuthorityForProvenance": true
+          }
         },
         "promptBudget": {
           "observedMaxTokens": null,

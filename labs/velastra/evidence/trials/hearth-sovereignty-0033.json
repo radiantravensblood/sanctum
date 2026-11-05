@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "protocol": "velastra.scene_sovereignty_trial.v1",
+  "trialId": "hearth-sovereignty-0033",
+  "status": "awaiting_local_plan",
+  "createdAt": null,
+  "updatedAt": null,
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": null,
+  "repeatsPerCondition": 2,
+  "frozen": {
+    "handprintSha256": null,
+    "handprintAlgorithmVersion": 2,
+    "witnessRegistrySha256": null,
+    "witnessId": "gallery_target_01",
+    "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+    "firewall": {
+      "active": true,
+      "algorithm": "patch_shuffle_v1",
+      "version": 1,
+      "tileSize": 32,
+      "blurRadius": 0.6,
+      "carrierId": null
+    }
+  },
+  "executionOrder": [],
+  "conditions": {
+    "handprint_only": [],
+    "original_witness_combined": [],
+    "firewall_combined": []
+  },
+  "summary": null,
+  "humanReview": {
+    "status": "pending",
+    "primaryQuestion": "Does the image read first as the target place rather than as the Visual Witness scene?",
+    "targetKind": "hearth",
+    "requiredFixedObjects": [
+      "low fire",
+      "velvet cushion"
+    ],
+    "witnessDoNotInherit": [
+      "specific frames",
+      "papers",
+      "objects",
+      "layout",
+      "exact light source"
+    ],
+    "candidateReviews": {},
+    "signatureLikeArtifacts": [],
+    "notes": null
+  },
+  "laws": {
+    "sceneTruthMustRemainRecognizable": true,
+    "fixedObjectsMustReachPositivePrompt": true,
+    "witnessMayTeachHandButCannotDonateRoom": true,
+    "firewallCarrierCannotBecomeSceneTruth": true,
+    "semanticSuccessRequiresHumanReview": true,
+    "signatureLikeArtifactCannotEstablishAuthorship": true,
+    "trialCannotPromoteCandidate": true
+  }
+}
