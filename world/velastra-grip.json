@@ -20,7 +20,12 @@
     "pendingHumanReviewCannotDriveRender": true,
     "motifOccurrenceCannotBecomeGripLawByItself": true,
     "gripChangeMustChangeCandidateIdentity": true,
-    "gripChangeCannotChangeCanonicalPlaceIdentity": true
+    "gripChangeCannotChangeCanonicalPlaceIdentity": true,
+    "gripIsObservationOnlyInKernel0031": true,
+    "humanReviewMayValidateObservationButCannotActivateRenderInKernel0031": true,
+    "crossSceneReplicationRequiredBeforeRenderActivation": true,
+    "observationalGripCannotChangeCandidateIdentity": true,
+    "gripMayTravelAsEvidenceButNotPrompt": true
   },
   "scope": {
     "mode": "scene_local_until_replicated_elsewhere",
@@ -30,7 +35,7 @@
     "assetKeys": [
       "velastra.place_tableau.5cms46"
     ],
-    "promotionRule": "requires replicated evidence across additional scenes before any global Grip law"
+    "promotionRule": "human review may validate this Gallery observation, but render activation requires replicated evidence across additional scenes in a future kernel"
   },
   "thresholds": {
     "minimumRepeatsPerCondition": 4,
@@ -458,7 +463,7 @@
     "path": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
     "trialId": "gallery-pressure-0030",
     "requiredStatus": "complete",
-    "humanReviewRequiredForRender": true,
+    "humanReviewRequiredForRender": false,
     "status": "complete",
     "assetKey": "velastra.place_tableau.5cms46",
     "manifestSha256": "6c6861ead6d787e24c5b871cfc92c9dbf4ca74bf16e7473f1b7ca69c1b837b69",
@@ -470,13 +475,14 @@
       "status": "pending",
       "sceneTruthPass": null,
       "notes": null
-    }
+    },
+    "humanReviewRequiredForValidation": true
   },
   "provenance": {
     "builder": "velastra-painter grip-build",
     "algorithmVersion": 1,
     "builtAt": null,
-    "note": "Grip is a scoped interpretation of replicated pressure-trial variance. It does not alter historical Handprint metrics.",
+    "note": "Grip is a scene-scoped interpretation of replicated pressure-trial variance. Kernel 0031 keeps it observational: it may be inspected and carried as evidence but cannot drive prompts or candidate identity.",
     "sourceTrialId": "gallery-pressure-0030",
     "manifestSha256": "6c6861ead6d787e24c5b871cfc92c9dbf4ca74bf16e7473f1b7ca69c1b837b69",
     "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
