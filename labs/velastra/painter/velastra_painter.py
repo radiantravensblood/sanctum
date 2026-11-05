@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import inspect
 import json
 import os
@@ -2344,6 +2345,422 @@ def cmd_brushes(args: argparse.Namespace) -> int:
     return 0
 
 
+def load_evaluation_module() -> Any:
+    module_path = Path(__file__).with_name("evaluation.py")
+    spec = importlib.util.spec_from_file_location(
+        "velastra_evaluation",
+        module_path,
+    )
+    if spec is None or spec.loader is None:
+        raise PainterError(
+            f"Unable to load candidate evaluator: {module_path}"
+        )
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:
+        raise PainterError(
+            f"Unable to initialize candidate evaluator: {exc}"
+        ) from exc
+    return module
+
+
+def cmd_evaluate(args: argparse.Namespace) -> int:
+    evaluator = load_evaluation_module()
+    repo_root = Path(args.repo_root).resolve()
+    candidate_path = Path(args.candidate)
+    candidate = read_json(candidate_path)
+
+    image_path = (
+        Path(args.image)
+        if args.image
+        else Path((candidate.get("output") or {}).get("path") or "")
+    )
+    if not image_path.exists():
+        raise PainterError(
+            f"Candidate image does not exist: {image_path}"
+        )
+
+    handprint = read_json(Path(args.handprint))
+    witness_registry = load_witness_registry(
+        Path(args.witness_registry)
+    )
+    roles = [
+        item.strip()
+        for item in (args.roles or "").split(",")
+        if item.strip()
+    ]
+
+    try:
+        evaluation = evaluator.evaluate_candidate(
+            image_path=image_path,
+            candidate_record=candidate,
+            handprint=handprint,
+            witness_registry=witness_registry,
+            repo_root=repo_root,
+            roles=roles or None,
+        )
+    except evaluator.EvaluationError as exc:
+        raise PainterError(str(exc)) from exc
+
+    output = (
+        Path(args.output)
+        if args.output
+        else candidate_path.with_suffix(".evaluation.json")
+    )
+    write_json(output, evaluation)
+
+    adherence = evaluation.get("handprintAdherence") or {}
+    similarity = evaluation.get("witnessSpatialSimilarity") or {}
+    print(output)
+    print(
+        "handprint_range_adherence="
+        + str(adherence.get("rangeAdherence"))
+        + " in_range_rate="
+        + str(adherence.get("inRangeRate"))
+        + " witness_spatial_similarity="
+        + str(similarity.get("score"))
+    )
+    return 0
+
+
+def trial_render_args(
+    *,
+    manifest: str,
+    attempt: str,
+    without_handprint: bool,
+    repo_root: str,
+    out_dir: str,
+) -> argparse.Namespace:
+    return argparse.Namespace(
+        manifest=manifest,
+        brush="qwen_image_edit",
+        transport="huggingface",
+        witness=None,
+        without_handprint=without_handprint,
+        without_witness=False,
+        attempt=attempt,
+        repo_root=repo_root,
+        brush_registry=None,
+        backend=None,
+        model=None,
+        seed=None,
+        width=None,
+        height=None,
+        steps=None,
+        guidance=None,
+        true_cfg_scale=None,
+        device=None,
+        dtype=None,
+        out_dir=out_dir,
+    )
+
+
+def trial_arm_plan(
+    *,
+    manifest: Mapping[str, Any],
+    args: argparse.Namespace,
+    condition: str,
+    repeat_index: int,
+) -> tuple[dict[str, Any], argparse.Namespace]:
+    suffix = "b" if condition == "witness_only" else "c"
+    attempt = (
+        str(args.trial_id)
+        + "-"
+        + suffix
+        + "-"
+        + f"{repeat_index:02d}"
+    )
+    render_args = trial_render_args(
+        manifest=args.manifest,
+        attempt=attempt,
+        without_handprint=(condition == "witness_only"),
+        repo_root=args.repo_root,
+        out_dir=args.out_dir,
+    )
+    spec = build_render_spec(render_args)
+    prompts = compile_prompt_bundle(manifest, spec)
+    cid = candidate_id(manifest, prompts, spec)
+    base = Path(args.out_dir) / manifest["assetKey"]
+    image_path = base / f"{cid}.png"
+    record_path = base / f"{cid}.candidate.json"
+
+    command = [
+        ".venv/bin/python",
+        "labs/velastra/painter/velastra_painter.py",
+        "render",
+        args.manifest,
+        "--brush",
+        "qwen_image_edit",
+        "--transport",
+        "huggingface",
+    ]
+    if condition == "witness_only":
+        command.append("--without-handprint")
+    command.extend([
+        "--attempt",
+        attempt,
+        "--repo-root",
+        args.repo_root,
+    ])
+
+    return ({
+        "condition": condition,
+        "repeat": repeat_index,
+        "attemptId": attempt,
+        "candidateId": cid,
+        "image": image_path.as_posix(),
+        "candidateRecord": record_path.as_posix(),
+        "pressure": prompts.get("handprintPressure"),
+        "witness": prompts.get("witness"),
+        "facetRoles": (
+            prompts.get("handprint") or {}
+        ).get("facetRoles") or [],
+        "status": (
+            "rendered"
+            if image_path.exists() and record_path.exists()
+            else "planned"
+        ),
+        "command": command,
+        "evaluation": None,
+    }, render_args)
+
+
+def cmd_pressure_trial(args: argparse.Namespace) -> int:
+    if args.repeats < 2:
+        raise PainterError(
+            "Pressure calibration requires at least 2 repeats per condition."
+        )
+
+    evaluator = load_evaluation_module()
+    repo_root = Path(args.repo_root).resolve()
+    manifest = unwrap_manifest(read_json(Path(args.manifest)))
+    require_manifest(manifest)
+
+    handprint_path = Path(args.handprint)
+    witness_registry_path = Path(args.witness_registry)
+    handprint = read_json(handprint_path)
+    witness_registry = load_witness_registry(
+        witness_registry_path
+    )
+
+    manifest_sha = sha256_bytes(canonical_json(manifest))
+    handprint_sha = sha256_bytes(canonical_json(handprint))
+    witness_registry_sha = sha256_bytes(
+        canonical_json(witness_registry)
+    )
+
+    plans: dict[str, list[dict[str, Any]]] = {
+        "witness_only": [],
+        "governing_translation": [],
+    }
+    namespaces: dict[str, argparse.Namespace] = {}
+
+    for repeat_index in range(1, args.repeats + 1):
+        for condition in (
+            "witness_only",
+            "governing_translation",
+        ):
+            arm, render_args = trial_arm_plan(
+                manifest=manifest,
+                args=args,
+                condition=condition,
+                repeat_index=repeat_index,
+            )
+            plans[condition].append(arm)
+            namespaces[arm["attemptId"]] = render_args
+
+    combined_first = plans["governing_translation"][0]
+    witness_first = plans["witness_only"][0]
+    combined_pressure = combined_first.get("pressure") or {}
+    witness_pressure = witness_first.get("pressure") or {}
+    combined_witness = combined_first.get("witness") or {}
+    witness_witness = witness_first.get("witness") or {}
+
+    if (
+        combined_pressure.get("profile")
+        != "governing_translation"
+        or combined_pressure.get("combined") is not True
+    ):
+        raise PainterError(
+            "Pressure trial requires governing_translation in condition C."
+        )
+    if witness_pressure.get("active"):
+        raise PainterError(
+            "Pressure trial condition B must have Handprint pressure disabled."
+        )
+    if (
+        combined_witness.get("selected")
+        != witness_witness.get("selected")
+        or (combined_witness.get("asset") or {}).get("sha256")
+        != (witness_witness.get("asset") or {}).get("sha256")
+    ):
+        raise PainterError(
+            "Pressure trial conditions must share the same sealed Visual Witness."
+        )
+
+    facet_roles = combined_first.get("facetRoles") or []
+    trial_path = Path(args.output)
+    existing = read_json(trial_path) if trial_path.exists() else {}
+    prior_manifest_sha = existing.get("manifestSha256")
+    if (
+        prior_manifest_sha
+        and prior_manifest_sha != manifest_sha
+        and not args.replace_trial
+    ):
+        raise PainterError(
+            "Existing trial was planned from a different manifest. "
+            "Use --replace-trial only after intentional review."
+        )
+
+    execution_order: list[str] = []
+    for repeat_index in range(1, args.repeats + 1):
+        pair = (
+            ["witness_only", "governing_translation"]
+            if repeat_index % 2 == 1
+            else ["governing_translation", "witness_only"]
+        )
+        for condition in pair:
+            attempt = plans[condition][repeat_index - 1][
+                "attemptId"
+            ]
+            execution_order.append(attempt)
+
+    trial: dict[str, Any] = {
+        "version": 1,
+        "protocol": "velastra.pressure_trial.v1",
+        "trialId": args.trial_id,
+        "status": "planned",
+        "createdAt": existing.get("createdAt") or utc_now(),
+        "updatedAt": utc_now(),
+        "assetKey": manifest["assetKey"],
+        "manifest": args.manifest,
+        "manifestSha256": manifest_sha,
+        "model": "Qwen/Qwen-Image-Edit",
+        "brush": "qwen_image_edit",
+        "transport": "huggingface",
+        "repeatsPerCondition": args.repeats,
+        "facetRoles": facet_roles,
+        "frozen": {
+            "handprintPath": handprint_path.as_posix(),
+            "handprintSha256": handprint_sha,
+            "handprintAlgorithmVersion": (
+                (handprint.get("provenance") or {}).get(
+                    "algorithmVersion"
+                )
+            ),
+            "pressureSchemaVersion": (
+                (handprint.get("pressure") or {}).get("version")
+            ),
+            "witnessRegistryPath": (
+                witness_registry_path.as_posix()
+            ),
+            "witnessRegistrySha256": witness_registry_sha,
+            "witnessId": combined_witness.get("selected"),
+            "witnessSha256": (
+                combined_witness.get("asset") or {}
+            ).get("sha256"),
+        },
+        "executionOrder": execution_order,
+        "conditions": plans,
+        "summary": None,
+        "humanReview": {
+            "status": "pending",
+            "sceneTruthPass": None,
+            "notes": None,
+        },
+        "laws": {
+            "trialCannotMutateCanon": True,
+            "candidateEvaluationCannotPromoteAsset": True,
+            "metricScoreCannotReplaceHumanReview": True,
+            "stochasticTransportRequiresReplication": True,
+            "pressureCalibrationMustFreezeHandprintAndWitnessCanon": True,
+        },
+    }
+    write_json(trial_path, trial)
+
+    if not args.render:
+        print(trial_path)
+        print(
+            "planned="
+            + str(args.repeats * 2)
+            + " renders; no inference executed"
+        )
+        return 0
+
+    trial["status"] = "running"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    by_attempt = {
+        arm["attemptId"]: arm
+        for arms in trial["conditions"].values()
+        for arm in arms
+    }
+
+    for attempt in execution_order:
+        arm = by_attempt[attempt]
+        render_args = namespaces[attempt]
+        image_path = Path(arm["image"])
+        record_path = Path(arm["candidateRecord"])
+
+        if not (image_path.exists() and record_path.exists()):
+            result = cmd_render(render_args)
+            if result != 0:
+                raise PainterError(
+                    f"Pressure trial render failed: {attempt}"
+                )
+
+        candidate = read_json(record_path)
+        try:
+            evaluation = evaluator.evaluate_candidate(
+                image_path=image_path,
+                candidate_record=candidate,
+                handprint=handprint,
+                witness_registry=witness_registry,
+                repo_root=repo_root,
+                roles=facet_roles,
+            )
+        except evaluator.EvaluationError as exc:
+            raise PainterError(str(exc)) from exc
+
+        arm["status"] = "evaluated"
+        arm["evaluation"] = evaluation
+        trial["updatedAt"] = utc_now()
+        write_json(trial_path, trial)
+
+    b_evaluations = [
+        arm["evaluation"]
+        for arm in trial["conditions"]["witness_only"]
+        if arm.get("evaluation")
+    ]
+    c_evaluations = [
+        arm["evaluation"]
+        for arm in trial["conditions"][
+            "governing_translation"
+        ]
+        if arm.get("evaluation")
+    ]
+    trial["summary"] = evaluator.summarize_trial(
+        b_evaluations,
+        c_evaluations,
+    )
+    trial["status"] = "complete"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    print(trial_path)
+    print(
+        json.dumps(
+            trial["summary"][
+                "deltaCombinedMinusWitnessOnly"
+            ],
+            indent=2,
+        )
+    )
+    return 0
+
+
 def cmd_plan(args: argparse.Namespace) -> int:
     manifest = unwrap_manifest(read_json(Path(args.manifest)))
     require_manifest(manifest)
@@ -2573,6 +2990,38 @@ def build_parser() -> argparse.ArgumentParser:
     witness_register.add_argument("--review-note", required=True)
     witness_register.add_argument("--replace", action="store_true")
     witness_register.set_defaults(func=cmd_witness_register)
+
+    evaluate = sub.add_parser(
+        "evaluate",
+        help="Measure one candidate against Handprint ranges and its sealed Visual Witness.",
+    )
+    evaluate.add_argument("candidate")
+    evaluate.add_argument("--image")
+    evaluate.add_argument("--handprint", default="world/velastra-handprint.json")
+    evaluate.add_argument("--witness-registry", default="world/velastra-witnesses.json")
+    evaluate.add_argument("--roles", help="Optional comma-separated Handprint facet roles.")
+    evaluate.add_argument("--repo-root", default=".")
+    evaluate.add_argument("--output")
+    evaluate.set_defaults(func=cmd_evaluate)
+
+    pressure_trial = sub.add_parser(
+        "pressure-trial",
+        help="Plan or explicitly render replicated witness-only versus governing-translation calibration.",
+    )
+    pressure_trial.add_argument("manifest")
+    pressure_trial.add_argument("--trial-id", default="gallery-pressure-0030")
+    pressure_trial.add_argument("--repeats", type=int, default=4)
+    pressure_trial.add_argument("--render", action="store_true", help="Explicitly spend inference and execute the planned trial.")
+    pressure_trial.add_argument("--replace-trial", action="store_true", help="Replace a prior trial plan made from a different manifest after intentional review.")
+    pressure_trial.add_argument("--repo-root", default=".")
+    pressure_trial.add_argument("--handprint", default="world/velastra-handprint.json")
+    pressure_trial.add_argument("--witness-registry", default="world/velastra-witnesses.json")
+    pressure_trial.add_argument("--out-dir", default=".velastra/candidates")
+    pressure_trial.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/gallery-pressure-0030.json",
+    )
+    pressure_trial.set_defaults(func=cmd_pressure_trial)
 
     approve = sub.add_parser("approve", help="Promote a reviewed candidate into a registry copy.")
     approve.add_argument("candidate")
