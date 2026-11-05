@@ -458,9 +458,9 @@ function refreshAtelierDock({
     : "Handprint pending";
 
   const grip = manifest.grip;
-  const gripLabel = grip?.active
+  const gripLabel = grip?.observed
     ? (
-        "Grip " +
+        "Grip observed " +
         String(Object.keys(grip.anchors || {}).length) +
         "A/" +
         String(Object.keys(grip.freedoms || {}).length) +
