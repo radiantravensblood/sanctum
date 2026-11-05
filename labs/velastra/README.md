@@ -668,6 +668,31 @@ No result may activate Grip in Kernel 0032.
 
 Signature-like marks remain a human observation field only.
 
+## Scene Sovereignty / Witness Firewall
+
+Kernel 0033 treats witness-content leakage as a brush-translation failure.
+
+The source witness remains approved and sealed.
+
+A deterministic semantic carrier may be generated locally for image-edit
+experiments so the brush receives local visual-hand evidence without receiving
+the witness room's global layout as authority.
+
+The trial protocol is:
+
+`velastra.scene_sovereignty_trial.v1`
+
+and the Painter Bridge command is:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json"
+```
+
+Planning performs no inference.
+
+Human review remains authoritative for whether Hearth is actually recognizable.
+
 ## Studio adapter contract
 
 Viryn Studio is an external consumer of Velastra.
