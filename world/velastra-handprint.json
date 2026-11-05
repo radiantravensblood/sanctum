@@ -24,7 +24,14 @@
     "singleWitnessFacetCannotBecomeCrossPortfolioLaw": true,
     "facetVariationMustRemainVisible": true,
     "sceneProjectionMaySelectFacetsButCannotRewriteThem": true,
-    "ablationMustRemainCandidateLocal": true
+    "ablationMustRemainCandidateLocal": true,
+    "handprintPressureMustRemainAuthoredAndInspectable": true,
+    "pressureCannotOverrideSceneTruth": true,
+    "pressureCannotOverrideVisibleEvidence": true,
+    "combinedModeMustTranslateWitnessThroughHandprint": true,
+    "literalWitnessReconstructionMustYieldToEligibleFacetLaw": true,
+    "pressureProfileMustTravelInManifest": true,
+    "pressureProfileMustEnterCandidateProvenance": true
   },
   "minimumApprovedWitnesses": 3,
   "corpus": {
@@ -117,7 +124,7 @@
         "meanSaturation": 0.6753,
         "meanWarmth": 0.1113,
         "darkShare": 0.6853,
-        "highlightShare": 0.0,
+        "highlightShare": 0,
         "p10Luminance": 0.0431,
         "p90Luminance": 0.4863,
         "tonalSpan": 0.4431,
@@ -222,7 +229,7 @@
         "count": 3,
         "mean": 0.0079,
         "median": 0.0054,
-        "min": 0.0,
+        "min": 0,
         "max": 0.0184,
         "stddev": 0.0077,
         "range": 0.0184,
@@ -497,7 +504,7 @@
             "count": 2,
             "mean": 0.0092,
             "median": 0.0092,
-            "min": 0.0,
+            "min": 0,
             "max": 0.0184,
             "stddev": 0.0092,
             "range": 0.0184,
@@ -588,8 +595,8 @@
             "median": 0.1903,
             "min": 0.1903,
             "max": 0.1903,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "meanSaturation": {
@@ -598,8 +605,8 @@
             "median": 0.6753,
             "min": 0.6753,
             "max": 0.6753,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "meanWarmth": {
@@ -608,8 +615,8 @@
             "median": 0.1113,
             "min": 0.1113,
             "max": 0.1113,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "darkShare": {
@@ -618,18 +625,18 @@
             "median": 0.6853,
             "min": 0.6853,
             "max": 0.6853,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "highlightShare": {
             "count": 1,
-            "mean": 0.0,
-            "median": 0.0,
-            "min": 0.0,
-            "max": 0.0,
-            "stddev": 0.0,
-            "range": 0.0,
+            "mean": 0,
+            "median": 0,
+            "min": 0,
+            "max": 0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "tonalSpan": {
@@ -638,8 +645,8 @@
             "median": 0.4431,
             "min": 0.4431,
             "max": 0.4431,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "edgeActivity": {
@@ -648,8 +655,8 @@
             "median": 0.0256,
             "min": 0.0256,
             "max": 0.0256,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "centerLuminance": {
@@ -658,8 +665,8 @@
             "median": 0.2934,
             "min": 0.2934,
             "max": 0.2934,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "peripheryLuminance": {
@@ -668,8 +675,8 @@
             "median": 0.1367,
             "min": 0.1367,
             "max": 0.1367,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "centerLightDelta": {
@@ -678,8 +685,8 @@
             "median": 0.1567,
             "min": 0.1567,
             "max": 0.1567,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "grayscaleEntropy": {
@@ -688,8 +695,8 @@
             "median": 0.8388,
             "min": 0.8388,
             "max": 0.8388,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           }
         },
@@ -847,8 +854,8 @@
             "median": 0.1903,
             "min": 0.1903,
             "max": 0.1903,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "meanSaturation": {
@@ -857,8 +864,8 @@
             "median": 0.6753,
             "min": 0.6753,
             "max": 0.6753,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "meanWarmth": {
@@ -867,8 +874,8 @@
             "median": 0.1113,
             "min": 0.1113,
             "max": 0.1113,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "darkShare": {
@@ -877,18 +884,18 @@
             "median": 0.6853,
             "min": 0.6853,
             "max": 0.6853,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "highlightShare": {
             "count": 1,
-            "mean": 0.0,
-            "median": 0.0,
-            "min": 0.0,
-            "max": 0.0,
-            "stddev": 0.0,
-            "range": 0.0,
+            "mean": 0,
+            "median": 0,
+            "min": 0,
+            "max": 0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "tonalSpan": {
@@ -897,8 +904,8 @@
             "median": 0.4431,
             "min": 0.4431,
             "max": 0.4431,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "edgeActivity": {
@@ -907,8 +914,8 @@
             "median": 0.0256,
             "min": 0.0256,
             "max": 0.0256,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "centerLuminance": {
@@ -917,8 +924,8 @@
             "median": 0.2934,
             "min": 0.2934,
             "max": 0.2934,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "peripheryLuminance": {
@@ -927,8 +934,8 @@
             "median": 0.1367,
             "min": 0.1367,
             "max": 0.1367,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "centerLightDelta": {
@@ -937,8 +944,8 @@
             "median": 0.1567,
             "min": 0.1567,
             "max": 0.1567,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           },
           "grayscaleEntropy": {
@@ -947,8 +954,8 @@
             "median": 0.8388,
             "min": 0.8388,
             "max": 0.8388,
-            "stddev": 0.0,
-            "range": 0.0,
+            "stddev": 0,
+            "range": 0,
             "variation": "tight"
           }
         },
@@ -1276,7 +1283,7 @@
             "count": 3,
             "mean": 0.0079,
             "median": 0.0054,
-            "min": 0.0,
+            "min": 0,
             "max": 0.0184,
             "stddev": 0.0077,
             "range": 0.0184,
@@ -1355,5 +1362,51 @@
       }
     },
     "note": "Facet statistics are conditioned only on witnesses explicitly reviewed to teach each role. Single-witness facets remain provisional and are not projected into render guidance."
+  },
+  "pressure": {
+    "version": 1,
+    "defaultProfile": "descriptive_guidance",
+    "combinedProfile": "governing_translation",
+    "priorityRoleOrder": [
+      "sacred_incompletion",
+      "material_hand",
+      "edge_behavior",
+      "tonal_memory",
+      "spatial_depth",
+      "compositional_cadence"
+    ],
+    "profiles": {
+      "descriptive_guidance": {
+        "mode": "descriptive_guidance",
+        "priority": 114,
+        "purpose": "Carry portable cross-portfolio tendencies into text-first rendering without pretending they are scene facts.",
+        "directives": [
+          "Use eligible Handprint facets as strong painterly guidance while preserving scene truth and Visible Evidence.",
+          "Treat facet ranges as legitimate variation rather than fixed numeric targets.",
+          "Do not invent witness scene content."
+        ]
+      },
+      "governing_translation": {
+        "mode": "governing_translation",
+        "priority": 123,
+        "purpose": "In combined image-edit mode, make Handprint the governing visual translation law over literal witness reconstruction.",
+        "directives": [
+          "Preserve the target scene truth and Visible Evidence as absolute semantic authority.",
+          "Use the Visual Witness as source memory and visual evidence, not as a layout or inventory to reproduce.",
+          "Translate every inherited witness tendency through eligible Handprint facets.",
+          "When literal witness reconstruction conflicts with eligible Handprint law, keep target scene truth and prefer Handprint translation.",
+          "Prefer reinterpretation, selective resolution, and handled material decisions over literal reconstruction."
+        ],
+        "nonNegotiableRoleLaws": {
+          "sacred_incompletion": "Preserve incompletion as visible process, revision, residue, and becoming; do not polish it into finished display or reduce it to blankness.",
+          "material_hand": "Let surfaces retain handled memory through layered pigment, residue, wear, patina, interruption, and selective material specificity.",
+          "edge_behavior": "Keep resolution selective; avoid uniformly crisp object boundaries and let some edges dissolve with purpose.",
+          "tonal_memory": "Use warmth as meaningful emphasis inside a restrained tonal field; avoid generic amber wash or indiscriminate glow.",
+          "spatial_depth": "Build depth through recession, threshold, occlusion, atmospheric separation, and light rather than showroom staging.",
+          "compositional_cadence": "Preserve purposeful imbalance and breathing room; do not mechanically copy the witness layout or force symmetry."
+        },
+        "witnessTranslationLaw": "Use witness content only as provisional visual memory. Recompose and repaint the target through Handprint law; the witness must not remain the final visual authority."
+      }
+    }
   }
 }
