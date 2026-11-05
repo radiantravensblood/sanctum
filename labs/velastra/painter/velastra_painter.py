@@ -685,8 +685,8 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
 
     parts.append(
         "Treat facet ranges as valid variation, not targets to average into one uniform look. "
-        "Use these as cross-portfolio tendencies only. Do not inherit any "
-        "witness subject, object, architecture, identity, or layout."
+        "These are cross-portfolio laws of visual treatment, never scene facts. "
+        "Do not inherit any witness subject, object, architecture, identity, or layout."
     )
     return " ".join(parts)
 
