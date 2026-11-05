@@ -66,7 +66,14 @@
     "handprintFacetRangesCannotBeCollapsedIntoUniversalTargets": true,
     "provisionalSingleWitnessFacetCannotDriveRender": true,
     "renderAblationMustNotMutateManifestOrCanon": true,
-    "textFirstBrushCannotClaimUnsentWitnessPixels": true
+    "textFirstBrushCannotClaimUnsentWitnessPixels": true,
+    "handprintPressureMustBeManifestAuthored": true,
+    "handprintPressureCannotOverrideSceneTruth": true,
+    "handprintPressureCannotOverrideVisibleEvidence": true,
+    "combinedWitnessMustYieldLiteralReconstructionToFacetLaw": true,
+    "pressureModeMustEnterCandidateProvenance": true,
+    "witnessOnlyAblationMustCarryNoHandprintPressure": true,
+    "textFirstHandprintMustRemainDescriptiveRatherThanPretendReferenceControl": true
   },
   "media": {
     "luminous_oil": {
@@ -220,6 +227,13 @@
       "withoutHandprint": "--without-handprint",
       "withoutWitness": "--without-witness",
       "candidateLocal": true,
+      "canonicalStateMutation": false
+    },
+    "handprintPressure": {
+      "source": "manifest.handprint.pressure",
+      "defaultProfile": "descriptive_guidance",
+      "combinedProfile": "governing_translation",
+      "candidateLocalResolution": true,
       "canonicalStateMutation": false
     }
   },
