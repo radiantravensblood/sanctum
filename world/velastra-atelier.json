@@ -82,7 +82,19 @@
     "metricScoreCannotReplaceHumanReview": true,
     "spatialSimilarityCannotEstablishSemanticCopying": true,
     "trialPlanningCannotExecuteInference": true,
-    "trialResultsMustRemainAuthoringEvidence": true
+    "trialResultsMustRemainAuthoringEvidence": true,
+    "gripMustTravelInsideManifest": true,
+    "gripCannotChangeCanonicalPlaceIdentity": true,
+    "gripChangeMustChangeCandidateIdentity": true,
+    "gripCannotBecomeSceneTruth": true,
+    "gripCannotOverridePainterlyTruth": true,
+    "gripCannotOverrideVisibleEvidence": true,
+    "gripCannotOverrideHumanReview": true,
+    "gripAnchorCannotFreezeExactValue": true,
+    "gripFreedomCannotBecomeRandomnessDirective": true,
+    "gripTendencyCannotBecomeCompulsoryMotif": true,
+    "oneSceneGripCannotBecomeGlobalLaw": true,
+    "pendingHumanReviewGripCannotDriveRender": true
   },
   "media": {
     "luminous_oil": {
@@ -258,6 +270,15 @@
       "explicitRenderFlag": "--render",
       "evaluator": "labs/velastra/painter/evaluation.py",
       "evidenceDirectory": "labs/velastra/evidence/trials"
+    },
+    "handprintGrip": {
+      "registry": "world/velastra-grip.json",
+      "sourceTrial": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+      "buildCommand": "grip-build",
+      "inspectCommand": "grip",
+      "snapshotTravelsWithManifest": true,
+      "humanReviewRequiredForRender": true,
+      "sceneLocalUntilReplicatedElsewhere": true
     }
   },
   "livingCanvas": {
