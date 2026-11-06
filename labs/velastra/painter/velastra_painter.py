@@ -1746,7 +1746,7 @@ def compile_prompt_bundle(
         if handprint_pressure.get("mode") == "governing_translation":
             witness_direction += (
                 " In combined mode, do not treat the reference image as the final visual authority: "
-                "recompose and repaint it through the governing Handprint laws above."
+                "recompose and repaint it through the portfolio-derived visual treatment above."
             )
         add(
             "visual_witness",
@@ -3668,6 +3668,8 @@ def cmd_scene_sovereignty_trial(
             "fixedObjectsMustReachPositivePrompt": True,
             "witnessMayTeachHandButCannotDonateRoom": True,
             "thresholdsMarkTransitionNotOwnership": True,
+            "controlPlaneVocabularyMustNotReachPainter": True,
+            "instructionTextMustNotBecomeImageContent": True,
             "firewallCarrierCannotBecomeSceneTruth": True,
             "semanticSuccessRequiresHumanReview": True,
             "signatureLikeArtifactCannotEstablishAuthorship": True,
