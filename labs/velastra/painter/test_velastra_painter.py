@@ -411,8 +411,10 @@ class PainterBridgeTests(unittest.TestCase):
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
-        self.assertIn("IDENTITY REFRAME", bundle["positive"])
+        self.assertNotIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertNotIn("IDENTITY REFRAME", bundle["positive"])
+        self.assertIn("The final image must make at least", bundle["positive"])
+        self.assertIn("The scene's identity should read as", bundle["positive"])
         self.assertIn("raw ground or underpainting", bundle["positive"])
         self.assertIn("empty frame may appear", bundle["positive"])
         self.assertEqual(bundle["negative"], "")
@@ -431,7 +433,8 @@ class PainterBridgeTests(unittest.TestCase):
 
         self.assertTrue(bundle["control"]["negativePromptActive"])
         self.assertIn("Virynism rejects", bundle["negative"])
-        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertNotIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertIn("The final image must make at least", bundle["positive"])
 
     def test_prompt_bundle_carries_portfolio_handprint(self):
         manifest = manifest_fixture()
@@ -798,7 +801,8 @@ class PainterBridgeTests(unittest.TestCase):
 
         self.assertFalse(bundle["witness"]["active"])
         self.assertNotIn("VISUAL WITNESS", bundle["positive"])
-        self.assertIn("HANDPRINT", bundle["positive"])
+        self.assertNotIn("HANDPRINT", bundle["positive"])
+        self.assertIn("approved source studies", bundle["positive"])
 
     def test_handprint_ablation_changes_candidate_without_changing_asset(self):
         manifest = manifest_fixture()
@@ -1200,7 +1204,8 @@ class PainterBridgeTests(unittest.TestCase):
         )
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("VISUAL WITNESS", bundle["positive"])
+        self.assertNotIn("VISUAL WITNESS", bundle["positive"])
+        self.assertIn("input reference image accompanies this request", bundle["positive"])
         self.assertIn("specific frames", bundle["positive"])
         self.assertEqual(
             bundle["witness"]["selected"],
