@@ -822,6 +822,115 @@ class PainterBridgeTests(unittest.TestCase):
             "old basin",
         )
 
+    def test_hearth_threshold_integrity_and_fixed_object_lock_are_prompt_visible(self):
+        manifest = manifest_fixture()
+        environment = manifest["scene"]["environment"]
+        environment["kind"] = "hearth"
+        environment["facts"] = [
+            "an intimate room organized around warmth and return",
+        ]
+        environment["painterlyTruth"] = {
+            "version": 1,
+            "id": "painterly_truth",
+            "revision": 3,
+            "room": "hearth",
+            "facts": [
+                "the hearth is a place of refuge and mutual presence",
+            ],
+            "fixedObjects": [
+                {"id": "low_fire", "name": "low fire"},
+                {"id": "velvet_cushion", "name": "velvet cushion"},
+            ],
+        }
+
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertTrue(bundle["thresholdIntegrity"]["active"])
+        self.assertEqual(
+            bundle["thresholdIntegrity"]["profile"],
+            "hearth_hospitality_v1",
+        )
+        self.assertIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertIn(
+            "Any authored low fire must remain visibly low and contained.",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "Any authored cushion must read as a discrete cushion",
+            bundle["positive"],
+        )
+        self.assertIn("THRESHOLD INTEGRITY LAW", bundle["positive"])
+        self.assertIn(
+            "Thresholds mark transition, not ownership.",
+            bundle["positive"],
+        )
+        self.assertIn("easy ingress and egress", bundle["positive"])
+        self.assertIn(
+            "Threshold integrity rejects:",
+            bundle["negative"],
+        )
+        self.assertIn("wrought-iron gates", bundle["negative"])
+        self.assertIn("chains", bundle["negative"])
+
+        record = painter.build_candidate_record(
+            manifest,
+            bundle,
+            spec,
+            Path(".velastra/hearth.png"),
+        )
+        self.assertTrue(
+            record["source"]["thresholdIntegrity"]["active"]
+        )
+
+    def test_explicit_scene_barrier_truth_disables_default_hospitality_override(self):
+        manifest = manifest_fixture()
+        environment = manifest["scene"]["environment"]
+        environment["kind"] = "hearth"
+        environment["facts"] = [
+            "an iron gate is explicitly required as memorial scene truth",
+        ]
+        environment["painterlyTruth"] = {
+            "version": 1,
+            "id": "painterly_truth",
+            "revision": 3,
+            "room": "hearth",
+            "fixedObjects": [
+                {"id": "low_fire", "name": "low fire"},
+            ],
+        }
+
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertFalse(bundle["thresholdIntegrity"]["active"])
+        self.assertEqual(
+            bundle["thresholdIntegrity"]["reason"],
+            "explicit_scene_truth_requires_barrier",
+        )
+        self.assertNotIn("THRESHOLD INTEGRITY LAW", bundle["positive"])
+        self.assertNotIn(
+            "Threshold integrity rejects:",
+            bundle["negative"],
+        )
+
+    def test_non_hearth_fixed_object_lock_does_not_introduce_hearth_objects(self):
+        manifest = manifest_fixture()
+        spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertIn("old basin", bundle["positive"])
+        self.assertNotIn("low fire", bundle["positive"])
+        self.assertNotIn("cushion", bundle["positive"])
+        self.assertFalse(bundle["thresholdIntegrity"]["active"])
+
     def test_witness_firewall_is_prompt_visible_and_candidate_local(self):
         manifest = manifest_fixture()
         approved = manifest["witnesses"]["selected"][0]
