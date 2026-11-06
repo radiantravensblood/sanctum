@@ -697,6 +697,67 @@ def resolve_handprint_pressure(
     }
 
 
+
+MODEL_VISIBLE_CONTROL_MARKERS = (
+    "scene sovereignty gate",
+    "fixed object lock",
+    "threshold integrity law",
+    "witness firewall",
+    "visual witness",
+    "governing handprint law",
+    "non-negotiable hand laws",
+    "witness translation law",
+    "identity reframe",
+    "visible evidence contract",
+    "positive composition controls",
+    "handprint",
+)
+
+
+def model_safe_instruction(value: Any) -> str:
+    """Translate internal system vocabulary into literal painter-facing prose."""
+    text = flatten_text(value)
+    replacements = (
+        ("Scene Sovereignty Gate", "authored scene facts"),
+        ("scene sovereignty gate", "authored scene facts"),
+        ("Fixed Object Lock", "required visible objects"),
+        ("fixed object lock", "required visible objects"),
+        ("Threshold Integrity Law", "movement and access guidance"),
+        ("threshold integrity law", "movement and access guidance"),
+        ("Witness Firewall", "reference-image preprocessing"),
+        ("witness firewall", "reference-image preprocessing"),
+        ("Visible Evidence Contract", "required visible facts"),
+        ("visible evidence contract", "required visible facts"),
+        ("Identity Reframe", "scene identity"),
+        ("identity reframe", "scene identity"),
+        ("Positive Composition Controls", "composition requirements"),
+        ("positive composition controls", "composition requirements"),
+        ("Governing Handprint Law", "portfolio-derived visual treatment"),
+        ("governing handprint law", "portfolio-derived visual treatment"),
+        ("Non-Negotiable Hand Laws", "visual treatment constraints"),
+        ("non-negotiable hand laws", "visual treatment constraints"),
+        ("Witness Translation Law", "reference-image translation guidance"),
+        ("witness translation law", "reference-image translation guidance"),
+        ("Visual Witness", "reference image"),
+        ("visual witness", "reference image"),
+        ("Witness", "reference image"),
+        ("witness", "reference image"),
+        ("Handprint", "portfolio-derived visual treatment"),
+        ("handprint", "portfolio-derived visual treatment"),
+    )
+    for source, target in replacements:
+        text = text.replace(source, target)
+    return text
+
+
+def control_plane_leaks(text: str) -> list[str]:
+    lowered = text.lower()
+    return [
+        marker
+        for marker in MODEL_VISIBLE_CONTROL_MARKERS
+        if marker in lowered
+    ]
+
 def handprint_pressure_text(
     handprint: Mapping[str, Any],
     pressure: Mapping[str, Any],
@@ -708,15 +769,18 @@ def handprint_pressure_text(
         return ""
 
     parts: list[str] = [
-        "GOVERNING HANDPRINT LAW — Handprint is the visual translation authority for this combined render. "
-        "Scene truth and Visible Evidence remain absolute semantic authority."
+        "For this combined render, use the portfolio-derived visual treatment "
+        "to translate the reference image. The authored scene and its required "
+        "visible facts remain the only semantic source."
     ]
 
-    directives = pressure.get("directives") or []
+    directives = [
+        model_safe_instruction(item)
+        for item in (pressure.get("directives") or [])
+        if model_safe_instruction(item)
+    ]
     if directives:
-        parts.append(
-            "TRANSLATION DIRECTIVES — " + " | ".join(directives)
-        )
+        parts.append(" ".join(directives))
 
     active_roles = set(handprint.get("facetRoles") or [])
     role_laws = pressure.get("roleLaws") or {}
@@ -730,20 +794,20 @@ def handprint_pressure_text(
         for role in active_roles
         if role not in ordered and flatten_text(role_laws.get(role))
     ]
-    laws = [
-        role.replace("_", " ").upper()
-        + " LAW — "
-        + flatten_text(role_laws.get(role))
+    constraints = [
+        role.replace("_", " ")
+        + ": "
+        + model_safe_instruction(role_laws.get(role))
         for role in ordered + sorted(remaining)
     ]
-    if laws:
-        parts.append("NON-NEGOTIABLE HAND LAWS — " + " | ".join(laws))
+    if constraints:
+        parts.append("Visual treatment constraints: " + " | ".join(constraints))
 
-    witness_law = pressure.get("witnessTranslationLaw")
-    if witness_law:
-        parts.append(
-            "WITNESS TRANSLATION LAW — " + str(witness_law)
-        )
+    translation = model_safe_instruction(
+        pressure.get("witnessTranslationLaw")
+    )
+    if translation:
+        parts.append(translation)
 
     return " ".join(parts)
 
@@ -754,9 +818,9 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
 
     interpretation = handprint.get("interpretation") or {}
     parts: list[str] = [
-        "Portfolio-derived Virynism Handprint from "
+        "Use portfolio-derived Virynism visual treatment learned from "
         + str(handprint.get("witnessCount") or 0)
-        + " approved witnesses."
+        + " approved source studies."
     ]
 
     labels = [
@@ -785,7 +849,7 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
                 )
         if facet_parts:
             parts.append(
-                "ROLE-CONDITIONED FACETS — " + " | ".join(facet_parts)
+                "Relevant visual-treatment facets: " + " | ".join(facet_parts)
             )
     else:
         roles = (
@@ -804,8 +868,8 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
 
     parts.append(
         "Treat facet ranges as valid variation, not targets to average into one uniform look. "
-        "These are cross-portfolio laws of visual treatment, never scene facts. "
-        "Do not inherit any witness subject, object, architecture, identity, or layout."
+        "These are recurring visual-treatment tendencies, never scene facts. "
+        "Do not inherit any reference-image subject, object, architecture, identity, or layout."
     )
     return " ".join(parts)
 
@@ -1561,11 +1625,10 @@ def compile_prompt_bundle(
     if sovereignty_facts:
         add(
             "scene_sovereignty",
-            "SCENE SOVEREIGNTY GATE — Build the target room from these "
-            "canonical place facts before applying witness translation: "
+            "Build the target room from these literal authored place facts: "
             + " | ".join(sovereignty_facts)
             + ". These target facts must remain recognizable. "
-            "The witness may not substitute its architecture, object inventory, "
+            "The reference image may not substitute its architecture, object inventory, "
             "furniture, layout, or exact light source for them.",
             priority=126,
             required=True,
@@ -1596,8 +1659,7 @@ def compile_prompt_bundle(
             )
         add(
             "fixed_object_lock",
-            "FIXED OBJECT LOCK — These authored objects are mandatory, visible, "
-            "and semantically literal: "
+            "These authored objects must be clearly visible and semantically literal: "
             + " | ".join(fixed_object_names)
             + ". "
             + " ".join(fixed_object_guidance),
@@ -1608,9 +1670,8 @@ def compile_prompt_bundle(
     if threshold_integrity.get("active"):
         add(
             "threshold_integrity",
-            "THRESHOLD INTEGRITY LAW — "
-            + str(threshold_integrity.get("law") or "")
-            + " This Hearth is organized by "
+            "Movement and access must remain consistent with the authored Hearth. "
+            "This room is organized by "
             + ", ".join(threshold_integrity.get("identity") or [])
             + ". Any doorway, opening, or passage must read as "
             + ", ".join(threshold_integrity.get("semantics") or [])
@@ -1623,7 +1684,7 @@ def compile_prompt_bundle(
     if evidence["identityReframe"]:
         add(
             "identity_reframe",
-            "IDENTITY REFRAME — " + evidence["identityReframe"],
+            "The scene's identity should read as: " + evidence["identityReframe"],
             priority=112,
             required=True,
         )
@@ -1635,7 +1696,7 @@ def compile_prompt_bundle(
         )
         add(
             "visible_evidence",
-            "VISIBLE EVIDENCE CONTRACT — the final image must make at least "
+            "The final image must make at least "
             + str(visible_count)
             + " of these already-true facts clearly perceptible: "
             + " | ".join(evidence["required"]),
@@ -1646,7 +1707,7 @@ def compile_prompt_bundle(
     if evidence["controls"]:
         add(
             "evidence_controls",
-            "POSITIVE COMPOSITION CONTROLS — satisfy these through what is visibly present: "
+            "Satisfy these composition requirements through what is visibly present: "
             + " | ".join(evidence["controls"]),
             priority=108,
             required=True,
@@ -1685,7 +1746,7 @@ def compile_prompt_bundle(
     if handprint_text:
         add(
             "handprint",
-            "HANDPRINT — " + handprint_text,
+            handprint_text,
             priority=int(handprint_pressure.get("priority") or 114) - 1,
             required=True,
         )
@@ -1694,18 +1755,18 @@ def compile_prompt_bundle(
         roles = ", ".join(witness["roles"]) or "approved visual-hand roles"
         exclusions = ", ".join(witness["doNotInherit"]) or "all depicted scene content"
         witness_direction = (
-            "VISUAL WITNESS — an input image accompanies this request. "
-            "Use it only as evidence for these visual-hand roles: "
+            "An input reference image accompanies this request. "
+            "Use it only as evidence for these visual-treatment roles: "
             + roles
             + ". Rebuild the target image from the authoritative target scene. "
             "Do not inherit witness content including: "
             + exclusions
-            + ". Witness scene content is non-canonical."
+            + ". Reference-image scene content is non-canonical."
         )
         if handprint_pressure.get("mode") == "governing_translation":
             witness_direction += (
-                " In combined mode, do not treat the witness as the final visual authority: "
-                "recompose and repaint it through the governing Handprint laws above."
+                " In combined mode, do not treat the reference image as the final visual authority: "
+                "recompose and repaint it through the portfolio-derived visual treatment above."
             )
         add(
             "visual_witness",
@@ -1717,14 +1778,13 @@ def compile_prompt_bundle(
         if (witness.get("firewall") or {}).get("active"):
             add(
                 "witness_firewall",
-                "WITNESS FIREWALL — the accompanying reference pixels have "
-                "been deliberately scrambled to destroy semantic layout. "
-                "Use the carrier only for local palette, pigment, texture, edge, "
-                "and material-hand memory. Do not infer or reconstruct the "
-                "original witness room, object inventory, architecture, frame "
-                "placement, papers, furniture, or exact light source. "
-                "Recover the target place only from Scene Sovereignty and "
-                "authoritative target truth.",
+                "The accompanying reference pixels have been locally rearranged "
+                "so their original spatial organization is unavailable. Use them "
+                "only for local palette, pigment, texture, edge, and material "
+                "memory. Do not infer or reconstruct the original reference room, "
+                "object inventory, architecture, frame placement, papers, furniture, "
+                "or exact light source. Build the target place only from the authored "
+                "scene facts above.",
                 priority=125,
                 required=True,
             )
@@ -1820,7 +1880,7 @@ def compile_prompt_bundle(
         )
 
     dialect_directives = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("directives") or [])
     ]
     dialect_directives = [
@@ -1851,6 +1911,7 @@ def compile_prompt_bundle(
         "Do not invent additional people, identities, relationships, consent, touch, text, logos, symbols, or objects.",
         "Do not turn symbolic motifs into literal world facts.",
         "Do not add decorative UI chrome, cards, captions, labels, diagrams, or typography unless explicitly present in scene facts.",
+        "Do not render wording, headings, labels, or phrases from these instructions into the image.",
         "Do not flatten the image into generic concept art, stock illustration, clip art, procedural SVG aesthetics, or staged showroom photography.",
         "Do not contradict the explicit subject, relation, environment, camera, lighting, or provenance constraints.",
     ]
@@ -1870,12 +1931,12 @@ def compile_prompt_bundle(
 
     if witness["active"] and witness["doNotInherit"]:
         negative.append(
-            "Do not copy Visual Witness scene content: "
+            "Do not copy reference-image scene content: "
             + " | ".join(witness["doNotInherit"])
         )
 
     dialect_negative = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("negativePriorities") or [])
     ]
     dialect_negative = [
@@ -1887,6 +1948,14 @@ def compile_prompt_bundle(
             + " | ".join(dialect_negative)
         )
 
+    positive_text = "\n".join(positive_sections)
+    leaks = control_plane_leaks(positive_text)
+    if leaks:
+        raise PainterError(
+            "Control-plane vocabulary leaked into painter-facing prompt: "
+            + ", ".join(leaks)
+        )
+
     negative_text = (
         "\n".join(negative)
         if negative_supported
@@ -1894,7 +1963,13 @@ def compile_prompt_bundle(
     )
 
     return {
-        "positive": "\n".join(positive_sections),
+        "positive": positive_text,
+        "controlPlaneIsolation": {
+            "version": 1,
+            "active": True,
+            "knownMarkersBlocked": list(MODEL_VISIBLE_CONTROL_MARKERS),
+            "leaks": leaks,
+        },
         "negative": negative_text,
         "truthEnvelope": truth,
         "thresholdIntegrity": threshold_integrity,
@@ -2190,6 +2265,7 @@ def build_candidate_record(
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
             "thresholdIntegrity": prompts.get("thresholdIntegrity"),
+            "controlPlaneIsolation": prompts.get("controlPlaneIsolation"),
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
             "handprint": prompts.get("handprint"),
@@ -3612,6 +3688,8 @@ def cmd_scene_sovereignty_trial(
             "fixedObjectsMustReachPositivePrompt": True,
             "witnessMayTeachHandButCannotDonateRoom": True,
             "thresholdsMarkTransitionNotOwnership": True,
+            "controlPlaneVocabularyMustNotReachPainter": True,
+            "instructionTextMustNotBecomeImageContent": True,
             "firewallCarrierCannotBecomeSceneTruth": True,
             "semanticSuccessRequiresHumanReview": True,
             "signatureLikeArtifactCannotEstablishAuthorship": True,
