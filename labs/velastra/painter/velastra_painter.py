@@ -1581,15 +1581,26 @@ def compile_prompt_bundle(
             fixed_object_names.append(value)
 
     if fixed_object_names:
+        fixed_object_guidance = [
+            "Preserve descriptive modifiers exactly; do not enlarge, merge, "
+            "substitute, omit, or merely imply authored fixed objects."
+        ]
+        if any("fire" in name.lower() for name in fixed_object_names):
+            fixed_object_guidance.append(
+                "Any authored low fire must remain visibly low and contained."
+            )
+        if any("cushion" in name.lower() for name in fixed_object_names):
+            fixed_object_guidance.append(
+                "Any authored cushion must read as a discrete cushion rather "
+                "than generic upholstered furniture."
+            )
         add(
             "fixed_object_lock",
             "FIXED OBJECT LOCK — These authored objects are mandatory, visible, "
             "and semantically literal: "
             + " | ".join(fixed_object_names)
-            + ". Preserve descriptive modifiers exactly; do not enlarge, merge, "
-            "substitute, omit, or merely imply them. A low fire must remain low "
-            "and contained; a cushion must read as a discrete cushion rather than "
-            "generic upholstered furniture.",
+            + ". "
+            + " ".join(fixed_object_guidance),
             priority=129,
             required=True,
         )
