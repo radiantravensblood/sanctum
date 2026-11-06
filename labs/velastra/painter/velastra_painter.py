@@ -2073,6 +2073,10 @@ def compile_prompt_bundle(
             "designation": (manifest.get("style") or {}).get("designation"),
             "emphasis": (manifest.get("style") or {}).get("emphasis") or [],
             "dialect": dialect.get("mode"),
+            "ablations": style.get("ablations") or {
+                "disabledStyleIds": [],
+                "disabledPhrases": [],
+            },
         },
         "control": {
             "negativePromptActive": negative_supported,
