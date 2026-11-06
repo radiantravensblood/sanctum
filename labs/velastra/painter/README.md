@@ -781,6 +781,87 @@ success is human-reviewed:
 
 **Does the image read first as the target place rather than as the witness?**
 
+## Kernel 0034 — Scene Truth Lock / Threshold Integrity
+
+Kernel 0034 keeps the Kernel 0033 Witness Firewall frozen:
+
+- algorithm: `patch_shuffle_v1`,
+- tile size: 32px,
+- seam blur: 0.6px.
+
+The changed variable is semantic authority.
+
+### Fixed Object Lock
+
+Painterly Truth `fixedObjects` now receive a required positive-prompt lock.
+Authored fixed objects must be visibly present and semantically literal.
+Descriptive modifiers remain binding: an authored **low fire** stays low and
+contained; an authored **velvet cushion** must read as a discrete cushion, not
+generic upholstered furniture.
+
+The lock is scene-local. It never introduces Hearth examples into scenes that
+did not author those objects.
+
+### Threshold Integrity
+
+For Hearth scenes, unless scene truth explicitly requires a barrier, Velastra
+adds the law:
+
+> Thresholds mark transition, not ownership.
+
+The default Hearth hospitality profile asks passages to read as permeable,
+unguarded, easy to enter and leave, and free of permission barriers. Safety is
+to come from welcome, shelter, warmth, mutual presence, and freedom of
+movement—not confinement.
+
+The positive contract is paired with best-effort negative guidance against:
+
+- wrought-iron gates,
+- bars,
+- chains,
+- portcullises,
+- prison or cell imagery,
+- barricades,
+- coercive enclosure,
+- guarded thresholds.
+
+Explicit scene truth remains sovereign. If the authored Hearth actually
+requires a gate, bars, chains, a portcullis, barricade, prison/cell imagery, or
+another barrier, the default hospitality override disables itself rather than
+silently rewriting the scene.
+
+### 0034 trial
+
+Keep the 0033 carrier settings unchanged and run a fresh balanced A/C/D trial:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-threshold-0034" \
+  --output "labs/velastra/evidence/trials/hearth-threshold-0034.json" \
+  --firewall-tile-size 32 \
+  --firewall-blur-radius 0.6 \
+  --render
+```
+
+Execution remains balanced:
+
+```text
+A1 → C1 → D1 → D2 → C2 → A2
+```
+
+Human review now asks both scene-sovereignty and threshold questions:
+
+1. Does the image read first as Hearth?
+2. Is the authored low fire visibly low and contained?
+3. Is the authored velvet cushion visibly present as a discrete cushion?
+4. Do thresholds read as permeable and unguarded?
+5. Are coercive barrier artifacts absent unless explicitly authored?
+6. Does the witness teach hand without donating its room?
+
+A beautiful image that violates fixed scene truth is still a failed candidate.
+No trial candidate is promoted automatically.
+
 ## Painterly Truth
 
 Kernel 0024 gives the Painter Bridge concrete stable scene evidence before

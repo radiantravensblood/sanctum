@@ -222,6 +222,95 @@ def compile_truth_envelope(manifest: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def threshold_integrity_contract(
+    manifest: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Return scene-authoritative threshold semantics without overriding explicit truth."""
+    scene = manifest.get("scene") or {}
+    environment = scene.get("environment") or {}
+    kind = (
+        flatten_text(environment.get("kind"))
+        .strip()
+        .lower()
+        .replace("-", "_")
+        .replace(" ", "_")
+    )
+
+    base = {
+        "version": 1,
+        "active": False,
+        "profile": None,
+        "targetKind": kind or None,
+        "law": "Thresholds mark transition, not ownership.",
+        "identity": [],
+        "semantics": [],
+        "mustNotIntroduce": [],
+        "reason": "no_profile",
+    }
+
+    if kind != "hearth":
+        return base
+
+    painterly_truth = environment.get("painterlyTruth") or {}
+    explicit_parts: list[str] = []
+    for value in (
+        list(environment.get("facts") or [])
+        + list(painterly_truth.get("facts") or [])
+        + list(painterly_truth.get("spatialFacts") or [])
+        + list(painterly_truth.get("fixedObjects") or [])
+    ):
+        text = flatten_text(value)
+        if text:
+            explicit_parts.append(text.lower())
+
+    explicit_truth = " | ".join(explicit_parts)
+    barrier_terms = (
+        "wrought-iron gate",
+        "wrought iron gate",
+        "iron gate",
+        "gate",
+        "bars",
+        "chain",
+        "portcullis",
+        "barricade",
+        "prison",
+        "cell",
+    )
+    if any(term in explicit_truth for term in barrier_terms):
+        base["reason"] = "explicit_scene_truth_requires_barrier"
+        return base
+
+    base.update({
+        "active": True,
+        "profile": "hearth_hospitality_v1",
+        "identity": [
+            "refuge",
+            "warmth",
+            "return",
+            "rest",
+            "mutual presence",
+        ],
+        "semantics": [
+            "permeable thresholds",
+            "unguarded passage",
+            "easy ingress and egress",
+            "belonging without permission barriers",
+        ],
+        "mustNotIntroduce": [
+            "wrought-iron gates",
+            "bars",
+            "chains",
+            "portcullises",
+            "prison or cell imagery",
+            "barricades",
+            "coercive enclosure",
+            "guarded thresholds",
+        ],
+        "reason": "default_hearth_hospitality",
+    })
+    return base
+
+
 def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     style = manifest.get("style")
     if not isinstance(style, Mapping):
@@ -1344,6 +1433,7 @@ def compile_prompt_bundle(
     brief = manifest.get("artBrief") or {}
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
+    threshold_integrity = threshold_integrity_contract(manifest)
     style = style_lines(manifest)
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
@@ -1478,6 +1568,55 @@ def compile_prompt_bundle(
             "The witness may not substitute its architecture, object inventory, "
             "furniture, layout, or exact light source for them.",
             priority=126,
+            required=True,
+        )
+
+    fixed_object_names: list[str] = []
+    for entry in painterly_truth.get("fixedObjects") or []:
+        if isinstance(entry, Mapping):
+            value = flatten_text(entry.get("name") or entry.get("id"))
+        else:
+            value = flatten_text(entry)
+        if value and value not in fixed_object_names:
+            fixed_object_names.append(value)
+
+    if fixed_object_names:
+        fixed_object_guidance = [
+            "Preserve descriptive modifiers exactly; do not enlarge, merge, "
+            "substitute, omit, or merely imply authored fixed objects."
+        ]
+        if any("fire" in name.lower() for name in fixed_object_names):
+            fixed_object_guidance.append(
+                "Any authored low fire must remain visibly low and contained."
+            )
+        if any("cushion" in name.lower() for name in fixed_object_names):
+            fixed_object_guidance.append(
+                "Any authored cushion must read as a discrete cushion rather "
+                "than generic upholstered furniture."
+            )
+        add(
+            "fixed_object_lock",
+            "FIXED OBJECT LOCK — These authored objects are mandatory, visible, "
+            "and semantically literal: "
+            + " | ".join(fixed_object_names)
+            + ". "
+            + " ".join(fixed_object_guidance),
+            priority=129,
+            required=True,
+        )
+
+    if threshold_integrity.get("active"):
+        add(
+            "threshold_integrity",
+            "THRESHOLD INTEGRITY LAW — "
+            + str(threshold_integrity.get("law") or "")
+            + " This Hearth is organized by "
+            + ", ".join(threshold_integrity.get("identity") or [])
+            + ". Any doorway, opening, or passage must read as "
+            + ", ".join(threshold_integrity.get("semantics") or [])
+            + ". Safety must come from welcome, shelter, warmth, mutual presence, "
+            "and freedom of movement—not from confinement or controlled access.",
+            priority=128,
             required=True,
         )
 
@@ -1716,6 +1855,14 @@ def compile_prompt_bundle(
         "Do not contradict the explicit subject, relation, environment, camera, lighting, or provenance constraints.",
     ]
 
+    if threshold_integrity.get("active"):
+        negative.append(
+            "Threshold integrity rejects: "
+            + " | ".join(
+                threshold_integrity.get("mustNotIntroduce") or []
+            )
+        )
+
     if style["avoid"]:
         negative.append(
             "Virynism rejects: " + " | ".join(style["avoid"])
@@ -1750,6 +1897,7 @@ def compile_prompt_bundle(
         "positive": "\n".join(positive_sections),
         "negative": negative_text,
         "truthEnvelope": truth,
+        "thresholdIntegrity": threshold_integrity,
         "evidence": {
             "id": evidence["id"],
             "version": evidence["version"],
@@ -2041,6 +2189,7 @@ def build_candidate_record(
             "manifestSha256": sha256_bytes(canonical_json(manifest)),
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
+            "thresholdIntegrity": prompts.get("thresholdIntegrity"),
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
             "handprint": prompts.get("handprint"),
@@ -3392,6 +3541,7 @@ def cmd_scene_sovereignty_trial(
             )
 
     truth = compile_truth_envelope(manifest)
+    threshold_integrity = threshold_integrity_contract(manifest)
     painterly_truth = truth.get("painterlyTruth") or {}
     fixed_objects = []
     for entry in painterly_truth.get("fixedObjects") or []:
@@ -3443,6 +3593,13 @@ def cmd_scene_sovereignty_trial(
                 .get("kind")
             ),
             "requiredFixedObjects": fixed_objects,
+            "thresholdIntegrity": threshold_integrity,
+            "thresholdQuestion": (
+                "Does every threshold read as permeable, unguarded, and free "
+                "of coercive enclosure?"
+                if threshold_integrity.get("active")
+                else None
+            ),
             "witnessDoNotInherit": (
                 c_witness.get("doNotInherit") or []
             ),
@@ -3454,6 +3611,7 @@ def cmd_scene_sovereignty_trial(
             "sceneTruthMustRemainRecognizable": True,
             "fixedObjectsMustReachPositivePrompt": True,
             "witnessMayTeachHandButCannotDonateRoom": True,
+            "thresholdsMarkTransitionNotOwnership": True,
             "firewallCarrierCannotBecomeSceneTruth": True,
             "semanticSuccessRequiresHumanReview": True,
             "signatureLikeArtifactCannotEstablishAuthorship": True,
@@ -3528,6 +3686,10 @@ def cmd_scene_sovereignty_trial(
                 for name in fixed_objects
             },
             "witnessLayoutLeakage": None,
+            "thresholdReadsAsHospitality": (
+                None if threshold_integrity.get("active") else "not_applicable"
+            ),
+            "coerciveThresholdArtifacts": [],
             "unsupportedWitnessContent": [],
             "signatureLikeArtifact": None,
             "notes": None,
