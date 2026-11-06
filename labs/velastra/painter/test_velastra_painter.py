@@ -1401,6 +1401,180 @@ class PainterBridgeTests(unittest.TestCase):
         values.update(overrides)
         return argparse.Namespace(**values)
 
+    def test_style_ablation_is_candidate_local_and_prompt_visible(self):
+        manifest = manifest_fixture()
+        manifest["style"]["hand"].append({
+            "id": "quiet_uncanny",
+            "weight": 0.9,
+            "directive": (
+                "Favor one or two quietly impossible or emotionally "
+                "dissonant details over spectacle."
+            ),
+        })
+        manifest["style"]["emphasis"].append("quiet_uncanny")
+        manifest["style"]["archetype"]["directives"].append(
+            "Let architecture and objects imply histories that are not fully explained."
+        )
+
+        baseline_spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        ablated_spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image",
+                without_style_law=["quiet_uncanny"],
+                without_style_phrase=[
+                    "inhabited memory-field",
+                    "imply histories",
+                ],
+            )
+        )
+
+        baseline = painter.compile_prompt_bundle(
+            manifest,
+            baseline_spec,
+        )
+        ablated = painter.compile_prompt_bundle(
+            manifest,
+            ablated_spec,
+        )
+
+        self.assertIn("quietly impossible", baseline["positive"])
+        self.assertIn("inhabited memory-field", baseline["positive"])
+        self.assertIn("imply histories", baseline["positive"])
+
+        self.assertNotIn("quietly impossible", ablated["positive"])
+        self.assertNotIn("inhabited memory-field", ablated["positive"])
+        self.assertNotIn("imply histories", ablated["positive"])
+        self.assertEqual(
+            ablated["style"]["ablations"]["disabledStyleIds"],
+            ["quiet_uncanny"],
+        )
+        self.assertEqual(
+            ablated["style"]["ablations"]["disabledPhrases"],
+            ["inhabited memory-field", "imply histories"],
+        )
+
+        baseline_id = painter.candidate_id(
+            manifest,
+            baseline,
+            baseline_spec,
+        )
+        ablated_id = painter.candidate_id(
+            manifest,
+            ablated,
+            ablated_spec,
+        )
+        self.assertNotEqual(baseline_id, ablated_id)
+
+    def test_presence_provenance_trial_plans_balanced_witness_free_factorial(self):
+        manifest = manifest_fixture()
+        manifest["style"]["hand"].append({
+            "id": "quiet_uncanny",
+            "weight": 0.9,
+            "directive": (
+                "Favor one or two quietly impossible or emotionally "
+                "dissonant details over spectacle."
+            ),
+        })
+        manifest["style"]["emphasis"].append("quiet_uncanny")
+        manifest["style"]["archetype"]["directives"].append(
+            "Let architecture and objects imply histories that are not fully explained."
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "hearth.velastra.json"
+            handprint_path = root / "handprint.json"
+            trial_path = root / "presence.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="hearth-presence-0036-test",
+                repeats=2,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                out_dir=str(out_dir),
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_presence_provenance_trial(
+                args
+            )
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(
+                set(trial["conditions"]),
+                {
+                    "baseline",
+                    "without_quiet_uncanny",
+                    "without_memory_presence",
+                    "without_both",
+                },
+            )
+            for arms in trial["conditions"].values():
+                self.assertEqual(len(arms), 2)
+                for arm in arms:
+                    self.assertFalse(arm["witness"]["active"])
+
+            self.assertEqual(
+                trial["executionOrder"],
+                [
+                    "hearth-presence-0036-test-b-01",
+                    "hearth-presence-0036-test-q-01",
+                    "hearth-presence-0036-test-m-01",
+                    "hearth-presence-0036-test-x-01",
+                    "hearth-presence-0036-test-x-02",
+                    "hearth-presence-0036-test-m-02",
+                    "hearth-presence-0036-test-q-02",
+                    "hearth-presence-0036-test-b-02",
+                ],
+            )
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only presence trial must not execute inference.",
+            )
+
+            for repeat_index in (0, 1):
+                seeds = {
+                    trial["conditions"][condition][repeat_index]["seed"]
+                    for condition in trial["conditions"]
+                }
+                self.assertEqual(len(seeds), 1)
+
+            self.assertEqual(
+                trial["conditions"]["without_quiet_uncanny"][0][
+                    "styleAblation"
+                ]["disabledStyleIds"],
+                ["quiet_uncanny"],
+            )
+            self.assertEqual(
+                trial["conditions"]["without_memory_presence"][0][
+                    "styleAblation"
+                ]["disabledPhrases"],
+                ["inhabited memory-field", "imply histories"],
+            )
+            self.assertTrue(
+                trial["laws"]["sameSeedWithinRepeatAcrossConditions"]
+            )
+
     def test_scene_sovereignty_trial_plans_a_c_d_without_inference(self):
         manifest = manifest_fixture()
         selected = manifest["witnesses"]["selected"][0]
