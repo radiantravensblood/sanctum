@@ -781,6 +781,169 @@ success is human-reviewed:
 
 **Does the image read first as the target place rather than as the witness?**
 
+## Kernel 0036 — Presence Provenance
+
+Kernel 0036 does **not** change scene truth, fixed-object enforcement, witness
+handling, the 32px / 0.6px carrier, or control-plane isolation.
+
+Its purpose is narrower: explain the recurrent uncanny / quasi-presence behavior
+seen in the Handprint-only Hearth pathway after control-plane cleanup.
+
+The trial is witness-free and uses the text-first Qwen brush so original or
+firewalled witness pixels cannot confound the result.
+
+### Factors
+
+The first 0036 phase is a balanced 2×2 ablation:
+
+- **Q — quiet uncanny**
+  - on: `quiet_uncanny` style law is present;
+  - off: `quiet_uncanny` is candidate-locally omitted.
+- **M — memory / prior-presence archetype language**
+  - on: place-tableau may describe the room as an “inhabited memory-field” and
+    let architecture/objects “imply histories”;
+  - off: those two phrases are candidate-locally omitted.
+
+Conditions:
+
+```text
+baseline                 Q+ M+
+without_quiet_uncanny    Q- M+
+without_memory_presence  Q+ M-
+without_both             Q- M-
+```
+
+Two repeats are required. All four conditions in the same repeat share the same
+seed. Execution order reverses on repeat two to reduce provider/order drift.
+
+The authored manifest is never mutated. Style ablations live only in the
+`RenderSpec`, enter candidate identity, and are recorded in candidate
+provenance.
+
+### Plan
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py presence-provenance-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-presence-0036" \
+  --output "labs/velastra/evidence/trials/hearth-presence-0036.json"
+```
+
+Expected:
+
+```text
+planned=8 renders; no inference executed
+```
+
+### Render
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py presence-provenance-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-presence-0036" \
+  --output "labs/velastra/evidence/trials/hearth-presence-0036.json" \
+  --render
+```
+
+Human review asks whether each candidate contains:
+
+- quasi-figurative atmosphere,
+- smoke or haze that coheres into presence,
+- a strong sense of prior/recent occupancy,
+- horror-adjacent affect,
+- scene-truth failure,
+- visible control-plane text.
+
+Interpretation is deliberately simple:
+
+- effect disappears whenever Q is off → `quiet_uncanny` is the likely driver;
+- effect disappears whenever M is off → memory/presence language is the likely
+  driver;
+- effect disappears only in Q-/M- → interaction;
+- effect persists in Q-/M- → test `threshold_depth` or a base-model/scene prior
+  next.
+
+No metric or visual resemblance may be interpreted as evidence of an entity,
+agency, intention, or supernatural cause.
+
+### Deferred fork
+
+Fixed-object obedience remains an acknowledged 0035 failure. Low-fire and
+velvet-cushion enforcement are intentionally frozen during 0036. They should be
+addressed in a separate subsequent kernel so presence provenance remains
+interpretable.
+
+## Kernel 0035 — Control-Plane Isolation
+
+Kernel 0035 responds to a concrete render failure discovered in the 0034 Hearth
+trial: painter-facing images visibly reproduced internal control labels such as
+`SCENE SOVEREIGNTY GATE`. Internal systems vocabulary was therefore entering
+the depicted world instead of remaining metadata.
+
+The architecture now separates two namespaces:
+
+- **control plane** — internal names, protocols, trial labels, provenance, and
+  validation concepts;
+- **image plane** — literal painter-facing scene behavior only.
+
+Internal concepts such as Handprint, Visual Witness, Witness Firewall, Scene
+Sovereignty Gate, Fixed Object Lock, and Threshold Integrity remain available
+to the code and evidence records. They are translated into plain descriptive
+sentences before reaching the painter.
+
+A fail-closed validator rejects any positive prompt containing a known internal
+control marker. This happens before inference.
+
+The painter also receives an explicit instruction not to render wording,
+headings, labels, or phrases from the instructions into the image unless
+visible text is itself authored scene truth.
+
+### 0035 isolation trial
+
+Keep every other variable frozen from 0034:
+
+- same Hearth packet,
+- same model and brush,
+- same Handprint registry,
+- same Visual Witness,
+- same balanced A/C/D order,
+- same Witness Firewall algorithm,
+- same 32px tile size,
+- same 0.6px blur radius.
+
+Plan first:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-controlplane-0035" \
+  --output "labs/velastra/evidence/trials/hearth-controlplane-0035.json" \
+  --firewall-tile-size 32 \
+  --firewall-blur-radius 0.6
+```
+
+Then render only after the plan succeeds without a control-plane leak:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-controlplane-0035" \
+  --output "labs/velastra/evidence/trials/hearth-controlplane-0035.json" \
+  --firewall-tile-size 32 \
+  --firewall-blur-radius 0.6 \
+  --render
+```
+
+Review adds two questions to the existing Hearth criteria:
+
+1. Did any instruction or control-plane wording become visible image text?
+2. Did any control-plane metaphor become a depicted object or architectural
+   motif without support from authored scene truth?
+
+The purpose is not to suppress strangeness. It is to distinguish authored or
+emergent visual behavior from accidental literalization of the renderer's own
+instrumentation.
+
 ## Kernel 0034 — Scene Truth Lock / Threshold Integrity
 
 Kernel 0034 keeps the Kernel 0033 Witness Firewall frozen:

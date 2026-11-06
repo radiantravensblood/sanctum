@@ -311,8 +311,38 @@ def threshold_integrity_contract(
     return base
 
 
-def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
+def style_lines(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
     style = manifest.get("style")
+    disabled_ids = {
+        str(item).strip()
+        for item in (
+            spec.disabled_style_ids
+            if spec is not None
+            else ()
+        )
+        if str(item).strip()
+    }
+    disabled_phrases = tuple(
+        str(item).strip().lower()
+        for item in (
+            spec.disabled_style_phrases
+            if spec is not None
+            else ()
+        )
+        if str(item).strip()
+    )
+
+    def phrase_allowed(value: Any) -> bool:
+        text = flatten_text(value)
+        lowered = text.lower()
+        return bool(text) and not any(
+            phrase in lowered
+            for phrase in disabled_phrases
+        )
+
     if not isinstance(style, Mapping):
         return {
             "signature": "",
@@ -320,12 +350,21 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
             "archetype": [],
             "place": [],
             "avoid": [],
+            "ablations": {
+                "disabledStyleIds": sorted(disabled_ids),
+                "disabledPhrases": list(disabled_phrases),
+            },
         }
 
     hand_entries = [
         entry
         for entry in (style.get("hand") or [])
-        if isinstance(entry, Mapping) and entry.get("directive")
+        if (
+            isinstance(entry, Mapping)
+            and entry.get("directive")
+            and str(entry.get("id") or "") not in disabled_ids
+            and phrase_allowed(entry.get("directive"))
+        )
     ]
     emphasis = set(style.get("emphasis") or [])
     hand_entries.sort(
@@ -346,12 +385,12 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     archetype = [
         flatten_text(item)
         for item in (archetype_block.get("directives") or [])
-        if flatten_text(item)
+        if phrase_allowed(item)
     ]
     place = [
         flatten_text(item)
         for item in (place_block.get("directives") or [])
-        if flatten_text(item)
+        if phrase_allowed(item)
     ]
     avoid = [
         flatten_text(item)
@@ -368,6 +407,10 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
         "archetype": archetype,
         "place": place,
         "avoid": avoid,
+        "ablations": {
+            "disabledStyleIds": sorted(disabled_ids),
+            "disabledPhrases": list(disabled_phrases),
+        },
     }
 
 
@@ -697,6 +740,67 @@ def resolve_handprint_pressure(
     }
 
 
+
+MODEL_VISIBLE_CONTROL_MARKERS = (
+    "scene sovereignty gate",
+    "fixed object lock",
+    "threshold integrity law",
+    "witness firewall",
+    "visual witness",
+    "governing handprint law",
+    "non-negotiable hand laws",
+    "witness translation law",
+    "identity reframe",
+    "visible evidence contract",
+    "positive composition controls",
+    "handprint",
+)
+
+
+def model_safe_instruction(value: Any) -> str:
+    """Translate internal system vocabulary into literal painter-facing prose."""
+    text = flatten_text(value)
+    replacements = (
+        ("Scene Sovereignty Gate", "authored scene facts"),
+        ("scene sovereignty gate", "authored scene facts"),
+        ("Fixed Object Lock", "required visible objects"),
+        ("fixed object lock", "required visible objects"),
+        ("Threshold Integrity Law", "movement and access guidance"),
+        ("threshold integrity law", "movement and access guidance"),
+        ("Witness Firewall", "reference-image preprocessing"),
+        ("witness firewall", "reference-image preprocessing"),
+        ("Visible Evidence Contract", "required visible facts"),
+        ("visible evidence contract", "required visible facts"),
+        ("Identity Reframe", "scene identity"),
+        ("identity reframe", "scene identity"),
+        ("Positive Composition Controls", "composition requirements"),
+        ("positive composition controls", "composition requirements"),
+        ("Governing Handprint Law", "portfolio-derived visual treatment"),
+        ("governing handprint law", "portfolio-derived visual treatment"),
+        ("Non-Negotiable Hand Laws", "visual treatment constraints"),
+        ("non-negotiable hand laws", "visual treatment constraints"),
+        ("Witness Translation Law", "reference-image translation guidance"),
+        ("witness translation law", "reference-image translation guidance"),
+        ("Visual Witness", "reference image"),
+        ("visual witness", "reference image"),
+        ("Witness", "reference image"),
+        ("witness", "reference image"),
+        ("Handprint", "portfolio-derived visual treatment"),
+        ("handprint", "portfolio-derived visual treatment"),
+    )
+    for source, target in replacements:
+        text = text.replace(source, target)
+    return text
+
+
+def control_plane_leaks(text: str) -> list[str]:
+    lowered = text.lower()
+    return [
+        marker
+        for marker in MODEL_VISIBLE_CONTROL_MARKERS
+        if marker in lowered
+    ]
+
 def handprint_pressure_text(
     handprint: Mapping[str, Any],
     pressure: Mapping[str, Any],
@@ -708,15 +812,18 @@ def handprint_pressure_text(
         return ""
 
     parts: list[str] = [
-        "GOVERNING HANDPRINT LAW — Handprint is the visual translation authority for this combined render. "
-        "Scene truth and Visible Evidence remain absolute semantic authority."
+        "For this combined render, use the portfolio-derived visual treatment "
+        "to translate the reference image. The authored scene and its required "
+        "visible facts remain the only semantic source."
     ]
 
-    directives = pressure.get("directives") or []
+    directives = [
+        model_safe_instruction(item)
+        for item in (pressure.get("directives") or [])
+        if model_safe_instruction(item)
+    ]
     if directives:
-        parts.append(
-            "TRANSLATION DIRECTIVES — " + " | ".join(directives)
-        )
+        parts.append(" ".join(directives))
 
     active_roles = set(handprint.get("facetRoles") or [])
     role_laws = pressure.get("roleLaws") or {}
@@ -730,20 +837,20 @@ def handprint_pressure_text(
         for role in active_roles
         if role not in ordered and flatten_text(role_laws.get(role))
     ]
-    laws = [
-        role.replace("_", " ").upper()
-        + " LAW — "
-        + flatten_text(role_laws.get(role))
+    constraints = [
+        role.replace("_", " ")
+        + ": "
+        + model_safe_instruction(role_laws.get(role))
         for role in ordered + sorted(remaining)
     ]
-    if laws:
-        parts.append("NON-NEGOTIABLE HAND LAWS — " + " | ".join(laws))
+    if constraints:
+        parts.append("Visual treatment constraints: " + " | ".join(constraints))
 
-    witness_law = pressure.get("witnessTranslationLaw")
-    if witness_law:
-        parts.append(
-            "WITNESS TRANSLATION LAW — " + str(witness_law)
-        )
+    translation = model_safe_instruction(
+        pressure.get("witnessTranslationLaw")
+    )
+    if translation:
+        parts.append(translation)
 
     return " ".join(parts)
 
@@ -754,9 +861,9 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
 
     interpretation = handprint.get("interpretation") or {}
     parts: list[str] = [
-        "Portfolio-derived Virynism Handprint from "
+        "Use portfolio-derived Virynism visual treatment learned from "
         + str(handprint.get("witnessCount") or 0)
-        + " approved witnesses."
+        + " approved source studies."
     ]
 
     labels = [
@@ -785,7 +892,7 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
                 )
         if facet_parts:
             parts.append(
-                "ROLE-CONDITIONED FACETS — " + " | ".join(facet_parts)
+                "Relevant visual-treatment facets: " + " | ".join(facet_parts)
             )
     else:
         roles = (
@@ -804,8 +911,8 @@ def handprint_prompt_text(handprint: Mapping[str, Any]) -> str:
 
     parts.append(
         "Treat facet ranges as valid variation, not targets to average into one uniform look. "
-        "These are cross-portfolio laws of visual treatment, never scene facts. "
-        "Do not inherit any witness subject, object, architecture, identity, or layout."
+        "These are recurring visual-treatment tendencies, never scene facts. "
+        "Do not inherit any reference-image subject, object, architecture, identity, or layout."
     )
     return " ".join(parts)
 
@@ -1434,7 +1541,7 @@ def compile_prompt_bundle(
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
     threshold_integrity = threshold_integrity_contract(manifest)
-    style = style_lines(manifest)
+    style = style_lines(manifest, spec)
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
     handprint = handprint_lines(manifest, spec)
@@ -1561,11 +1668,10 @@ def compile_prompt_bundle(
     if sovereignty_facts:
         add(
             "scene_sovereignty",
-            "SCENE SOVEREIGNTY GATE — Build the target room from these "
-            "canonical place facts before applying witness translation: "
+            "Build the target room from these literal authored place facts: "
             + " | ".join(sovereignty_facts)
             + ". These target facts must remain recognizable. "
-            "The witness may not substitute its architecture, object inventory, "
+            "The reference image may not substitute its architecture, object inventory, "
             "furniture, layout, or exact light source for them.",
             priority=126,
             required=True,
@@ -1596,8 +1702,7 @@ def compile_prompt_bundle(
             )
         add(
             "fixed_object_lock",
-            "FIXED OBJECT LOCK — These authored objects are mandatory, visible, "
-            "and semantically literal: "
+            "These authored objects must be clearly visible and semantically literal: "
             + " | ".join(fixed_object_names)
             + ". "
             + " ".join(fixed_object_guidance),
@@ -1608,9 +1713,8 @@ def compile_prompt_bundle(
     if threshold_integrity.get("active"):
         add(
             "threshold_integrity",
-            "THRESHOLD INTEGRITY LAW — "
-            + str(threshold_integrity.get("law") or "")
-            + " This Hearth is organized by "
+            "Movement and access must remain consistent with the authored Hearth. "
+            "This room is organized by "
             + ", ".join(threshold_integrity.get("identity") or [])
             + ". Any doorway, opening, or passage must read as "
             + ", ".join(threshold_integrity.get("semantics") or [])
@@ -1623,7 +1727,7 @@ def compile_prompt_bundle(
     if evidence["identityReframe"]:
         add(
             "identity_reframe",
-            "IDENTITY REFRAME — " + evidence["identityReframe"],
+            "The scene's identity should read as: " + evidence["identityReframe"],
             priority=112,
             required=True,
         )
@@ -1635,7 +1739,7 @@ def compile_prompt_bundle(
         )
         add(
             "visible_evidence",
-            "VISIBLE EVIDENCE CONTRACT — the final image must make at least "
+            "The final image must make at least "
             + str(visible_count)
             + " of these already-true facts clearly perceptible: "
             + " | ".join(evidence["required"]),
@@ -1646,7 +1750,7 @@ def compile_prompt_bundle(
     if evidence["controls"]:
         add(
             "evidence_controls",
-            "POSITIVE COMPOSITION CONTROLS — satisfy these through what is visibly present: "
+            "Satisfy these composition requirements through what is visibly present: "
             + " | ".join(evidence["controls"]),
             priority=108,
             required=True,
@@ -1685,7 +1789,7 @@ def compile_prompt_bundle(
     if handprint_text:
         add(
             "handprint",
-            "HANDPRINT — " + handprint_text,
+            handprint_text,
             priority=int(handprint_pressure.get("priority") or 114) - 1,
             required=True,
         )
@@ -1694,18 +1798,18 @@ def compile_prompt_bundle(
         roles = ", ".join(witness["roles"]) or "approved visual-hand roles"
         exclusions = ", ".join(witness["doNotInherit"]) or "all depicted scene content"
         witness_direction = (
-            "VISUAL WITNESS — an input image accompanies this request. "
-            "Use it only as evidence for these visual-hand roles: "
+            "An input reference image accompanies this request. "
+            "Use it only as evidence for these visual-treatment roles: "
             + roles
             + ". Rebuild the target image from the authoritative target scene. "
             "Do not inherit witness content including: "
             + exclusions
-            + ". Witness scene content is non-canonical."
+            + ". Reference-image scene content is non-canonical."
         )
         if handprint_pressure.get("mode") == "governing_translation":
             witness_direction += (
-                " In combined mode, do not treat the witness as the final visual authority: "
-                "recompose and repaint it through the governing Handprint laws above."
+                " In combined mode, do not treat the reference image as the final visual authority: "
+                "recompose and repaint it through the portfolio-derived visual treatment above."
             )
         add(
             "visual_witness",
@@ -1717,14 +1821,13 @@ def compile_prompt_bundle(
         if (witness.get("firewall") or {}).get("active"):
             add(
                 "witness_firewall",
-                "WITNESS FIREWALL — the accompanying reference pixels have "
-                "been deliberately scrambled to destroy semantic layout. "
-                "Use the carrier only for local palette, pigment, texture, edge, "
-                "and material-hand memory. Do not infer or reconstruct the "
-                "original witness room, object inventory, architecture, frame "
-                "placement, papers, furniture, or exact light source. "
-                "Recover the target place only from Scene Sovereignty and "
-                "authoritative target truth.",
+                "The accompanying reference pixels have been locally rearranged "
+                "so their original spatial organization is unavailable. Use them "
+                "only for local palette, pigment, texture, edge, and material "
+                "memory. Do not infer or reconstruct the original reference room, "
+                "object inventory, architecture, frame placement, papers, furniture, "
+                "or exact light source. Build the target place only from the authored "
+                "scene facts above.",
                 priority=125,
                 required=True,
             )
@@ -1820,7 +1923,7 @@ def compile_prompt_bundle(
         )
 
     dialect_directives = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("directives") or [])
     ]
     dialect_directives = [
@@ -1851,6 +1954,7 @@ def compile_prompt_bundle(
         "Do not invent additional people, identities, relationships, consent, touch, text, logos, symbols, or objects.",
         "Do not turn symbolic motifs into literal world facts.",
         "Do not add decorative UI chrome, cards, captions, labels, diagrams, or typography unless explicitly present in scene facts.",
+        "Do not render wording, headings, labels, or phrases from these instructions into the image.",
         "Do not flatten the image into generic concept art, stock illustration, clip art, procedural SVG aesthetics, or staged showroom photography.",
         "Do not contradict the explicit subject, relation, environment, camera, lighting, or provenance constraints.",
     ]
@@ -1870,12 +1974,12 @@ def compile_prompt_bundle(
 
     if witness["active"] and witness["doNotInherit"]:
         negative.append(
-            "Do not copy Visual Witness scene content: "
+            "Do not copy reference-image scene content: "
             + " | ".join(witness["doNotInherit"])
         )
 
     dialect_negative = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("negativePriorities") or [])
     ]
     dialect_negative = [
@@ -1887,6 +1991,14 @@ def compile_prompt_bundle(
             + " | ".join(dialect_negative)
         )
 
+    positive_text = "\n".join(positive_sections)
+    leaks = control_plane_leaks(positive_text)
+    if leaks:
+        raise PainterError(
+            "Control-plane vocabulary leaked into painter-facing prompt: "
+            + ", ".join(leaks)
+        )
+
     negative_text = (
         "\n".join(negative)
         if negative_supported
@@ -1894,7 +2006,13 @@ def compile_prompt_bundle(
     )
 
     return {
-        "positive": "\n".join(positive_sections),
+        "positive": positive_text,
+        "controlPlaneIsolation": {
+            "version": 1,
+            "active": True,
+            "knownMarkersBlocked": list(MODEL_VISIBLE_CONTROL_MARKERS),
+            "leaks": leaks,
+        },
         "negative": negative_text,
         "truthEnvelope": truth,
         "thresholdIntegrity": threshold_integrity,
@@ -1955,6 +2073,10 @@ def compile_prompt_bundle(
             "designation": (manifest.get("style") or {}).get("designation"),
             "emphasis": (manifest.get("style") or {}).get("emphasis") or [],
             "dialect": dialect.get("mode"),
+            "ablations": style.get("ablations") or {
+                "disabledStyleIds": [],
+                "disabledPhrases": [],
+            },
         },
         "control": {
             "negativePromptActive": negative_supported,
@@ -2102,6 +2224,12 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         witness_firewall=bool(getattr(args, "witness_firewall", False)),
         firewall_tile_size=int(getattr(args, "firewall_tile_size", 32) or 32),
         firewall_blur_radius=float(getattr(args, "firewall_blur_radius", 0.6) or 0.0),
+        disabled_style_ids=tuple(
+            getattr(args, "without_style_law", None) or []
+        ),
+        disabled_style_phrases=tuple(
+            getattr(args, "without_style_phrase", None) or []
+        ),
     )
 
 
@@ -2133,6 +2261,8 @@ class RenderSpec:
     witness_firewall: bool = False
     firewall_tile_size: int = 32
     firewall_blur_radius: float = 0.6
+    disabled_style_ids: tuple[str, ...] = ()
+    disabled_style_phrases: tuple[str, ...] = ()
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -2163,6 +2293,8 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
                 "withoutHandprint": spec.disable_handprint,
                 "withoutWitness": spec.disable_witness,
                 "witnessFirewall": spec.witness_firewall,
+                "disabledStyleIds": list(spec.disabled_style_ids),
+                "disabledStylePhrases": list(spec.disabled_style_phrases),
             },
         },
     }
@@ -2190,6 +2322,7 @@ def build_candidate_record(
             "atelierProvenance": manifest.get("provenance"),
             "truthEnvelope": prompts["truthEnvelope"],
             "thresholdIntegrity": prompts.get("thresholdIntegrity"),
+            "controlPlaneIsolation": prompts.get("controlPlaneIsolation"),
             "style": prompts.get("style"),
             "evidence": prompts.get("evidence"),
             "handprint": prompts.get("handprint"),
@@ -2212,6 +2345,8 @@ def build_candidate_record(
             "ablation": {
                 "withoutHandprint": spec.disable_handprint,
                 "withoutWitness": spec.disable_witness,
+                "disabledStyleIds": list(spec.disabled_style_ids),
+                "disabledStylePhrases": list(spec.disabled_style_phrases),
             },
             "device": spec.device,
             "dtype": spec.dtype,
@@ -3432,6 +3567,334 @@ def sovereignty_arm_plan(
     }, render_args)
 
 
+
+PRESENCE_PROVENANCE_CONDITIONS: dict[str, dict[str, list[str]]] = {
+    "baseline": {
+        "styleIds": [],
+        "stylePhrases": [],
+    },
+    "without_quiet_uncanny": {
+        "styleIds": ["quiet_uncanny"],
+        "stylePhrases": [],
+    },
+    "without_memory_presence": {
+        "styleIds": [],
+        "stylePhrases": [
+            "inhabited memory-field",
+            "imply histories",
+        ],
+    },
+    "without_both": {
+        "styleIds": ["quiet_uncanny"],
+        "stylePhrases": [
+            "inhabited memory-field",
+            "imply histories",
+        ],
+    },
+}
+
+
+def presence_provenance_arm_plan(
+    *,
+    manifest: Mapping[str, Any],
+    args: argparse.Namespace,
+    condition: str,
+    repeat_index: int,
+) -> tuple[dict[str, Any], argparse.Namespace]:
+    if condition not in PRESENCE_PROVENANCE_CONDITIONS:
+        raise PainterError(
+            f"Unknown presence-provenance condition: {condition}"
+        )
+
+    config = PRESENCE_PROVENANCE_CONDITIONS[condition]
+    suffix = {
+        "baseline": "b",
+        "without_quiet_uncanny": "q",
+        "without_memory_presence": "m",
+        "without_both": "x",
+    }[condition]
+    attempt = (
+        str(args.trial_id)
+        + "-"
+        + suffix
+        + "-"
+        + f"{repeat_index:02d}"
+    )
+
+    render_args = sovereignty_render_args(
+        manifest=args.manifest,
+        condition="handprint_only",
+        attempt=attempt,
+        repeat_index=repeat_index,
+        repo_root=args.repo_root,
+        out_dir=args.out_dir,
+        tile_size=32,
+        blur_radius=0.6,
+    )
+    render_args.without_style_law = list(config["styleIds"])
+    render_args.without_style_phrase = list(
+        config["stylePhrases"]
+    )
+
+    spec = build_render_spec(render_args)
+    prompts = compile_prompt_bundle(manifest, spec)
+    witness = prompts.get("witness") or {}
+    if witness.get("active"):
+        raise PainterError(
+            "Presence-provenance trial must remain witness-free."
+        )
+
+    cid = candidate_id(manifest, prompts, spec)
+    base = Path(args.out_dir) / manifest["assetKey"]
+    image_path = base / f"{cid}.png"
+    record_path = base / f"{cid}.candidate.json"
+
+    command = [
+        ".venv/bin/python",
+        "labs/velastra/painter/velastra_painter.py",
+        "render",
+        args.manifest,
+        "--brush",
+        "qwen_image",
+        "--transport",
+        "huggingface",
+        "--attempt",
+        attempt,
+        "--seed",
+        str(render_args.seed),
+        "--repo-root",
+        args.repo_root,
+    ]
+    for style_id in config["styleIds"]:
+        command.extend(["--without-style-law", style_id])
+    for phrase in config["stylePhrases"]:
+        command.extend(["--without-style-phrase", phrase])
+
+    return ({
+        "condition": condition,
+        "repeat": repeat_index,
+        "attemptId": attempt,
+        "candidateId": cid,
+        "image": image_path.as_posix(),
+        "candidateRecord": record_path.as_posix(),
+        "seed": spec.seed,
+        "styleAblation": (
+            prompts.get("style") or {}
+        ).get("ablations") or {},
+        "witness": witness,
+        "status": (
+            "rendered"
+            if image_path.exists() and record_path.exists()
+            else "planned"
+        ),
+        "command": command,
+        "humanReview": {
+            "quasiFigurativeAtmosphere": None,
+            "priorPresenceAffect": None,
+            "smokeOrHaze": None,
+            "horrorAdjacentAffect": None,
+            "sceneTruthPass": None,
+            "controlPlaneTextVisible": None,
+            "notes": None,
+        },
+    }, render_args)
+
+
+def cmd_presence_provenance_trial(
+    args: argparse.Namespace,
+) -> int:
+    if args.repeats < 2:
+        raise PainterError(
+            "Presence provenance requires at least 2 repeats per condition."
+        )
+
+    manifest = unwrap_manifest(
+        read_json(Path(args.manifest))
+    )
+    require_manifest(manifest)
+    manifest_sha = sha256_bytes(canonical_json(manifest))
+
+    handprint = read_json(Path(args.handprint))
+    handprint_sha = sha256_bytes(
+        canonical_json(handprint)
+    )
+
+    conditions = tuple(PRESENCE_PROVENANCE_CONDITIONS)
+    plans: dict[str, list[dict[str, Any]]] = {
+        condition: []
+        for condition in conditions
+    }
+    namespaces: dict[str, argparse.Namespace] = {}
+
+    for repeat_index in range(1, args.repeats + 1):
+        for condition in conditions:
+            arm, render_args = presence_provenance_arm_plan(
+                manifest=manifest,
+                args=args,
+                condition=condition,
+                repeat_index=repeat_index,
+            )
+            plans[condition].append(arm)
+            namespaces[arm["attemptId"]] = render_args
+
+    trial_path = Path(args.output)
+    existing = read_json(trial_path) if trial_path.exists() else {}
+    prior_manifest_sha = existing.get("manifestSha256")
+    if (
+        prior_manifest_sha
+        and prior_manifest_sha != manifest_sha
+        and not args.replace_trial
+    ):
+        raise PainterError(
+            "Existing presence-provenance trial was planned from a different manifest. "
+            "Use --replace-trial only after intentional review."
+        )
+
+    execution_order: list[str] = []
+    for repeat_index in range(1, args.repeats + 1):
+        order = (
+            list(conditions)
+            if repeat_index % 2 == 1
+            else list(reversed(conditions))
+        )
+        for condition in order:
+            execution_order.append(
+                plans[condition][repeat_index - 1][
+                    "attemptId"
+                ]
+            )
+
+    seed_schedule = {
+        str(repeat_index): (
+            plans["baseline"][repeat_index - 1]["seed"]
+        )
+        for repeat_index in range(1, args.repeats + 1)
+    }
+
+    trial: dict[str, Any] = {
+        "version": 1,
+        "protocol": "velastra.presence_provenance_trial.v1",
+        "trialId": args.trial_id,
+        "status": "planned",
+        "createdAt": existing.get("createdAt") or utc_now(),
+        "updatedAt": utc_now(),
+        "assetKey": manifest["assetKey"],
+        "manifest": args.manifest,
+        "manifestSha256": manifest_sha,
+        "brush": "qwen_image",
+        "transport": "huggingface",
+        "repeatsPerCondition": args.repeats,
+        "frozen": {
+            "handprintPath": Path(args.handprint).as_posix(),
+            "handprintSha256": handprint_sha,
+            "witnessPixels": "none",
+            "controlPlaneIsolation": True,
+            "thresholdIntegrity": True,
+            "seedSchedule": seed_schedule,
+            "fixedObjectEnforcement": "unchanged_from_0035",
+        },
+        "factors": {
+            "Q_quiet_uncanny": {
+                "baseline": True,
+                "ablatedIn": [
+                    "without_quiet_uncanny",
+                    "without_both",
+                ],
+            },
+            "M_memory_presence_language": {
+                "baseline": True,
+                "phrases": [
+                    "inhabited memory-field",
+                    "imply histories",
+                ],
+                "ablatedIn": [
+                    "without_memory_presence",
+                    "without_both",
+                ],
+            },
+        },
+        "conditions": plans,
+        "executionOrder": execution_order,
+        "summary": None,
+        "humanReview": {
+            "status": "pending",
+            "primaryQuestion": (
+                "Does quasi-figurative or uncanny presence persist when "
+                "quiet-uncanny and memory-presence language are removed?"
+            ),
+            "candidateReviews": {},
+            "interpretationRules": {
+                "Q_effect": (
+                    "Presence drops whenever quiet_uncanny is absent."
+                ),
+                "M_effect": (
+                    "Presence drops whenever memory-presence language is absent."
+                ),
+                "interaction": (
+                    "Presence drops only when both factors are absent."
+                ),
+                "neither": (
+                    "Presence persists in without_both; test threshold_depth "
+                    "or base-model/scene prior next."
+                ),
+            },
+            "notes": None,
+        },
+        "laws": {
+            "trialCannotMutateCanon": True,
+            "witnessMustRemainAbsent": True,
+            "sameSeedWithinRepeatAcrossConditions": True,
+            "fixedObjectBehaviorMustRemainFrozen": True,
+            "controlPlaneIsolationMustRemainFrozen": True,
+            "styleAblationsMustRemainCandidateLocal": True,
+            "humanReviewRequired": True,
+            "presenceCannotBeInterpretedAsEntityByMetricAlone": True,
+        },
+    }
+    write_json(trial_path, trial)
+
+    if not args.render:
+        print(trial_path)
+        print(
+            "planned="
+            + str(args.repeats * len(conditions))
+            + " renders; no inference executed"
+        )
+        return 0
+
+    trial["status"] = "running"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    by_attempt = {
+        arm["attemptId"]: arm
+        for arms in trial["conditions"].values()
+        for arm in arms
+    }
+
+    for attempt in execution_order:
+        arm = by_attempt[attempt]
+        render_args = namespaces[attempt]
+        image_path = Path(arm["image"])
+        record_path = Path(arm["candidateRecord"])
+
+        if not (image_path.exists() and record_path.exists()):
+            result = cmd_render(render_args)
+            if result != 0:
+                raise PainterError(
+                    f"Presence-provenance render failed: {attempt}"
+                )
+
+        arm["status"] = "rendered"
+        trial["updatedAt"] = utc_now()
+        write_json(trial_path, trial)
+
+    trial["status"] = "complete"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+    print(trial_path)
+    return 0
+
 def cmd_scene_sovereignty_trial(
     args: argparse.Namespace,
 ) -> int:
@@ -3612,6 +4075,8 @@ def cmd_scene_sovereignty_trial(
             "fixedObjectsMustReachPositivePrompt": True,
             "witnessMayTeachHandButCannotDonateRoom": True,
             "thresholdsMarkTransitionNotOwnership": True,
+            "controlPlaneVocabularyMustNotReachPainter": True,
+            "instructionTextMustNotBecomeImageContent": True,
             "firewallCarrierCannotBecomeSceneTruth": True,
             "semanticSuccessRequiresHumanReview": True,
             "signatureLikeArtifactCannotEstablishAuthorship": True,
@@ -3889,6 +4354,18 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--without-handprint", action="store_true", help="Ablation: omit Handprint guidance while preserving the rest of the manifest.")
     parser.add_argument("--without-witness", action="store_true", help="Ablation: omit Visual Witness guidance when the selected brush does not require an input image.")
+    parser.add_argument(
+        "--without-style-law",
+        action="append",
+        default=[],
+        help="Candidate-local ablation: omit one authored style hand law by ID. Repeatable.",
+    )
+    parser.add_argument(
+        "--without-style-phrase",
+        action="append",
+        default=[],
+        help="Candidate-local ablation: omit style/archetype/place directives containing this phrase. Repeatable.",
+    )
     parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
     parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
@@ -4087,6 +4564,46 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sovereignty_trial.set_defaults(
         func=cmd_scene_sovereignty_trial
+    )
+
+    presence_trial = sub.add_parser(
+        "presence-provenance-trial",
+        help="Plan or explicitly render a witness-free 2x2 ablation of uncanny versus memory-presence style language.",
+    )
+    presence_trial.add_argument("manifest")
+    presence_trial.add_argument(
+        "--trial-id",
+        default="hearth-presence-0036",
+    )
+    presence_trial.add_argument(
+        "--repeats",
+        type=int,
+        default=2,
+    )
+    presence_trial.add_argument(
+        "--render",
+        action="store_true",
+        help="Explicitly execute the 2x2 witness-free presence ablation.",
+    )
+    presence_trial.add_argument(
+        "--replace-trial",
+        action="store_true",
+    )
+    presence_trial.add_argument("--repo-root", default=".")
+    presence_trial.add_argument(
+        "--handprint",
+        default="world/velastra-handprint.json",
+    )
+    presence_trial.add_argument(
+        "--out-dir",
+        default=".velastra/candidates",
+    )
+    presence_trial.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/hearth-presence-0036.json",
+    )
+    presence_trial.set_defaults(
+        func=cmd_presence_provenance_trial
     )
 
     pressure_trial = sub.add_parser(

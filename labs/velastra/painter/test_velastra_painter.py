@@ -411,8 +411,10 @@ class PainterBridgeTests(unittest.TestCase):
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
-        self.assertIn("IDENTITY REFRAME", bundle["positive"])
+        self.assertNotIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertNotIn("IDENTITY REFRAME", bundle["positive"])
+        self.assertIn("The final image must make at least", bundle["positive"])
+        self.assertIn("The scene's identity should read as", bundle["positive"])
         self.assertIn("raw ground or underpainting", bundle["positive"])
         self.assertIn("empty frame may appear", bundle["positive"])
         self.assertEqual(bundle["negative"], "")
@@ -431,22 +433,23 @@ class PainterBridgeTests(unittest.TestCase):
 
         self.assertTrue(bundle["control"]["negativePromptActive"])
         self.assertIn("Virynism rejects", bundle["negative"])
-        self.assertIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertNotIn("VISIBLE EVIDENCE CONTRACT", bundle["positive"])
+        self.assertIn("The final image must make at least", bundle["positive"])
 
     def test_prompt_bundle_carries_portfolio_handprint(self):
         manifest = manifest_fixture()
         spec = painter.build_render_spec(self.brush_args())
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("HANDPRINT", bundle["positive"])
-        self.assertIn("3 approved witnesses", bundle["positive"])
+        self.assertNotIn("HANDPRINT", bundle["positive"])
+        self.assertIn("3 approved source studies", bundle["positive"])
         self.assertIn(
             "warm-biased overall",
             bundle["positive"],
         )
         self.assertTrue(bundle["handprint"]["active"])
         self.assertEqual(bundle["handprint"]["witnessCount"], 3)
-        self.assertIn("ROLE-CONDITIONED FACETS", bundle["positive"])
+        self.assertIn("Relevant visual-treatment facets", bundle["positive"])
         self.assertIn("edge behavior", bundle["positive"])
         self.assertIn(
             "edge_behavior",
@@ -461,6 +464,60 @@ class PainterBridgeTests(unittest.TestCase):
             "GOVERNING HANDPRINT LAW",
             bundle["positive"],
         )
+
+    def test_control_plane_isolation_blocks_internal_markers_from_positive_prompt(self):
+        manifest = manifest_fixture()
+        approved = manifest["witnesses"]["selected"][0]
+        approved["status"] = "approved"
+        approved["asset"] = {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a" * 64,
+            "width": 1536,
+            "height": 864,
+            "mediaType": "image/png",
+        }
+        manifest["witnesses"]["approved"] = [
+            json.loads(json.dumps(approved))
+        ]
+        manifest["witnesses"]["active"] = True
+
+        spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image_edit",
+                attempt="control-plane-isolation",
+                witness_firewall=True,
+                firewall_tile_size=32,
+                firewall_blur_radius=0.6,
+            )
+        )
+        bundle = painter.compile_prompt_bundle(manifest, spec)
+
+        self.assertTrue(bundle["controlPlaneIsolation"]["active"])
+        self.assertEqual(bundle["controlPlaneIsolation"]["leaks"], [])
+        lowered = bundle["positive"].lower()
+        for marker in painter.MODEL_VISIBLE_CONTROL_MARKERS:
+            self.assertNotIn(marker, lowered)
+
+        self.assertIn(
+            "Do not render wording, headings, labels, or phrases from these instructions",
+            bundle["negative"],
+        )
+
+        record = painter.build_candidate_record(
+            manifest,
+            bundle,
+            spec,
+            Path(".velastra/control-plane.png"),
+        )
+        self.assertTrue(
+            record["source"]["controlPlaneIsolation"]["active"]
+        )
+
+    def test_control_plane_leak_detector_is_fail_closed(self):
+        leaks = painter.control_plane_leaks(
+            "Please obey the SCENE SOVEREIGNTY GATE."
+        )
+        self.assertIn("scene sovereignty gate", leaks)
 
     def test_provisional_grip_remains_silent(self):
         manifest = manifest_fixture()
@@ -744,7 +801,8 @@ class PainterBridgeTests(unittest.TestCase):
 
         self.assertFalse(bundle["witness"]["active"])
         self.assertNotIn("VISUAL WITNESS", bundle["positive"])
-        self.assertIn("HANDPRINT", bundle["positive"])
+        self.assertNotIn("HANDPRINT", bundle["positive"])
+        self.assertIn("approved source studies", bundle["positive"])
 
     def test_handprint_ablation_changes_candidate_without_changing_asset(self):
         manifest = manifest_fixture()
@@ -807,8 +865,12 @@ class PainterBridgeTests(unittest.TestCase):
             spec,
         )
 
-        self.assertIn(
+        self.assertNotIn(
             "SCENE SOVEREIGNTY GATE",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "Build the target room from these literal authored place facts",
             bundle["positive"],
         )
         self.assertIn(
@@ -853,7 +915,11 @@ class PainterBridgeTests(unittest.TestCase):
             bundle["thresholdIntegrity"]["profile"],
             "hearth_hospitality_v1",
         )
-        self.assertIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertNotIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertIn(
+            "These authored objects must be clearly visible",
+            bundle["positive"],
+        )
         self.assertIn(
             "Any authored low fire must remain visibly low and contained.",
             bundle["positive"],
@@ -862,9 +928,9 @@ class PainterBridgeTests(unittest.TestCase):
             "Any authored cushion must read as a discrete cushion",
             bundle["positive"],
         )
-        self.assertIn("THRESHOLD INTEGRITY LAW", bundle["positive"])
+        self.assertNotIn("THRESHOLD INTEGRITY LAW", bundle["positive"])
         self.assertIn(
-            "Thresholds mark transition, not ownership.",
+            "Movement and access must remain consistent with the authored Hearth",
             bundle["positive"],
         )
         self.assertIn("easy ingress and egress", bundle["positive"])
@@ -925,7 +991,8 @@ class PainterBridgeTests(unittest.TestCase):
         )
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertNotIn("FIXED OBJECT LOCK", bundle["positive"])
+        self.assertIn("These authored objects must be clearly visible", bundle["positive"])
         self.assertIn("old basin", bundle["positive"])
         self.assertNotIn("low fire", bundle["positive"])
         self.assertNotIn("cushion", bundle["positive"])
@@ -981,12 +1048,16 @@ class PainterBridgeTests(unittest.TestCase):
             firewalled["witness"]["firewall"]["algorithm"],
             "patch_shuffle_v1",
         )
-        self.assertIn(
+        self.assertNotIn(
             "WITNESS FIREWALL",
             firewalled["positive"],
         )
         self.assertIn(
-            "destroy semantic layout",
+            "reference pixels have been locally rearranged",
+            firewalled["positive"],
+        )
+        self.assertIn(
+            "original spatial organization is unavailable",
             firewalled["positive"],
         )
         self.assertNotEqual(
@@ -1031,12 +1102,19 @@ class PainterBridgeTests(unittest.TestCase):
             "governing_translation",
         )
         self.assertTrue(bundle["handprintPressure"]["combined"])
-        self.assertIn("GOVERNING HANDPRINT LAW", bundle["positive"])
-        self.assertIn("NON-NEGOTIABLE HAND LAWS", bundle["positive"])
-        self.assertIn("EDGE BEHAVIOR LAW", bundle["positive"])
-        self.assertIn("WITNESS TRANSLATION LAW", bundle["positive"])
+        self.assertNotIn("GOVERNING HANDPRINT LAW", bundle["positive"])
+        self.assertNotIn("NON-NEGOTIABLE HAND LAWS", bundle["positive"])
+        self.assertNotIn("WITNESS TRANSLATION LAW", bundle["positive"])
         self.assertIn(
-            "recompose and repaint it through the governing Handprint laws",
+            "portfolio-derived visual treatment",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "Visual treatment constraints:",
+            bundle["positive"],
+        )
+        self.assertIn(
+            "reference image",
             bundle["positive"],
         )
 
@@ -1126,7 +1204,8 @@ class PainterBridgeTests(unittest.TestCase):
         )
         bundle = painter.compile_prompt_bundle(manifest, spec)
 
-        self.assertIn("VISUAL WITNESS", bundle["positive"])
+        self.assertNotIn("VISUAL WITNESS", bundle["positive"])
+        self.assertIn("input reference image accompanies this request", bundle["positive"])
         self.assertIn("specific frames", bundle["positive"])
         self.assertEqual(
             bundle["witness"]["selected"],
@@ -1321,6 +1400,180 @@ class PainterBridgeTests(unittest.TestCase):
         }
         values.update(overrides)
         return argparse.Namespace(**values)
+
+    def test_style_ablation_is_candidate_local_and_prompt_visible(self):
+        manifest = manifest_fixture()
+        manifest["style"]["hand"].append({
+            "id": "quiet_uncanny",
+            "weight": 0.9,
+            "directive": (
+                "Favor one or two quietly impossible or emotionally "
+                "dissonant details over spectacle."
+            ),
+        })
+        manifest["style"]["emphasis"].append("quiet_uncanny")
+        manifest["style"]["archetype"]["directives"].append(
+            "Let architecture and objects imply histories that are not fully explained."
+        )
+
+        baseline_spec = painter.build_render_spec(
+            self.brush_args(brush="qwen_image")
+        )
+        ablated_spec = painter.build_render_spec(
+            self.brush_args(
+                brush="qwen_image",
+                without_style_law=["quiet_uncanny"],
+                without_style_phrase=[
+                    "inhabited memory-field",
+                    "imply histories",
+                ],
+            )
+        )
+
+        baseline = painter.compile_prompt_bundle(
+            manifest,
+            baseline_spec,
+        )
+        ablated = painter.compile_prompt_bundle(
+            manifest,
+            ablated_spec,
+        )
+
+        self.assertIn("quietly impossible", baseline["positive"])
+        self.assertIn("inhabited memory-field", baseline["positive"])
+        self.assertIn("imply histories", baseline["positive"])
+
+        self.assertNotIn("quietly impossible", ablated["positive"])
+        self.assertNotIn("inhabited memory-field", ablated["positive"])
+        self.assertNotIn("imply histories", ablated["positive"])
+        self.assertEqual(
+            ablated["style"]["ablations"]["disabledStyleIds"],
+            ["quiet_uncanny"],
+        )
+        self.assertEqual(
+            ablated["style"]["ablations"]["disabledPhrases"],
+            ["inhabited memory-field", "imply histories"],
+        )
+
+        baseline_id = painter.candidate_id(
+            manifest,
+            baseline,
+            baseline_spec,
+        )
+        ablated_id = painter.candidate_id(
+            manifest,
+            ablated,
+            ablated_spec,
+        )
+        self.assertNotEqual(baseline_id, ablated_id)
+
+    def test_presence_provenance_trial_plans_balanced_witness_free_factorial(self):
+        manifest = manifest_fixture()
+        manifest["style"]["hand"].append({
+            "id": "quiet_uncanny",
+            "weight": 0.9,
+            "directive": (
+                "Favor one or two quietly impossible or emotionally "
+                "dissonant details over spectacle."
+            ),
+        })
+        manifest["style"]["emphasis"].append("quiet_uncanny")
+        manifest["style"]["archetype"]["directives"].append(
+            "Let architecture and objects imply histories that are not fully explained."
+        )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "hearth.velastra.json"
+            handprint_path = root / "handprint.json"
+            trial_path = root / "presence.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="hearth-presence-0036-test",
+                repeats=2,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                out_dir=str(out_dir),
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_presence_provenance_trial(
+                args
+            )
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(
+                set(trial["conditions"]),
+                {
+                    "baseline",
+                    "without_quiet_uncanny",
+                    "without_memory_presence",
+                    "without_both",
+                },
+            )
+            for arms in trial["conditions"].values():
+                self.assertEqual(len(arms), 2)
+                for arm in arms:
+                    self.assertFalse(arm["witness"]["active"])
+
+            self.assertEqual(
+                trial["executionOrder"],
+                [
+                    "hearth-presence-0036-test-b-01",
+                    "hearth-presence-0036-test-q-01",
+                    "hearth-presence-0036-test-m-01",
+                    "hearth-presence-0036-test-x-01",
+                    "hearth-presence-0036-test-x-02",
+                    "hearth-presence-0036-test-m-02",
+                    "hearth-presence-0036-test-q-02",
+                    "hearth-presence-0036-test-b-02",
+                ],
+            )
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only presence trial must not execute inference.",
+            )
+
+            for repeat_index in (0, 1):
+                seeds = {
+                    trial["conditions"][condition][repeat_index]["seed"]
+                    for condition in trial["conditions"]
+                }
+                self.assertEqual(len(seeds), 1)
+
+            self.assertEqual(
+                trial["conditions"]["without_quiet_uncanny"][0][
+                    "styleAblation"
+                ]["disabledStyleIds"],
+                ["quiet_uncanny"],
+            )
+            self.assertEqual(
+                trial["conditions"]["without_memory_presence"][0][
+                    "styleAblation"
+                ]["disabledPhrases"],
+                ["inhabited memory-field", "imply histories"],
+            )
+            self.assertTrue(
+                trial["laws"]["sameSeedWithinRepeatAcrossConditions"]
+            )
 
     def test_scene_sovereignty_trial_plans_a_c_d_without_inference(self):
         manifest = manifest_fixture()
