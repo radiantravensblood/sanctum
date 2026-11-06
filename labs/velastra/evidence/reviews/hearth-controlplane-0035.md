@@ -97,15 +97,22 @@ The Handprint facet `intimate_presence` has only one supporting witness and is
 not render-eligible. It therefore cannot honestly be credited as the active
 cause of the 0035 A-arm effect.
 
-The active suspects are instead the Virynism/style instructions:
+The active suspects are instead the Virynism/style instructions that actually
+reach the current prompt budget:
 
 - `quiet_uncanny`
-- `intimate_scale` and its “evidence of prior presence” language
 - place-tableau instruction: “inhabited memory-field”
 - place-tableau instruction: architecture/objects may imply unexplained history
 - possibly `threshold_depth`
 
-These are the target of Kernel 0036.
+The current compiler carries only the six highest-priority hand directives.
+With the present place-tableau emphasis, `intimate_scale` falls outside that
+active hand set; it should therefore **not** be credited as a causal instruction
+for 0035 without further evidence.
+
+Kernel 0036 first tests `quiet_uncanny` against the explicit memory/presence
+archetype language. `threshold_depth` is held fixed and becomes the next
+ablation only if the first factorial is inconclusive.
 
 ## Metric note
 
