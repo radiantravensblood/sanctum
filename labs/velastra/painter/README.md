@@ -781,6 +781,77 @@ success is human-reviewed:
 
 **Does the image read first as the target place rather than as the witness?**
 
+## Kernel 0035 — Control-Plane Isolation
+
+Kernel 0035 responds to a concrete render failure discovered in the 0034 Hearth
+trial: painter-facing images visibly reproduced internal control labels such as
+`SCENE SOVEREIGNTY GATE`. Internal systems vocabulary was therefore entering
+the depicted world instead of remaining metadata.
+
+The architecture now separates two namespaces:
+
+- **control plane** — internal names, protocols, trial labels, provenance, and
+  validation concepts;
+- **image plane** — literal painter-facing scene behavior only.
+
+Internal concepts such as Handprint, Visual Witness, Witness Firewall, Scene
+Sovereignty Gate, Fixed Object Lock, and Threshold Integrity remain available
+to the code and evidence records. They are translated into plain descriptive
+sentences before reaching the painter.
+
+A fail-closed validator rejects any positive prompt containing a known internal
+control marker. This happens before inference.
+
+The painter also receives an explicit instruction not to render wording,
+headings, labels, or phrases from the instructions into the image unless
+visible text is itself authored scene truth.
+
+### 0035 isolation trial
+
+Keep every other variable frozen from 0034:
+
+- same Hearth packet,
+- same model and brush,
+- same Handprint registry,
+- same Visual Witness,
+- same balanced A/C/D order,
+- same Witness Firewall algorithm,
+- same 32px tile size,
+- same 0.6px blur radius.
+
+Plan first:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-controlplane-0035" \
+  --output "labs/velastra/evidence/trials/hearth-controlplane-0035.json" \
+  --firewall-tile-size 32 \
+  --firewall-blur-radius 0.6
+```
+
+Then render only after the plan succeeds without a control-plane leak:
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py scene-sovereignty-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-controlplane-0035" \
+  --output "labs/velastra/evidence/trials/hearth-controlplane-0035.json" \
+  --firewall-tile-size 32 \
+  --firewall-blur-radius 0.6 \
+  --render
+```
+
+Review adds two questions to the existing Hearth criteria:
+
+1. Did any instruction or control-plane wording become visible image text?
+2. Did any control-plane metaphor become a depicted object or architectural
+   motif without support from authored scene truth?
+
+The purpose is not to suppress strangeness. It is to distinguish authored or
+emergent visual behavior from accidental literalization of the renderer's own
+instrumentation.
+
 ## Kernel 0034 — Scene Truth Lock / Threshold Integrity
 
 Kernel 0034 keeps the Kernel 0033 Witness Firewall frozen:
