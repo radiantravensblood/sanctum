@@ -718,6 +718,26 @@ def model_safe_instruction(value: Any) -> str:
     """Translate internal system vocabulary into literal painter-facing prose."""
     text = flatten_text(value)
     replacements = (
+        ("Scene Sovereignty Gate", "authored scene facts"),
+        ("scene sovereignty gate", "authored scene facts"),
+        ("Fixed Object Lock", "required visible objects"),
+        ("fixed object lock", "required visible objects"),
+        ("Threshold Integrity Law", "movement and access guidance"),
+        ("threshold integrity law", "movement and access guidance"),
+        ("Witness Firewall", "reference-image preprocessing"),
+        ("witness firewall", "reference-image preprocessing"),
+        ("Visible Evidence Contract", "required visible facts"),
+        ("visible evidence contract", "required visible facts"),
+        ("Identity Reframe", "scene identity"),
+        ("identity reframe", "scene identity"),
+        ("Positive Composition Controls", "composition requirements"),
+        ("positive composition controls", "composition requirements"),
+        ("Governing Handprint Law", "portfolio-derived visual treatment"),
+        ("governing handprint law", "portfolio-derived visual treatment"),
+        ("Non-Negotiable Hand Laws", "visual treatment constraints"),
+        ("non-negotiable hand laws", "visual treatment constraints"),
+        ("Witness Translation Law", "reference-image translation guidance"),
+        ("witness translation law", "reference-image translation guidance"),
         ("Visual Witness", "reference image"),
         ("visual witness", "reference image"),
         ("Witness", "reference image"),
@@ -1860,7 +1880,7 @@ def compile_prompt_bundle(
         )
 
     dialect_directives = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("directives") or [])
     ]
     dialect_directives = [
@@ -1916,7 +1936,7 @@ def compile_prompt_bundle(
         )
 
     dialect_negative = [
-        flatten_text(item)
+        model_safe_instruction(item)
         for item in (dialect.get("negativePriorities") or [])
     ]
     dialect_negative = [
