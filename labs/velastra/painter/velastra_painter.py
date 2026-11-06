@@ -311,8 +311,38 @@ def threshold_integrity_contract(
     return base
 
 
-def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
+def style_lines(
+    manifest: Mapping[str, Any],
+    spec: "RenderSpec | None" = None,
+) -> dict[str, Any]:
     style = manifest.get("style")
+    disabled_ids = {
+        str(item).strip()
+        for item in (
+            spec.disabled_style_ids
+            if spec is not None
+            else ()
+        )
+        if str(item).strip()
+    }
+    disabled_phrases = tuple(
+        str(item).strip().lower()
+        for item in (
+            spec.disabled_style_phrases
+            if spec is not None
+            else ()
+        )
+        if str(item).strip()
+    )
+
+    def phrase_allowed(value: Any) -> bool:
+        text = flatten_text(value)
+        lowered = text.lower()
+        return bool(text) and not any(
+            phrase in lowered
+            for phrase in disabled_phrases
+        )
+
     if not isinstance(style, Mapping):
         return {
             "signature": "",
@@ -320,12 +350,21 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
             "archetype": [],
             "place": [],
             "avoid": [],
+            "ablations": {
+                "disabledStyleIds": sorted(disabled_ids),
+                "disabledPhrases": list(disabled_phrases),
+            },
         }
 
     hand_entries = [
         entry
         for entry in (style.get("hand") or [])
-        if isinstance(entry, Mapping) and entry.get("directive")
+        if (
+            isinstance(entry, Mapping)
+            and entry.get("directive")
+            and str(entry.get("id") or "") not in disabled_ids
+            and phrase_allowed(entry.get("directive"))
+        )
     ]
     emphasis = set(style.get("emphasis") or [])
     hand_entries.sort(
@@ -346,12 +385,12 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
     archetype = [
         flatten_text(item)
         for item in (archetype_block.get("directives") or [])
-        if flatten_text(item)
+        if phrase_allowed(item)
     ]
     place = [
         flatten_text(item)
         for item in (place_block.get("directives") or [])
-        if flatten_text(item)
+        if phrase_allowed(item)
     ]
     avoid = [
         flatten_text(item)
@@ -368,6 +407,10 @@ def style_lines(manifest: Mapping[str, Any]) -> dict[str, list[str]]:
         "archetype": archetype,
         "place": place,
         "avoid": avoid,
+        "ablations": {
+            "disabledStyleIds": sorted(disabled_ids),
+            "disabledPhrases": list(disabled_phrases),
+        },
     }
 
 
@@ -1498,7 +1541,7 @@ def compile_prompt_bundle(
     scene = manifest.get("scene") or {}
     truth = compile_truth_envelope(manifest)
     threshold_integrity = threshold_integrity_contract(manifest)
-    style = style_lines(manifest)
+    style = style_lines(manifest, spec)
     evidence = evidence_lines(manifest)
     witness = witness_lines(manifest, spec)
     handprint = handprint_lines(manifest, spec)
@@ -2177,6 +2220,12 @@ def build_render_spec(args: argparse.Namespace) -> "RenderSpec":
         witness_firewall=bool(getattr(args, "witness_firewall", False)),
         firewall_tile_size=int(getattr(args, "firewall_tile_size", 32) or 32),
         firewall_blur_radius=float(getattr(args, "firewall_blur_radius", 0.6) or 0.0),
+        disabled_style_ids=tuple(
+            getattr(args, "without_style_law", None) or []
+        ),
+        disabled_style_phrases=tuple(
+            getattr(args, "without_style_phrase", None) or []
+        ),
     )
 
 
@@ -2208,6 +2257,8 @@ class RenderSpec:
     witness_firewall: bool = False
     firewall_tile_size: int = 32
     firewall_blur_radius: float = 0.6
+    disabled_style_ids: tuple[str, ...] = ()
+    disabled_style_phrases: tuple[str, ...] = ()
 
 
 def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: RenderSpec) -> str:
@@ -2238,6 +2289,8 @@ def candidate_id(manifest: Mapping[str, Any], prompts: Mapping[str, Any], spec: 
                 "withoutHandprint": spec.disable_handprint,
                 "withoutWitness": spec.disable_witness,
                 "witnessFirewall": spec.witness_firewall,
+                "disabledStyleIds": list(spec.disabled_style_ids),
+                "disabledStylePhrases": list(spec.disabled_style_phrases),
             },
         },
     }
@@ -2288,6 +2341,8 @@ def build_candidate_record(
             "ablation": {
                 "withoutHandprint": spec.disable_handprint,
                 "withoutWitness": spec.disable_witness,
+                "disabledStyleIds": list(spec.disabled_style_ids),
+                "disabledStylePhrases": list(spec.disabled_style_phrases),
             },
             "device": spec.device,
             "dtype": spec.dtype,
@@ -3967,6 +4022,18 @@ def add_render_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--without-handprint", action="store_true", help="Ablation: omit Handprint guidance while preserving the rest of the manifest.")
     parser.add_argument("--without-witness", action="store_true", help="Ablation: omit Visual Witness guidance when the selected brush does not require an input image.")
+    parser.add_argument(
+        "--without-style-law",
+        action="append",
+        default=[],
+        help="Candidate-local ablation: omit one authored style hand law by ID. Repeatable.",
+    )
+    parser.add_argument(
+        "--without-style-phrase",
+        action="append",
+        default=[],
+        help="Candidate-local ablation: omit style/archetype/place directives containing this phrase. Repeatable.",
+    )
     parser.add_argument("--attempt", help="Explicit attempt identity for transports without reliable seed control.")
     parser.add_argument("--repo-root", default=".", help="Repository root used to resolve approved witness assets.")
     parser.add_argument("--brush-registry", help="Optional alternate brush cabinet path.")
