@@ -1672,6 +1672,106 @@ class PainterBridgeTests(unittest.TestCase):
         with self.assertRaises(painter.PainterError):
             painter.parse_seed_list("190920")
 
+    def test_basin_density_plans_identical_prompt_seed_range(self):
+        manifest = manifest_fixture()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "hearth.velastra.json"
+            handprint_path = root / "handprint.json"
+            trial_path = root / "density.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="hearth-density-0038-test",
+                start_seed=190920,
+                end_seed=190923,
+                max_seeds=32,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                out_dir=str(out_dir),
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_basin_density_trial(args)
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(
+                trial["seeds"],
+                [190920, 190921, 190922, 190923],
+            )
+            self.assertEqual(len(trial["arms"]), 4)
+            self.assertEqual(
+                trial["seedRange"],
+                {
+                    "start": 190920,
+                    "end": 190923,
+                    "count": 4,
+                },
+            )
+
+            prompt_shas = {
+                arm["promptSha256"]
+                for arm in trial["arms"]
+            }
+            self.assertEqual(len(prompt_shas), 1)
+            self.assertEqual(
+                next(iter(prompt_shas)),
+                trial["promptSha256"],
+            )
+            self.assertEqual(
+                trial["knownReferenceBasins"]["190920"],
+                "smoky_presence",
+            )
+            self.assertEqual(
+                trial["knownReferenceBasins"]["190923"],
+                "centered_ceremonial",
+            )
+
+            for arm in trial["arms"]:
+                self.assertFalse(arm["witness"]["active"])
+                self.assertEqual(arm["replicate"], 1)
+
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only density scan must not execute inference.",
+            )
+            self.assertTrue(
+                trial["laws"]["numericSeedAdjacencyDoesNotImplyLatentAdjacency"]
+            )
+            self.assertTrue(
+                trial["laws"]["novelBasinsRequireReplicationBeforeInterpretation"]
+            )
+
+    def test_basin_density_seed_range_has_safety_bounds(self):
+        self.assertEqual(
+            painter.density_seed_range(10, 13),
+            [10, 11, 12, 13],
+        )
+        with self.assertRaises(painter.PainterError):
+            painter.density_seed_range(13, 10)
+        with self.assertRaises(painter.PainterError):
+            painter.density_seed_range(10, 12)
+        with self.assertRaises(painter.PainterError):
+            painter.density_seed_range(1, 40, max_seeds=16)
+
     def test_scene_sovereignty_trial_plans_a_c_d_without_inference(self):
         manifest = manifest_fixture()
         selected = manifest["witnesses"]["selected"][0]
