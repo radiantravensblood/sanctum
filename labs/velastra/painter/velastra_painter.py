@@ -4243,6 +4243,257 @@ def cmd_basin_cartography_trial(
     print(trial_path)
     return 0
 
+
+def density_seed_range(
+    start_seed: int,
+    end_seed: int,
+    *,
+    max_seeds: int = 32,
+) -> list[int]:
+    if end_seed < start_seed:
+        raise PainterError(
+            "Basin density end seed must be greater than or equal to start seed."
+        )
+    seeds = list(range(start_seed, end_seed + 1))
+    if len(seeds) < 4:
+        raise PainterError(
+            "Basin density requires at least four seeds."
+        )
+    if len(seeds) > max_seeds:
+        raise PainterError(
+            f"Basin density is capped at {max_seeds} seeds per trial."
+        )
+    return seeds
+
+
+def cmd_basin_density_trial(
+    args: argparse.Namespace,
+) -> int:
+    seeds = density_seed_range(
+        int(args.start_seed),
+        int(args.end_seed),
+        max_seeds=int(args.max_seeds),
+    )
+
+    manifest = unwrap_manifest(
+        read_json(Path(args.manifest))
+    )
+    require_manifest(manifest)
+    manifest_sha = sha256_bytes(canonical_json(manifest))
+
+    handprint = read_json(Path(args.handprint))
+    handprint_sha = sha256_bytes(
+        canonical_json(handprint)
+    )
+
+    arms: list[dict[str, Any]] = []
+    namespaces: dict[str, argparse.Namespace] = {}
+
+    for seed in seeds:
+        arm, render_args = basin_cartography_arm_plan(
+            manifest=manifest,
+            args=args,
+            seed=seed,
+            replicate=1,
+        )
+        arms.append(arm)
+        namespaces[arm["attemptId"]] = render_args
+
+    prompt_shas = {
+        arm["promptSha256"]
+        for arm in arms
+    }
+    if len(prompt_shas) != 1:
+        raise PainterError(
+            "Basin density prompt drift detected across seeds."
+        )
+    prompt_sha = next(iter(prompt_shas))
+
+    trial_path = Path(args.output)
+    existing = read_json(trial_path) if trial_path.exists() else {}
+    prior_manifest_sha = existing.get("manifestSha256")
+    if (
+        prior_manifest_sha
+        and prior_manifest_sha != manifest_sha
+        and not args.replace_trial
+    ):
+        raise PainterError(
+            "Existing basin-density trial was planned from a different manifest. "
+            "Use --replace-trial only after intentional review."
+        )
+
+    known_reference = {
+        "190920": "smoky_presence",
+        "190921": "clear_intimate",
+        "190922": "wide_tableau",
+        "190923": "centered_ceremonial",
+    }
+
+    trial: dict[str, Any] = {
+        "version": 1,
+        "protocol": "velastra.basin_density_trial.v1",
+        "trialId": args.trial_id,
+        "status": "planned",
+        "createdAt": existing.get("createdAt") or utc_now(),
+        "updatedAt": utc_now(),
+        "assetKey": manifest["assetKey"],
+        "manifest": args.manifest,
+        "manifestSha256": manifest_sha,
+        "brush": "qwen_image",
+        "transport": "huggingface",
+        "seedRange": {
+            "start": seeds[0],
+            "end": seeds[-1],
+            "count": len(seeds),
+        },
+        "seeds": seeds,
+        "promptSha256": prompt_sha,
+        "knownReferenceBasins": {
+            seed: basin
+            for seed, basin in known_reference.items()
+            if int(seed) in seeds
+        },
+        "frozen": {
+            "handprintPath": Path(args.handprint).as_posix(),
+            "handprintSha256": handprint_sha,
+            "witnessPixels": "none",
+            "styleAblations": "none",
+            "controlPlaneIsolation": True,
+            "thresholdIntegrity": True,
+            "fixedObjectEnforcement": "unchanged_from_0037",
+            "promptMustBeIdenticalAcrossArms": True,
+            "replicatesPerSeed": 1,
+        },
+        "arms": arms,
+        "executionOrder": [
+            arm["attemptId"]
+            for arm in arms
+        ],
+        "humanReview": {
+            "status": "pending",
+            "primaryQuestion": (
+                "How often do recurring Hearth compositional morphologies appear "
+                "across this local numeric seed neighborhood?"
+            ),
+            "dimensions": {
+                "atmosphere": [
+                    "clear",
+                    "smoky",
+                    "other",
+                ],
+                "camera": [
+                    "intimate",
+                    "medium",
+                    "wide",
+                    "other",
+                ],
+                "topology": [
+                    "asymmetrical",
+                    "centered",
+                    "circular",
+                    "other",
+                ],
+                "presentation": [
+                    "immersive_room",
+                    "tableau",
+                    "bordered_canvas",
+                    "other",
+                ],
+                "presence": [
+                    "none",
+                    "implied",
+                    "quasi_figurative",
+                    "other",
+                ],
+            },
+            "candidateReviews": {},
+            "clusterSummary": None,
+            "notes": None,
+        },
+        "laws": {
+            "trialCannotMutateCanon": True,
+            "witnessMustRemainAbsent": True,
+            "promptMustRemainByteIdenticalAcrossArms": True,
+            "onlySeedAndAttemptIdentityMayVary": True,
+            "singleRenderPerSeed": True,
+            "numericSeedAdjacencyDoesNotImplyLatentAdjacency": True,
+            "novelBasinsRequireReplicationBeforeInterpretation": True,
+            "humanReviewRequired": True,
+            "basinClassificationCannotImplyAgency": True,
+        },
+    }
+    write_json(trial_path, trial)
+
+    if not args.render:
+        print(trial_path)
+        print(
+            "planned="
+            + str(len(seeds))
+            + " renders; no inference executed"
+        )
+        print("prompt_sha256=" + prompt_sha)
+        return 0
+
+    trial["status"] = "running"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    by_attempt = {
+        arm["attemptId"]: arm
+        for arm in trial["arms"]
+    }
+
+    for attempt in trial["executionOrder"]:
+        arm = by_attempt[attempt]
+        render_args = namespaces[attempt]
+        image_path = Path(arm["image"])
+        record_path = Path(arm["candidateRecord"])
+
+        if not (image_path.exists() and record_path.exists()):
+            result = cmd_render(render_args)
+            if result != 0:
+                raise PainterError(
+                    f"Basin-density render failed: {attempt}"
+                )
+
+        arm["status"] = "rendered"
+        arm["outputSha256"] = (
+            sha256_file(image_path)
+            if image_path.exists()
+            else None
+        )
+        trial["updatedAt"] = utc_now()
+        write_json(trial_path, trial)
+
+    output_shas = [
+        arm.get("outputSha256")
+        for arm in trial["arms"]
+        if arm.get("outputSha256")
+    ]
+    trial["outputDiagnostics"] = {
+        "renderedCount": len(output_shas),
+        "uniqueOutputCount": len(set(output_shas)),
+        "duplicateOutputGroups": {
+            sha: [
+                arm["seed"]
+                for arm in trial["arms"]
+                if arm.get("outputSha256") == sha
+            ]
+            for sha in sorted(set(output_shas))
+            if sum(
+                1
+                for arm in trial["arms"]
+                if arm.get("outputSha256") == sha
+            ) > 1
+        },
+    }
+
+    trial["status"] = "complete"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+    print(trial_path)
+    return 0
+
 def cmd_scene_sovereignty_trial(
     args: argparse.Namespace,
 ) -> int:
@@ -4997,6 +5248,57 @@ def build_parser() -> argparse.ArgumentParser:
     )
     basin_trial.set_defaults(
         func=cmd_basin_cartography_trial
+    )
+
+    density_trial = sub.add_parser(
+        "basin-density-trial",
+        help="Plan or explicitly render a one-pass identical-prompt seed neighborhood scan.",
+    )
+    density_trial.add_argument("manifest")
+    density_trial.add_argument(
+        "--trial-id",
+        default="hearth-density-0038",
+    )
+    density_trial.add_argument(
+        "--start-seed",
+        type=int,
+        default=190916,
+    )
+    density_trial.add_argument(
+        "--end-seed",
+        type=int,
+        default=190931,
+    )
+    density_trial.add_argument(
+        "--max-seeds",
+        type=int,
+        default=32,
+        help="Safety cap for one density scan.",
+    )
+    density_trial.add_argument(
+        "--render",
+        action="store_true",
+        help="Explicitly execute one render per seed.",
+    )
+    density_trial.add_argument(
+        "--replace-trial",
+        action="store_true",
+    )
+    density_trial.add_argument("--repo-root", default=".")
+    density_trial.add_argument(
+        "--handprint",
+        default="world/velastra-handprint.json",
+    )
+    density_trial.add_argument(
+        "--out-dir",
+        default=".velastra/candidates",
+    )
+    density_trial.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/hearth-density-0038.json",
+    )
+    density_trial.set_defaults(
+        func=cmd_basin_density_trial
     )
 
     pressure_trial = sub.add_parser(
