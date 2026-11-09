@@ -1,0 +1,493 @@
+{
+  "version": 1,
+  "protocol": "velastra.basin_cartography_trial.v1",
+  "trialId": "hearth-basin-0037",
+  "status": "complete",
+  "createdAt": "2026-11-09T16:24:53Z",
+  "updatedAt": "2026-11-09T16:28:25Z",
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "brush": "qwen_image",
+  "transport": "huggingface",
+  "seeds": [
+    190920,
+    190921,
+    190922,
+    190923
+  ],
+  "replicatesPerSeed": 2,
+  "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+  "frozen": {
+    "handprintPath": "world/velastra-handprint.json",
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "witnessPixels": "none",
+    "styleAblations": "none",
+    "controlPlaneIsolation": true,
+    "thresholdIntegrity": true,
+    "fixedObjectEnforcement": "unchanged_from_0036",
+    "promptMustBeIdenticalAcrossArms": true
+  },
+  "conditions": {
+    "190920": [
+      {
+        "seed": 190920,
+        "replicate": 1,
+        "attemptId": "hearth-basin-0037-s190920-r01",
+        "candidateId": "b6867c720601c03bdc20",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b6867c720601c03bdc20.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b6867c720601c03bdc20.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "ae97f91454c106aaaa514c0f5b0e1d1157988eff20fe78f1d8eaae4f6dd0807a",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190920-r01",
+          "--seed",
+          "190920",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "seed": 190920,
+        "replicate": 2,
+        "attemptId": "hearth-basin-0037-s190920-r02",
+        "candidateId": "3e29576bd1aa3fdee73d",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3e29576bd1aa3fdee73d.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3e29576bd1aa3fdee73d.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "76df771d6761527af098b584bb6ce9a37ad8d2734b74991de640a5d2eebe26a4",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190920-r02",
+          "--seed",
+          "190920",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ],
+    "190921": [
+      {
+        "seed": 190921,
+        "replicate": 1,
+        "attemptId": "hearth-basin-0037-s190921-r01",
+        "candidateId": "9aedee9896bc49525c0b",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9aedee9896bc49525c0b.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9aedee9896bc49525c0b.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "03ef7ed255214b11203287341933d0b0e31cbfbd57db7ca9dffd6ad665c58175",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190921-r01",
+          "--seed",
+          "190921",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "seed": 190921,
+        "replicate": 2,
+        "attemptId": "hearth-basin-0037-s190921-r02",
+        "candidateId": "21bfadb2fd3ba4a31c77",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/21bfadb2fd3ba4a31c77.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/21bfadb2fd3ba4a31c77.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "03ef7ed255214b11203287341933d0b0e31cbfbd57db7ca9dffd6ad665c58175",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190921-r02",
+          "--seed",
+          "190921",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ],
+    "190922": [
+      {
+        "seed": 190922,
+        "replicate": 1,
+        "attemptId": "hearth-basin-0037-s190922-r01",
+        "candidateId": "ad915a47c25e98cef65e",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/ad915a47c25e98cef65e.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/ad915a47c25e98cef65e.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "007c7f710e5b77e4c53935c5631bdb62997da4e4bbc22331e67789be471455ed",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190922-r01",
+          "--seed",
+          "190922",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "seed": 190922,
+        "replicate": 2,
+        "attemptId": "hearth-basin-0037-s190922-r02",
+        "candidateId": "100961bb1c632393d65e",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/100961bb1c632393d65e.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/100961bb1c632393d65e.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "007c7f710e5b77e4c53935c5631bdb62997da4e4bbc22331e67789be471455ed",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190922-r02",
+          "--seed",
+          "190922",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ],
+    "190923": [
+      {
+        "seed": 190923,
+        "replicate": 1,
+        "attemptId": "hearth-basin-0037-s190923-r01",
+        "candidateId": "a1c16e5c80c2924526a4",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/a1c16e5c80c2924526a4.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/a1c16e5c80c2924526a4.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "dbddb909814bbfa6f6f303ff7f1756554de453fff7de34ae6edb5b391e832b38",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190923-r01",
+          "--seed",
+          "190923",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "seed": 190923,
+        "replicate": 2,
+        "attemptId": "hearth-basin-0037-s190923-r02",
+        "candidateId": "f74a264aa1c63c1b1f26",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/f74a264aa1c63c1b1f26.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/f74a264aa1c63c1b1f26.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "outputSha256": "dbddb909814bbfa6f6f303ff7f1756554de453fff7de34ae6edb5b391e832b38",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-basin-0037-s190923-r02",
+          "--seed",
+          "190923",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "basin": null,
+          "quasiFigurativeAtmosphere": null,
+          "smokeOrHaze": null,
+          "priorPresenceAffect": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ]
+  },
+  "executionOrder": [
+    "hearth-basin-0037-s190920-r01",
+    "hearth-basin-0037-s190921-r01",
+    "hearth-basin-0037-s190922-r01",
+    "hearth-basin-0037-s190923-r01",
+    "hearth-basin-0037-s190923-r02",
+    "hearth-basin-0037-s190922-r02",
+    "hearth-basin-0037-s190921-r02",
+    "hearth-basin-0037-s190920-r02"
+  ],
+  "pairDiagnostics": {
+    "190920": {
+      "seed": 190920,
+      "replicateCount": 2,
+      "outputSha256": [
+        "ae97f91454c106aaaa514c0f5b0e1d1157988eff20fe78f1d8eaae4f6dd0807a",
+        "76df771d6761527af098b584bb6ce9a37ad8d2734b74991de640a5d2eebe26a4"
+      ],
+      "exactPixelMatch": false,
+      "humanBasinAgreement": null
+    },
+    "190921": {
+      "seed": 190921,
+      "replicateCount": 2,
+      "outputSha256": [
+        "03ef7ed255214b11203287341933d0b0e31cbfbd57db7ca9dffd6ad665c58175",
+        "03ef7ed255214b11203287341933d0b0e31cbfbd57db7ca9dffd6ad665c58175"
+      ],
+      "exactPixelMatch": true,
+      "humanBasinAgreement": null
+    },
+    "190922": {
+      "seed": 190922,
+      "replicateCount": 2,
+      "outputSha256": [
+        "007c7f710e5b77e4c53935c5631bdb62997da4e4bbc22331e67789be471455ed",
+        "007c7f710e5b77e4c53935c5631bdb62997da4e4bbc22331e67789be471455ed"
+      ],
+      "exactPixelMatch": true,
+      "humanBasinAgreement": null
+    },
+    "190923": {
+      "seed": 190923,
+      "replicateCount": 2,
+      "outputSha256": [
+        "dbddb909814bbfa6f6f303ff7f1756554de453fff7de34ae6edb5b391e832b38",
+        "dbddb909814bbfa6f6f303ff7f1756554de453fff7de34ae6edb5b391e832b38"
+      ],
+      "exactPixelMatch": true,
+      "humanBasinAgreement": null
+    }
+  },
+  "humanReview": {
+    "status": "pending",
+    "primaryQuestion": "Do identical prompt + identical seed pairs occupy the same atmospheric basin, and do different seeds select different basins?",
+    "basinVocabulary": [
+      "smoky_presence",
+      "clear_room",
+      "other"
+    ],
+    "interpretationRules": {
+      "seed_conditioned": "Within-seed pairs agree while at least two seeds occupy different basins.",
+      "provider_stochastic": "One or more within-seed pairs disagree materially.",
+      "single_basin": "All seeds and replicates occupy the same basin."
+    },
+    "notes": null
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "witnessMustRemainAbsent": true,
+    "promptMustRemainByteIdenticalAcrossArms": true,
+    "onlySeedAndAttemptIdentityMayVary": true,
+    "atLeastTwoReplicatesPerSeed": true,
+    "humanReviewRequired": true,
+    "basinClassificationCannotImplyAgency": true
+  }
+}
