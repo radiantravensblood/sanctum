@@ -1575,6 +1575,103 @@ class PainterBridgeTests(unittest.TestCase):
                 trial["laws"]["sameSeedWithinRepeatAcrossConditions"]
             )
 
+    def test_basin_cartography_plans_paired_identical_prompt_seeds(self):
+        manifest = manifest_fixture()
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            manifest_path = root / "hearth.velastra.json"
+            handprint_path = root / "handprint.json"
+            trial_path = root / "basin.json"
+            out_dir = root / "candidates"
+
+            painter.write_json(manifest_path, manifest)
+            painter.write_json(
+                handprint_path,
+                {
+                    "version": 1,
+                    "status": "built",
+                    "provenance": {
+                        "algorithmVersion": 2,
+                    },
+                },
+            )
+
+            args = argparse.Namespace(
+                manifest=str(manifest_path),
+                trial_id="hearth-basin-0037-test",
+                seeds="190920,190921",
+                replicates=2,
+                render=False,
+                replace_trial=False,
+                repo_root=str(root),
+                handprint=str(handprint_path),
+                out_dir=str(out_dir),
+                output=str(trial_path),
+            )
+
+            result = painter.cmd_basin_cartography_trial(
+                args
+            )
+            self.assertEqual(result, 0)
+
+            trial = painter.read_json(trial_path)
+            self.assertEqual(trial["status"], "planned")
+            self.assertEqual(trial["seeds"], [190920, 190921])
+            self.assertEqual(trial["replicatesPerSeed"], 2)
+            self.assertEqual(
+                trial["executionOrder"],
+                [
+                    "hearth-basin-0037-test-s190920-r01",
+                    "hearth-basin-0037-test-s190921-r01",
+                    "hearth-basin-0037-test-s190921-r02",
+                    "hearth-basin-0037-test-s190920-r02",
+                ],
+            )
+
+            prompt_shas = {
+                arm["promptSha256"]
+                for arms in trial["conditions"].values()
+                for arm in arms
+            }
+            self.assertEqual(len(prompt_shas), 1)
+            self.assertEqual(
+                next(iter(prompt_shas)),
+                trial["promptSha256"],
+            )
+
+            for seed, arms in trial["conditions"].items():
+                self.assertEqual(len(arms), 2)
+                self.assertNotEqual(
+                    arms[0]["candidateId"],
+                    arms[1]["candidateId"],
+                )
+                for arm in arms:
+                    self.assertEqual(arm["seed"], int(seed))
+                    self.assertFalse(arm["witness"]["active"])
+                    self.assertEqual(
+                        arm["command"][
+                            arm["command"].index("--seed") + 1
+                        ],
+                        seed,
+                    )
+
+            self.assertFalse(
+                list(out_dir.rglob("*.png")),
+                "Plan-only basin cartography must not execute inference.",
+            )
+            self.assertTrue(
+                trial["laws"]["promptMustRemainByteIdenticalAcrossArms"]
+            )
+
+    def test_basin_seed_list_requires_multiple_distinct_seeds(self):
+        self.assertEqual(
+            painter.parse_seed_list("190920,190921,190920"),
+            [190920, 190921],
+        )
+        with self.assertRaises(painter.PainterError):
+            painter.parse_seed_list("190920")
+
     def test_scene_sovereignty_trial_plans_a_c_d_without_inference(self):
         manifest = manifest_fixture()
         selected = manifest["witnesses"]["selected"][0]
