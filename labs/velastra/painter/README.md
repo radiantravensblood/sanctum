@@ -781,6 +781,98 @@ success is human-reviewed:
 
 **Does the image read first as the target place rather than as the witness?**
 
+## Kernel 0038 — Basin Density
+
+Kernel 0038 follows 0037's finding that identical Hearth semantics can produce
+multiple stable high-level compositional families under different seeds.
+
+The experiment is deliberately simple: one render per seed across a compact
+numeric neighborhood, using one byte-identical painter-facing prompt for every
+arm.
+
+The default scan is:
+
+```text
+190916 … 190931
+```
+
+That is 16 renders total.
+
+Numeric adjacency is treated only as an economical sampling strategy. It does
+**not** imply that consecutive integer seeds are geometrically adjacent in the
+model's latent space.
+
+### Frozen variables
+
+- Hearth manifest and scene truth;
+- Handprint and Virynism style;
+- Qwen text-to-image brush;
+- Hugging Face transport;
+- no Visual Witness;
+- no style ablations;
+- control-plane isolation;
+- threshold integrity;
+- fixed-object enforcement unchanged from 0037.
+
+Only seed and attempt identity vary.
+
+### Plan
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py basin-density-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-density-0038" \
+  --start-seed 190916 \
+  --end-seed 190931 \
+  --output "labs/velastra/evidence/trials/hearth-density-0038.json"
+```
+
+Expected:
+
+```text
+planned=16 renders; no inference executed
+prompt_sha256=<one shared prompt fingerprint>
+```
+
+### Render
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py basin-density-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-density-0038" \
+  --start-seed 190916 \
+  --end-seed 190931 \
+  --output "labs/velastra/evidence/trials/hearth-density-0038.json" \
+  --render
+```
+
+### Human review
+
+Each output is classified independently along multiple axes instead of being
+forced into a single basin label:
+
+- **atmosphere:** clear / smoky / other
+- **camera:** intimate / medium / wide / other
+- **topology:** asymmetrical / centered / circular / other
+- **presentation:** immersive_room / tableau / bordered_canvas / other
+- **presence:** none / implied / quasi_figurative / other
+
+The four 0037 seeds are included as known reference coordinates:
+
+- 190920 → smoky_presence
+- 190921 → clear_intimate
+- 190922 → wide_tableau
+- 190923 → centered_ceremonial
+
+Any newly observed morphology is provisional. It must be replicated in a later
+paired-seed trial before interpretation.
+
+The scan records exact PNG hashes and reports duplicate outputs if two distinct
+seeds happen to produce the same image.
+
+Fixed-object obedience and further semantic ablations remain deferred until the
+density map is reviewed.
+
 ## Kernel 0037 — Basin Cartography
 
 Kernel 0037 follows the 0036 result that the strongest visual split aligned
