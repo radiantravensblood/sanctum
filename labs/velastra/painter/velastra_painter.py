@@ -3895,6 +3895,354 @@ def cmd_presence_provenance_trial(
     print(trial_path)
     return 0
 
+
+DEFAULT_BASIN_CARTOGRAPHY_SEEDS = (
+    190920,
+    190921,
+    190922,
+    190923,
+)
+
+
+def parse_seed_list(value: str | None) -> list[int]:
+    raw = value or ",".join(
+        str(seed)
+        for seed in DEFAULT_BASIN_CARTOGRAPHY_SEEDS
+    )
+    seeds: list[int] = []
+    for part in raw.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        try:
+            seed = int(part)
+        except ValueError as exc:
+            raise PainterError(
+                f"Invalid basin seed: {part}"
+            ) from exc
+        if seed not in seeds:
+            seeds.append(seed)
+    if len(seeds) < 2:
+        raise PainterError(
+            "Basin cartography requires at least two distinct seeds."
+        )
+    return seeds
+
+
+def basin_cartography_arm_plan(
+    *,
+    manifest: Mapping[str, Any],
+    args: argparse.Namespace,
+    seed: int,
+    replicate: int,
+) -> tuple[dict[str, Any], argparse.Namespace]:
+    attempt = (
+        str(args.trial_id)
+        + "-s"
+        + str(seed)
+        + "-r"
+        + f"{replicate:02d}"
+    )
+    render_args = sovereignty_render_args(
+        manifest=args.manifest,
+        condition="handprint_only",
+        attempt=attempt,
+        repeat_index=1,
+        repo_root=args.repo_root,
+        out_dir=args.out_dir,
+        tile_size=32,
+        blur_radius=0.6,
+    )
+    render_args.seed = seed
+    render_args.without_style_law = []
+    render_args.without_style_phrase = []
+
+    spec = build_render_spec(render_args)
+    prompts = compile_prompt_bundle(manifest, spec)
+    witness = prompts.get("witness") or {}
+    if witness.get("active"):
+        raise PainterError(
+            "Basin cartography must remain witness-free."
+        )
+    style_ablations = (
+        (prompts.get("style") or {}).get("ablations") or {}
+    )
+    if (
+        style_ablations.get("disabledStyleIds")
+        or style_ablations.get("disabledPhrases")
+    ):
+        raise PainterError(
+            "Basin cartography requires the unablated baseline prompt."
+        )
+
+    prompt_sha = sha256_bytes(
+        canonical_json({
+            "positive": prompts.get("positive") or "",
+            "negative": prompts.get("negative") or "",
+        })
+    )
+    cid = candidate_id(manifest, prompts, spec)
+    base = Path(args.out_dir) / manifest["assetKey"]
+    image_path = base / f"{cid}.png"
+    record_path = base / f"{cid}.candidate.json"
+
+    command = [
+        ".venv/bin/python",
+        "labs/velastra/painter/velastra_painter.py",
+        "render",
+        args.manifest,
+        "--brush",
+        "qwen_image",
+        "--transport",
+        "huggingface",
+        "--attempt",
+        attempt,
+        "--seed",
+        str(seed),
+        "--repo-root",
+        args.repo_root,
+    ]
+
+    return ({
+        "seed": seed,
+        "replicate": replicate,
+        "attemptId": attempt,
+        "candidateId": cid,
+        "image": image_path.as_posix(),
+        "candidateRecord": record_path.as_posix(),
+        "promptSha256": prompt_sha,
+        "witness": witness,
+        "status": (
+            "rendered"
+            if image_path.exists() and record_path.exists()
+            else "planned"
+        ),
+        "outputSha256": (
+            sha256_file(image_path)
+            if image_path.exists()
+            else None
+        ),
+        "command": command,
+        "humanReview": {
+            "basin": None,
+            "quasiFigurativeAtmosphere": None,
+            "smokeOrHaze": None,
+            "priorPresenceAffect": None,
+            "horrorAdjacentAffect": None,
+            "sceneTruthPass": None,
+            "notes": None,
+        },
+    }, render_args)
+
+
+def cmd_basin_cartography_trial(
+    args: argparse.Namespace,
+) -> int:
+    if args.replicates < 2:
+        raise PainterError(
+            "Basin cartography requires at least two replicates per seed."
+        )
+
+    seeds = parse_seed_list(args.seeds)
+    manifest = unwrap_manifest(
+        read_json(Path(args.manifest))
+    )
+    require_manifest(manifest)
+    manifest_sha = sha256_bytes(canonical_json(manifest))
+
+    handprint = read_json(Path(args.handprint))
+    handprint_sha = sha256_bytes(
+        canonical_json(handprint)
+    )
+
+    plans: dict[str, list[dict[str, Any]]] = {
+        str(seed): []
+        for seed in seeds
+    }
+    namespaces: dict[str, argparse.Namespace] = {}
+
+    for replicate in range(1, args.replicates + 1):
+        for seed in seeds:
+            arm, render_args = basin_cartography_arm_plan(
+                manifest=manifest,
+                args=args,
+                seed=seed,
+                replicate=replicate,
+            )
+            plans[str(seed)].append(arm)
+            namespaces[arm["attemptId"]] = render_args
+
+    prompt_shas = {
+        arm["promptSha256"]
+        for arms in plans.values()
+        for arm in arms
+    }
+    if len(prompt_shas) != 1:
+        raise PainterError(
+            "Basin cartography prompt drift detected across arms."
+        )
+    prompt_sha = next(iter(prompt_shas))
+
+    execution_order: list[str] = []
+    for replicate in range(1, args.replicates + 1):
+        order = (
+            list(seeds)
+            if replicate % 2 == 1
+            else list(reversed(seeds))
+        )
+        for seed in order:
+            execution_order.append(
+                plans[str(seed)][replicate - 1][
+                    "attemptId"
+                ]
+            )
+
+    trial_path = Path(args.output)
+    existing = read_json(trial_path) if trial_path.exists() else {}
+    prior_manifest_sha = existing.get("manifestSha256")
+    if (
+        prior_manifest_sha
+        and prior_manifest_sha != manifest_sha
+        and not args.replace_trial
+    ):
+        raise PainterError(
+            "Existing basin-cartography trial was planned from a different manifest. "
+            "Use --replace-trial only after intentional review."
+        )
+
+    trial: dict[str, Any] = {
+        "version": 1,
+        "protocol": "velastra.basin_cartography_trial.v1",
+        "trialId": args.trial_id,
+        "status": "planned",
+        "createdAt": existing.get("createdAt") or utc_now(),
+        "updatedAt": utc_now(),
+        "assetKey": manifest["assetKey"],
+        "manifest": args.manifest,
+        "manifestSha256": manifest_sha,
+        "brush": "qwen_image",
+        "transport": "huggingface",
+        "seeds": seeds,
+        "replicatesPerSeed": args.replicates,
+        "promptSha256": prompt_sha,
+        "frozen": {
+            "handprintPath": Path(args.handprint).as_posix(),
+            "handprintSha256": handprint_sha,
+            "witnessPixels": "none",
+            "styleAblations": "none",
+            "controlPlaneIsolation": True,
+            "thresholdIntegrity": True,
+            "fixedObjectEnforcement": "unchanged_from_0036",
+            "promptMustBeIdenticalAcrossArms": True,
+        },
+        "conditions": plans,
+        "executionOrder": execution_order,
+        "pairDiagnostics": {},
+        "humanReview": {
+            "status": "pending",
+            "primaryQuestion": (
+                "Do identical prompt + identical seed pairs occupy the same "
+                "atmospheric basin, and do different seeds select different basins?"
+            ),
+            "basinVocabulary": [
+                "smoky_presence",
+                "clear_room",
+                "other",
+            ],
+            "interpretationRules": {
+                "seed_conditioned": (
+                    "Within-seed pairs agree while at least two seeds occupy "
+                    "different basins."
+                ),
+                "provider_stochastic": (
+                    "One or more within-seed pairs disagree materially."
+                ),
+                "single_basin": (
+                    "All seeds and replicates occupy the same basin."
+                ),
+            },
+            "notes": None,
+        },
+        "laws": {
+            "trialCannotMutateCanon": True,
+            "witnessMustRemainAbsent": True,
+            "promptMustRemainByteIdenticalAcrossArms": True,
+            "onlySeedAndAttemptIdentityMayVary": True,
+            "atLeastTwoReplicatesPerSeed": True,
+            "humanReviewRequired": True,
+            "basinClassificationCannotImplyAgency": True,
+        },
+    }
+    write_json(trial_path, trial)
+
+    if not args.render:
+        print(trial_path)
+        print(
+            "planned="
+            + str(len(seeds) * args.replicates)
+            + " renders; no inference executed"
+        )
+        print("prompt_sha256=" + prompt_sha)
+        return 0
+
+    trial["status"] = "running"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+
+    by_attempt = {
+        arm["attemptId"]: arm
+        for arms in trial["conditions"].values()
+        for arm in arms
+    }
+
+    for attempt in execution_order:
+        arm = by_attempt[attempt]
+        render_args = namespaces[attempt]
+        image_path = Path(arm["image"])
+        record_path = Path(arm["candidateRecord"])
+
+        if not (image_path.exists() and record_path.exists()):
+            result = cmd_render(render_args)
+            if result != 0:
+                raise PainterError(
+                    f"Basin-cartography render failed: {attempt}"
+                )
+
+        arm["status"] = "rendered"
+        arm["outputSha256"] = (
+            sha256_file(image_path)
+            if image_path.exists()
+            else None
+        )
+        trial["updatedAt"] = utc_now()
+        write_json(trial_path, trial)
+
+    pair_diagnostics: dict[str, Any] = {}
+    for seed in seeds:
+        arms = trial["conditions"][str(seed)]
+        output_shas = [
+            arm.get("outputSha256")
+            for arm in arms
+            if arm.get("outputSha256")
+        ]
+        pair_diagnostics[str(seed)] = {
+            "seed": seed,
+            "replicateCount": len(arms),
+            "outputSha256": output_shas,
+            "exactPixelMatch": (
+                len(output_shas) == len(arms)
+                and len(set(output_shas)) == 1
+            ),
+            "humanBasinAgreement": None,
+        }
+
+    trial["pairDiagnostics"] = pair_diagnostics
+    trial["status"] = "complete"
+    trial["updatedAt"] = utc_now()
+    write_json(trial_path, trial)
+    print(trial_path)
+    return 0
+
 def cmd_scene_sovereignty_trial(
     args: argparse.Namespace,
 ) -> int:
@@ -4604,6 +4952,51 @@ def build_parser() -> argparse.ArgumentParser:
     )
     presence_trial.set_defaults(
         func=cmd_presence_provenance_trial
+    )
+
+    basin_trial = sub.add_parser(
+        "basin-cartography-trial",
+        help="Plan or explicitly render identical-prompt paired seed trials for atmospheric basin mapping.",
+    )
+    basin_trial.add_argument("manifest")
+    basin_trial.add_argument(
+        "--trial-id",
+        default="hearth-basin-0037",
+    )
+    basin_trial.add_argument(
+        "--seeds",
+        default="190920,190921,190922,190923",
+        help="Comma-separated distinct seeds.",
+    )
+    basin_trial.add_argument(
+        "--replicates",
+        type=int,
+        default=2,
+    )
+    basin_trial.add_argument(
+        "--render",
+        action="store_true",
+        help="Explicitly execute paired seed inference.",
+    )
+    basin_trial.add_argument(
+        "--replace-trial",
+        action="store_true",
+    )
+    basin_trial.add_argument("--repo-root", default=".")
+    basin_trial.add_argument(
+        "--handprint",
+        default="world/velastra-handprint.json",
+    )
+    basin_trial.add_argument(
+        "--out-dir",
+        default=".velastra/candidates",
+    )
+    basin_trial.add_argument(
+        "--output",
+        default="labs/velastra/evidence/trials/hearth-basin-0037.json",
+    )
+    basin_trial.set_defaults(
+        func=cmd_basin_cartography_trial
     )
 
     pressure_trial = sub.add_parser(

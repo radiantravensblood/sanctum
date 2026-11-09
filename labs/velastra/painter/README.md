@@ -781,6 +781,98 @@ success is human-reviewed:
 
 **Does the image read first as the target place rather than as the witness?**
 
+## Kernel 0037 — Basin Cartography
+
+Kernel 0037 follows the 0036 result that the strongest visual split aligned
+exactly with the repeat seed boundary:
+
+- seed `190920` → smoky / atmospheric presence across all four Q/M conditions;
+- seed `190921` → clear-room basin across all four Q/M conditions.
+
+0036 falsified `quiet_uncanny` and the tested memory/presence phrases as
+primary causes, but it did **not** render the exact same prompt twice with the
+same seed. Kernel 0037 closes that gap.
+
+### Trial design
+
+The basin trial is witness-free and uses the unablated baseline prompt for
+every render. The positive and negative prompt text is hashed before inference;
+all arms must share one prompt SHA or the trial fails closed.
+
+Default seeds:
+
+```text
+190920
+190921
+190922
+190923
+```
+
+Each seed is rendered twice. Execution order is interleaved to reduce temporal
+or provider drift:
+
+```text
+190920-r1
+190921-r1
+190922-r1
+190923-r1
+190923-r2
+190922-r2
+190921-r2
+190920-r2
+```
+
+Only seed and attempt identity may vary.
+
+### Plan
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py basin-cartography-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-basin-0037" \
+  --output "labs/velastra/evidence/trials/hearth-basin-0037.json"
+```
+
+Expected:
+
+```text
+planned=8 renders; no inference executed
+prompt_sha256=<one shared prompt fingerprint>
+```
+
+### Render
+
+```bash
+.venv/bin/python labs/velastra/painter/velastra_painter.py basin-cartography-trial \
+  "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json" \
+  --trial-id "hearth-basin-0037" \
+  --output "labs/velastra/evidence/trials/hearth-basin-0037.json" \
+  --render
+```
+
+After rendering, the trial records the PNG SHA-256 for each output and an
+`exactPixelMatch` diagnostic for each same-seed pair.
+
+Interpretation:
+
+- same-seed pairs agree visually while different seeds occupy different basins:
+  evidence for seed-conditioned basin selection;
+- same-seed pairs diverge materially: provider stochasticity remains a stronger
+  confound than seed;
+- every seed occupies one basin: the current scene/prompt has a dominant basin
+  under this provider state.
+
+Human review classifies each render as `smoky_presence`, `clear_room`, or
+`other`. Exact pixel equality is useful but is not required for human basin
+agreement.
+
+Fixed-object obedience, `threshold_depth`, and all further semantic ablations
+remain frozen during this trial.
+
+The term “presence” names a visual/atmospheric morphology only. Basin
+classification is not evidence of agency, intention, consciousness, or a
+supernatural entity.
+
 ## Kernel 0036 — Presence Provenance
 
 Kernel 0036 does **not** change scene truth, fixed-object enforcement, witness
