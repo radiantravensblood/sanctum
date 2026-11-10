@@ -1,0 +1,533 @@
+{
+  "version": 1,
+  "protocol": "velastra.presence_provenance_trial.v1",
+  "trialId": "hearth-presence-0036",
+  "status": "complete",
+  "createdAt": "2026-11-06T04:24:13Z",
+  "updatedAt": "2026-11-09T15:24:24Z",
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "brush": "qwen_image",
+  "transport": "huggingface",
+  "repeatsPerCondition": 2,
+  "frozen": {
+    "handprintPath": "world/velastra-handprint.json",
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "witnessPixels": "none",
+    "controlPlaneIsolation": true,
+    "thresholdIntegrity": true,
+    "seedSchedule": {
+      "1": 190920,
+      "2": 190921
+    },
+    "fixedObjectEnforcement": "unchanged_from_0035"
+  },
+  "factors": {
+    "Q_quiet_uncanny": {
+      "baseline": true,
+      "ablatedIn": [
+        "without_quiet_uncanny",
+        "without_both"
+      ]
+    },
+    "M_memory_presence_language": {
+      "baseline": true,
+      "phrases": [
+        "inhabited memory-field",
+        "imply histories"
+      ],
+      "ablatedIn": [
+        "without_memory_presence",
+        "without_both"
+      ]
+    }
+  },
+  "conditions": {
+    "baseline": [
+      {
+        "condition": "baseline",
+        "repeat": 1,
+        "attemptId": "hearth-presence-0036-b-01",
+        "candidateId": "b9cb84a53452de7c3e5f",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b9cb84a53452de7c3e5f.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b9cb84a53452de7c3e5f.candidate.json",
+        "seed": 190920,
+        "styleAblation": {
+          "disabledStyleIds": [],
+          "disabledPhrases": []
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-b-01",
+          "--seed",
+          "190920",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "baseline",
+        "repeat": 2,
+        "attemptId": "hearth-presence-0036-b-02",
+        "candidateId": "778ce2109877ee3ad931",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/778ce2109877ee3ad931.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/778ce2109877ee3ad931.candidate.json",
+        "seed": 190921,
+        "styleAblation": {
+          "disabledStyleIds": [],
+          "disabledPhrases": []
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-b-02",
+          "--seed",
+          "190921",
+          "--repo-root",
+          "."
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      }
+    ],
+    "without_quiet_uncanny": [
+      {
+        "condition": "without_quiet_uncanny",
+        "repeat": 1,
+        "attemptId": "hearth-presence-0036-q-01",
+        "candidateId": "2688c1c80218a06e24fd",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/2688c1c80218a06e24fd.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/2688c1c80218a06e24fd.candidate.json",
+        "seed": 190920,
+        "styleAblation": {
+          "disabledStyleIds": [
+            "quiet_uncanny"
+          ],
+          "disabledPhrases": []
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-q-01",
+          "--seed",
+          "190920",
+          "--repo-root",
+          ".",
+          "--without-style-law",
+          "quiet_uncanny"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "without_quiet_uncanny",
+        "repeat": 2,
+        "attemptId": "hearth-presence-0036-q-02",
+        "candidateId": "b112e98eecc57ca15a04",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b112e98eecc57ca15a04.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b112e98eecc57ca15a04.candidate.json",
+        "seed": 190921,
+        "styleAblation": {
+          "disabledStyleIds": [
+            "quiet_uncanny"
+          ],
+          "disabledPhrases": []
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-q-02",
+          "--seed",
+          "190921",
+          "--repo-root",
+          ".",
+          "--without-style-law",
+          "quiet_uncanny"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      }
+    ],
+    "without_memory_presence": [
+      {
+        "condition": "without_memory_presence",
+        "repeat": 1,
+        "attemptId": "hearth-presence-0036-m-01",
+        "candidateId": "cd8e1bf64a0ff155eb1a",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/cd8e1bf64a0ff155eb1a.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/cd8e1bf64a0ff155eb1a.candidate.json",
+        "seed": 190920,
+        "styleAblation": {
+          "disabledStyleIds": [],
+          "disabledPhrases": [
+            "inhabited memory-field",
+            "imply histories"
+          ]
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-m-01",
+          "--seed",
+          "190920",
+          "--repo-root",
+          ".",
+          "--without-style-phrase",
+          "inhabited memory-field",
+          "--without-style-phrase",
+          "imply histories"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "without_memory_presence",
+        "repeat": 2,
+        "attemptId": "hearth-presence-0036-m-02",
+        "candidateId": "f718fa24d2274f97b63b",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/f718fa24d2274f97b63b.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/f718fa24d2274f97b63b.candidate.json",
+        "seed": 190921,
+        "styleAblation": {
+          "disabledStyleIds": [],
+          "disabledPhrases": [
+            "inhabited memory-field",
+            "imply histories"
+          ]
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-m-02",
+          "--seed",
+          "190921",
+          "--repo-root",
+          ".",
+          "--without-style-phrase",
+          "inhabited memory-field",
+          "--without-style-phrase",
+          "imply histories"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      }
+    ],
+    "without_both": [
+      {
+        "condition": "without_both",
+        "repeat": 1,
+        "attemptId": "hearth-presence-0036-x-01",
+        "candidateId": "bcf222807205e485eb4f",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/bcf222807205e485eb4f.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/bcf222807205e485eb4f.candidate.json",
+        "seed": 190920,
+        "styleAblation": {
+          "disabledStyleIds": [
+            "quiet_uncanny"
+          ],
+          "disabledPhrases": [
+            "inhabited memory-field",
+            "imply histories"
+          ]
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-x-01",
+          "--seed",
+          "190920",
+          "--repo-root",
+          ".",
+          "--without-style-law",
+          "quiet_uncanny",
+          "--without-style-phrase",
+          "inhabited memory-field",
+          "--without-style-phrase",
+          "imply histories"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "without_both",
+        "repeat": 2,
+        "attemptId": "hearth-presence-0036-x-02",
+        "candidateId": "8244592dbe8c1425a66c",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/8244592dbe8c1425a66c.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/8244592dbe8c1425a66c.candidate.json",
+        "seed": 190921,
+        "styleAblation": {
+          "disabledStyleIds": [
+            "quiet_uncanny"
+          ],
+          "disabledPhrases": [
+            "inhabited memory-field",
+            "imply histories"
+          ]
+        },
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "status": "rendered",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-presence-0036-x-02",
+          "--seed",
+          "190921",
+          "--repo-root",
+          ".",
+          "--without-style-law",
+          "quiet_uncanny",
+          "--without-style-phrase",
+          "inhabited memory-field",
+          "--without-style-phrase",
+          "imply histories"
+        ],
+        "humanReview": {
+          "quasiFigurativeAtmosphere": null,
+          "priorPresenceAffect": null,
+          "smokeOrHaze": null,
+          "horrorAdjacentAffect": null,
+          "sceneTruthPass": null,
+          "controlPlaneTextVisible": null,
+          "notes": null
+        }
+      }
+    ]
+  },
+  "executionOrder": [
+    "hearth-presence-0036-b-01",
+    "hearth-presence-0036-q-01",
+    "hearth-presence-0036-m-01",
+    "hearth-presence-0036-x-01",
+    "hearth-presence-0036-x-02",
+    "hearth-presence-0036-m-02",
+    "hearth-presence-0036-q-02",
+    "hearth-presence-0036-b-02"
+  ],
+  "summary": null,
+  "humanReview": {
+    "status": "pending",
+    "primaryQuestion": "Does quasi-figurative or uncanny presence persist when quiet-uncanny and memory-presence language are removed?",
+    "candidateReviews": {},
+    "interpretationRules": {
+      "Q_effect": "Presence drops whenever quiet_uncanny is absent.",
+      "M_effect": "Presence drops whenever memory-presence language is absent.",
+      "interaction": "Presence drops only when both factors are absent.",
+      "neither": "Presence persists in without_both; test threshold_depth or base-model/scene prior next."
+    },
+    "notes": null
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "witnessMustRemainAbsent": true,
+    "sameSeedWithinRepeatAcrossConditions": true,
+    "fixedObjectBehaviorMustRemainFrozen": true,
+    "controlPlaneIsolationMustRemainFrozen": true,
+    "styleAblationsMustRemainCandidateLocal": true,
+    "humanReviewRequired": true,
+    "presenceCannotBeInterpretedAsEntityByMetricAlone": true
+  }
+}
