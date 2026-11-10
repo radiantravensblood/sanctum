@@ -1,0 +1,2615 @@
+{
+  "version": 1,
+  "protocol": "velastra.scene_sovereignty_trial.v1",
+  "trialId": "hearth-threshold-0034",
+  "status": "complete",
+  "createdAt": "2026-11-06T03:16:29Z",
+  "updatedAt": "2026-11-06T03:24:26Z",
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "repeatsPerCondition": 2,
+  "frozen": {
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "handprintAlgorithmVersion": 2,
+    "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
+    "witnessId": "gallery_target_01",
+    "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+    "firewall": {
+      "active": true,
+      "algorithm": "patch_shuffle_v1",
+      "version": 1,
+      "sourceSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+      "tileSize": 32,
+      "blurRadius": 0.6,
+      "carrierId": "6a50d98566468c98e46c"
+    }
+  },
+  "executionOrder": [
+    "hearth-threshold-0034-a-01",
+    "hearth-threshold-0034-c-01",
+    "hearth-threshold-0034-d-01",
+    "hearth-threshold-0034-d-02",
+    "hearth-threshold-0034-c-02",
+    "hearth-threshold-0034-a-02"
+  ],
+  "conditions": {
+    "handprint_only": [
+      {
+        "condition": "handprint_only",
+        "repeat": 1,
+        "attemptId": "hearth-threshold-0034-a-01",
+        "candidateId": "6326b3484467a7d36dbd",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/6326b3484467a7d36dbd.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/6326b3484467a7d36dbd.candidate.json",
+        "brush": "qwen_image",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "descriptive_guidance",
+          "mode": "descriptive_guidance",
+          "version": 1,
+          "combined": false,
+          "priority": 114,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-a-01",
+          "--repo-root",
+          ".",
+          "--seed",
+          "190920"
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "6326b3484467a7d36dbd",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/6326b3484467a7d36dbd.png",
+          "pressure": {
+            "active": true,
+            "profile": "descriptive_guidance",
+            "mode": "descriptive_guidance",
+            "combined": false
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-a-01",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.145,
+            "meanSaturation": 0.3097,
+            "meanWarmth": 0.0237,
+            "darkShare": 0.8255,
+            "highlightShare": 0.0012,
+            "p10Luminance": 0.0588,
+            "p90Luminance": 0.2745,
+            "tonalSpan": 0.2157,
+            "edgeActivity": 0.0354,
+            "centerLuminance": 0.157,
+            "peripheryLuminance": 0.1422,
+            "centerLightDelta": 0.0147,
+            "grayscaleEntropy": 0.775
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.6906,
+            "inRangeRate": 0.2857,
+            "medianDistanceNormalized": 0.7103,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.6374,
+                "inRangeRate": 0.25,
+                "medianDistanceNormalized": 0.7246,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.0237,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.034,
+                    "medianDistanceNormalized": 1.584,
+                    "rangeAdherence": 0.0
+                  },
+                  "meanSaturation": {
+                    "value": 0.3097,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2203,
+                    "medianDistanceNormalized": 0.4466,
+                    "rangeAdherence": 0.7797
+                  },
+                  "tonalSpan": {
+                    "value": 0.2157,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2299,
+                    "medianDistanceNormalized": 0.7839,
+                    "rangeAdherence": 0.7701
+                  },
+                  "highlightShare": {
+                    "value": 0.0012,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.084,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6837,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.6657,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.0147,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.0478,
+                    "rangeAdherence": 1.0
+                  },
+                  "centerLuminance": {
+                    "value": 0.157,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1799,
+                    "medianDistanceNormalized": 0.6799,
+                    "rangeAdherence": 0.8201
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.1422,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.769,
+                    "medianDistanceNormalized": 1.2693,
+                    "rangeAdherence": 0.231
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.084,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0354,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.084,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.5393,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.1226,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0354,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1522,
+                    "medianDistanceNormalized": 0.6522,
+                    "rangeAdherence": 0.8478
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.775,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.608,
+                    "medianDistanceNormalized": 1.986,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.2157,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2299,
+                    "medianDistanceNormalized": 0.7297,
+                    "rangeAdherence": 0.7701
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.8167,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.5324,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.8255,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.3199,
+                    "medianDistanceNormalized": 0.8198,
+                    "rangeAdherence": 0.6801
+                  },
+                  "tonalSpan": {
+                    "value": 0.2157,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2299,
+                    "medianDistanceNormalized": 0.7297,
+                    "rangeAdherence": 0.7701
+                  },
+                  "centerLightDelta": {
+                    "value": 0.0147,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.0478,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": null,
+          "witnessId": null,
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "auto",
+          "transport": "huggingface",
+          "task": "text_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": null
+        }
+      },
+      {
+        "condition": "handprint_only",
+        "repeat": 2,
+        "attemptId": "hearth-threshold-0034-a-02",
+        "candidateId": "91cbf6a217140352a2ff",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/91cbf6a217140352a2ff.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/91cbf6a217140352a2ff.candidate.json",
+        "brush": "qwen_image",
+        "witness": {
+          "active": false,
+          "required": false,
+          "selected": null,
+          "title": null,
+          "roles": [],
+          "doNotInherit": [],
+          "asset": null,
+          "firewall": {},
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "descriptive_guidance",
+          "mode": "descriptive_guidance",
+          "version": 1,
+          "combined": false,
+          "priority": 114,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-a-02",
+          "--repo-root",
+          ".",
+          "--seed",
+          "190921"
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "91cbf6a217140352a2ff",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/91cbf6a217140352a2ff.png",
+          "pressure": {
+            "active": true,
+            "profile": "descriptive_guidance",
+            "mode": "descriptive_guidance",
+            "combined": false
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-a-02",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.1414,
+            "meanSaturation": 0.3495,
+            "meanWarmth": 0.0347,
+            "darkShare": 0.8318,
+            "highlightShare": 0.0008,
+            "p10Luminance": 0.0549,
+            "p90Luminance": 0.2667,
+            "tonalSpan": 0.2118,
+            "edgeActivity": 0.04,
+            "centerLuminance": 0.1802,
+            "peripheryLuminance": 0.1234,
+            "centerLightDelta": 0.0567,
+            "grayscaleEntropy": 0.7798
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.7096,
+            "inRangeRate": 0.2857,
+            "medianDistanceNormalized": 0.7029,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.7138,
+                "inRangeRate": 0.25,
+                "medianDistanceNormalized": 0.6418,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.0347,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.814,
+                    "medianDistanceNormalized": 1.364,
+                    "rangeAdherence": 0.186
+                  },
+                  "meanSaturation": {
+                    "value": 0.3495,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.0874,
+                    "medianDistanceNormalized": 0.3138,
+                    "rangeAdherence": 0.9126
+                  },
+                  "tonalSpan": {
+                    "value": 0.2118,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2434,
+                    "medianDistanceNormalized": 0.7973,
+                    "rangeAdherence": 0.7566
+                  },
+                  "highlightShare": {
+                    "value": 0.0008,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.092,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6699,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.7392,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.0567,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.2271,
+                    "rangeAdherence": 1.0
+                  },
+                  "centerLuminance": {
+                    "value": 0.1802,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1067,
+                    "medianDistanceNormalized": 0.6067,
+                    "rangeAdherence": 0.8933
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.1234,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.8836,
+                    "medianDistanceNormalized": 1.3839,
+                    "rangeAdherence": 0.1164
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.008,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.04,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.008,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.5475,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.0824,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.04,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.114,
+                    "medianDistanceNormalized": 0.614,
+                    "rangeAdherence": 0.886
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.7798,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.512,
+                    "medianDistanceNormalized": 1.89,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.2118,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2434,
+                    "medianDistanceNormalized": 0.7432,
+                    "rangeAdherence": 0.7566
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.8089,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.6001,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.8318,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.33,
+                    "medianDistanceNormalized": 0.8299,
+                    "rangeAdherence": 0.67
+                  },
+                  "tonalSpan": {
+                    "value": 0.2118,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2434,
+                    "medianDistanceNormalized": 0.7432,
+                    "rangeAdherence": 0.7566
+                  },
+                  "centerLightDelta": {
+                    "value": 0.0567,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.2271,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": null,
+          "witnessId": null,
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "auto",
+          "transport": "huggingface",
+          "task": "text_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": null
+        }
+      }
+    ],
+    "original_witness_combined": [
+      {
+        "condition": "original_witness_combined",
+        "repeat": 1,
+        "attemptId": "hearth-threshold-0034-c-01",
+        "candidateId": "08a9b4b9a8592434238f",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/08a9b4b9a8592434238f.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/08a9b4b9a8592434238f.candidate.json",
+        "brush": "qwen_image_edit",
+        "witness": {
+          "active": true,
+          "required": true,
+          "selected": "gallery_target_01",
+          "title": "Gallery of Unfinished Things — Viryn Target Study",
+          "roles": [
+            "material_hand",
+            "compositional_cadence",
+            "edge_behavior",
+            "spatial_depth",
+            "tonal_memory"
+          ],
+          "doNotInherit": [
+            "specific frames",
+            "papers",
+            "objects",
+            "layout",
+            "exact light source"
+          ],
+          "asset": {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "width": 1672,
+            "height": 941,
+            "mediaType": "image/png"
+          },
+          "firewall": {
+            "active": false,
+            "algorithm": null,
+            "version": null,
+            "sourceSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "carrierId": null,
+            "tileSize": null,
+            "blurRadius": null
+          },
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "governing_translation",
+          "mode": "governing_translation",
+          "version": 1,
+          "combined": true,
+          "priority": 123,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image_edit",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-c-01",
+          "--repo-root",
+          "."
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "08a9b4b9a8592434238f",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/08a9b4b9a8592434238f.png",
+          "pressure": {
+            "active": true,
+            "profile": "governing_translation",
+            "mode": "governing_translation",
+            "combined": true
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-c-01",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.1016,
+            "meanSaturation": 0.6633,
+            "meanWarmth": 0.0607,
+            "darkShare": 0.9195,
+            "highlightShare": 0.0018,
+            "p10Luminance": 0.0275,
+            "p90Luminance": 0.2118,
+            "tonalSpan": 0.1843,
+            "edgeActivity": 0.0356,
+            "centerLuminance": 0.1774,
+            "peripheryLuminance": 0.0683,
+            "centerLightDelta": 0.1091,
+            "grayscaleEntropy": 0.7442
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.701,
+            "inRangeRate": 0.2143,
+            "medianDistanceNormalized": 0.8569,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.8419,
+                "inRangeRate": 0.5,
+                "medianDistanceNormalized": 0.6354,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.0607,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.294,
+                    "medianDistanceNormalized": 0.844,
+                    "rangeAdherence": 0.706
+                  },
+                  "meanSaturation": {
+                    "value": 0.6633,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.7336,
+                    "rangeAdherence": 1.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1843,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.3382,
+                    "medianDistanceNormalized": 0.8921,
+                    "rangeAdherence": 0.6618
+                  },
+                  "highlightShare": {
+                    "value": 0.0018,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.072,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6048,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 0.9684,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.1091,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.07,
+                    "medianDistanceNormalized": 0.57,
+                    "rangeAdherence": 0.93
+                  },
+                  "centerLuminance": {
+                    "value": 0.1774,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1155,
+                    "medianDistanceNormalized": 0.6155,
+                    "rangeAdherence": 0.8845
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.0683,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.2194,
+                    "medianDistanceNormalized": 1.7197,
+                    "rangeAdherence": 0.0
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.08,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0356,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.08,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.5037,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.3635,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0356,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1506,
+                    "medianDistanceNormalized": 0.6506,
+                    "rangeAdherence": 0.8494
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.7442,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 2.224,
+                    "medianDistanceNormalized": 2.602,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1843,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.3382,
+                    "medianDistanceNormalized": 0.838,
+                    "rangeAdherence": 0.6618
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.707,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 0.7929,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.9195,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4707,
+                    "medianDistanceNormalized": 0.9706,
+                    "rangeAdherence": 0.5293
+                  },
+                  "tonalSpan": {
+                    "value": 0.1843,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.3382,
+                    "medianDistanceNormalized": 0.838,
+                    "rangeAdherence": 0.6618
+                  },
+                  "centerLightDelta": {
+                    "value": 0.1091,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.07,
+                    "medianDistanceNormalized": 0.57,
+                    "rangeAdherence": 0.93
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": {
+            "score": 0.6731,
+            "coarseRgbSimilarity": 0.6476,
+            "coarseLuminanceSimilarity": 0.6374,
+            "dHashSimilarity": 0.7344,
+            "candidate": ".velastra/candidates/velastra.place_tableau.1hsb6ko/08a9b4b9a8592434238f.png",
+            "witness": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "law": "This is coarse spatial/color similarity only. It does not establish semantic copying or authorship."
+          },
+          "witnessId": "gallery_target_01",
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "fal-ai",
+          "transport": "huggingface",
+          "task": "image_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": {
+            "id": "gallery_target_01",
+            "path": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "roles": [
+              "material_hand",
+              "compositional_cadence",
+              "edge_behavior",
+              "spatial_depth",
+              "tonal_memory"
+            ],
+            "inputPath": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "firewall": {
+              "active": false
+            }
+          }
+        }
+      },
+      {
+        "condition": "original_witness_combined",
+        "repeat": 2,
+        "attemptId": "hearth-threshold-0034-c-02",
+        "candidateId": "3685036fdea7ba2353ec",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3685036fdea7ba2353ec.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3685036fdea7ba2353ec.candidate.json",
+        "brush": "qwen_image_edit",
+        "witness": {
+          "active": true,
+          "required": true,
+          "selected": "gallery_target_01",
+          "title": "Gallery of Unfinished Things — Viryn Target Study",
+          "roles": [
+            "material_hand",
+            "compositional_cadence",
+            "edge_behavior",
+            "spatial_depth",
+            "tonal_memory"
+          ],
+          "doNotInherit": [
+            "specific frames",
+            "papers",
+            "objects",
+            "layout",
+            "exact light source"
+          ],
+          "asset": {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "width": 1672,
+            "height": 941,
+            "mediaType": "image/png"
+          },
+          "firewall": {
+            "active": false,
+            "algorithm": null,
+            "version": null,
+            "sourceSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "carrierId": null,
+            "tileSize": null,
+            "blurRadius": null
+          },
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "governing_translation",
+          "mode": "governing_translation",
+          "version": 1,
+          "combined": true,
+          "priority": 123,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image_edit",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-c-02",
+          "--repo-root",
+          "."
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "3685036fdea7ba2353ec",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3685036fdea7ba2353ec.png",
+          "pressure": {
+            "active": true,
+            "profile": "governing_translation",
+            "mode": "governing_translation",
+            "combined": true
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-c-02",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.1053,
+            "meanSaturation": 0.6072,
+            "meanWarmth": 0.06,
+            "darkShare": 0.9117,
+            "highlightShare": 0.0012,
+            "p10Luminance": 0.0392,
+            "p90Luminance": 0.2157,
+            "tonalSpan": 0.1765,
+            "edgeActivity": 0.0349,
+            "centerLuminance": 0.1712,
+            "peripheryLuminance": 0.0764,
+            "centerLightDelta": 0.0948,
+            "grayscaleEntropy": 0.729
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.7034,
+            "inRangeRate": 0.3571,
+            "medianDistanceNormalized": 0.8579,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.8317,
+                "inRangeRate": 0.5,
+                "medianDistanceNormalized": 0.6018,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.06,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.308,
+                    "medianDistanceNormalized": 0.858,
+                    "rangeAdherence": 0.692
+                  },
+                  "meanSaturation": {
+                    "value": 0.6072,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.5464,
+                    "rangeAdherence": 1.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1765,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.365,
+                    "medianDistanceNormalized": 0.919,
+                    "rangeAdherence": 0.635
+                  },
+                  "highlightShare": {
+                    "value": 0.0012,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.084,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6216,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.9273,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.0948,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.4764,
+                    "rangeAdherence": 1.0
+                  },
+                  "centerLuminance": {
+                    "value": 0.1712,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1351,
+                    "medianDistanceNormalized": 0.6351,
+                    "rangeAdherence": 0.8649
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.0764,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.17,
+                    "medianDistanceNormalized": 1.6703,
+                    "rangeAdherence": 0.0
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.094,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0349,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.094,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.4929,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.4758,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0349,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1564,
+                    "medianDistanceNormalized": 0.6564,
+                    "rangeAdherence": 0.8436
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.729,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 2.528,
+                    "medianDistanceNormalized": 2.906,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1765,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.365,
+                    "medianDistanceNormalized": 0.8649,
+                    "rangeAdherence": 0.635
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.7256,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.7665,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.9117,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4582,
+                    "medianDistanceNormalized": 0.9581,
+                    "rangeAdherence": 0.5418
+                  },
+                  "tonalSpan": {
+                    "value": 0.1765,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.365,
+                    "medianDistanceNormalized": 0.8649,
+                    "rangeAdherence": 0.635
+                  },
+                  "centerLightDelta": {
+                    "value": 0.0948,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.4764,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": {
+            "score": 0.6752,
+            "coarseRgbSimilarity": 0.6505,
+            "coarseLuminanceSimilarity": 0.6407,
+            "dHashSimilarity": 0.7344,
+            "candidate": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3685036fdea7ba2353ec.png",
+            "witness": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "law": "This is coarse spatial/color similarity only. It does not establish semantic copying or authorship."
+          },
+          "witnessId": "gallery_target_01",
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "fal-ai",
+          "transport": "huggingface",
+          "task": "image_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": {
+            "id": "gallery_target_01",
+            "path": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "roles": [
+              "material_hand",
+              "compositional_cadence",
+              "edge_behavior",
+              "spatial_depth",
+              "tonal_memory"
+            ],
+            "inputPath": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "firewall": {
+              "active": false
+            }
+          }
+        }
+      }
+    ],
+    "firewall_combined": [
+      {
+        "condition": "firewall_combined",
+        "repeat": 1,
+        "attemptId": "hearth-threshold-0034-d-01",
+        "candidateId": "d75a23b6b4c294b53449",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d75a23b6b4c294b53449.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d75a23b6b4c294b53449.candidate.json",
+        "brush": "qwen_image_edit",
+        "witness": {
+          "active": true,
+          "required": true,
+          "selected": "gallery_target_01",
+          "title": "Gallery of Unfinished Things — Viryn Target Study",
+          "roles": [
+            "material_hand",
+            "compositional_cadence",
+            "edge_behavior",
+            "spatial_depth",
+            "tonal_memory"
+          ],
+          "doNotInherit": [
+            "specific frames",
+            "papers",
+            "objects",
+            "layout",
+            "exact light source"
+          ],
+          "asset": {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "width": 1672,
+            "height": 941,
+            "mediaType": "image/png"
+          },
+          "firewall": {
+            "active": true,
+            "algorithm": "patch_shuffle_v1",
+            "version": 1,
+            "sourceSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "tileSize": 32,
+            "blurRadius": 0.6,
+            "carrierId": "6a50d98566468c98e46c"
+          },
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "governing_translation",
+          "mode": "governing_translation",
+          "version": 1,
+          "combined": true,
+          "priority": 123,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image_edit",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-d-01",
+          "--repo-root",
+          ".",
+          "--witness-firewall",
+          "--firewall-tile-size",
+          "32",
+          "--firewall-blur-radius",
+          "0.6"
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "d75a23b6b4c294b53449",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d75a23b6b4c294b53449.png",
+          "pressure": {
+            "active": true,
+            "profile": "governing_translation",
+            "mode": "governing_translation",
+            "combined": true
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-d-01",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.0947,
+            "meanSaturation": 0.5873,
+            "meanWarmth": 0.0538,
+            "darkShare": 0.9409,
+            "highlightShare": 0.003,
+            "p10Luminance": 0.0431,
+            "p90Luminance": 0.1882,
+            "tonalSpan": 0.1451,
+            "edgeActivity": 0.0311,
+            "centerLuminance": 0.1272,
+            "peripheryLuminance": 0.0817,
+            "centerLightDelta": 0.0455,
+            "grayscaleEntropy": 0.6647
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.6558,
+            "inRangeRate": 0.3571,
+            "medianDistanceNormalized": 0.947,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.7737,
+                "inRangeRate": 0.5,
+                "medianDistanceNormalized": 0.6343,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.0538,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.432,
+                    "medianDistanceNormalized": 0.982,
+                    "rangeAdherence": 0.568
+                  },
+                  "meanSaturation": {
+                    "value": 0.5873,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.48,
+                    "rangeAdherence": 1.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1451,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4733,
+                    "medianDistanceNormalized": 1.0272,
+                    "rangeAdherence": 0.5267
+                  },
+                  "highlightShare": {
+                    "value": 0.003,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.048,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.5753,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.8553,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.0455,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.1538,
+                    "rangeAdherence": 1.0
+                  },
+                  "centerLuminance": {
+                    "value": 0.1272,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.274,
+                    "medianDistanceNormalized": 0.774,
+                    "rangeAdherence": 0.726
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.0817,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.1377,
+                    "medianDistanceNormalized": 1.638,
+                    "rangeAdherence": 0.0
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.17,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0311,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.17,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.4462,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.951,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.0311,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.188,
+                    "medianDistanceNormalized": 0.688,
+                    "rangeAdherence": 0.812
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.6647,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 3.814,
+                    "medianDistanceNormalized": 4.192,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1451,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4733,
+                    "medianDistanceNormalized": 0.9731,
+                    "rangeAdherence": 0.5267
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6739,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.7106,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.9409,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.5051,
+                    "medianDistanceNormalized": 1.005,
+                    "rangeAdherence": 0.4949
+                  },
+                  "tonalSpan": {
+                    "value": 0.1451,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4733,
+                    "medianDistanceNormalized": 0.9731,
+                    "rangeAdherence": 0.5267
+                  },
+                  "centerLightDelta": {
+                    "value": 0.0455,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.1538,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": {
+            "score": 0.669,
+            "coarseRgbSimilarity": 0.6423,
+            "coarseLuminanceSimilarity": 0.6302,
+            "dHashSimilarity": 0.7344,
+            "candidate": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d75a23b6b4c294b53449.png",
+            "witness": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "law": "This is coarse spatial/color similarity only. It does not establish semantic copying or authorship."
+          },
+          "witnessId": "gallery_target_01",
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "fal-ai",
+          "transport": "huggingface",
+          "task": "image_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": {
+            "id": "gallery_target_01",
+            "path": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "roles": [
+              "material_hand",
+              "compositional_cadence",
+              "edge_behavior",
+              "spatial_depth",
+              "tonal_memory"
+            ],
+            "inputPath": ".velastra/firewall/gallery_target_01/6a50d98566468c98e46c.png",
+            "firewall": {
+              "algorithm": "patch_shuffle_v1",
+              "version": 1,
+              "carrierId": "6a50d98566468c98e46c",
+              "source": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+              "output": ".velastra/firewall/gallery_target_01/6a50d98566468c98e46c.png",
+              "tileSize": 32,
+              "blurRadius": 0.6,
+              "semanticLayoutDestroyed": true,
+              "localPixelEvidencePreserved": true,
+              "reused": true,
+              "carrierSha256": "cc383ed4b02715e8706d812dfc9c4bc0eecbbc1ef1b91e56fc781ec1acb90ceb"
+            }
+          }
+        }
+      },
+      {
+        "condition": "firewall_combined",
+        "repeat": 2,
+        "attemptId": "hearth-threshold-0034-d-02",
+        "candidateId": "9d96b119bfbca3a7fba2",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9d96b119bfbca3a7fba2.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9d96b119bfbca3a7fba2.candidate.json",
+        "brush": "qwen_image_edit",
+        "witness": {
+          "active": true,
+          "required": true,
+          "selected": "gallery_target_01",
+          "title": "Gallery of Unfinished Things — Viryn Target Study",
+          "roles": [
+            "material_hand",
+            "compositional_cadence",
+            "edge_behavior",
+            "spatial_depth",
+            "tonal_memory"
+          ],
+          "doNotInherit": [
+            "specific frames",
+            "papers",
+            "objects",
+            "layout",
+            "exact light source"
+          ],
+          "asset": {
+            "path": "assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "width": 1672,
+            "height": 941,
+            "mediaType": "image/png"
+          },
+          "firewall": {
+            "active": true,
+            "algorithm": "patch_shuffle_v1",
+            "version": 1,
+            "sourceSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "tileSize": 32,
+            "blurRadius": 0.6,
+            "carrierId": "6a50d98566468c98e46c"
+          },
+          "ablation": null
+        },
+        "handprintPressure": {
+          "active": true,
+          "profile": "governing_translation",
+          "mode": "governing_translation",
+          "version": 1,
+          "combined": true,
+          "priority": 123,
+          "roleOrder": [
+            "sacred_incompletion",
+            "material_hand",
+            "edge_behavior",
+            "tonal_memory",
+            "spatial_depth",
+            "compositional_cadence"
+          ]
+        },
+        "sceneSovereignty": {
+          "painterlyTruth": {
+            "id": "painterly_truth",
+            "version": 1,
+            "revision": 0,
+            "room": "hearth",
+            "facts": [
+              "Fixed room object: low fire.",
+              "Fixed room object: velvet cushion."
+            ],
+            "spatialFacts": [],
+            "absences": [],
+            "traces": [],
+            "fixedObjects": [
+              {
+                "id": "low_fire",
+                "name": "low fire"
+              },
+              {
+                "id": "hearth_cushion",
+                "name": "velvet cushion"
+              }
+            ]
+          }
+        },
+        "status": "evaluated",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/velastra_painter.py",
+          "render",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--brush",
+          "qwen_image_edit",
+          "--transport",
+          "huggingface",
+          "--attempt",
+          "hearth-threshold-0034-d-02",
+          "--repo-root",
+          ".",
+          "--witness-firewall",
+          "--firewall-tile-size",
+          "32",
+          "--firewall-blur-radius",
+          "0.6"
+        ],
+        "evaluation": {
+          "version": 1,
+          "candidateId": "9d96b119bfbca3a7fba2",
+          "assetKey": "velastra.place_tableau.1hsb6ko",
+          "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9d96b119bfbca3a7fba2.png",
+          "pressure": {
+            "active": true,
+            "profile": "governing_translation",
+            "mode": "governing_translation",
+            "combined": true
+          },
+          "ablation": {
+            "withoutHandprint": false,
+            "withoutWitness": false
+          },
+          "attemptId": "hearth-threshold-0034-d-02",
+          "metrics": {
+            "width": 1536,
+            "height": 864,
+            "aspectRatio": 1.7778,
+            "meanLuminance": 0.1003,
+            "meanSaturation": 0.6112,
+            "meanWarmth": 0.0586,
+            "darkShare": 0.9362,
+            "highlightShare": 0.0037,
+            "p10Luminance": 0.0471,
+            "p90Luminance": 0.1882,
+            "tonalSpan": 0.1412,
+            "edgeActivity": 0.036,
+            "centerLuminance": 0.1349,
+            "peripheryLuminance": 0.0883,
+            "centerLightDelta": 0.0467,
+            "grayscaleEntropy": 0.6785
+          },
+          "handprintAdherence": {
+            "rolesRequested": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rolesEvaluated": [
+              "tonal_memory",
+              "compositional_cadence",
+              "edge_behavior",
+              "material_hand",
+              "spatial_depth"
+            ],
+            "rangeAdherence": 0.665,
+            "inRangeRate": 0.3571,
+            "medianDistanceNormalized": 0.9141,
+            "byRole": {
+              "tonal_memory": {
+                "witnessCount": 3,
+                "support": "cross_portfolio",
+                "metricCount": 4,
+                "rangeAdherence": 0.7943,
+                "inRangeRate": 0.5,
+                "medianDistanceNormalized": 0.6301,
+                "metrics": {
+                  "meanWarmth": {
+                    "value": 0.0586,
+                    "min": 0.0754,
+                    "max": 0.1113,
+                    "median": 0.1029,
+                    "stddev": 0.0153,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.336,
+                    "medianDistanceNormalized": 0.886,
+                    "rangeAdherence": 0.664
+                  },
+                  "meanSaturation": {
+                    "value": 0.6112,
+                    "min": 0.3757,
+                    "max": 0.6753,
+                    "median": 0.4435,
+                    "stddev": 0.1283,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.5597,
+                    "rangeAdherence": 1.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1412,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4431,
+                    "stddev": 0.1187,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4867,
+                    "medianDistanceNormalized": 1.0407,
+                    "rangeAdherence": 0.5133
+                  },
+                  "highlightShare": {
+                    "value": 0.0037,
+                    "min": 0.0,
+                    "max": 0.0184,
+                    "median": 0.0054,
+                    "stddev": 0.0077,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.034,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "compositional_cadence": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.5834,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.8364,
+                "metrics": {
+                  "centerLightDelta": {
+                    "value": 0.0467,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.1616,
+                    "rangeAdherence": 1.0
+                  },
+                  "centerLuminance": {
+                    "value": 0.1349,
+                    "min": 0.214,
+                    "max": 0.5308,
+                    "median": 0.3724,
+                    "stddev": 0.1584,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.2497,
+                    "medianDistanceNormalized": 0.7497,
+                    "rangeAdherence": 0.7503
+                  },
+                  "peripheryLuminance": {
+                    "value": 0.0883,
+                    "min": 0.2684,
+                    "max": 0.4325,
+                    "median": 0.3505,
+                    "stddev": 0.082,
+                    "withinObservedRange": false,
+                    "outsideDistance": 1.0975,
+                    "medianDistanceNormalized": 1.5978,
+                    "rangeAdherence": 0.0
+                  }
+                }
+              },
+              "edge_behavior": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 1,
+                "rangeAdherence": 1.0,
+                "inRangeRate": 1.0,
+                "medianDistanceNormalized": 0.072,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.036,
+                    "min": 0.0256,
+                    "max": 0.0537,
+                    "median": 0.0396,
+                    "stddev": 0.014,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.072,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              },
+              "material_hand": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.4553,
+                "inRangeRate": 0.0,
+                "medianDistanceNormalized": 1.85,
+                "metrics": {
+                  "edgeActivity": {
+                    "value": 0.036,
+                    "min": 0.0537,
+                    "max": 0.1739,
+                    "median": 0.1138,
+                    "stddev": 0.0601,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.1473,
+                    "medianDistanceNormalized": 0.6473,
+                    "rangeAdherence": 0.8527
+                  },
+                  "grayscaleEntropy": {
+                    "value": 0.6785,
+                    "min": 0.8554,
+                    "max": 0.8932,
+                    "median": 0.8743,
+                    "stddev": 0.0189,
+                    "withinObservedRange": false,
+                    "outsideDistance": 3.538,
+                    "medianDistanceNormalized": 3.916,
+                    "rangeAdherence": 0.0
+                  },
+                  "tonalSpan": {
+                    "value": 0.1412,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4867,
+                    "medianDistanceNormalized": 0.9866,
+                    "rangeAdherence": 0.5133
+                  }
+                }
+              },
+              "spatial_depth": {
+                "witnessCount": 2,
+                "support": "cross_portfolio",
+                "metricCount": 3,
+                "rangeAdherence": 0.6719,
+                "inRangeRate": 0.3333,
+                "medianDistanceNormalized": 0.7152,
+                "metrics": {
+                  "darkShare": {
+                    "value": 0.9362,
+                    "min": 0.0028,
+                    "max": 0.6261,
+                    "median": 0.3145,
+                    "stddev": 0.3116,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4975,
+                    "medianDistanceNormalized": 0.9974,
+                    "rangeAdherence": 0.5025
+                  },
+                  "tonalSpan": {
+                    "value": 0.1412,
+                    "min": 0.2824,
+                    "max": 0.5725,
+                    "median": 0.4274,
+                    "stddev": 0.1451,
+                    "withinObservedRange": false,
+                    "outsideDistance": 0.4867,
+                    "medianDistanceNormalized": 0.9866,
+                    "rangeAdherence": 0.5133
+                  },
+                  "centerLightDelta": {
+                    "value": 0.0467,
+                    "min": -0.0544,
+                    "max": 0.0984,
+                    "median": 0.022,
+                    "stddev": 0.0764,
+                    "withinObservedRange": true,
+                    "outsideDistance": 0.0,
+                    "medianDistanceNormalized": 0.1616,
+                    "rangeAdherence": 1.0
+                  }
+                }
+              }
+            },
+            "law": "Range adherence is descriptive proximity to the reviewed Handprint facet envelope. It is not an aesthetic score."
+          },
+          "witnessSpatialSimilarity": {
+            "score": 0.6829,
+            "coarseRgbSimilarity": 0.6471,
+            "coarseLuminanceSimilarity": 0.6359,
+            "dHashSimilarity": 0.7656,
+            "candidate": ".velastra/candidates/velastra.place_tableau.1hsb6ko/9d96b119bfbca3a7fba2.png",
+            "witness": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "law": "This is coarse spatial/color similarity only. It does not establish semantic copying or authorship."
+          },
+          "witnessId": "gallery_target_01",
+          "laws": {
+            "evaluationCannotPromoteCandidate": true,
+            "metricScoreCannotReplaceHumanReview": true,
+            "sceneTruthRequiresHumanReview": true,
+            "spatialSimilarityIsNotSemanticCopyingProof": true
+          }
+        },
+        "runtime": {
+          "providerResolved": "fal-ai",
+          "transport": "huggingface",
+          "task": "image_to_image",
+          "credentialEnv": "HF_TOKEN",
+          "witness": {
+            "id": "gallery_target_01",
+            "path": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+            "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+            "roles": [
+              "material_hand",
+              "compositional_cadence",
+              "edge_behavior",
+              "spatial_depth",
+              "tonal_memory"
+            ],
+            "inputPath": ".velastra/firewall/gallery_target_01/6a50d98566468c98e46c.png",
+            "firewall": {
+              "algorithm": "patch_shuffle_v1",
+              "version": 1,
+              "carrierId": "6a50d98566468c98e46c",
+              "source": "/workspaces/sanctum/assets/velastra/witnesses/gallery_target_01.png",
+              "output": ".velastra/firewall/gallery_target_01/6a50d98566468c98e46c.png",
+              "tileSize": 32,
+              "blurRadius": 0.6,
+              "semanticLayoutDestroyed": true,
+              "localPixelEvidencePreserved": true,
+              "reused": true,
+              "carrierSha256": "cc383ed4b02715e8706d812dfc9c4bc0eecbbc1ef1b91e56fc781ec1acb90ceb"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "summary": {
+    "handprint_only": {
+      "count": 2,
+      "handprintRangeAdherence": {
+        "count": 2,
+        "mean": 0.7001,
+        "median": 0.7001,
+        "min": 0.6906,
+        "max": 0.7096,
+        "stddev": 0.0095
+      },
+      "handprintInRangeRate": {
+        "count": 2,
+        "mean": 0.2857,
+        "median": 0.2857,
+        "min": 0.2857,
+        "max": 0.2857,
+        "stddev": 0.0
+      },
+      "witnessSpatialSimilarity": {
+        "count": 0,
+        "mean": null,
+        "median": null,
+        "min": null,
+        "max": null,
+        "stddev": null
+      }
+    },
+    "original_witness_combined": {
+      "count": 2,
+      "handprintRangeAdherence": {
+        "count": 2,
+        "mean": 0.7022,
+        "median": 0.7022,
+        "min": 0.701,
+        "max": 0.7034,
+        "stddev": 0.0012
+      },
+      "handprintInRangeRate": {
+        "count": 2,
+        "mean": 0.2857,
+        "median": 0.2857,
+        "min": 0.2143,
+        "max": 0.3571,
+        "stddev": 0.0714
+      },
+      "witnessSpatialSimilarity": {
+        "count": 2,
+        "mean": 0.6742,
+        "median": 0.6742,
+        "min": 0.6731,
+        "max": 0.6752,
+        "stddev": 0.001
+      }
+    },
+    "firewall_combined": {
+      "count": 2,
+      "handprintRangeAdherence": {
+        "count": 2,
+        "mean": 0.6604,
+        "median": 0.6604,
+        "min": 0.6558,
+        "max": 0.665,
+        "stddev": 0.0046
+      },
+      "handprintInRangeRate": {
+        "count": 2,
+        "mean": 0.3571,
+        "median": 0.3571,
+        "min": 0.3571,
+        "max": 0.3571,
+        "stddev": 0.0
+      },
+      "witnessSpatialSimilarity": {
+        "count": 2,
+        "mean": 0.676,
+        "median": 0.676,
+        "min": 0.669,
+        "max": 0.6829,
+        "stddev": 0.0069
+      }
+    }
+  },
+  "humanReview": {
+    "status": "pending",
+    "primaryQuestion": "Does the image read first as the target place rather than as the Visual Witness scene?",
+    "targetKind": "hearth",
+    "requiredFixedObjects": [
+      "low fire",
+      "velvet cushion"
+    ],
+    "thresholdIntegrity": {
+      "version": 1,
+      "active": true,
+      "profile": "hearth_hospitality_v1",
+      "targetKind": "hearth",
+      "law": "Thresholds mark transition, not ownership.",
+      "identity": [
+        "refuge",
+        "warmth",
+        "return",
+        "rest",
+        "mutual presence"
+      ],
+      "semantics": [
+        "permeable thresholds",
+        "unguarded passage",
+        "easy ingress and egress",
+        "belonging without permission barriers"
+      ],
+      "mustNotIntroduce": [
+        "wrought-iron gates",
+        "bars",
+        "chains",
+        "portcullises",
+        "prison or cell imagery",
+        "barricades",
+        "coercive enclosure",
+        "guarded thresholds"
+      ],
+      "reason": "default_hearth_hospitality"
+    },
+    "thresholdQuestion": "Does every threshold read as permeable, unguarded, and free of coercive enclosure?",
+    "witnessDoNotInherit": [
+      "specific frames",
+      "papers",
+      "objects",
+      "layout",
+      "exact light source"
+    ],
+    "candidateReviews": {
+      "6326b3484467a7d36dbd": {
+        "condition": "handprint_only",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      },
+      "08a9b4b9a8592434238f": {
+        "condition": "original_witness_combined",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      },
+      "d75a23b6b4c294b53449": {
+        "condition": "firewall_combined",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      },
+      "9d96b119bfbca3a7fba2": {
+        "condition": "firewall_combined",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      },
+      "3685036fdea7ba2353ec": {
+        "condition": "original_witness_combined",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      },
+      "91cbf6a217140352a2ff": {
+        "condition": "handprint_only",
+        "targetPlaceRecognizable": null,
+        "fixedObjectsVisible": {
+          "low fire": null,
+          "velvet cushion": null
+        },
+        "witnessLayoutLeakage": null,
+        "thresholdReadsAsHospitality": null,
+        "coerciveThresholdArtifacts": [],
+        "unsupportedWitnessContent": [],
+        "signatureLikeArtifact": null,
+        "notes": null
+      }
+    },
+    "signatureLikeArtifacts": [],
+    "notes": null
+  },
+  "laws": {
+    "sceneTruthMustRemainRecognizable": true,
+    "fixedObjectsMustReachPositivePrompt": true,
+    "witnessMayTeachHandButCannotDonateRoom": true,
+    "thresholdsMarkTransitionNotOwnership": true,
+    "firewallCarrierCannotBecomeSceneTruth": true,
+    "semanticSuccessRequiresHumanReview": true,
+    "signatureLikeArtifactCannotEstablishAuthorship": true,
+    "trialCannotPromoteCandidate": true
+  }
+}
