@@ -131,6 +131,16 @@ def candidate_plan(
 
     if condition == "spatial_identity":
         bundle = spatial.augment_prompt_bundle(bundle, contract)
+        leaks = painter.control_plane_leaks(
+            str(bundle.get("positive") or "")
+            + "\n"
+            + str(bundle.get("negative") or "")
+        )
+        if leaks:
+            raise RuntimeError(
+                "0039 control-plane vocabulary leaked after Place Memory "
+                "augmentation: " + ", ".join(leaks)
+            )
 
     cid = painter.candidate_id(manifest, bundle, spec)
     base = Path(args.out_dir) / manifest["assetKey"]
