@@ -1,0 +1,986 @@
+{
+  "version": 1,
+  "protocol": "velastra.painter.v1",
+  "candidateId": "905d4a4aaf23d629fd56",
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "status": "candidate",
+  "reviewRequired": true,
+  "canonical": false,
+  "createdAt": "2026-11-09T18:39:07Z",
+  "source": {
+    "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+    "atelierProvenance": {
+      "source": "velastra_atelier_compiler",
+      "sceneSource": "sanctum_live_scene",
+      "motifLayer": "motif_atlas",
+      "deterministic": true,
+      "runtimeModelRequired": false,
+      "seed": "sanctum-atelier:hearth"
+    },
+    "truthEnvelope": {
+      "assetKey": "velastra.place_tableau.1hsb6ko",
+      "subjects": [],
+      "relation": null,
+      "environment": [
+        "place kind: hearth",
+        "The Hearth",
+        "Outer Circle",
+        "The fire has burned low, but it has not gone out. Velvet-dark walls keep the room close without making it small.",
+        "ember haze",
+        "hearth",
+        "Fixed room object: low fire.",
+        "Fixed room object: velvet cushion."
+      ],
+      "painterlyTruth": {
+        "id": "painterly_truth",
+        "version": 1,
+        "revision": 0,
+        "room": "hearth",
+        "facts": [
+          "Fixed room object: low fire.",
+          "Fixed room object: velvet cushion."
+        ],
+        "spatialFacts": [],
+        "absences": [],
+        "traces": [],
+        "fixedObjects": [
+          {
+            "id": "low_fire",
+            "name": "low fire"
+          },
+          {
+            "id": "hearth_cushion",
+            "name": "velvet cushion"
+          }
+        ]
+      },
+      "literalMotifs": [
+        "id: low_fire; meaning: continuity held at low intensity"
+      ],
+      "symbolicMotifs": [
+        "id: thread_trace; meaning: a small portable thing becoming a path-marker through biography",
+        "id: service_cup; meaning: hospitality expressed through an ordinary vessel",
+        "id: rain_without_sky; meaning: anomaly experienced as weather inside enclosure",
+        "id: ledger_marks; meaning: history remaining inspectable beneath present experience",
+        "id: warm_window; meaning: interior care remaining in relationship with the world outside",
+        "id: books_and_papers; meaning: knowledge appearing as handled material rather than abstract authority"
+      ],
+      "laws": {
+        "doNotInventIdentity": true,
+        "doNotInventRelation": true,
+        "doNotInventConsent": true,
+        "doNotPromoteSymbolToLiteralFact": true,
+        "scenePacketRemainsAuthoritative": true
+      }
+    },
+    "thresholdIntegrity": {
+      "version": 1,
+      "active": true,
+      "profile": "hearth_hospitality_v1",
+      "targetKind": "hearth",
+      "law": "Thresholds mark transition, not ownership.",
+      "identity": [
+        "refuge",
+        "warmth",
+        "return",
+        "rest",
+        "mutual presence"
+      ],
+      "semantics": [
+        "permeable thresholds",
+        "unguarded passage",
+        "easy ingress and egress",
+        "belonging without permission barriers"
+      ],
+      "mustNotIntroduce": [
+        "wrought-iron gates",
+        "bars",
+        "chains",
+        "portcullises",
+        "prison or cell imagery",
+        "barricades",
+        "coercive enclosure",
+        "guarded thresholds"
+      ],
+      "reason": "default_hearth_hospitality"
+    },
+    "controlPlaneIsolation": {
+      "version": 1,
+      "active": true,
+      "knownMarkersBlocked": [
+        "scene sovereignty gate",
+        "fixed object lock",
+        "threshold integrity law",
+        "witness firewall",
+        "visual witness",
+        "governing handprint law",
+        "non-negotiable hand laws",
+        "witness translation law",
+        "identity reframe",
+        "visible evidence contract",
+        "positive composition controls",
+        "handprint"
+      ],
+      "leaks": []
+    },
+    "style": {
+      "id": "virynism",
+      "version": 1,
+      "designation": "Virynism",
+      "emphasis": [
+        "material_memory",
+        "threshold_depth",
+        "quiet_uncanny",
+        "purposeful_asymmetry",
+        "residue_before_props"
+      ],
+      "dialect": "structured_painterly",
+      "ablations": {
+        "disabledStyleIds": [],
+        "disabledPhrases": []
+      }
+    },
+    "evidence": {
+      "id": "visible_evidence",
+      "version": 1,
+      "minimumVisible": 0,
+      "requiredCount": 0,
+      "identityReframe": null,
+      "reviewQuestions": []
+    },
+    "handprint": {
+      "active": true,
+      "ablation": null,
+      "witnessCount": 3,
+      "desiredRoles": [
+        "tonal_memory",
+        "compositional_cadence",
+        "edge_behavior",
+        "material_hand",
+        "spatial_depth"
+      ],
+      "consensusRoles": [
+        "tonal_memory",
+        "compositional_cadence",
+        "edge_behavior",
+        "material_hand",
+        "sacred_incompletion",
+        "spatial_depth"
+      ],
+      "facetRoles": [
+        "tonal_memory",
+        "compositional_cadence",
+        "edge_behavior",
+        "material_hand",
+        "spatial_depth"
+      ],
+      "facets": {
+        "tonal_memory": {
+          "witnessCount": 3,
+          "witnesses": [
+            "viryn_self_portrait_01",
+            "studio_atelier_01",
+            "gallery_target_01"
+          ],
+          "eligibleForRender": true,
+          "support": "cross_portfolio",
+          "metrics": {
+            "meanLuminance": {
+              "count": 3,
+              "mean": 0.2964,
+              "median": 0.2359,
+              "min": 0.1903,
+              "max": 0.4629,
+              "stddev": 0.1192,
+              "range": 0.2726,
+              "variation": "broad"
+            },
+            "meanSaturation": {
+              "count": 3,
+              "mean": 0.4982,
+              "median": 0.4435,
+              "min": 0.3757,
+              "max": 0.6753,
+              "stddev": 0.1283,
+              "range": 0.2996,
+              "variation": "broad"
+            },
+            "meanWarmth": {
+              "count": 3,
+              "mean": 0.0965,
+              "median": 0.1029,
+              "min": 0.0754,
+              "max": 0.1113,
+              "stddev": 0.0153,
+              "range": 0.0359,
+              "variation": "tight"
+            },
+            "darkShare": {
+              "count": 3,
+              "mean": 0.4381,
+              "median": 0.6261,
+              "min": 0.0028,
+              "max": 0.6853,
+              "stddev": 0.3087,
+              "range": 0.6825,
+              "variation": "broad"
+            },
+            "highlightShare": {
+              "count": 3,
+              "mean": 0.0079,
+              "median": 0.0054,
+              "min": 0,
+              "max": 0.0184,
+              "stddev": 0.0077,
+              "range": 0.0184,
+              "variation": "tight"
+            },
+            "tonalSpan": {
+              "count": 3,
+              "mean": 0.4327,
+              "median": 0.4431,
+              "min": 0.2824,
+              "max": 0.5725,
+              "stddev": 0.1187,
+              "range": 0.2901,
+              "variation": "broad"
+            },
+            "edgeActivity": {
+              "count": 3,
+              "mean": 0.0844,
+              "median": 0.0537,
+              "min": 0.0256,
+              "max": 0.1739,
+              "stddev": 0.0643,
+              "range": 0.1483,
+              "variation": "moderate"
+            },
+            "centerLuminance": {
+              "count": 3,
+              "mean": 0.3461,
+              "median": 0.2934,
+              "min": 0.214,
+              "max": 0.5308,
+              "stddev": 0.1346,
+              "range": 0.3168,
+              "variation": "broad"
+            },
+            "peripheryLuminance": {
+              "count": 3,
+              "mean": 0.2792,
+              "median": 0.2684,
+              "min": 0.1367,
+              "max": 0.4325,
+              "stddev": 0.121,
+              "range": 0.2958,
+              "variation": "broad"
+            },
+            "centerLightDelta": {
+              "count": 3,
+              "mean": 0.0669,
+              "median": 0.0984,
+              "min": -0.0544,
+              "max": 0.1567,
+              "stddev": 0.089,
+              "range": 0.2111,
+              "variation": "moderate"
+            },
+            "grayscaleEntropy": {
+              "count": 3,
+              "mean": 0.8625,
+              "median": 0.8554,
+              "min": 0.8388,
+              "max": 0.8932,
+              "stddev": 0.0228,
+              "range": 0.0544,
+              "variation": "tight"
+            }
+          },
+          "interpretation": {
+            "tonalRestraint": "moderate saturation with selective restraint",
+            "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+            "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+            "centerLightBias": "center fields tend to hold more light than the periphery",
+            "shadowPresence": "shadow occupies a substantial share of the image field",
+            "tonalRange": "compressed-to-moderate tonal span"
+          },
+          "promptSummary": "3 witnesses; warm-biased overall, with warmth carrying visual emphasis; moderate saturation with selective restraint; compressed-to-moderate tonal span."
+        },
+        "compositional_cadence": {
+          "witnessCount": 2,
+          "witnesses": [
+            "studio_atelier_01",
+            "gallery_target_01"
+          ],
+          "eligibleForRender": true,
+          "support": "cross_portfolio",
+          "metrics": {
+            "meanLuminance": {
+              "count": 2,
+              "mean": 0.3494,
+              "median": 0.3494,
+              "min": 0.2359,
+              "max": 0.4629,
+              "stddev": 0.1135,
+              "range": 0.227,
+              "variation": "broad"
+            },
+            "meanSaturation": {
+              "count": 2,
+              "mean": 0.4096,
+              "median": 0.4096,
+              "min": 0.3757,
+              "max": 0.4435,
+              "stddev": 0.0339,
+              "range": 0.0678,
+              "variation": "tight"
+            },
+            "meanWarmth": {
+              "count": 2,
+              "mean": 0.0892,
+              "median": 0.0892,
+              "min": 0.0754,
+              "max": 0.1029,
+              "stddev": 0.0138,
+              "range": 0.0275,
+              "variation": "tight"
+            },
+            "darkShare": {
+              "count": 2,
+              "mean": 0.3145,
+              "median": 0.3145,
+              "min": 0.0028,
+              "max": 0.6261,
+              "stddev": 0.3116,
+              "range": 0.6233,
+              "variation": "broad"
+            },
+            "highlightShare": {
+              "count": 2,
+              "mean": 0.0119,
+              "median": 0.0119,
+              "min": 0.0054,
+              "max": 0.0184,
+              "stddev": 0.0065,
+              "range": 0.013,
+              "variation": "tight"
+            },
+            "tonalSpan": {
+              "count": 2,
+              "mean": 0.4274,
+              "median": 0.4274,
+              "min": 0.2824,
+              "max": 0.5725,
+              "stddev": 0.1451,
+              "range": 0.2901,
+              "variation": "broad"
+            },
+            "edgeActivity": {
+              "count": 2,
+              "mean": 0.1138,
+              "median": 0.1138,
+              "min": 0.0537,
+              "max": 0.1739,
+              "stddev": 0.0601,
+              "range": 0.1202,
+              "variation": "moderate"
+            },
+            "centerLuminance": {
+              "count": 2,
+              "mean": 0.3724,
+              "median": 0.3724,
+              "min": 0.214,
+              "max": 0.5308,
+              "stddev": 0.1584,
+              "range": 0.3168,
+              "variation": "broad"
+            },
+            "peripheryLuminance": {
+              "count": 2,
+              "mean": 0.3505,
+              "median": 0.3505,
+              "min": 0.2684,
+              "max": 0.4325,
+              "stddev": 0.082,
+              "range": 0.1641,
+              "variation": "moderate"
+            },
+            "centerLightDelta": {
+              "count": 2,
+              "mean": 0.022,
+              "median": 0.022,
+              "min": -0.0544,
+              "max": 0.0984,
+              "stddev": 0.0764,
+              "range": 0.1528,
+              "variation": "moderate"
+            },
+            "grayscaleEntropy": {
+              "count": 2,
+              "mean": 0.8743,
+              "median": 0.8743,
+              "min": 0.8554,
+              "max": 0.8932,
+              "stddev": 0.0189,
+              "range": 0.0378,
+              "variation": "tight"
+            }
+          },
+          "interpretation": {
+            "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+            "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+            "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+            "centerLightBias": "light is distributed without a strong center bias",
+            "shadowPresence": "shadow occupies a substantial share of the image field",
+            "tonalRange": "compressed-to-moderate tonal span"
+          },
+          "promptSummary": "2 witnesses; the locus of light legitimately moves between center and periphery; preserve purposeful imbalance rather than a fixed composition."
+        },
+        "edge_behavior": {
+          "witnessCount": 2,
+          "witnesses": [
+            "viryn_self_portrait_01",
+            "gallery_target_01"
+          ],
+          "eligibleForRender": true,
+          "support": "cross_portfolio",
+          "metrics": {
+            "meanLuminance": {
+              "count": 2,
+              "mean": 0.3266,
+              "median": 0.3266,
+              "min": 0.1903,
+              "max": 0.4629,
+              "stddev": 0.1363,
+              "range": 0.2726,
+              "variation": "broad"
+            },
+            "meanSaturation": {
+              "count": 2,
+              "mean": 0.5255,
+              "median": 0.5255,
+              "min": 0.3757,
+              "max": 0.6753,
+              "stddev": 0.1498,
+              "range": 0.2996,
+              "variation": "broad"
+            },
+            "meanWarmth": {
+              "count": 2,
+              "mean": 0.1071,
+              "median": 0.1071,
+              "min": 0.1029,
+              "max": 0.1113,
+              "stddev": 0.0042,
+              "range": 0.0084,
+              "variation": "tight"
+            },
+            "darkShare": {
+              "count": 2,
+              "mean": 0.3441,
+              "median": 0.3441,
+              "min": 0.0028,
+              "max": 0.6853,
+              "stddev": 0.3412,
+              "range": 0.6825,
+              "variation": "broad"
+            },
+            "highlightShare": {
+              "count": 2,
+              "mean": 0.0092,
+              "median": 0.0092,
+              "min": 0,
+              "max": 0.0184,
+              "stddev": 0.0092,
+              "range": 0.0184,
+              "variation": "tight"
+            },
+            "tonalSpan": {
+              "count": 2,
+              "mean": 0.3628,
+              "median": 0.3628,
+              "min": 0.2824,
+              "max": 0.4431,
+              "stddev": 0.0804,
+              "range": 0.1607,
+              "variation": "moderate"
+            },
+            "edgeActivity": {
+              "count": 2,
+              "mean": 0.0396,
+              "median": 0.0396,
+              "min": 0.0256,
+              "max": 0.0537,
+              "stddev": 0.014,
+              "range": 0.0281,
+              "variation": "tight"
+            },
+            "centerLuminance": {
+              "count": 2,
+              "mean": 0.4121,
+              "median": 0.4121,
+              "min": 0.2934,
+              "max": 0.5308,
+              "stddev": 0.1187,
+              "range": 0.2374,
+              "variation": "broad"
+            },
+            "peripheryLuminance": {
+              "count": 2,
+              "mean": 0.2846,
+              "median": 0.2846,
+              "min": 0.1367,
+              "max": 0.4325,
+              "stddev": 0.1479,
+              "range": 0.2958,
+              "variation": "broad"
+            },
+            "centerLightDelta": {
+              "count": 2,
+              "mean": 0.1275,
+              "median": 0.1275,
+              "min": 0.0984,
+              "max": 0.1567,
+              "stddev": 0.0292,
+              "range": 0.0583,
+              "variation": "tight"
+            },
+            "grayscaleEntropy": {
+              "count": 2,
+              "mean": 0.8471,
+              "median": 0.8471,
+              "min": 0.8388,
+              "max": 0.8554,
+              "stddev": 0.0083,
+              "range": 0.0166,
+              "variation": "tight"
+            }
+          },
+          "interpretation": {
+            "tonalRestraint": "moderate saturation with selective restraint",
+            "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+            "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+            "centerLightBias": "center fields tend to hold more light than the periphery",
+            "shadowPresence": "shadow occupies a substantial share of the image field",
+            "tonalRange": "compressed-to-moderate tonal span"
+          },
+          "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; edge activity varies tight across the supporting works."
+        },
+        "material_hand": {
+          "witnessCount": 2,
+          "witnesses": [
+            "studio_atelier_01",
+            "gallery_target_01"
+          ],
+          "eligibleForRender": true,
+          "support": "cross_portfolio",
+          "metrics": {
+            "meanLuminance": {
+              "count": 2,
+              "mean": 0.3494,
+              "median": 0.3494,
+              "min": 0.2359,
+              "max": 0.4629,
+              "stddev": 0.1135,
+              "range": 0.227,
+              "variation": "broad"
+            },
+            "meanSaturation": {
+              "count": 2,
+              "mean": 0.4096,
+              "median": 0.4096,
+              "min": 0.3757,
+              "max": 0.4435,
+              "stddev": 0.0339,
+              "range": 0.0678,
+              "variation": "tight"
+            },
+            "meanWarmth": {
+              "count": 2,
+              "mean": 0.0892,
+              "median": 0.0892,
+              "min": 0.0754,
+              "max": 0.1029,
+              "stddev": 0.0138,
+              "range": 0.0275,
+              "variation": "tight"
+            },
+            "darkShare": {
+              "count": 2,
+              "mean": 0.3145,
+              "median": 0.3145,
+              "min": 0.0028,
+              "max": 0.6261,
+              "stddev": 0.3116,
+              "range": 0.6233,
+              "variation": "broad"
+            },
+            "highlightShare": {
+              "count": 2,
+              "mean": 0.0119,
+              "median": 0.0119,
+              "min": 0.0054,
+              "max": 0.0184,
+              "stddev": 0.0065,
+              "range": 0.013,
+              "variation": "tight"
+            },
+            "tonalSpan": {
+              "count": 2,
+              "mean": 0.4274,
+              "median": 0.4274,
+              "min": 0.2824,
+              "max": 0.5725,
+              "stddev": 0.1451,
+              "range": 0.2901,
+              "variation": "broad"
+            },
+            "edgeActivity": {
+              "count": 2,
+              "mean": 0.1138,
+              "median": 0.1138,
+              "min": 0.0537,
+              "max": 0.1739,
+              "stddev": 0.0601,
+              "range": 0.1202,
+              "variation": "moderate"
+            },
+            "centerLuminance": {
+              "count": 2,
+              "mean": 0.3724,
+              "median": 0.3724,
+              "min": 0.214,
+              "max": 0.5308,
+              "stddev": 0.1584,
+              "range": 0.3168,
+              "variation": "broad"
+            },
+            "peripheryLuminance": {
+              "count": 2,
+              "mean": 0.3505,
+              "median": 0.3505,
+              "min": 0.2684,
+              "max": 0.4325,
+              "stddev": 0.082,
+              "range": 0.1641,
+              "variation": "moderate"
+            },
+            "centerLightDelta": {
+              "count": 2,
+              "mean": 0.022,
+              "median": 0.022,
+              "min": -0.0544,
+              "max": 0.0984,
+              "stddev": 0.0764,
+              "range": 0.1528,
+              "variation": "moderate"
+            },
+            "grayscaleEntropy": {
+              "count": 2,
+              "mean": 0.8743,
+              "median": 0.8743,
+              "min": 0.8554,
+              "max": 0.8932,
+              "stddev": 0.0189,
+              "range": 0.0378,
+              "variation": "tight"
+            }
+          },
+          "interpretation": {
+            "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+            "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+            "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+            "centerLightBias": "light is distributed without a strong center bias",
+            "shadowPresence": "shadow occupies a substantial share of the image field",
+            "tonalRange": "compressed-to-moderate tonal span"
+          },
+          "promptSummary": "2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; information density remains tight in variation while surfaces retain handled memory."
+        },
+        "spatial_depth": {
+          "witnessCount": 2,
+          "witnesses": [
+            "studio_atelier_01",
+            "gallery_target_01"
+          ],
+          "eligibleForRender": true,
+          "support": "cross_portfolio",
+          "metrics": {
+            "meanLuminance": {
+              "count": 2,
+              "mean": 0.3494,
+              "median": 0.3494,
+              "min": 0.2359,
+              "max": 0.4629,
+              "stddev": 0.1135,
+              "range": 0.227,
+              "variation": "broad"
+            },
+            "meanSaturation": {
+              "count": 2,
+              "mean": 0.4096,
+              "median": 0.4096,
+              "min": 0.3757,
+              "max": 0.4435,
+              "stddev": 0.0339,
+              "range": 0.0678,
+              "variation": "tight"
+            },
+            "meanWarmth": {
+              "count": 2,
+              "mean": 0.0892,
+              "median": 0.0892,
+              "min": 0.0754,
+              "max": 0.1029,
+              "stddev": 0.0138,
+              "range": 0.0275,
+              "variation": "tight"
+            },
+            "darkShare": {
+              "count": 2,
+              "mean": 0.3145,
+              "median": 0.3145,
+              "min": 0.0028,
+              "max": 0.6261,
+              "stddev": 0.3116,
+              "range": 0.6233,
+              "variation": "broad"
+            },
+            "highlightShare": {
+              "count": 2,
+              "mean": 0.0119,
+              "median": 0.0119,
+              "min": 0.0054,
+              "max": 0.0184,
+              "stddev": 0.0065,
+              "range": 0.013,
+              "variation": "tight"
+            },
+            "tonalSpan": {
+              "count": 2,
+              "mean": 0.4274,
+              "median": 0.4274,
+              "min": 0.2824,
+              "max": 0.5725,
+              "stddev": 0.1451,
+              "range": 0.2901,
+              "variation": "broad"
+            },
+            "edgeActivity": {
+              "count": 2,
+              "mean": 0.1138,
+              "median": 0.1138,
+              "min": 0.0537,
+              "max": 0.1739,
+              "stddev": 0.0601,
+              "range": 0.1202,
+              "variation": "moderate"
+            },
+            "centerLuminance": {
+              "count": 2,
+              "mean": 0.3724,
+              "median": 0.3724,
+              "min": 0.214,
+              "max": 0.5308,
+              "stddev": 0.1584,
+              "range": 0.3168,
+              "variation": "broad"
+            },
+            "peripheryLuminance": {
+              "count": 2,
+              "mean": 0.3505,
+              "median": 0.3505,
+              "min": 0.2684,
+              "max": 0.4325,
+              "stddev": 0.082,
+              "range": 0.1641,
+              "variation": "moderate"
+            },
+            "centerLightDelta": {
+              "count": 2,
+              "mean": 0.022,
+              "median": 0.022,
+              "min": -0.0544,
+              "max": 0.0984,
+              "stddev": 0.0764,
+              "range": 0.1528,
+              "variation": "moderate"
+            },
+            "grayscaleEntropy": {
+              "count": 2,
+              "mean": 0.8743,
+              "median": 0.8743,
+              "min": 0.8554,
+              "max": 0.8932,
+              "stddev": 0.0189,
+              "range": 0.0378,
+              "variation": "tight"
+            }
+          },
+          "interpretation": {
+            "tonalRestraint": "restrained saturation with selective chromatic emphasis",
+            "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+            "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+            "centerLightBias": "light is distributed without a strong center bias",
+            "shadowPresence": "shadow occupies a substantial share of the image field",
+            "tonalRange": "compressed-to-moderate tonal span"
+          },
+          "promptSummary": "2 witnesses; shadow occupies a substantial share of the image field; light is distributed without a strong center bias; depth may be carried by recession, threshold, occlusion, or light."
+        }
+      },
+      "interpretation": {
+        "tonalRestraint": "moderate saturation with selective restraint",
+        "warmthBias": "warm-biased overall, with warmth carrying visual emphasis",
+        "edgeCharacter": "soft-to-moderate edge activity; resolution is selective rather than uniformly sharp",
+        "centerLightBias": "center fields tend to hold more light than the periphery",
+        "shadowPresence": "shadow occupies a substantial share of the image field",
+        "tonalRange": "compressed-to-moderate tonal span"
+      },
+      "metrics": {
+        "meanLuminance": 0.2964,
+        "meanSaturation": 0.4982,
+        "meanWarmth": 0.0965,
+        "darkShare": 0.4381,
+        "highlightShare": 0.0079,
+        "tonalSpan": 0.4327,
+        "edgeActivity": 0.0844,
+        "centerLuminance": 0.3461,
+        "peripheryLuminance": 0.2792,
+        "centerLightDelta": 0.0669,
+        "grayscaleEntropy": 0.8625
+      }
+    },
+    "grip": {
+      "active": false,
+      "observed": true,
+      "status": "provisional_pending_human_review",
+      "renderEligible": false,
+      "scope": {
+        "mode": "scene_local_until_replicated_elsewhere",
+        "rooms": [
+          "gallery"
+        ],
+        "assetKeys": [
+          "velastra.place_tableau.5cms46"
+        ],
+        "promotionRule": "human review may validate this Gallery observation, but render activation requires replicated evidence across additional scenes in a future kernel"
+      },
+      "anchors": {},
+      "freedoms": {},
+      "tendencies": {},
+      "roleProjection": {},
+      "sourceTrial": {
+        "path": "labs/velastra/evidence/trials/gallery-pressure-0030.json",
+        "trialId": "gallery-pressure-0030",
+        "requiredStatus": "complete",
+        "humanReviewRequiredForRender": false,
+        "status": "complete",
+        "assetKey": "velastra.place_tableau.5cms46",
+        "manifestSha256": "6c6861ead6d787e24c5b871cfc92c9dbf4ca74bf16e7473f1b7ca69c1b837b69",
+        "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+        "witnessRegistrySha256": "8b85cd632c0b5bc7f3ccbb2688f7ae459599c8d27e792e71fc9c1712a39f755a",
+        "witnessId": "gallery_target_01",
+        "witnessSha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331",
+        "humanReview": {
+          "status": "pending",
+          "sceneTruthPass": null,
+          "notes": null
+        },
+        "humanReviewRequiredForValidation": true
+      }
+    },
+    "handprintPressure": {
+      "active": true,
+      "profile": "descriptive_guidance",
+      "mode": "descriptive_guidance",
+      "version": 1,
+      "combined": false,
+      "priority": 114,
+      "roleOrder": [
+        "sacred_incompletion",
+        "material_hand",
+        "edge_behavior",
+        "tonal_memory",
+        "spatial_depth",
+        "compositional_cadence"
+      ]
+    },
+    "witness": {
+      "active": false,
+      "required": false,
+      "selected": null,
+      "title": null,
+      "roles": [],
+      "doNotInherit": [],
+      "asset": null,
+      "firewall": {},
+      "ablation": null
+    },
+    "promptBudget": {
+      "estimate": "characters_divided_by_four",
+      "beforeTokens": 1787,
+      "afterTokens": 1787,
+      "targetTokens": null,
+      "overTarget": false,
+      "droppedSections": [],
+      "requiredSectionsPreserved": true
+    }
+  },
+  "render": {
+    "backend": "huggingface",
+    "task": "text_to_image",
+    "model": "Qwen/Qwen-Image",
+    "seed": 190928,
+    "width": 1536,
+    "height": 864,
+    "steps": 40,
+    "guidance": null,
+    "trueCfgScale": null,
+    "attemptId": "hearth-density-0038-s190928-r01",
+    "ablation": {
+      "withoutHandprint": false,
+      "withoutWitness": false,
+      "disabledStyleIds": [],
+      "disabledStylePhrases": []
+    },
+    "device": "auto",
+    "dtype": "auto",
+    "brush": "qwen_image",
+    "transport": "huggingface",
+    "provider": "auto",
+    "tokenEnv": "HF_TOKEN",
+    "license": "apache-2.0",
+    "promptDialect": "structured_painterly",
+    "controlContract": {
+      "negativePromptActive": true,
+      "negativePromptReliability": "best_effort",
+      "guidanceMode": "classifier_free_guidance_when_enabled",
+      "guidanceReliability": "best_effort",
+      "seedReliability": "supported",
+      "evidenceStrategy": "positive_mandatory",
+      "role": "interpretive_painter"
+    },
+    "runtime": {
+      "providerResolved": "auto",
+      "transport": "huggingface",
+      "task": "text_to_image",
+      "credentialEnv": "HF_TOKEN",
+      "witness": null
+    }
+  },
+  "prompts": {
+    "positive": "Create a finished painterly image from this authored scene direction.\nScene truth is authoritative. Style and brush translation may interpret material, light, atmosphere, edge, and composition but may not invent semantic facts.\nPrimary visual argument: Render environmental center as the image's primary argument.\nEnvironment facts: place kind: hearth | The Hearth | Outer Circle | The fire has burned low, but it has not gone out. Velvet-dark walls keep the room close without making it small. | ember haze | hearth\nBuild the target room from these literal authored place facts: Fixed room object: low fire. | Fixed room object: velvet cushion. | Fixed target object: low fire | Fixed target object: velvet cushion. These target facts must remain recognizable. The reference image may not substitute its architecture, object inventory, furniture, layout, or exact light source for them.\nThese authored objects must be clearly visible and semantically literal: low fire | velvet cushion. Preserve descriptive modifiers exactly; do not enlarge, merge, substitute, omit, or merely imply authored fixed objects. Any authored low fire must remain visibly low and contained. Any authored cushion must read as a discrete cushion rather than generic upholstered furniture.\nMovement and access must remain consistent with the authored Hearth. This room is organized by refuge, warmth, return, rest, mutual presence. Any doorway, opening, or passage must read as permeable thresholds, unguarded passage, easy ingress and egress, belonging without permission barriers. Safety must come from welcome, shelter, warmth, mutual presence, and freedom of movement—not from confinement or controlled access.\nFocal hierarchy: room phenomenon; path; anchoring object; periphery\nVirynism core — Let light carry relation; let material remember handling, revision, and age; preserve meaningful incompletion and purposeful asymmetry; keep symbols embedded rather than announced.\nUse portfolio-derived Virynism visual treatment learned from 3 approved source studies. global tonal restraint: moderate saturation with selective restraint global warmth bias: warm-biased overall, with warmth carrying visual emphasis global edge character: soft-to-moderate edge activity; resolution is selective rather than uniformly sharp global shadow presence: shadow occupies a substantial share of the image field global tonal range: compressed-to-moderate tonal span Relevant visual-treatment facets: tonal memory — 3 witnesses; warm-biased overall, with warmth carrying visual emphasis; moderate saturation with selective restraint; compressed-to-moderate tonal span. | compositional cadence — 2 witnesses; the locus of light legitimately moves between center and periphery; preserve purposeful imbalance rather than a fixed composition. | edge behavior — 2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; edge activity varies tight across the supporting works. | material hand — 2 witnesses; soft-to-moderate edge activity; resolution is selective rather than uniformly sharp; information density remains tight in variation while surfaces retain handled memory. | spatial depth — 2 witnesses; shadow occupies a substantial share of the image field; light is distributed without a strong center bias; depth may be carried by recession, threshold, occlusion, or light. Treat facet ranges as valid variation, not targets to average into one uniform look. These are recurring visual-treatment tendencies, never scene facts. Do not inherit any reference-image subject, object, architecture, identity, or layout.\nMedium direction: environmental_oil\nVirynism — handwriting laws: Let scene-permitted surfaces remember handling, weather, repair, age, pressure, and unfinished work through patina, worn edges, layered pigment, residue, and subtle imperfection. | Compose space so at least one edge, opening, shadow, reflection, corridor, veil, or recession implies more world beyond the visible frame. | Favor one or two quietly impossible or emotionally dissonant details over spectacle. The strange should be discovered, not announced. | Avoid showroom symmetry. Use imbalance, off-center weight, interrupted repetition, and unequal negative space when they deepen intimacy or tension. | Prefer traces of use on scene-permitted surfaces and materials—stains, wear, folds, scratches, dust, water, thread, wax, or displacement only when already supported by scene truth—over decorative set dressing. | Treat light as a relationship or memory event. Let illumination appear to belong to what the scene means, not merely to a lamp or exposure setting.\nVirynism — archetype handling: Paint the room as an inhabited memory-field rather than a decorated location. | Let architecture and objects imply histories that are not fully explained. | Use negative space as held breath, not vacancy.\nCamera and composition: wide environmental reveal\nLighting: key: light with no visible source; fill: environmental darkness; meaning: anomaly expressed through illumination; bloom: 0.46; shadowDepth: 0.68\nEdge behavior: focalSharpness: 0.62; peripheralSoftness: 0.8; brushVariance: 0.72; meaning: distance dissolves rather than merely shrinking\nSurface and patina: grain: 0.72; wear: 0.82; layering: 0.46; imperfection: 0.74; meaning: time has touched the surface openly\nLiteral motifs permitted by scene truth: id: low_fire; meaning: continuity held at low intensity\nSymbolic motifs must remain metaphorical or materially embedded: id: thread_trace; meaning: a small portable thing becoming a path-marker through biography | id: service_cup; meaning: hospitality expressed through an ordinary vessel | id: rain_without_sky; meaning: anomaly experienced as weather inside enclosure | id: ledger_marks; meaning: history remaining inspectable beneath present experience | id: warm_window; meaning: interior care remaining in relationship with the world outside | id: books_and_papers; meaning: knowledge appearing as handled material rather than abstract authority\nScene art direction: Treat environmental center as the primary visual argument. | Let lived objects accumulate around the focal hierarchy rather than flatten into decorative clutter. | Use light to communicate: anomaly expressed through illumination. | Edge behavior should communicate: distance dissolves rather than merely shrinking. | Surface age should communicate: time has touched the surface openly.\nBrush translation rules: Honor the focal hierarchy explicitly and keep secondary details subordinate. | Render abstract meaning through treatment of scene-permitted material, space, light, and gesture rather than by inventing new props. | Keep unresolved marks and partial process visible on existing works and surfaces where Virynism asks for incompletion. | Use asymmetry, layered depth, and scene-supported residue to avoid showroom composition. | Let symbolic meaning remain implicit in materials and light rather than explicit iconography.\nLet material, light, gesture, residue, atmosphere, negative space, and painterly edges carry meaning. Preserve strangeness without spectacle.",
+    "negative": "Do not invent additional people, identities, relationships, consent, touch, text, logos, symbols, or objects.\nDo not turn symbolic motifs into literal world facts.\nDo not add decorative UI chrome, cards, captions, labels, diagrams, or typography unless explicitly present in scene facts.\nDo not render wording, headings, labels, or phrases from these instructions into the image.\nDo not flatten the image into generic concept art, stock illustration, clip art, procedural SVG aesthetics, or staged showroom photography.\nDo not contradict the explicit subject, relation, environment, camera, lighting, or provenance constraints.\nThreshold integrity rejects: wrought-iron gates | bars | chains | portcullises | prison or cell imagery | barricades | coercive enclosure | guarded thresholds\nVirynism rejects: tasteful showroom minimalism | generic cinematic concept art | perfectly centered hero composition without semantic reason | glossy luxury interior styling | empty frames used as the only shorthand for unfinishedness | literal mystical symbols added for atmosphere | uniformly clean surfaces | overfilled prop dressing | high-saturation fantasy glow without scene cause | photorealistic product photography\nBrush-specific avoidances: literal symbol illustration | generic concept-art staging | over-detailed decorative clutter | sterile symmetry | photographic showroom polish"
+  },
+  "output": {
+    "path": ".velastra/candidates/velastra.place_tableau.1hsb6ko/905d4a4aaf23d629fd56.png",
+    "sha256": "ed8e342a506c8a15ab93a738a0595336d6a492b5f84fe3890b258a80b78c278c",
+    "mediaType": "image/png"
+  },
+  "laws": {
+    "candidateCannotRenderInSanctum": true,
+    "candidateCannotMutateRegistry": true,
+    "humanReviewRequiredBeforeApproval": true,
+    "runtimeGenerationForbidden": true,
+    "modelIsBrushNotAuthority": true
+  }
+}

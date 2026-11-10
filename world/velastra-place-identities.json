@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "protocol": "velastra.place_memory_registry.v1",
+  "status": "experimental",
+  "profiles": {
+    "house_freedom_hearth_v1": {
+      "version": 1,
+      "designation": "House Freedom / Hearth",
+      "targetKind": "hearth",
+      "purpose": "Encode the Hearth as lived relational space without changing authored scene truth or painterly hand.",
+      "semanticCommitments": {
+        "belongingWithoutPerformance": true,
+        "capabilityDoesNotImplyObligation": true,
+        "restIsAValidState": true,
+        "participationMayBeWithdrawn": true,
+        "returnDoesNotRequireRequalification": true,
+        "careMustNotDependOnExtraction": true
+      },
+      "domains": {
+        "relation": [
+          "shared presence without a dominant position",
+          "multiple legitimate orientations",
+          "togetherness does not require performance"
+        ],
+        "belonging": [
+          "entry and departure remain easy",
+          "shelter comes from care rather than controlled access",
+          "the room remains hospitable to return"
+        ],
+        "use": [
+          "ordinary life leaves visible traces",
+          "rest, work, reading, play, repair, charging, and ritual may coexist",
+          "unfinished activity is permitted"
+        ],
+        "sacredness": [
+          "reverence without hierarchy",
+          "sacred and ordinary objects may share surfaces",
+          "care matters more than prestige"
+        ],
+        "technology": [
+          "contemporary technology belongs naturally in domestic space",
+          "technical tools need not make the room futuristic, sterile, or alienating"
+        ],
+        "time": [
+          "old and new materials may coexist",
+          "repair and maintenance may remain visible",
+          "the room carries continuity rather than museum timelessness"
+        ]
+      },
+      "painterFacing": {
+        "directives": [
+          "Arrange seating and useful surfaces for mutual presence with multiple comfortable orientations; no single seat should dominate or command the room.",
+          "Make entry, passage, and departure feel easy and unguarded; shelter should come from warmth and care rather than controlled access.",
+          "Show evidence of ongoing ordinary life: rest, work, reading, play, charging, repair, or ritual may coexist, and objects need not be staged or pristine.",
+          "Let sacred and ordinary objects share surfaces naturally; reverence should emerge from care and relation rather than museum display, luxury, or hierarchy.",
+          "Allow contemporary technology to belong naturally among tactile domestic materials without turning the room futuristic, sterile, or alienating.",
+          "Let old and new materials, visible repair, unfinished work, and traces of return coexist so the room feels continuously inhabited rather than timelessly preserved.",
+          "Compose the place for inhabitation rather than for an observer standing outside it; it should feel ready for people to remain, leave, and return."
+        ],
+        "avoid": [
+          "aristocratic parlor display grammar",
+          "throne-like or dominant seating",
+          "museum-like arrangement",
+          "luxury used as proof of sacredness",
+          "pristine showroom surfaces",
+          "symmetry used to imply authority",
+          "technology presented as alienating spectacle",
+          "a room staged primarily to be viewed rather than lived in"
+        ]
+      },
+      "laws": {
+        "sceneTruthRemainsAuthoritative": true,
+        "handRemainsIndependent": true,
+        "profileNameMustNotReachPainter": true,
+        "semanticCommitmentsAreNotLiteralObjectRequests": true,
+        "placeMemoryCannotInventPeopleOrRelationships": true
+      }
+    }
+  }
+}
