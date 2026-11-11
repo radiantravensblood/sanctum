@@ -118,6 +118,54 @@
           "carrierCannotPromoteWitnessObjectsToCanonicalObjects": true,
           "visualMemoryRemainsCandidateLocalUntilReviewed": true
         }
+      },
+      "structuralMemory": {
+        "status": "experimental",
+        "purpose": "Encode lived-space topology without reference pixels or new scene facts.",
+        "nodes": [
+          {
+            "id": "warmth",
+            "role": "shared warmth without sovereign centrality"
+          },
+          {
+            "id": "rest",
+            "role": "resting presence without a dominant seat"
+          },
+          {
+            "id": "activity",
+            "role": "ordinary ongoing use without staged display"
+          },
+          {
+            "id": "threshold",
+            "role": "easy arrival, departure, and return"
+          }
+        ],
+        "relations": [
+          "distribute visual weight across at least three non-collinear anchors",
+          "keep circulation between threshold, rest, warmth, and activity visibly open",
+          "let warmth participate in the room without becoming an altar-like geometric center",
+          "let seating or resting forms use varied orientations rather than mirrored bilateral pairing",
+          "frame the room from an inhabitable position rather than a ceremonial frontal viewpoint",
+          "use asymmetry and uneven negative space to imply ongoing life rather than presentation"
+        ],
+        "painterFacing": {
+          "directives": [
+            "Build the room around several non-collinear centers of use rather than one sovereign visual axis.",
+            "Keep a clear, unguarded path through the room so arrival, movement, departure, and return remain visually easy.",
+            "Let the fire or source of warmth belong to one part of the room instead of organizing the entire composition as an altar or stage.",
+            "Arrange resting or seating forms with different angles, distances, and orientations rather than mirrored pairs facing a central object.",
+            "Distribute visual weight among warmth, rest, ordinary activity, and threshold so no single zone commands the whole room.",
+            "Compose from inside the lived space: allow partial occlusion, side angles, and uneven negative space instead of a frontal ceremonial presentation."
+          ]
+        },
+        "laws": {
+          "sceneTruthRemainsAuthoritative": true,
+          "structuralMemoryCannotInventObjects": true,
+          "structuralMemoryCannotInventPeopleOrRelationships": true,
+          "structuralMemoryCannotOverrideFixedObjects": true,
+          "structuralMemoryCannotOverrideThresholdIntegrity": true,
+          "referencePixelsForbidden": true
+        }
       }
     }
   }
