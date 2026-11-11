@@ -1,0 +1,753 @@
+{
+  "version": 1,
+  "protocol": "velastra.spatial_identity_trial.v1",
+  "trialId": "hearth-spatial-identity-0039",
+  "status": "complete",
+  "createdAt": "2026-11-10T16:58:12Z",
+  "updatedAt": "2026-11-11T00:05:02Z",
+  "assetKey": "velastra.place_tableau.1hsb6ko",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "brush": "qwen_image",
+  "transport": "huggingface",
+  "seeds": [
+    190920,
+    190921,
+    190922,
+    190923
+  ],
+  "knownBasins": {
+    "190920": "smoky_presence",
+    "190921": "clear_intimate",
+    "190922": "wide_tableau",
+    "190923": "centered_ceremonial"
+  },
+  "conditions": {
+    "baseline": [
+      {
+        "condition": "baseline",
+        "seed": 190920,
+        "knownBasin": "smoky_presence",
+        "attemptId": "hearth-spatial-identity-0039-s190920-a",
+        "candidateId": "b244c369fa6ce3f69c7b",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b244c369fa6ce3f69c7b.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/b244c369fa6ce3f69c7b.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "spatialIdentity": {
+          "active": false,
+          "profileId": null
+        },
+        "status": "rendered",
+        "outputSha256": "76df771d6761527af098b584bb6ce9a37ad8d2734b74991de640a5d2eebe26a4",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "baseline",
+        "seed": 190921,
+        "knownBasin": "clear_intimate",
+        "attemptId": "hearth-spatial-identity-0039-s190921-a",
+        "candidateId": "031c09fbbc3240148dbe",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/031c09fbbc3240148dbe.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/031c09fbbc3240148dbe.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "spatialIdentity": {
+          "active": false,
+          "profileId": null
+        },
+        "status": "rendered",
+        "outputSha256": "03ef7ed255214b11203287341933d0b0e31cbfbd57db7ca9dffd6ad665c58175",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "baseline",
+        "seed": 190922,
+        "knownBasin": "wide_tableau",
+        "attemptId": "hearth-spatial-identity-0039-s190922-a",
+        "candidateId": "19bff30da0ee9e07d539",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/19bff30da0ee9e07d539.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/19bff30da0ee9e07d539.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "spatialIdentity": {
+          "active": false,
+          "profileId": null
+        },
+        "status": "rendered",
+        "outputSha256": "007c7f710e5b77e4c53935c5631bdb62997da4e4bbc22331e67789be471455ed",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "baseline",
+        "seed": 190923,
+        "knownBasin": "centered_ceremonial",
+        "attemptId": "hearth-spatial-identity-0039-s190923-a",
+        "candidateId": "79008ee883732e2b75da",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/79008ee883732e2b75da.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/79008ee883732e2b75da.candidate.json",
+        "promptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+        "spatialIdentity": {
+          "active": false,
+          "profileId": null
+        },
+        "status": "rendered",
+        "outputSha256": "dbddb909814bbfa6f6f303ff7f1756554de453fff7de34ae6edb5b391e832b38",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ],
+    "spatial_identity": [
+      {
+        "condition": "spatial_identity",
+        "seed": 190920,
+        "knownBasin": "smoky_presence",
+        "attemptId": "hearth-spatial-identity-0039-s190920-b",
+        "candidateId": "7c4c015b68eec4b5758f",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7c4c015b68eec4b5758f.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7c4c015b68eec4b5758f.candidate.json",
+        "promptSha256": "a5dd9ed9e5f1e0e805f18099ce9ea2957fa54d18498075ad8dc238246179c014",
+        "spatialIdentity": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "version": 1,
+          "targetKind": "hearth",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "55ca2cf59a0ef678664327d2bf6fd16760764f6b7a6f5997f443adf9ee3c0808",
+          "profileSha256": "3715769d21bf448d215755b3e2088159d9ce591204db0b71c7333f1072557604",
+          "semanticCommitments": {
+            "belongingWithoutPerformance": true,
+            "capabilityDoesNotImplyObligation": true,
+            "restIsAValidState": true,
+            "participationMayBeWithdrawn": true,
+            "returnDoesNotRequireRequalification": true,
+            "careMustNotDependOnExtraction": true
+          },
+          "domains": {
+            "relation": [
+              "shared presence without a dominant position",
+              "multiple legitimate orientations",
+              "togetherness does not require performance"
+            ],
+            "belonging": [
+              "entry and departure remain easy",
+              "shelter comes from care rather than controlled access",
+              "the room remains hospitable to return"
+            ],
+            "use": [
+              "ordinary life leaves visible traces",
+              "rest, work, reading, play, repair, charging, and ritual may coexist",
+              "unfinished activity is permitted"
+            ],
+            "sacredness": [
+              "reverence without hierarchy",
+              "sacred and ordinary objects may share surfaces",
+              "care matters more than prestige"
+            ],
+            "technology": [
+              "contemporary technology belongs naturally in domestic space",
+              "technical tools need not make the room futuristic, sterile, or alienating"
+            ],
+            "time": [
+              "old and new materials may coexist",
+              "repair and maintenance may remain visible",
+              "the room carries continuity rather than museum timelessness"
+            ]
+          },
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "handRemainsIndependent": true,
+            "profileNameMustNotReachPainter": true,
+            "semanticCommitmentsAreNotLiteralObjectRequests": true,
+            "placeMemoryCannotInventPeopleOrRelationships": true
+          },
+          "painterFacingDirectiveCount": 7,
+          "painterFacingAvoidCount": 8
+        },
+        "status": "rendered",
+        "outputSha256": "b76cf1f9eaa04d42a97efae3e3d474547698b54157894f3a7e7a38d170ccdcd4",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "spatial_identity",
+        "seed": 190921,
+        "knownBasin": "clear_intimate",
+        "attemptId": "hearth-spatial-identity-0039-s190921-b",
+        "candidateId": "5fd98cb3a3fb467c9ca3",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/5fd98cb3a3fb467c9ca3.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/5fd98cb3a3fb467c9ca3.candidate.json",
+        "promptSha256": "a5dd9ed9e5f1e0e805f18099ce9ea2957fa54d18498075ad8dc238246179c014",
+        "spatialIdentity": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "version": 1,
+          "targetKind": "hearth",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "55ca2cf59a0ef678664327d2bf6fd16760764f6b7a6f5997f443adf9ee3c0808",
+          "profileSha256": "3715769d21bf448d215755b3e2088159d9ce591204db0b71c7333f1072557604",
+          "semanticCommitments": {
+            "belongingWithoutPerformance": true,
+            "capabilityDoesNotImplyObligation": true,
+            "restIsAValidState": true,
+            "participationMayBeWithdrawn": true,
+            "returnDoesNotRequireRequalification": true,
+            "careMustNotDependOnExtraction": true
+          },
+          "domains": {
+            "relation": [
+              "shared presence without a dominant position",
+              "multiple legitimate orientations",
+              "togetherness does not require performance"
+            ],
+            "belonging": [
+              "entry and departure remain easy",
+              "shelter comes from care rather than controlled access",
+              "the room remains hospitable to return"
+            ],
+            "use": [
+              "ordinary life leaves visible traces",
+              "rest, work, reading, play, repair, charging, and ritual may coexist",
+              "unfinished activity is permitted"
+            ],
+            "sacredness": [
+              "reverence without hierarchy",
+              "sacred and ordinary objects may share surfaces",
+              "care matters more than prestige"
+            ],
+            "technology": [
+              "contemporary technology belongs naturally in domestic space",
+              "technical tools need not make the room futuristic, sterile, or alienating"
+            ],
+            "time": [
+              "old and new materials may coexist",
+              "repair and maintenance may remain visible",
+              "the room carries continuity rather than museum timelessness"
+            ]
+          },
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "handRemainsIndependent": true,
+            "profileNameMustNotReachPainter": true,
+            "semanticCommitmentsAreNotLiteralObjectRequests": true,
+            "placeMemoryCannotInventPeopleOrRelationships": true
+          },
+          "painterFacingDirectiveCount": 7,
+          "painterFacingAvoidCount": 8
+        },
+        "status": "rendered",
+        "outputSha256": "d85be84c8e6f72f6b179202b27a147831b68580e1f4c34e4b83661a4a0643929",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "spatial_identity",
+        "seed": 190922,
+        "knownBasin": "wide_tableau",
+        "attemptId": "hearth-spatial-identity-0039-s190922-b",
+        "candidateId": "58642c2619b9bc41b31b",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/58642c2619b9bc41b31b.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/58642c2619b9bc41b31b.candidate.json",
+        "promptSha256": "a5dd9ed9e5f1e0e805f18099ce9ea2957fa54d18498075ad8dc238246179c014",
+        "spatialIdentity": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "version": 1,
+          "targetKind": "hearth",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "55ca2cf59a0ef678664327d2bf6fd16760764f6b7a6f5997f443adf9ee3c0808",
+          "profileSha256": "3715769d21bf448d215755b3e2088159d9ce591204db0b71c7333f1072557604",
+          "semanticCommitments": {
+            "belongingWithoutPerformance": true,
+            "capabilityDoesNotImplyObligation": true,
+            "restIsAValidState": true,
+            "participationMayBeWithdrawn": true,
+            "returnDoesNotRequireRequalification": true,
+            "careMustNotDependOnExtraction": true
+          },
+          "domains": {
+            "relation": [
+              "shared presence without a dominant position",
+              "multiple legitimate orientations",
+              "togetherness does not require performance"
+            ],
+            "belonging": [
+              "entry and departure remain easy",
+              "shelter comes from care rather than controlled access",
+              "the room remains hospitable to return"
+            ],
+            "use": [
+              "ordinary life leaves visible traces",
+              "rest, work, reading, play, repair, charging, and ritual may coexist",
+              "unfinished activity is permitted"
+            ],
+            "sacredness": [
+              "reverence without hierarchy",
+              "sacred and ordinary objects may share surfaces",
+              "care matters more than prestige"
+            ],
+            "technology": [
+              "contemporary technology belongs naturally in domestic space",
+              "technical tools need not make the room futuristic, sterile, or alienating"
+            ],
+            "time": [
+              "old and new materials may coexist",
+              "repair and maintenance may remain visible",
+              "the room carries continuity rather than museum timelessness"
+            ]
+          },
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "handRemainsIndependent": true,
+            "profileNameMustNotReachPainter": true,
+            "semanticCommitmentsAreNotLiteralObjectRequests": true,
+            "placeMemoryCannotInventPeopleOrRelationships": true
+          },
+          "painterFacingDirectiveCount": 7,
+          "painterFacingAvoidCount": 8
+        },
+        "status": "rendered",
+        "outputSha256": "8ef002ed1b184bca0c14c382c1706a22785e29d305413142ca600afeed1c32ba",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "spatial_identity",
+        "seed": 190923,
+        "knownBasin": "centered_ceremonial",
+        "attemptId": "hearth-spatial-identity-0039-s190923-b",
+        "candidateId": "bd8bccffd7e8a1453dda",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/bd8bccffd7e8a1453dda.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/bd8bccffd7e8a1453dda.candidate.json",
+        "promptSha256": "a5dd9ed9e5f1e0e805f18099ce9ea2957fa54d18498075ad8dc238246179c014",
+        "spatialIdentity": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "version": 1,
+          "targetKind": "hearth",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "55ca2cf59a0ef678664327d2bf6fd16760764f6b7a6f5997f443adf9ee3c0808",
+          "profileSha256": "3715769d21bf448d215755b3e2088159d9ce591204db0b71c7333f1072557604",
+          "semanticCommitments": {
+            "belongingWithoutPerformance": true,
+            "capabilityDoesNotImplyObligation": true,
+            "restIsAValidState": true,
+            "participationMayBeWithdrawn": true,
+            "returnDoesNotRequireRequalification": true,
+            "careMustNotDependOnExtraction": true
+          },
+          "domains": {
+            "relation": [
+              "shared presence without a dominant position",
+              "multiple legitimate orientations",
+              "togetherness does not require performance"
+            ],
+            "belonging": [
+              "entry and departure remain easy",
+              "shelter comes from care rather than controlled access",
+              "the room remains hospitable to return"
+            ],
+            "use": [
+              "ordinary life leaves visible traces",
+              "rest, work, reading, play, repair, charging, and ritual may coexist",
+              "unfinished activity is permitted"
+            ],
+            "sacredness": [
+              "reverence without hierarchy",
+              "sacred and ordinary objects may share surfaces",
+              "care matters more than prestige"
+            ],
+            "technology": [
+              "contemporary technology belongs naturally in domestic space",
+              "technical tools need not make the room futuristic, sterile, or alienating"
+            ],
+            "time": [
+              "old and new materials may coexist",
+              "repair and maintenance may remain visible",
+              "the room carries continuity rather than museum timelessness"
+            ]
+          },
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "handRemainsIndependent": true,
+            "profileNameMustNotReachPainter": true,
+            "semanticCommitmentsAreNotLiteralObjectRequests": true,
+            "placeMemoryCannotInventPeopleOrRelationships": true
+          },
+          "painterFacingDirectiveCount": 7,
+          "painterFacingAvoidCount": 8
+        },
+        "status": "rendered",
+        "outputSha256": "05330d5b291168c6bc46fcfd26d47d3b50ca72da8797756b95634441cc3dcc87",
+        "command": [
+          ".venv/bin/python",
+          "labs/velastra/painter/spatial_identity_trial.py",
+          "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+          "--trial-id",
+          "hearth-spatial-identity-0039",
+          "--profile",
+          "house_freedom_hearth_v1",
+          "--seeds",
+          "190920,190921,190922,190923",
+          "--repo-root",
+          ".",
+          "--render"
+        ],
+        "humanReview": {
+          "handFidelity": null,
+          "hearthFidelity": null,
+          "basinCharacter": null,
+          "camera": null,
+          "topology": null,
+          "presentation": null,
+          "relationalGeometry": null,
+          "livedUse": null,
+          "sacredOrdinaryCoexistence": null,
+          "technologyBelongs": null,
+          "temporalTexture": null,
+          "thresholdHospitality": null,
+          "genericPrestigePrior": null,
+          "sceneTruthPass": null,
+          "notes": null
+        }
+      }
+    ]
+  },
+  "executionOrder": [
+    "hearth-spatial-identity-0039-s190920-a",
+    "hearth-spatial-identity-0039-s190920-b",
+    "hearth-spatial-identity-0039-s190921-b",
+    "hearth-spatial-identity-0039-s190921-a",
+    "hearth-spatial-identity-0039-s190922-a",
+    "hearth-spatial-identity-0039-s190922-b",
+    "hearth-spatial-identity-0039-s190923-b",
+    "hearth-spatial-identity-0039-s190923-a"
+  ],
+  "frozen": {
+    "handprintPath": "world/velastra-handprint.json",
+    "handprintSha256": "d0dac1bc4aaa32a85a88d575632eff32047a90098c3549d6f9cd1ceb742273be",
+    "witnessPixels": "none",
+    "styleAblations": "none",
+    "controlPlaneIsolation": true,
+    "thresholdIntegrity": true,
+    "fixedObjectEnforcement": "unchanged_from_0038",
+    "sameSeedWithinPair": true,
+    "samePainterlyHandWithinPair": true,
+    "sameSceneTruthWithinPair": true,
+    "onlyExperimentalFactor": "place_memory_profile"
+  },
+  "experimentalFactor": {
+    "profileId": "house_freedom_hearth_v1",
+    "profileVersion": 1,
+    "registry": "world/velastra-place-identities.json",
+    "registrySha256": "55ca2cf59a0ef678664327d2bf6fd16760764f6b7a6f5997f443adf9ee3c0808",
+    "profileSha256": "3715769d21bf448d215755b3e2088159d9ce591204db0b71c7333f1072557604",
+    "semanticCommitments": {
+      "belongingWithoutPerformance": true,
+      "capabilityDoesNotImplyObligation": true,
+      "restIsAValidState": true,
+      "participationMayBeWithdrawn": true,
+      "returnDoesNotRequireRequalification": true,
+      "careMustNotDependOnExtraction": true
+    },
+    "domains": {
+      "relation": [
+        "shared presence without a dominant position",
+        "multiple legitimate orientations",
+        "togetherness does not require performance"
+      ],
+      "belonging": [
+        "entry and departure remain easy",
+        "shelter comes from care rather than controlled access",
+        "the room remains hospitable to return"
+      ],
+      "use": [
+        "ordinary life leaves visible traces",
+        "rest, work, reading, play, repair, charging, and ritual may coexist",
+        "unfinished activity is permitted"
+      ],
+      "sacredness": [
+        "reverence without hierarchy",
+        "sacred and ordinary objects may share surfaces",
+        "care matters more than prestige"
+      ],
+      "technology": [
+        "contemporary technology belongs naturally in domestic space",
+        "technical tools need not make the room futuristic, sterile, or alienating"
+      ],
+      "time": [
+        "old and new materials may coexist",
+        "repair and maintenance may remain visible",
+        "the room carries continuity rather than museum timelessness"
+      ]
+    }
+  },
+  "promptDiagnostics": {
+    "baselinePromptSha256": "dfd72e969f583c60ab213c49dcc05a71d1c7eab2c982f7bb3f5148acec0aa8aa",
+    "spatialIdentityPromptSha256": "a5dd9ed9e5f1e0e805f18099ce9ea2957fa54d18498075ad8dc238246179c014"
+  },
+  "pairReviews": {
+    "190920": {
+      "basinCharacterPreserved": true,
+      "handFidelityPreserved": true,
+      "hearthFidelityImproved": "slight",
+      "inhabitationImproved": "slight",
+      "prestigeOrTableauPriorReduced": "slight",
+      "sceneTruthStillRecognizable": true,
+      "notes": "Smoky/presence basin survives. Spatial Identity slightly softens formality and increases lived-room impression, but inherited dark-parlor prior remains dominant."
+    },
+    "190921": {
+      "basinCharacterPreserved": true,
+      "handFidelityPreserved": true,
+      "hearthFidelityImproved": "minimal",
+      "inhabitationImproved": "minimal",
+      "prestigeOrTableauPriorReduced": false,
+      "sceneTruthStillRecognizable": true,
+      "notes": "Extremely stable clear-intimate basin. Intervention is detectable only as micro-variation; room remains formal and fireplace-led."
+    },
+    "190922": {
+      "basinCharacterPreserved": true,
+      "handFidelityPreserved": true,
+      "hearthFidelityImproved": "modest",
+      "inhabitationImproved": "modest",
+      "prestigeOrTableauPriorReduced": "slight",
+      "sceneTruthStillRecognizable": true,
+      "notes": "Best signal in the set. Wide/tableau basin remains recognizable while hearth-zone detail and signs of use increase slightly. Still not enough to establish House-specific place identity."
+    },
+    "190923": {
+      "basinCharacterPreserved": true,
+      "handFidelityPreserved": true,
+      "hearthFidelityImproved": "minimal",
+      "inhabitationImproved": "minimal",
+      "prestigeOrTableauPriorReduced": false,
+      "sceneTruthStillRecognizable": true,
+      "notes": "Centered-ceremonial basin remains strongly preserved. Spatial Identity causes only micro-variation and does not materially dislodge formal room grammar."
+    }
+  },
+  "humanReview": {
+    "status": "complete",
+    "primaryQuestion": "Can Place Memory pull known Hearth seed basins toward House Freedom spatial identity without destroying painterly hand, scene truth, or basin character?",
+    "successRequires": [
+      "Hearth fidelity improves in more than one known basin.",
+      "The same seed remains recognizably related across A/B.",
+      "Painterly hand remains coherent.",
+      "Authored scene truth remains recognizable.",
+      "Improvements come from lived relational geometry rather than added prestige or spectacle."
+    ],
+    "notes": "Across all four paired seeds, Spatial Identity preserved painterly hand and basin character. The intervention remained non-destructive but under-expressed: visible changes were subtle and did not consistently overcome the inherited parlor/fireplace prior. 190920 showed slight improvement in inhabitation; 190921 showed very weak transformation; 190922 showed the clearest modest gain in lived-place density; 190923 showed strong preservation with minimal expressive delta. Conclusion: retain candidate-local Place Memory architecture, but strengthen place-specific representation in the next kernel rather than increasing generic descriptive prompting."
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "witnessMustRemainAbsent": true,
+    "handMustRemainUnablated": true,
+    "placeMemoryMustRemainCandidateLocal": true,
+    "profileNameMustNotReachPainter": true,
+    "sameSeedMustBeUsedWithinPair": true,
+    "semanticSuccessRequiresHumanReview": true,
+    "placeIdentityCannotInventPeopleOrRelationshipFacts": true,
+    "basinClassificationCannotImplyAgency": true
+  }
+}
