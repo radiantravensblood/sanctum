@@ -74,6 +74,50 @@
         "profileNameMustNotReachPainter": true,
         "semanticCommitmentsAreNotLiteralObjectRequests": true,
         "placeMemoryCannotInventPeopleOrRelationships": true
+      },
+      "visualMemory": {
+        "status": "experimental",
+        "purpose": "Carry House Freedom place vocabulary through reviewed visual evidence without allowing any source room, person, object inventory, or composition to become scene truth.",
+        "sourceWitnessIds": [
+          "studio_atelier_01",
+          "gallery_target_01"
+        ],
+        "roles": [
+          "compositional_cadence",
+          "material_hand",
+          "spatial_depth",
+          "sacred_incompletion",
+          "tonal_memory"
+        ],
+        "doNotInherit": [
+          "specific people or identities",
+          "specific tools or furniture",
+          "specific symbols or decorative objects",
+          "source architecture",
+          "source room layout",
+          "source frame placement",
+          "source object inventory",
+          "exact source light placement"
+        ],
+        "carrier": {
+          "width": 1536,
+          "height": 864,
+          "microTileSize": 32,
+          "neighborhoodSize": 96,
+          "blurRadius": 0.6,
+          "controlAlgorithm": "micro_scrub_v1",
+          "experimentalAlgorithm": "neighborhood_quilt_v1"
+        },
+        "laws": {
+          "sameNormalizedSourcePixelsAcrossConditions": true,
+          "sourcePixelsAreNotSceneTruth": true,
+          "sourceLayoutMustBeDestroyed": true,
+          "experimentalCarrierMayPreserveOnlyMesoScaleAdjacency": true,
+          "carrierCannotInventPeopleOrRelationships": true,
+          "carrierCannotOverrideAuthoredSceneTruth": true,
+          "carrierCannotPromoteWitnessObjectsToCanonicalObjects": true,
+          "visualMemoryRemainsCandidateLocalUntilReviewed": true
+        }
       }
     }
   }
