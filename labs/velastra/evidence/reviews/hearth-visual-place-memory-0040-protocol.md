@@ -86,11 +86,17 @@ Both source assets remain reviewed Visual Witness canon. Their people, objects, 
 
 ## Execution
 
-Default trial size:
+Default pilot size:
 
-- 4 control renders
-- 4 Visual Place Memory renders
+- 2 control renders
+- 2 Visual Place Memory renders
 - alternating execution order to reduce provider / time-order bias
+
+### Adaptive stop rule
+
+Review after the first 2+2 pilot before authorizing more inference.
+
+Expand to 4+4 only if the pilot shows a directional Visual Place Memory signal without material source-scene leakage or scene-truth degradation. If the pilot is null, leakage-heavy, or clearly dominated by provider stochasticity, stop 0040 and preserve the remaining budget for a brush/backend pivot.
 
 The trial driver must fail closed if painter-facing prompt hashes differ between conditions.
 
