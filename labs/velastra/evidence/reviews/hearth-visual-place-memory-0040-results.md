@@ -11,8 +11,8 @@
 - [ ] Handprint enabled
 - [ ] semantic Place Memory enabled in both conditions
 - [ ] ordinary Witness Firewall disabled
-- [ ] 4 control renders completed
-- [ ] 4 Visual Place Memory renders completed
+- [ ] 2 control pilot renders completed
+- [ ] 2 Visual Place Memory pilot renders completed
 - [ ] candidate sidecars present
 - [ ] output hashes present
 
