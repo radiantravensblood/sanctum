@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "protocol": "velastra.visual_place_memory_trial.v1",
+  "trialId": "hearth-visual-place-memory-0040",
+  "status": "complete",
+  "createdAt": "2026-11-11T01:12:25Z",
+  "updatedAt": "2026-11-11T02:12:35Z",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "profileId": "house_freedom_hearth_v1",
+  "repeatsPerCondition": 2,
+  "brush": "qwen_image_edit",
+  "transport": "huggingface",
+  "provider": "fal-ai",
+  "providerSeedControl": false,
+  "carrierPair": {
+    "protocol": "velastra.visual_place_memory_carrier.v1",
+    "version": 1,
+    "pairId": "36831383998327581f18",
+    "sourceCorpus": [
+      {
+        "id": "studio_atelier_01",
+        "title": "Original Studio / Atelier Painting",
+        "path": "assets/velastra/witnesses/studio_atelier_01.png",
+        "sha256": "cd3465c210f6732cdb2ebea0925781927859d9d235b81818967b4d35c61a0e08"
+      },
+      {
+        "id": "gallery_target_01",
+        "title": "Gallery of Unfinished Things — Viryn Target Study",
+        "path": "assets/velastra/witnesses/gallery_target_01.png",
+        "sha256": "a4ad0dc78d2fb02f617abc549e943f7cb4d0b917a3a42d1e06fd1a175438e331"
+      }
+    ],
+    "corpusPixelSha256": "4c1cca0927ea2ef475904c41b2d4250d5e4315f2e9969db9e3f5e231e44cf26a",
+    "sameSourcePixelsAfterNormalization": true,
+    "conditions": {
+      "micro_scrub_control": {
+        "algorithm": "micro_scrub_v1",
+        "path": "/workspaces/sanctum/.velastra/place-memory/hearth-visual-place-memory-0040/micro_scrub_control.png",
+        "carrierSha256": "d3d48aa74fc46fa07609af895ef470f09d11aceebee54525ef8487e3c3e48783",
+        "microTileSize": 32,
+        "neighborhoodSize": null,
+        "blurRadius": 0.6,
+        "globalLayoutDestroyed": true,
+        "mesoSpatialAdjacencyPreserved": false,
+        "localPixelEvidencePreserved": true
+      },
+      "visual_place_memory": {
+        "algorithm": "neighborhood_quilt_v1",
+        "path": "/workspaces/sanctum/.velastra/place-memory/hearth-visual-place-memory-0040/visual_place_memory.png",
+        "carrierSha256": "71f2e3611063bd8a428b48ebeb51df48aa9d1910daf00d383ac797ecb02587a3",
+        "microTileSize": 32,
+        "neighborhoodSize": 96,
+        "blurRadius": 0.6,
+        "globalLayoutDestroyed": true,
+        "mesoSpatialAdjacencyPreserved": true,
+        "localPixelEvidencePreserved": true
+      }
+    },
+    "laws": {
+      "sourcePixelsAreNotSceneTruth": true,
+      "sourceLayoutIsNotAuthority": true,
+      "carrierCannotInventPeopleOrRelationships": true,
+      "carrierCannotOverrideAuthoredSceneTruth": true,
+      "carrierCannotPromoteWitnessObjectsToCanonicalObjects": true,
+      "controlAndExperimentalShareNormalizedSourceCorpus": true
+    }
+  },
+  "promptDiagnostics": {
+    "sharedPromptSha256": "283a183f4246ece5b80d59fa4345164124b7b9964ef379b226936c8be6e73532",
+    "painterFacingPromptIdenticalAcrossConditions": true
+  },
+  "conditions": {
+    "micro_scrub_control": [
+      {
+        "condition": "micro_scrub_control",
+        "repeat": 1,
+        "attemptId": "hearth-visual-place-memory-0040-r01-micro_scrub_control",
+        "candidateId": "7924aa5562cbf4c0e30b",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7924aa5562cbf4c0e30b.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7924aa5562cbf4c0e30b.candidate.json",
+        "promptSha256": "283a183f4246ece5b80d59fa4345164124b7b9964ef379b226936c8be6e73532",
+        "carrierSha256": "d3d48aa74fc46fa07609af895ef470f09d11aceebee54525ef8487e3c3e48783",
+        "carrierAlgorithm": "micro_scrub_v1",
+        "mesoSpatialAdjacencyPreserved": false,
+        "status": "rendered",
+        "outputSha256": "5230665ff439d74edf0ad935a614df31759d2d6fa9b8e82472a846c2acfd8182",
+        "humanReview": {
+          "sceneTruthStillRecognizable": null,
+          "handFidelityPreserved": null,
+          "sourceLayoutLeakage": null,
+          "sourceObjectLeakage": null,
+          "placeSpecificity": null,
+          "inhabitation": null,
+          "relationalGeometry": null,
+          "sacredOrdinaryCoexistence": null,
+          "oldNewCoexistence": null,
+          "technologyBelongs": null,
+          "genericPrestigePrior": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "micro_scrub_control",
+        "repeat": 2,
+        "attemptId": "hearth-visual-place-memory-0040-r02-micro_scrub_control",
+        "candidateId": "4f38dffd7d2e562948d4",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/4f38dffd7d2e562948d4.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/4f38dffd7d2e562948d4.candidate.json",
+        "promptSha256": "283a183f4246ece5b80d59fa4345164124b7b9964ef379b226936c8be6e73532",
+        "carrierSha256": "d3d48aa74fc46fa07609af895ef470f09d11aceebee54525ef8487e3c3e48783",
+        "carrierAlgorithm": "micro_scrub_v1",
+        "mesoSpatialAdjacencyPreserved": false,
+        "status": "rendered",
+        "outputSha256": "a1404be0ab79eea76fe79f7178174153f6dcddf7fb03484893dc99e2f7f80d62",
+        "humanReview": {
+          "sceneTruthStillRecognizable": null,
+          "handFidelityPreserved": null,
+          "sourceLayoutLeakage": null,
+          "sourceObjectLeakage": null,
+          "placeSpecificity": null,
+          "inhabitation": null,
+          "relationalGeometry": null,
+          "sacredOrdinaryCoexistence": null,
+          "oldNewCoexistence": null,
+          "technologyBelongs": null,
+          "genericPrestigePrior": null,
+          "notes": null
+        }
+      }
+    ],
+    "visual_place_memory": [
+      {
+        "condition": "visual_place_memory",
+        "repeat": 1,
+        "attemptId": "hearth-visual-place-memory-0040-r01-visual_place_memory",
+        "candidateId": "7e150a45531faaeb9b0f",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7e150a45531faaeb9b0f.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7e150a45531faaeb9b0f.candidate.json",
+        "promptSha256": "283a183f4246ece5b80d59fa4345164124b7b9964ef379b226936c8be6e73532",
+        "carrierSha256": "71f2e3611063bd8a428b48ebeb51df48aa9d1910daf00d383ac797ecb02587a3",
+        "carrierAlgorithm": "neighborhood_quilt_v1",
+        "mesoSpatialAdjacencyPreserved": true,
+        "status": "rendered",
+        "outputSha256": "a556640f88cafb62e1bc997574461bf4c041b5f5b319500a3b91c33e3081d8f5",
+        "humanReview": {
+          "sceneTruthStillRecognizable": null,
+          "handFidelityPreserved": null,
+          "sourceLayoutLeakage": null,
+          "sourceObjectLeakage": null,
+          "placeSpecificity": null,
+          "inhabitation": null,
+          "relationalGeometry": null,
+          "sacredOrdinaryCoexistence": null,
+          "oldNewCoexistence": null,
+          "technologyBelongs": null,
+          "genericPrestigePrior": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "visual_place_memory",
+        "repeat": 2,
+        "attemptId": "hearth-visual-place-memory-0040-r02-visual_place_memory",
+        "candidateId": "4553b7e9214128d5f949",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/4553b7e9214128d5f949.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/4553b7e9214128d5f949.candidate.json",
+        "promptSha256": "283a183f4246ece5b80d59fa4345164124b7b9964ef379b226936c8be6e73532",
+        "carrierSha256": "71f2e3611063bd8a428b48ebeb51df48aa9d1910daf00d383ac797ecb02587a3",
+        "carrierAlgorithm": "neighborhood_quilt_v1",
+        "mesoSpatialAdjacencyPreserved": true,
+        "status": "rendered",
+        "outputSha256": "4da66fab37fdee6dc6669c06c4f83a3c0714eda29936c19cefed9ee103d96abe",
+        "humanReview": {
+          "sceneTruthStillRecognizable": null,
+          "handFidelityPreserved": null,
+          "sourceLayoutLeakage": null,
+          "sourceObjectLeakage": null,
+          "placeSpecificity": null,
+          "inhabitation": null,
+          "relationalGeometry": null,
+          "sacredOrdinaryCoexistence": null,
+          "oldNewCoexistence": null,
+          "technologyBelongs": null,
+          "genericPrestigePrior": null,
+          "notes": null
+        }
+      }
+    ]
+  },
+  "executionOrder": [
+    "hearth-visual-place-memory-0040-r01-micro_scrub_control",
+    "hearth-visual-place-memory-0040-r01-visual_place_memory",
+    "hearth-visual-place-memory-0040-r02-visual_place_memory",
+    "hearth-visual-place-memory-0040-r02-micro_scrub_control"
+  ],
+  "frozen": {
+    "sameAuthoredSceneTruth": true,
+    "sameHandprint": true,
+    "sameSemanticPlaceMemory": true,
+    "sameApprovedSourceCorpus": true,
+    "sameNormalizedSourcePixels": true,
+    "samePainterFacingPrompt": true,
+    "sameBrush": true,
+    "sameProvider": true,
+    "ordinaryWitnessFirewall": "disabled",
+    "providerSeedControl": false,
+    "onlySystematicFactor": "carrier_spatial_retention"
+  },
+  "humanReview": {
+    "status": "complete",
+    "questions": [
+      "Does meso-scale adjacency increase lived-place specificity across repeated outputs?",
+      "Does the experimental carrier reduce generic prestige/parlor priors?",
+      "Does authored scene truth remain recognizable?",
+      "Does the painterly hand remain coherent?",
+      "Does any source architecture, object inventory, or layout leak into the target?",
+      "Do old/new, sacred/ordinary, technical/domestic relations appear more naturally without becoming spectacle?"
+    ],
+    "notes": "2+2 pilot reviewed visually. Both micro-scrub control and Visual Place Memory arms converged on the same ceremonial Hearth attractor: centered fire, paired red seating, strong bilateral/axial symmetry, dark chamber palette, and ritualized rather than lived-domestic room grammar. Visual Place Memory did not establish a reliable distributional advantage over control. Source-scene copying was not the dominant failure mode; instead the prompt/model stack converged strongly toward a shared Hearth archetype. Adaptive stop rule triggered. Do not expand to 4+4. Preserve budget for Structural Hearth Memory / brush-portability work."
+  },
+  "successCriteria": [
+    "Visual Place Memory improves place specificity across more than one repeated output.",
+    "The effect is directional across the distribution, not dependent on one lucky render.",
+    "Authored scene truth remains recognizable.",
+    "Painterly hand remains coherent.",
+    "Source room layout and object inventory do not become target scene facts.",
+    "The experimental carrier does not collapse outputs into one copied source composition."
+  ],
+  "falsification": [
+    "Control and experimental distributions are visually indistinguishable.",
+    "Experimental outputs copy source architecture, furniture, people, or object inventory.",
+    "Scene truth degrades materially under the experimental carrier.",
+    "Any improvement is only generic prettiness or atmosphere rather than lived-place specificity."
+  ],
+  "laws": {
+    "noCanonMutation": true,
+    "humanReviewRequired": true,
+    "sourcePixelsAreEvidenceNotAuthority": true,
+    "placeMemoryCannotInventPeopleOrRelationships": true,
+    "carrierCannotOverrideSceneTruth": true,
+    "providerStochasticityMustNotBeMisreportedAsSeedControl": true
+  }
+}
