@@ -4,7 +4,7 @@
   "trialId": "hearth-visual-place-memory-0040",
   "status": "complete",
   "createdAt": "2026-11-11T01:12:25Z",
-  "updatedAt": "2026-11-11T01:16:43Z",
+  "updatedAt": "2026-11-11T02:12:35Z",
   "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
   "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
   "profileId": "house_freedom_hearth_v1",
@@ -208,7 +208,7 @@
     "onlySystematicFactor": "carrier_spatial_retention"
   },
   "humanReview": {
-    "status": "pending",
+    "status": "complete",
     "questions": [
       "Does meso-scale adjacency increase lived-place specificity across repeated outputs?",
       "Does the experimental carrier reduce generic prestige/parlor priors?",
@@ -217,7 +217,7 @@
       "Does any source architecture, object inventory, or layout leak into the target?",
       "Do old/new, sacred/ordinary, technical/domestic relations appear more naturally without becoming spectacle?"
     ],
-    "notes": null
+    "notes": "2+2 pilot reviewed visually. Both micro-scrub control and Visual Place Memory arms converged on the same ceremonial Hearth attractor: centered fire, paired red seating, strong bilateral/axial symmetry, dark chamber palette, and ritualized rather than lived-domestic room grammar. Visual Place Memory did not establish a reliable distributional advantage over control. Source-scene copying was not the dominant failure mode; instead the prompt/model stack converged strongly toward a shared Hearth archetype. Adaptive stop rule triggered. Do not expand to 4+4. Preserve budget for Structural Hearth Memory / brush-portability work."
   },
   "successCriteria": [
     "Visual Place Memory improves place specificity across more than one repeated output.",
