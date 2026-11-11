@@ -336,7 +336,7 @@ def main() -> int:
         "--profile",
         default="house_freedom_hearth_v1",
     )
-    parser.add_argument("--repeats", type=int, default=4)
+    parser.add_argument("--repeats", type=int, default=2)
     parser.add_argument("--repo-root", default=".")
     parser.add_argument(
         "--place-registry",
