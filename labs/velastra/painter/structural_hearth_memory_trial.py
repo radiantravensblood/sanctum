@@ -15,6 +15,7 @@ import hashlib
 import importlib.util
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
@@ -105,6 +106,27 @@ def render_namespace(
     )
 
 
+def reserve_structural_prompt_budget(spec: Any) -> Any:
+    """Reserve equal prompt space in both arms for the 0041 topology section.
+
+    Z-Image Turbo's configured safe target is 420 estimated tokens. The
+    Structural Memory section is appended after the core compiler, so both
+    arms compile the shared base prompt to 220 tokens first. This keeps the
+    comparison causal and prevents the experimental arm from being silently
+    truncated by the brush budget.
+    """
+    control = dict(spec.control_contract or {})
+    budget = dict(control.get("promptBudget") or {})
+    configured_safe = int(budget.get("safeTargetTokens") or 420)
+    if configured_safe < 420:
+        raise RuntimeError(
+            "0041 expected a Z-Image safe prompt target of at least 420 tokens."
+        )
+    budget["safeTargetTokens"] = 220
+    control["promptBudget"] = budget
+    return replace(spec, control_contract=control)
+
+
 def candidate_plan(
     *,
     args: argparse.Namespace,
@@ -116,7 +138,9 @@ def candidate_plan(
     suffix = "a" if condition == "baseline" else "b"
     attempt = f"{args.trial_id}-s{seed}-{suffix}"
     ns = render_namespace(args, seed=seed, attempt=attempt)
-    spec = painter.build_render_spec(ns)
+    spec = reserve_structural_prompt_budget(
+        painter.build_render_spec(ns)
+    )
 
     if spec.task != "text_to_image":
         raise RuntimeError("0041 is frozen to text-to-image.")
@@ -142,6 +166,17 @@ def candidate_plan(
 
     if condition == "structural_memory":
         bundle = structural.augment_prompt_bundle(bundle, contract)
+        final_estimate = int(
+            (bundle.get("budget") or {}).get(
+                "afterStructuralMemoryTokensEstimate"
+            )
+            or 0
+        )
+        if final_estimate > 420:
+            raise RuntimeError(
+                "0041 structural prompt exceeded Z-Image's 420-token safe "
+                f"target after reserved-budget compilation: {final_estimate}"
+            )
         leaks = painter.control_plane_leaks(
             str(bundle.get("positive") or "")
             + "\n"
@@ -171,6 +206,7 @@ def candidate_plan(
             if condition == "structural_memory"
             else {"active": False}
         ),
+        "promptBudget": dict(bundle.get("budget") or {}),
         "status": (
             "rendered"
             if image_path.exists() and record_path.exists()
@@ -376,6 +412,22 @@ def main() -> int:
             "baselinePromptSha256": next(iter(baseline_hashes)),
             "structuralPromptSha256": next(iter(structural_hashes)),
             "promptsDifferAcrossConditions": True,
+            "sharedBaseSafeTargetTokens": 220,
+            "finalBrushSafeTargetTokens": 420,
+            "structuralSectionTokensEstimate": int(
+                (
+                    arms["structural_memory"][0].get("promptBudget")
+                    or {}
+                ).get("structuralMemoryAddedTokensEstimate")
+                or 0
+            ),
+            "structuralFinalTokensEstimate": int(
+                (
+                    arms["structural_memory"][0].get("promptBudget")
+                    or {}
+                ).get("afterStructuralMemoryTokensEstimate")
+                or 0
+            ),
         },
         "frozen": {
             "referencePixels": "none",
