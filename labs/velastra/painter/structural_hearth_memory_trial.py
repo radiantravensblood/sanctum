@@ -106,26 +106,147 @@ def render_namespace(
     )
 
 
-def reserve_structural_prompt_budget(spec: Any) -> Any:
-    """Reserve equal prompt space in both arms for the 0041 topology section.
+def compact_trial_base_bundle(
+    manifest: dict[str, Any],
+    bundle: dict[str, Any],
+) -> dict[str, Any]:
+    """Build a bounded causal prompt for the 0041 same-seed A/B trial.
 
-    Z-Image Turbo's configured safe target is 420 estimated tokens. The
-    Structural Memory section is appended after the core compiler, so both
-    arms compile the shared base prompt to 220 tokens first. This keeps the
-    comparison causal and prevents the experimental arm from being silently
-    truncated by the brush budget.
+    The normal Painter compiler correctly refuses to drop required scene-truth,
+    threshold, and Handprint sections. On dense manifests that can leave the
+    compiled prompt above Z-Image Turbo's observed 512-token envelope even when
+    the configured safe target is lower.
+
+    0041 therefore derives a compact painter-facing base from the already-
+    compiled bundle and authoritative manifest. Both arms receive this exact
+    same base. Structural Memory is the only text added to the experimental
+    arm.
     """
-    control = dict(spec.control_contract or {})
-    budget = dict(control.get("promptBudget") or {})
-    configured_safe = int(budget.get("safeTargetTokens") or 420)
-    if configured_safe < 420:
-        raise RuntimeError(
-            "0041 expected a Z-Image safe prompt target of at least 420 tokens."
-        )
-    budget["safeTargetTokens"] = 220
-    control["promptBudget"] = budget
-    return replace(spec, control_contract=control)
+    compact = dict(bundle)
+    scene = manifest.get("scene") or {}
+    environment = scene.get("environment") or {}
+    painterly_truth = environment.get("painterlyTruth") or {}
+    brief = manifest.get("artBrief") or {}
+    style = manifest.get("style") or {}
 
+    facts: list[str] = []
+    for raw in environment.get("facts") or []:
+        value = painter.flatten_text(raw)
+        lowered = value.lower()
+        if not value or lowered.startswith("fixed room object:"):
+            continue
+        if value not in facts:
+            facts.append(value)
+
+    fixed_objects: list[str] = []
+    for entry in painterly_truth.get("fixedObjects") or []:
+        if isinstance(entry, dict):
+            value = painter.flatten_text(entry.get("name") or entry.get("id"))
+        else:
+            value = painter.flatten_text(entry)
+        if value and value not in fixed_objects:
+            fixed_objects.append(value)
+
+    hierarchy = painter.flatten_text(
+        brief.get("hierarchy")
+        or (scene.get("composition") or {}).get("hierarchy")
+    )
+    camera = painter.flatten_text(
+        brief.get("camera")
+        or (scene.get("composition") or {}).get("camera")
+    )
+    lighting = painter.flatten_text(
+        (brief.get("lighting") or {}).get("meaning")
+        if isinstance(brief.get("lighting"), dict)
+        else brief.get("lighting")
+    )
+    surface = painter.flatten_text(
+        (brief.get("surface") or {}).get("meaning")
+        if isinstance(brief.get("surface"), dict)
+        else brief.get("surface")
+    )
+
+    handprint = bundle.get("handprint") or {}
+    interpretation = handprint.get("interpretation") or {}
+    handprint_bits = [
+        painter.flatten_text(interpretation.get("warmthBias")),
+        painter.flatten_text(interpretation.get("edgeCharacter")),
+        painter.flatten_text(interpretation.get("shadowPresence")),
+    ]
+    handprint_bits = [item for item in handprint_bits if item]
+
+    parts = [
+        "Create a finished painterly image from this authored Hearth scene.",
+        (
+            "Scene truth: "
+            + " | ".join(facts[:3])
+            if facts
+            else "Scene truth: preserve the authored Hearth environment."
+        ),
+        (
+            "Fixed authored objects: " + ", ".join(fixed_objects) + "."
+            if fixed_objects
+            else ""
+        ),
+        (
+            "Composition: "
+            + "; ".join(item for item in (camera, hierarchy) if item)
+            + "."
+            if camera or hierarchy
+            else ""
+        ),
+        (
+            "Atmosphere: "
+            + "; ".join(item for item in (lighting, surface) if item)
+            + "."
+            if lighting or surface
+            else ""
+        ),
+        (
+            "Virynism hand: "
+            + painter.flatten_text(style.get("compactSignature"))
+        ),
+        (
+            "Portfolio-derived visual tendencies: " + "; ".join(handprint_bits) + "."
+            if handprint_bits
+            else ""
+        ),
+        (
+            "Keep thresholds permeable and movement easy. "
+            "Do not invent people, relationships, text, logos, symbols, or "
+            "objects. Keep symbolic motifs nonliteral."
+        ),
+    ]
+    positive = "\n".join(item for item in parts if item)
+    estimate = painter.estimate_prompt_tokens(positive)
+    target = 300
+    if estimate > target:
+        raise RuntimeError(
+            "0041 compact shared base exceeded its 300-token target: "
+            f"{estimate}"
+        )
+
+    budget = dict(bundle.get("budget") or {})
+    raw_after = int(
+        budget.get("afterTokens")
+        or painter.estimate_prompt_tokens(str(bundle.get("positive") or ""))
+    )
+    budget["rawBaseTokensEstimate"] = raw_after
+    budget["compactBaseTokensEstimate"] = estimate
+    budget["afterTokens"] = estimate
+    budget["targetTokens"] = target
+    budget["overTarget"] = False
+    budget["compaction"] = "0041_causal_trial_v1"
+
+    compact["positive"] = positive
+    compact["budget"] = budget
+    compact["trialPrompt"] = {
+        "profile": "0041_causal_trial_v1",
+        "rawBaseTokensEstimate": raw_after,
+        "compactBaseTokensEstimate": estimate,
+        "targetTokens": target,
+    }
+    return compact
 
 def candidate_plan(
     *,
@@ -138,9 +259,7 @@ def candidate_plan(
     suffix = "a" if condition == "baseline" else "b"
     attempt = f"{args.trial_id}-s{seed}-{suffix}"
     ns = render_namespace(args, seed=seed, attempt=attempt)
-    spec = reserve_structural_prompt_budget(
-        painter.build_render_spec(ns)
-    )
+    spec = painter.build_render_spec(ns)
 
     if spec.task != "text_to_image":
         raise RuntimeError("0041 is frozen to text-to-image.")
@@ -150,6 +269,7 @@ def candidate_plan(
         raise RuntimeError("0041 is frozen to the current hosted provider.")
 
     bundle = painter.compile_prompt_bundle(manifest, spec)
+    bundle = compact_trial_base_bundle(manifest, bundle)
     witness = bundle.get("witness") or {}
     if witness.get("active"):
         raise RuntimeError("0041 must remain reference-pixel-free.")
@@ -412,7 +532,21 @@ def main() -> int:
             "baselinePromptSha256": next(iter(baseline_hashes)),
             "structuralPromptSha256": next(iter(structural_hashes)),
             "promptsDifferAcrossConditions": True,
-            "sharedBaseSafeTargetTokens": 220,
+            "rawBaseTokensEstimate": int(
+                (
+                    arms["baseline"][0].get("promptBudget")
+                    or {}
+                ).get("rawBaseTokensEstimate")
+                or 0
+            ),
+            "compactBaseTokensEstimate": int(
+                (
+                    arms["baseline"][0].get("promptBudget")
+                    or {}
+                ).get("compactBaseTokensEstimate")
+                or 0
+            ),
+            "sharedBaseSafeTargetTokens": 300,
             "finalBrushSafeTargetTokens": 420,
             "structuralSectionTokensEstimate": int(
                 (
