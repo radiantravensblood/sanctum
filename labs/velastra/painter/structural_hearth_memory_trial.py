@@ -207,7 +207,7 @@ def compact_trial_base_bundle(
             + painter.flatten_text(style.get("compactSignature"))
         ),
         (
-            "Handprint tendencies: " + "; ".join(handprint_bits) + "."
+            "Portfolio-derived visual tendencies: " + "; ".join(handprint_bits) + "."
             if handprint_bits
             else ""
         ),
