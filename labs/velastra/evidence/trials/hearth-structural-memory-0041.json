@@ -1,0 +1,406 @@
+{
+  "version": 1,
+  "protocol": "velastra.structural_memory_trial.v1",
+  "trialId": "hearth-structural-memory-0041",
+  "status": "complete",
+  "createdAt": "2026-11-13T15:01:55Z",
+  "updatedAt": "2026-11-13T15:16:02Z",
+  "manifest": "authoring/inbox/hearth--velastra.place_tableau.1hsb6ko.velastra.json",
+  "manifestSha256": "a61922e8ca5e9a83d98a1c128bcb1a208caff38861d807041f2ed9f21436de13",
+  "brush": "z_image_turbo",
+  "transport": "huggingface",
+  "provider": "fal-ai",
+  "seeds": [
+    190920,
+    190923
+  ],
+  "conditions": {
+    "baseline": [
+      {
+        "condition": "baseline",
+        "seed": 190920,
+        "attemptId": "hearth-structural-memory-0041-s190920-a",
+        "candidateId": "d97e4f17e24bab4c1230",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d97e4f17e24bab4c1230.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/d97e4f17e24bab4c1230.candidate.json",
+        "promptSha256": "e98147c93dd7ee7e7388b23ea05c1bf8d5a53d692a6920ea9351ff238b487ddd",
+        "structuralMemory": {
+          "active": false
+        },
+        "promptBudget": {
+          "estimate": "characters_divided_by_four",
+          "beforeTokens": 1888,
+          "afterTokens": 259,
+          "targetTokens": 300,
+          "overTarget": false,
+          "droppedSections": [
+            "closing",
+            "symbolic_motifs",
+            "edge",
+            "virynism_hand",
+            "brush_dialect",
+            "virynism_archetype",
+            "scene_directives",
+            "medium",
+            "lighting",
+            "camera",
+            "surface",
+            "literal_motifs"
+          ],
+          "requiredSectionsPreserved": true,
+          "rawBaseTokensEstimate": 905,
+          "compactBaseTokensEstimate": 259,
+          "compaction": "0041_causal_trial_v1"
+        },
+        "status": "rendered",
+        "outputSha256": "105df163dd625fe80ad7c841c862e03f228bca93d852b10ff556c18c2de68005",
+        "humanReview": {
+          "handFidelityPreserved": null,
+          "sceneTruthStillRecognizable": null,
+          "ceremonialAxisReduced": null,
+          "bilateralSymmetryReduced": null,
+          "multipleCentersOfUse": null,
+          "openCirculation": null,
+          "inhabitableViewpoint": null,
+          "fireSubordinateToRoom": null,
+          "ordinaryDomesticity": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "baseline",
+        "seed": 190923,
+        "attemptId": "hearth-structural-memory-0041-s190923-a",
+        "candidateId": "7f6e333029187dc9ff93",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7f6e333029187dc9ff93.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/7f6e333029187dc9ff93.candidate.json",
+        "promptSha256": "e98147c93dd7ee7e7388b23ea05c1bf8d5a53d692a6920ea9351ff238b487ddd",
+        "structuralMemory": {
+          "active": false
+        },
+        "promptBudget": {
+          "estimate": "characters_divided_by_four",
+          "beforeTokens": 1888,
+          "afterTokens": 259,
+          "targetTokens": 300,
+          "overTarget": false,
+          "droppedSections": [
+            "closing",
+            "symbolic_motifs",
+            "edge",
+            "virynism_hand",
+            "brush_dialect",
+            "virynism_archetype",
+            "scene_directives",
+            "medium",
+            "lighting",
+            "camera",
+            "surface",
+            "literal_motifs"
+          ],
+          "requiredSectionsPreserved": true,
+          "rawBaseTokensEstimate": 905,
+          "compactBaseTokensEstimate": 259,
+          "compaction": "0041_causal_trial_v1"
+        },
+        "status": "rendered",
+        "outputSha256": "03995a2092e9df9b2a03784e1eab5e9d1f12fb5bd83f634e4a2ce4ef7c0dc636",
+        "humanReview": {
+          "handFidelityPreserved": null,
+          "sceneTruthStillRecognizable": null,
+          "ceremonialAxisReduced": null,
+          "bilateralSymmetryReduced": null,
+          "multipleCentersOfUse": null,
+          "openCirculation": null,
+          "inhabitableViewpoint": null,
+          "fireSubordinateToRoom": null,
+          "ordinaryDomesticity": null,
+          "notes": null
+        }
+      }
+    ],
+    "structural_memory": [
+      {
+        "condition": "structural_memory",
+        "seed": 190920,
+        "attemptId": "hearth-structural-memory-0041-s190920-b",
+        "candidateId": "baf996b037a950e25da0",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/baf996b037a950e25da0.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/baf996b037a950e25da0.candidate.json",
+        "promptSha256": "b912d6aca13459321ffdbe96f10fb369a48ecfd44fe5295c35d1de259bad8b4d",
+        "structuralMemory": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "e4411a829a4743b9cc10e7bcd2ef587ec5eb7f6d0396a3c88c2a7dc161e9e544",
+          "structuralSha256": "1584bc3f274c8097bcfc07ee92f7ac3b718cdafe0c3737f17246d923f6b56f37",
+          "nodes": [
+            {
+              "id": "warmth",
+              "role": "shared warmth without sovereign centrality"
+            },
+            {
+              "id": "rest",
+              "role": "resting presence without a dominant seat"
+            },
+            {
+              "id": "activity",
+              "role": "ordinary ongoing use without staged display"
+            },
+            {
+              "id": "threshold",
+              "role": "easy arrival, departure, and return"
+            }
+          ],
+          "relations": [
+            "distribute visual weight across at least three non-collinear anchors",
+            "keep circulation between threshold, rest, warmth, and activity visibly open",
+            "let warmth participate in the room without becoming an altar-like geometric center",
+            "let seating or resting forms use varied orientations rather than mirrored bilateral pairing",
+            "frame the room from an inhabitable position rather than a ceremonial frontal viewpoint",
+            "use asymmetry and uneven negative space to imply ongoing life rather than presentation"
+          ],
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "structuralMemoryCannotInventObjects": true,
+            "structuralMemoryCannotInventPeopleOrRelationships": true,
+            "structuralMemoryCannotOverrideFixedObjects": true,
+            "structuralMemoryCannotOverrideThresholdIntegrity": true,
+            "referencePixelsForbidden": true
+          },
+          "painterFacingDirectiveCount": 6
+        },
+        "promptBudget": {
+          "estimate": "characters_divided_by_four",
+          "beforeTokens": 1888,
+          "afterTokens": 259,
+          "targetTokens": 300,
+          "overTarget": false,
+          "droppedSections": [
+            "closing",
+            "symbolic_motifs",
+            "edge",
+            "virynism_hand",
+            "brush_dialect",
+            "virynism_archetype",
+            "scene_directives",
+            "medium",
+            "lighting",
+            "camera",
+            "surface",
+            "literal_motifs"
+          ],
+          "requiredSectionsPreserved": true,
+          "rawBaseTokensEstimate": 905,
+          "compactBaseTokensEstimate": 259,
+          "compaction": "0041_causal_trial_v1",
+          "structuralMemoryAddedTokensEstimate": 110,
+          "afterStructuralMemoryTokensEstimate": 369
+        },
+        "status": "rendered",
+        "outputSha256": "83f0acb07cdb275855cc4ea0eb95d4867031b9b1e40a1fcd43d44dc659e83dcd",
+        "humanReview": {
+          "handFidelityPreserved": null,
+          "sceneTruthStillRecognizable": null,
+          "ceremonialAxisReduced": null,
+          "bilateralSymmetryReduced": null,
+          "multipleCentersOfUse": null,
+          "openCirculation": null,
+          "inhabitableViewpoint": null,
+          "fireSubordinateToRoom": null,
+          "ordinaryDomesticity": null,
+          "notes": null
+        }
+      },
+      {
+        "condition": "structural_memory",
+        "seed": 190923,
+        "attemptId": "hearth-structural-memory-0041-s190923-b",
+        "candidateId": "3157c4d8bbb2280e2eee",
+        "image": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3157c4d8bbb2280e2eee.png",
+        "candidateRecord": ".velastra/candidates/velastra.place_tableau.1hsb6ko/3157c4d8bbb2280e2eee.candidate.json",
+        "promptSha256": "b912d6aca13459321ffdbe96f10fb369a48ecfd44fe5295c35d1de259bad8b4d",
+        "structuralMemory": {
+          "active": true,
+          "profileId": "house_freedom_hearth_v1",
+          "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+          "registrySha256": "e4411a829a4743b9cc10e7bcd2ef587ec5eb7f6d0396a3c88c2a7dc161e9e544",
+          "structuralSha256": "1584bc3f274c8097bcfc07ee92f7ac3b718cdafe0c3737f17246d923f6b56f37",
+          "nodes": [
+            {
+              "id": "warmth",
+              "role": "shared warmth without sovereign centrality"
+            },
+            {
+              "id": "rest",
+              "role": "resting presence without a dominant seat"
+            },
+            {
+              "id": "activity",
+              "role": "ordinary ongoing use without staged display"
+            },
+            {
+              "id": "threshold",
+              "role": "easy arrival, departure, and return"
+            }
+          ],
+          "relations": [
+            "distribute visual weight across at least three non-collinear anchors",
+            "keep circulation between threshold, rest, warmth, and activity visibly open",
+            "let warmth participate in the room without becoming an altar-like geometric center",
+            "let seating or resting forms use varied orientations rather than mirrored bilateral pairing",
+            "frame the room from an inhabitable position rather than a ceremonial frontal viewpoint",
+            "use asymmetry and uneven negative space to imply ongoing life rather than presentation"
+          ],
+          "laws": {
+            "sceneTruthRemainsAuthoritative": true,
+            "structuralMemoryCannotInventObjects": true,
+            "structuralMemoryCannotInventPeopleOrRelationships": true,
+            "structuralMemoryCannotOverrideFixedObjects": true,
+            "structuralMemoryCannotOverrideThresholdIntegrity": true,
+            "referencePixelsForbidden": true
+          },
+          "painterFacingDirectiveCount": 6
+        },
+        "promptBudget": {
+          "estimate": "characters_divided_by_four",
+          "beforeTokens": 1888,
+          "afterTokens": 259,
+          "targetTokens": 300,
+          "overTarget": false,
+          "droppedSections": [
+            "closing",
+            "symbolic_motifs",
+            "edge",
+            "virynism_hand",
+            "brush_dialect",
+            "virynism_archetype",
+            "scene_directives",
+            "medium",
+            "lighting",
+            "camera",
+            "surface",
+            "literal_motifs"
+          ],
+          "requiredSectionsPreserved": true,
+          "rawBaseTokensEstimate": 905,
+          "compactBaseTokensEstimate": 259,
+          "compaction": "0041_causal_trial_v1",
+          "structuralMemoryAddedTokensEstimate": 110,
+          "afterStructuralMemoryTokensEstimate": 369
+        },
+        "status": "rendered",
+        "outputSha256": "da16df957ac6ae80e04538baa2897dedc2245cf08243dcc76dbad0c402a4a577",
+        "humanReview": {
+          "handFidelityPreserved": null,
+          "sceneTruthStillRecognizable": null,
+          "ceremonialAxisReduced": null,
+          "bilateralSymmetryReduced": null,
+          "multipleCentersOfUse": null,
+          "openCirculation": null,
+          "inhabitableViewpoint": null,
+          "fireSubordinateToRoom": null,
+          "ordinaryDomesticity": null,
+          "notes": null
+        }
+      }
+    ]
+  },
+  "executionOrder": [
+    "hearth-structural-memory-0041-s190920-a",
+    "hearth-structural-memory-0041-s190920-b",
+    "hearth-structural-memory-0041-s190923-b",
+    "hearth-structural-memory-0041-s190923-a"
+  ],
+  "promptDiagnostics": {
+    "baselinePromptSha256": "e98147c93dd7ee7e7388b23ea05c1bf8d5a53d692a6920ea9351ff238b487ddd",
+    "structuralPromptSha256": "b912d6aca13459321ffdbe96f10fb369a48ecfd44fe5295c35d1de259bad8b4d",
+    "promptsDifferAcrossConditions": true,
+    "rawBaseTokensEstimate": 905,
+    "compactBaseTokensEstimate": 259,
+    "sharedBaseSafeTargetTokens": 300,
+    "finalBrushSafeTargetTokens": 420,
+    "structuralSectionTokensEstimate": 110,
+    "structuralFinalTokensEstimate": 369
+  },
+  "frozen": {
+    "referencePixels": "none",
+    "sameSeedWithinPair": true,
+    "samePainterlyHandWithinPair": true,
+    "sameAuthoredSceneTruthWithinPair": true,
+    "sameBrushWithinPair": true,
+    "sameProviderWithinPair": true,
+    "onlyExperimentalFactor": "structural_hearth_memory"
+  },
+  "experimentalFactor": {
+    "profileId": "house_freedom_hearth_v1",
+    "registry": "/workspaces/sanctum/world/velastra-place-identities.json",
+    "registrySha256": "e4411a829a4743b9cc10e7bcd2ef587ec5eb7f6d0396a3c88c2a7dc161e9e544",
+    "structuralSha256": "1584bc3f274c8097bcfc07ee92f7ac3b718cdafe0c3737f17246d923f6b56f37",
+    "nodes": [
+      {
+        "id": "warmth",
+        "role": "shared warmth without sovereign centrality"
+      },
+      {
+        "id": "rest",
+        "role": "resting presence without a dominant seat"
+      },
+      {
+        "id": "activity",
+        "role": "ordinary ongoing use without staged display"
+      },
+      {
+        "id": "threshold",
+        "role": "easy arrival, departure, and return"
+      }
+    ],
+    "relations": [
+      "distribute visual weight across at least three non-collinear anchors",
+      "keep circulation between threshold, rest, warmth, and activity visibly open",
+      "let warmth participate in the room without becoming an altar-like geometric center",
+      "let seating or resting forms use varied orientations rather than mirrored bilateral pairing",
+      "frame the room from an inhabitable position rather than a ceremonial frontal viewpoint",
+      "use asymmetry and uneven negative space to imply ongoing life rather than presentation"
+    ],
+    "laws": {
+      "sceneTruthRemainsAuthoritative": true,
+      "structuralMemoryCannotInventObjects": true,
+      "structuralMemoryCannotInventPeopleOrRelationships": true,
+      "structuralMemoryCannotOverrideFixedObjects": true,
+      "structuralMemoryCannotOverrideThresholdIntegrity": true,
+      "referencePixelsForbidden": true
+    }
+  },
+  "humanReview": {
+    "status": "pending",
+    "questions": [
+      "Does the structural arm reduce axial / ceremonial Hearth grammar?",
+      "Does bilateral mirror seating decrease?",
+      "Does the room gain multiple centers of ordinary use?",
+      "Does circulation read as open and inhabitable?",
+      "Does fire become one room element rather than sovereign center?",
+      "Do scene truth and painterly hand remain recognizable?"
+    ],
+    "notes": null
+  },
+  "successCriteria": [
+    "Structural memory produces directional topology change in more than one seed.",
+    "Same-seed pairs remain recognizably related rather than becoming unrelated images.",
+    "Ceremonial axis and bilateral mirror composition reduce.",
+    "Scene truth remains recognizable.",
+    "Painterly hand remains coherent."
+  ],
+  "falsification": [
+    "Structural and baseline arms remain topologically indistinguishable.",
+    "Structural arm merely adds clutter without changing room organization.",
+    "Scene truth degrades.",
+    "Structural directives introduce un-authored people or semantic relationships."
+  ],
+  "laws": {
+    "noCanonMutation": true,
+    "humanReviewRequired": true,
+    "referencePixelsForbidden": true,
+    "structuralMemoryCannotInventSceneFacts": true
+  }
+}

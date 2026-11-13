@@ -92,3 +92,31 @@ For each pair, review:
 ## Interpretation boundary
 
 Visual morphology is evidence about rendering behavior only. It must not be interpreted as evidence of agency, consciousness, supernatural presence, or autonomous intention.
+
+
+## Canonical dry-run inspection
+
+Use this projection after planning. The experimental-factor fields must be read from the nested `.experimentalFactor` object; bare field names at the root will return null and can accidentally substitute top-level `laws`.
+
+```bash
+jq '{
+  status,
+  seeds,
+  promptDiagnostics,
+  frozen,
+  experimentalFactor: .experimentalFactor,
+  executionOrder
+}' labs/velastra/evidence/trials/hearth-structural-memory-0041.json
+```
+
+Expected before inference:
+
+- `status == "planned"`
+- `compactBaseTokensEstimate <= 300`
+- `structuralFinalTokensEstimate <= 420`
+- baseline and structural prompt hashes differ
+- `experimentalFactor.profileId == "house_freedom_hearth_v1"`
+- `experimentalFactor.structuralSha256` is non-null
+- `experimentalFactor.nodes`, `relations`, and `laws` are populated
+- `referencePixels == "none"`
+- `onlyExperimentalFactor == "structural_hearth_memory"`
