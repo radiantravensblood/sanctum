@@ -1,0 +1,35 @@
+{
+  "protocol": "velastra.atelier.raster.v1",
+  "id": "hearth-atelier-0001",
+  "designation": "Hearth study — direct raster authorship",
+  "seed": "hearth-atelier-0001-seed",
+  "canvas": { "width": 1536, "height": 864 },
+  "truth": [
+    "The room is inhabitable rather than staged.",
+    "The fire is low, contained, and subordinate to the room.",
+    "There is exactly one velvet cushion.",
+    "There are no chairs, tables, altars, thrones, people, text, or decorative symbols.",
+    "A permeable threshold remains visually available.",
+    "Negative space is an active part of the room rather than an absence to fill."
+  ],
+  "fixedObjects": [
+    { "id": "fire", "kind": "low_fire", "count": 1, "region": "fire" },
+    { "id": "cushion", "kind": "velvet_cushion", "count": 1, "region": "cushion" }
+  ],
+  "forbiddenObjectKinds": ["chair", "table", "altar", "throne", "person", "text", "symbol"],
+  "layers": [
+    { "id": "ground", "label": "Ground", "opacity": 1, "composite": "source-over" },
+    { "id": "mass", "label": "Mass", "opacity": 1, "composite": "source-over" },
+    { "id": "light", "label": "Light", "opacity": 1, "composite": "screen" },
+    { "id": "detail", "label": "Detail", "opacity": 1, "composite": "source-over" },
+    { "id": "glaze", "label": "Glaze", "opacity": 1, "composite": "source-over" }
+  ],
+  "laws": {
+    "sceneTruthPrecedesBrush": true,
+    "spatialAuthorityPrecedesHand": true,
+    "fixedObjectCardinalityIsLiteral": true,
+    "modelGenerationUsed": false,
+    "sessionMarksRemainReplayable": true,
+    "exportCannotMutateSceneTruth": true
+  }
+}
