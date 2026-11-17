@@ -1,0 +1,38 @@
+{
+  "protocol": "velastra.atelier.raster.v1",
+  "scene": "hearth-atelier-0001",
+  "events": [
+    { "id": "0001-ground-black", "op": "fill", "layer": "ground", "color": [14,10,12], "opacity": 1 },
+    { "id": "0002-wall-field", "op": "regionFill", "layer": "ground", "region": "wall", "gradient": { "from": [0.08,0.08], "to": [0.92,0.63], "stops": [ { "at": 0, "color": [35,17,24,1] }, { "at": 0.58, "color": [22,16,20,1] }, { "at": 1, "color": [11,14,18,1] } ] }, "opacity": 1 },
+    { "id": "0003-floor-field", "op": "regionFill", "layer": "mass", "region": "floor", "gradient": { "from": [0.1,0.7], "to": [0.9,0.95], "stops": [ { "at": 0, "color": [48,30,25,1] }, { "at": 0.5, "color": [55,39,29,1] }, { "at": 1, "color": [24,26,25,1] } ] }, "opacity": 0.95 },
+    { "id": "0004-threshold-cool", "op": "regionFill", "layer": "mass", "region": "threshold", "gradient": { "from": [0.86,0.18], "to": [0.96,0.66], "stops": [ { "at": 0, "color": [28,45,54,1] }, { "at": 0.55, "color": [18,29,34,1] }, { "at": 1, "color": [9,15,18,1] } ] }, "opacity": 0.72 },
+
+    { "id": "0010-wall-broken-umber", "op": "stroke", "layer": "mass", "clipRegion": "wall", "color": [75,39,42], "points": [[0.02,0.35],[0.18,0.30],[0.32,0.33],[0.47,0.28]], "brush": { "radius": 42, "opacity": 0.22, "flow": 0.40, "spacing": 16, "jitter": 0.18, "aspect": 0.42, "angle": -0.08 } },
+    { "id": "0011-wall-cool-drag", "op": "stroke", "layer": "mass", "clipRegion": "wall", "color": [36,44,51], "points": [[0.54,0.26],[0.69,0.23],[0.83,0.29],[0.96,0.24]], "brush": { "radius": 52, "opacity": 0.18, "flow": 0.34, "spacing": 18, "jitter": 0.2, "aspect": 0.35, "angle": 0.06 } },
+    { "id": "0012-floor-worn-line", "op": "stroke", "layer": "detail", "clipRegion": "floor", "color": [104,68,48], "points": [[0.03,0.78],[0.24,0.76],[0.44,0.81],[0.65,0.78],[0.94,0.83]], "brush": { "radius": 10, "opacity": 0.25, "flow": 0.42, "spacing": 6, "jitter": 0.25, "aspect": 0.28 } },
+    { "id": "0013-floor-cool-line", "op": "stroke", "layer": "detail", "clipRegion": "floor", "color": [41,50,49], "points": [[0.12,0.88],[0.37,0.86],[0.61,0.90],[0.87,0.87]], "brush": { "radius": 14, "opacity": 0.22, "flow": 0.34, "spacing": 7, "jitter": 0.22, "aspect": 0.25 } },
+
+    { "id": "0020-fire-ember-mass", "op": "regionFill", "layer": "mass", "region": "fire", "objectId": "fire", "color": [82,28,14], "opacity": 0.90 },
+    { "id": "0021-fire-inner", "op": "dab", "layer": "light", "clipRegion": "fire", "objectId": "fire", "at": [0.215,0.704], "radius": 62, "aspect": 0.46, "color": [255,113,42], "opacity": 0.62, "jitter": 0.08 },
+    { "id": "0022-fire-amber", "op": "dab", "layer": "light", "clipRegion": "fire", "objectId": "fire", "at": [0.228,0.695], "radius": 38, "aspect": 0.52, "color": [255,196,103], "opacity": 0.70 },
+    { "id": "0023-fire-lift", "op": "lift", "layer": "light", "clipRegion": "fire", "objectId": "fire", "at": [0.208,0.718], "radius": 22, "aspect": 0.42, "opacity": 0.14 },
+    { "id": "0024-fire-low-stroke", "op": "stroke", "layer": "detail", "clipRegion": "fire", "objectId": "fire", "color": [236,104,35], "points": [[0.17,0.718],[0.20,0.700],[0.23,0.713],[0.26,0.696]], "brush": { "radius": 11, "opacity": 0.62, "flow": 0.45, "spacing": 5, "jitter": 0.12, "aspect": 0.4 } },
+
+    { "id": "0030-cushion-mass", "op": "regionFill", "layer": "mass", "region": "cushion", "objectId": "cushion", "gradient": { "from": [0.63,0.66], "to": [0.80,0.78], "stops": [ { "at": 0, "color": [92,21,38,1] }, { "at": 0.55, "color": [123,32,50,1] }, { "at": 1, "color": [56,20,31,1] } ] }, "opacity": 0.95 },
+    { "id": "0031-cushion-velvet-warm", "op": "stroke", "layer": "detail", "clipRegion": "cushion", "objectId": "cushion", "color": [182,62,70], "points": [[0.63,0.70],[0.67,0.685],[0.72,0.69],[0.77,0.715]], "brush": { "radius": 22, "opacity": 0.33, "flow": 0.38, "spacing": 8, "jitter": 0.1, "aspect": 0.45, "angle": -0.1 } },
+    { "id": "0032-cushion-shadow-fold", "op": "stroke", "layer": "detail", "clipRegion": "cushion", "objectId": "cushion", "color": [45,12,24], "points": [[0.65,0.74],[0.70,0.725],[0.75,0.742]], "brush": { "radius": 13, "opacity": 0.42, "flow": 0.42, "spacing": 6, "jitter": 0.1, "aspect": 0.32 } },
+    { "id": "0033-cushion-smudge", "op": "smudge", "layer": "detail", "clipRegion": "cushion", "objectId": "cushion", "points": [[0.66,0.705],[0.69,0.695],[0.73,0.704],[0.76,0.716]], "radius": 28, "opacity": 0.20 },
+
+    { "id": "0040-fire-bloom", "op": "dab", "layer": "light", "at": [0.255,0.63], "radius": 165, "aspect": 0.62, "color": [231,112,57], "opacity": 0.13, "jitter": 0.04 },
+    { "id": "0041-reflected-cushion-edge", "op": "stroke", "layer": "light", "clipRegion": "cushion", "objectId": "cushion", "color": [236,123,76], "points": [[0.635,0.675],[0.66,0.665],[0.69,0.667]], "brush": { "radius": 10, "opacity": 0.28, "flow": 0.28, "spacing": 5, "jitter": 0.06, "aspect": 0.35 } },
+    { "id": "0042-threshold-glint", "op": "stroke", "layer": "light", "clipRegion": "threshold", "color": [118,158,172], "points": [[0.89,0.18],[0.895,0.31],[0.90,0.44],[0.905,0.61]], "brush": { "radius": 8, "opacity": 0.22, "flow": 0.36, "spacing": 7, "jitter": 0.08, "aspect": 0.22 } },
+
+    { "id": "0050-wall-scrape-a", "op": "lift", "layer": "mass", "clipRegion": "wall", "points": [[0.08,0.16],[0.23,0.15],[0.36,0.18]], "color": [0,0,0], "brush": { "radius": 8, "opacity": 0.16, "flow": 0.38, "spacing": 5, "jitter": 0.25, "aspect": 0.2 } },
+    { "id": "0051-wall-scrape-b", "op": "stroke", "layer": "detail", "clipRegion": "wall", "color": [102,68,65], "points": [[0.10,0.43],[0.24,0.40],[0.36,0.44]], "brush": { "radius": 6, "opacity": 0.17, "flow": 0.35, "spacing": 4, "jitter": 0.3, "aspect": 0.15 } },
+    { "id": "0052-floor-residue", "op": "stroke", "layer": "detail", "clipRegion": "floor", "color": [122,90,64], "points": [[0.48,0.75],[0.55,0.77],[0.62,0.765]], "brush": { "radius": 7, "opacity": 0.16, "flow": 0.32, "spacing": 4, "jitter": 0.35, "aspect": 0.16 } },
+
+    { "id": "0060-glaze-warm-left", "op": "glaze", "layer": "glaze", "region": "wall", "color": [98,35,31], "opacity": 0.07 },
+    { "id": "0061-glaze-cool-threshold", "op": "glaze", "layer": "glaze", "region": "threshold", "color": [35,67,78], "opacity": 0.12 },
+    { "id": "0062-glaze-room", "op": "glaze", "layer": "glaze", "color": [31,18,24], "opacity": 0.06 }
+  ]
+}
