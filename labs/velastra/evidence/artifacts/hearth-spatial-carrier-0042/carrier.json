@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "protocol": "velastra.spatial_carrier.v1",
+  "width": 1536,
+  "height": 864,
+  "tileSize": 96,
+  "controlShuffleSeed": 42042,
+  "semanticContent": "none",
+  "styleContent": "none",
+  "structured": {
+    "path": ".velastra/spatial-carrier/hearth-0042/structured.png",
+    "sha256": "0b6695aebdc1b2e9add009ed7b56bb868695fd482651f78415ae67f24bba1b5b",
+    "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+    "globalTopologyPreserved": true
+  },
+  "destroyed": {
+    "path": ".velastra/spatial-carrier/hearth-0042/destroyed.png",
+    "sha256": "2bb09fd8a40bd15a1f2f1446741b565214298d446d7ee03da7ea32a3b0ff82e6",
+    "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+    "globalTopologyPreserved": false,
+    "sameLocalTileInventoryAsStructured": true
+  },
+  "laws": {
+    "carrierCannotContainSceneObjects": true,
+    "carrierCannotContainTextOrSymbols": true,
+    "carrierCannotTeachPainterlyHand": true,
+    "carrierCannotMutateSceneTruth": true,
+    "controlMustPreserveExactPixelHistogram": true
+  }
+}
