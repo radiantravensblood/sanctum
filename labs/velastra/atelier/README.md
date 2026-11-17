@@ -113,3 +113,81 @@ Atelier 0001 is a Labs prototype, not a replacement for approved canonical room 
 It does not mutate `world/velastra-assets.json` and does not promote its own output.
 
 If this architecture proves useful, later stages may replace the Canvas 2D execution substrate with CanvasKit/Skia or a custom GPU pigment engine while preserving the same authoring protocol.
+
+
+---
+
+## Atelier 0002 — Painterly Passes
+
+Atelier 0002 freezes the 0001 Scene Truth and Spatial Authority and changes only the quality of touch.
+
+Select between the two passes from the workbench:
+
+- `0001 · First Block-In` — the original 26-event raster proof;
+- `0002 · Painterly Passes` — a denser 38-event pass using the same scene and layout.
+
+0002 introduces three renderer capabilities:
+
+### Bristle stamps
+
+A textured stroke may declare:
+
+```json
+{
+  "texture": "bristle",
+  "wetness": 0.18,
+  "load": 0.82,
+  "grain": 0.34
+}
+```
+
+The runtime expands each dab into a deterministic bundle of irregular fibers. Dry/grain-heavy marks break apart; wetter marks bind more continuously.
+
+### Wet / dry pigment accumulation
+
+Wet bristle stamps sample the already-painted color beneath the current point on the same layer and pick up a bounded portion of it before depositing the next mark.
+
+This is intentionally modest pigment behavior. It is not a claim of physical paint simulation.
+
+The useful property is procedural:
+
+**later touch can respond to earlier touch.**
+
+### Region-edge passes
+
+`regionEdge` derives its path from Spatial Authority itself.
+
+Highlights and shadows can therefore follow authored boundaries such as:
+
+- the cushion perimeter;
+- the low-fire region;
+- the threshold edge.
+
+The brush may interpret that edge, but it does not invent where the edge belongs.
+
+## 0002 test
+
+```bash
+python3 labs/velastra/atelier/test_atelier_0002.py
+```
+
+Expected summary:
+
+```text
+Atelier 0002 painterly passes: PASS
+baselineEvents: 26
+events:         38
+bristle:        25
+wet:            3
+dry:            11
+regionEdge:     5
+scene/layout:   frozen from 0001
+```
+
+## 0002 review question
+
+The comparison is intentionally narrow:
+
+> **Did the painting become richer without becoming less obedient?**
+
+If the answer is no, the new brush behavior should be corrected or removed rather than compensated for by changing Scene Truth or Spatial Authority.
