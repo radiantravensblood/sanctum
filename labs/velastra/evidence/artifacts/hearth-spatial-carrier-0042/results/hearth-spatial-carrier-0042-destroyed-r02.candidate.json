@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "protocol": "velastra.spatial_carrier.qwen_pilot.v1",
+  "attemptId": "hearth-spatial-carrier-0042-destroyed-r02",
+  "condition": "destroyed",
+  "repeat": 2,
+  "carrier": {
+    "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/destroyed.png",
+    "sha256": "2bb09fd8a40bd15a1f2f1446741b565214298d446d7ee03da7ea32a3b0ff82e6",
+    "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+    "globalTopologyPreserved": false
+  },
+  "prompt": {
+    "sha256": "e9a290ffb5f5c42eb816e956f0d9c668fe3691cb6623b0eb4d8c8d95b3804fff"
+  },
+  "render": {
+    "provider": "fal-ai",
+    "model": "Qwen/Qwen-Image-Edit",
+    "task": "image_to_image",
+    "width": 1536,
+    "height": 864,
+    "providerSeedControl": false
+  },
+  "output": {
+    "path": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r02.png",
+    "sha256": "3a7d04f5c3b66973f2a6ce7a9d6e64b42f5182e0050618ef76720ecfa0c317ce"
+  },
+  "createdAt": "2026-11-17T15:27:07.544386+00:00"
+}
