@@ -1,6 +1,6 @@
 # Hearth Spatial Carrier 0042 — Results
 
-**Status:** complete; human review recorded; archive pending local artifact push.
+**Status:** complete; human review recorded; evidence archive sealed.
 
 ## Carrier integrity
 
@@ -25,7 +25,7 @@
 - [x] 2 structured-carrier attempts completed
 - [x] output hashes present in local trial record
 - [x] human review complete
-- [ ] output images / sidecars / trial JSON archived to repository
+- [x] output images / sidecars / render-time trial snapshot archived to repository
 
 ## Transport result
 
@@ -162,3 +162,10 @@ This suggests the next useful intervention must provide stronger structural auth
 ## Interpretation boundary
 
 This result concerns rendering behavior, prompt-conditioned priors, and spatial conditioning only. It is not evidence of agency, consciousness, supernatural presence, or autonomous intention.
+
+
+## Archive note
+
+The archived `results/trial.json` is the immutable **render-time snapshot** captured before human review. The canonical trial record at `labs/velastra/evidence/trials/hearth-spatial-carrier-0042.json` carries the finalized human-review state and disposition.
+
+The archive manifest preserves SHA-256 values for the render-time evidence package. Candidate sidecar output hashes were verified against the trial outputs before closure.
