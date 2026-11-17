@@ -1,7 +1,7 @@
 {
   "version": 1,
   "trial": "hearth-spatial-carrier-0042",
-  "status": "rendered_pending_human_review",
+  "status": "complete",
   "createdAt": "2026-11-17T15:26:35.134650+00:00",
   "question": "Does preserved global carrier geometry shift Hearth topology relative to an exact-pixel-histogram destroyed-layout control?",
   "prompt": {
@@ -126,17 +126,16 @@
     ]
   },
   "humanReview": {
-    "status": "pending",
-    "questions": [
-      "Does preserved geometry reduce the sovereign central axis?",
-      "Does preserved geometry create multiple non-collinear zones of use?",
-      "Does preserved geometry improve open circulation?",
-      "Does preserved geometry reduce bilateral seating grammar?",
-      "Does fire become subordinate to the room?",
-      "Does either condition inherit block/tile artifacts?",
-      "Does scene-truth fidelity differ materially by condition?"
-    ],
-    "notes": null
+    "status": "complete",
+    "reviewedAt": "2026-11-17",
+    "conclusion": "weak_topology_effect",
+    "notes": [
+      "All four Qwen outputs converge on the same narrow Hearth composition family: left masonry fireplace, right red velvet resting form, dark wall field, and dominant warm firelight.",
+      "Structured versus destroyed carriers do not separate strongly enough to support a material global-topology effect.",
+      "Structured carriers may slightly stabilize object identity/compositional resolution, but the effect is subtle and secondary to the model prior.",
+      "Scene-truth fidelity remains imperfect in both conditions: fire is not clearly low/subordinate and the velvet cushion repeatedly becomes a chair-like furnishing.",
+      "Do not expand the 2+2 cohort under the same design."
+    ]
   },
   "laws": {
     "trialCannotMutateCanon": true,
@@ -149,5 +148,10 @@
   },
   "executedAt": "2026-11-17T15:26:36.775120+00:00",
   "completedAt": "2026-11-17T15:27:07.545224+00:00",
-  "providerRequestsSpentTotal": 4
+  "providerRequestsSpentTotal": 4,
+  "disposition": {
+    "expand": false,
+    "nextAction": "regroup_cross_kernel_before_new_inference",
+    "rationale": "Transport and weak carrier influence are established; stronger structural authority is required before further spend."
+  }
 }
