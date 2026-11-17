@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "kernel": "0042",
+  "trial": "hearth-spatial-carrier-0042",
+  "files": [
+    {
+      "name": "transport--z-image-rejected.json",
+      "source": "labs/velastra/evidence/trials/hearth-spatial-carrier-0042-probe.json",
+      "sha256": "01e1495e727c0c3bb84d73804a137bb057a599c94b330363026475a5def68a60"
+    },
+    {
+      "name": "transport--qwen-accepted.json",
+      "source": "labs/velastra/evidence/trials/hearth-spatial-carrier-0042-qwen-probe.json",
+      "sha256": "b5a6c848302d3464464926c8cc03066c391a14fe2e30d5640d2ad9046293d391"
+    },
+    {
+      "name": "structured-r01--qwen-probe.png",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-structured-probe.png",
+      "sha256": "e0cdd95461c1da3e7a920844adf7b163a9a3787983a3ccb99eaf27b7c62eefe4"
+    },
+    {
+      "name": "trial.json",
+      "source": "labs/velastra/evidence/trials/hearth-spatial-carrier-0042.json",
+      "sha256": "2addc671195a3ad13de1a5c2cb56ad89469ad7ec426690e62f19cb033c221486"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-structured-r02.png",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-structured-r02.png",
+      "sha256": "8e346e300ca9a10362c896ac06a50429f03760c9d91d7b01d67d83162a3e4f49"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-structured-r02.candidate.json",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-structured-r02.candidate.json",
+      "sha256": "8a52b1cbe959369fe64830cd1cab396fd23ef4018d711e477c1aa7c0c4c55c54"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-destroyed-r01.png",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r01.png",
+      "sha256": "60b4a247325ec2cee5a657673fc66352d74cc0d8b8ed6f4ad5632f6bb33ee426"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-destroyed-r01.candidate.json",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r01.candidate.json",
+      "sha256": "faaef9991f3cf55414e0d9285f7bb4dbadfb0d079d70c459c569088446303bf0"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-destroyed-r02.png",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r02.png",
+      "sha256": "3a7d04f5c3b66973f2a6ce7a9d6e64b42f5182e0050618ef76720ecfa0c317ce"
+    },
+    {
+      "name": "hearth-spatial-carrier-0042-destroyed-r02.candidate.json",
+      "source": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r02.candidate.json",
+      "sha256": "fcde5748e0b5758c0c1999e9d8fad1c33c990ce137c1c5376bb216730e91064c"
+    }
+  ]
+}

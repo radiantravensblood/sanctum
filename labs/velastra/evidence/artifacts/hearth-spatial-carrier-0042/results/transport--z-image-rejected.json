@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "trial": "hearth-spatial-carrier-0042-transport-probe",
+  "status": "transport_rejected",
+  "createdAt": "2026-11-17T14:33:40.003570+00:00",
+  "purpose": "Test whether the hosted provider accepts Z-Image Turbo image-to-image using the structured non-semantic carrier.",
+  "providerRequestCountAuthorized": 1,
+  "input": {
+    "condition": "structured",
+    "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/structured.png",
+    "sha256": "0b6695aebdc1b2e9add009ed7b56bb868695fd482651f78415ae67f24bba1b5b",
+    "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+    "semanticContent": "none",
+    "styleContent": "none"
+  },
+  "prompt": {
+    "sha256": "e2138b136d38fc6cb46f8fd2ab641f184f8bcd1cad2803e14a5ad86628278b87",
+    "estimatedTokens": 136,
+    "controlPlaneLeaks": []
+  },
+  "render": {
+    "provider": "fal-ai",
+    "model": "Tongyi-MAI/Z-Image-Turbo",
+    "task": "image_to_image",
+    "width": 1536,
+    "height": 864,
+    "providerSeedControl": false,
+    "attempts": 1
+  },
+  "output": null,
+  "providerResult": {
+    "accepted": false,
+    "errorType": "ValueError",
+    "error": "Model Tongyi-MAI/Z-Image-Turbo is not supported for task image-to-image and provider fal-ai. Supported task: text-to-image.",
+    "recordedAt": "2026-11-17T14:33:41.799700+00:00"
+  },
+  "laws": {
+    "probeMaySpendAtMostOneRequest": true,
+    "probeUsesStructuredCarrierOnly": true,
+    "carrierIsNotVisualWitness": true,
+    "promptContainsNoTopologyInstruction": true,
+    "rejectionMustBeRecorded": true,
+    "noRetryOnRejectedTransport": true
+  },
+  "executedAt": "2026-11-17T14:33:41.702045+00:00"
+}
