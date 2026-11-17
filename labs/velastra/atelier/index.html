@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Velastra Atelier 0001</title>
+  <link rel="stylesheet" href="./atelier.css">
+</head>
+<body>
+  <main class="atelier-shell">
+    <header class="atelier-header">
+      <div>
+        <p class="eyebrow">Viryn Labs · Velastra</p>
+        <h1>Atelier 0001</h1>
+        <p class="lede">A raster painting runtime where Scene Truth and Spatial Authority precede the brush.</p>
+      </div>
+      <div class="law">No generative image model is used by this prototype.</div>
+    </header>
+
+    <section class="workbench">
+      <aside class="panel inspector">
+        <section>
+          <h2>Scene Truth</h2>
+          <ul id="scene-facts"></ul>
+        </section>
+        <section>
+          <h2>Fixed objects</h2>
+          <ul id="fixed-objects"></ul>
+        </section>
+        <section>
+          <h2>Spatial Authority</h2>
+          <ul id="regions"></ul>
+        </section>
+        <section>
+          <h2>Protocol</h2>
+          <p id="validation" class="validation"></p>
+        </section>
+      </aside>
+
+      <section class="canvas-column">
+        <div class="canvas-frame">
+          <canvas id="atelier-canvas" aria-label="Velastra Atelier raster canvas"></canvas>
+        </div>
+
+        <div class="transport panel">
+          <div class="transport-row">
+            <button id="reset">Reset</button>
+            <button id="play">Play</button>
+            <button id="finish">Finish</button>
+            <label class="check"><input id="authority-overlay" type="checkbox"> Authority map</label>
+          </div>
+          <div class="timeline-row">
+            <input id="timeline" type="range" min="0" value="0" step="1" aria-label="Painting replay timeline">
+            <output id="event-label">0 / 0</output>
+          </div>
+        </div>
+
+        <div class="paintbar panel">
+          <label class="check"><input id="live-paint" type="checkbox"> Live paint</label>
+          <label>Layer <select id="paint-layer"></select></label>
+          <label>Color <input id="paint-color" type="color" value="#c76f4f"></label>
+          <label>Size <input id="paint-size" type="range" min="3" max="90" value="24"></label>
+          <label>Opacity <input id="paint-opacity" type="range" min="0.05" max="1" step="0.05" value="0.55"></label>
+          <button id="undo">Undo stroke</button>
+          <button id="copy-session">Copy session JSON</button>
+          <button id="export">Export PNG</button>
+          <span>Session strokes: <strong id="session-count">0</strong></span>
+        </div>
+        <p id="status" class="status" role="status"></p>
+      </section>
+    </section>
+  </main>
+
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
