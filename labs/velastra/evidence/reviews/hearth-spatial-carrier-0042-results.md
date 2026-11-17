@@ -14,9 +14,9 @@
 
 ## Transport gate
 
-- [ ] Z-Image hosted image-to-image probe attempted
-- [ ] provider accepted / rejected
-- [ ] fallback decision recorded
+- [x] Z-Image hosted image-to-image probe attempted
+- [x] provider rejected Z-Image Turbo for image-to-image on fal-ai
+- [x] fallback decision recorded: use Qwen Image Edit transport gate
 
 ## Pilot
 
@@ -26,6 +26,24 @@
 - [ ] candidate sidecars present
 - [ ] human review complete
 
+## Transport result
+
+The one-request Z-Image transport gate was executed against:
+
+- provider: `fal-ai`
+- model: `Tongyi-MAI/Z-Image-Turbo`
+- task: `image_to_image`
+
+Provider response:
+
+> `Model Tongyi-MAI/Z-Image-Turbo is not supported for task image-to-image and provider fal-ai. Supported task: text-to-image.`
+
+No retry was attempted.
+
+This is a hosted transport limitation for the tested provider route, not evidence that the Z-Image model family is incapable of image-to-image in other runtimes.
+
+The protocol therefore advances to the documented **Qwen Image Edit** fallback.
+
 ## Conclusion
 
-Pending.
+Pending Qwen transport probe and 2+2 pilot.
