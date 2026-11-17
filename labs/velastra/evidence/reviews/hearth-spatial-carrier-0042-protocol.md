@@ -115,3 +115,54 @@ Stop if:
 ## Interpretation boundary
 
 0042 measures rendering response to spatial conditioning only. It is not evidence of agency, consciousness, supernatural presence, or autonomous intention.
+
+
+## Transport probe runbook
+
+The transport gate is implemented in:
+
+`labs/velastra/painter/spatial_carrier_probe.py`
+
+It is dry-run by default and requires explicit `--execute` to authorize one provider request.
+
+### Validate probe code
+
+```bash
+.venv/bin/python labs/velastra/painter/test_spatial_carrier_probe.py
+```
+
+Expected: 3 passing tests.
+
+### Dry-run
+
+```bash
+.venv/bin/python labs/velastra/painter/spatial_carrier_probe.py
+```
+
+Expected:
+
+- `status=planned`
+- `provider_requests=0`
+- probe record written to `labs/velastra/evidence/trials/hearth-spatial-carrier-0042-probe.json`
+
+Inspect:
+
+```bash
+jq '.' labs/velastra/evidence/trials/hearth-spatial-carrier-0042-probe.json
+```
+
+### One-request transport gate
+
+Only after the dry-run is reviewed:
+
+```bash
+.venv/bin/python labs/velastra/painter/spatial_carrier_probe.py --execute
+```
+
+This authorizes exactly one structured-carrier request.
+
+If accepted, the probe writes:
+
+`.velastra/spatial-carrier/hearth-0042/z-image-structured-probe.png`
+
+If rejected, the provider error is preserved in the probe JSON and there is **no retry** on Z-Image hosted img2img. Proceed to the documented Qwen Image Edit fallback.
