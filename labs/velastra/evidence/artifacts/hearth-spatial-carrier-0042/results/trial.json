@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "trial": "hearth-spatial-carrier-0042",
+  "status": "rendered_pending_human_review",
+  "createdAt": "2026-11-17T15:26:35.134650+00:00",
+  "question": "Does preserved global carrier geometry shift Hearth topology relative to an exact-pixel-histogram destroyed-layout control?",
+  "prompt": {
+    "sha256": "e9a290ffb5f5c42eb816e956f0d9c668fe3691cb6623b0eb4d8c8d95b3804fff",
+    "estimatedTokens": 172,
+    "textIdenticalAcrossConditions": true,
+    "containsExplicitTopologyLayoutInstructions": false
+  },
+  "render": {
+    "provider": "fal-ai",
+    "model": "Qwen/Qwen-Image-Edit",
+    "task": "image_to_image",
+    "width": 1536,
+    "height": 864,
+    "providerSeedControl": false,
+    "interpretation": "distributional_2_plus_2"
+  },
+  "frozen": {
+    "samePromptAcrossConditions": true,
+    "sameModelAcrossConditions": true,
+    "sameProviderAcrossConditions": true,
+    "sameDimensionsAcrossConditions": true,
+    "samePixelHistogramAcrossCarriers": true,
+    "sameLocalTileInventoryAcrossCarriers": true,
+    "carrierSemanticContent": "none",
+    "carrierStyleContent": "none",
+    "onlySystematicFactor": "carrier_global_spatial_retention"
+  },
+  "providerRequestsAlreadySpent": 1,
+  "providerRequestsRemaining": 3,
+  "executionOrder": [
+    "hearth-spatial-carrier-0042-structured-r01",
+    "hearth-spatial-carrier-0042-destroyed-r01",
+    "hearth-spatial-carrier-0042-structured-r02",
+    "hearth-spatial-carrier-0042-destroyed-r02"
+  ],
+  "conditions": {
+    "structured": [
+      {
+        "attemptId": "hearth-spatial-carrier-0042-structured-r01",
+        "condition": "structured",
+        "repeat": 1,
+        "source": "accepted_transport_probe",
+        "carrier": {
+          "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/structured.png",
+          "sha256": "0b6695aebdc1b2e9add009ed7b56bb868695fd482651f78415ae67f24bba1b5b",
+          "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+          "globalTopologyPreserved": true
+        },
+        "output": {
+          "path": ".velastra/spatial-carrier/hearth-0042/qwen-structured-probe.png",
+          "sha256": "e0cdd95461c1da3e7a920844adf7b163a9a3787983a3ccb99eaf27b7c62eefe4"
+        },
+        "candidateRecord": null,
+        "providerResult": {
+          "accepted": true,
+          "recordedAt": "2026-11-17T14:37:07.597746+00:00"
+        }
+      },
+      {
+        "attemptId": "hearth-spatial-carrier-0042-structured-r02",
+        "condition": "structured",
+        "repeat": 2,
+        "carrier": {
+          "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/structured.png",
+          "sha256": "0b6695aebdc1b2e9add009ed7b56bb868695fd482651f78415ae67f24bba1b5b",
+          "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+          "globalTopologyPreserved": true
+        },
+        "output": {
+          "path": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-structured-r02.png",
+          "sha256": "8e346e300ca9a10362c896ac06a50429f03760c9d91d7b01d67d83162a3e4f49"
+        },
+        "candidateRecord": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-structured-r02.candidate.json",
+        "providerResult": {
+          "accepted": true,
+          "recordedAt": "2026-11-17T15:26:57.314935+00:00"
+        }
+      }
+    ],
+    "destroyed": [
+      {
+        "attemptId": "hearth-spatial-carrier-0042-destroyed-r01",
+        "condition": "destroyed",
+        "repeat": 1,
+        "carrier": {
+          "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/destroyed.png",
+          "sha256": "2bb09fd8a40bd15a1f2f1446741b565214298d446d7ee03da7ea32a3b0ff82e6",
+          "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+          "globalTopologyPreserved": false
+        },
+        "output": {
+          "path": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r01.png",
+          "sha256": "60b4a247325ec2cee5a657673fc66352d74cc0d8b8ed6f4ad5632f6bb33ee426"
+        },
+        "candidateRecord": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r01.candidate.json",
+        "providerResult": {
+          "accepted": true,
+          "recordedAt": "2026-11-17T15:26:48.325366+00:00"
+        }
+      },
+      {
+        "attemptId": "hearth-spatial-carrier-0042-destroyed-r02",
+        "condition": "destroyed",
+        "repeat": 2,
+        "carrier": {
+          "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/destroyed.png",
+          "sha256": "2bb09fd8a40bd15a1f2f1446741b565214298d446d7ee03da7ea32a3b0ff82e6",
+          "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+          "globalTopologyPreserved": false
+        },
+        "output": {
+          "path": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r02.png",
+          "sha256": "3a7d04f5c3b66973f2a6ce7a9d6e64b42f5182e0050618ef76720ecfa0c317ce"
+        },
+        "candidateRecord": ".velastra/spatial-carrier/hearth-0042/qwen-pilot/hearth-spatial-carrier-0042-destroyed-r02.candidate.json",
+        "providerResult": {
+          "accepted": true,
+          "recordedAt": "2026-11-17T15:27:07.544357+00:00"
+        }
+      }
+    ]
+  },
+  "humanReview": {
+    "status": "pending",
+    "questions": [
+      "Does preserved geometry reduce the sovereign central axis?",
+      "Does preserved geometry create multiple non-collinear zones of use?",
+      "Does preserved geometry improve open circulation?",
+      "Does preserved geometry reduce bilateral seating grammar?",
+      "Does fire become subordinate to the room?",
+      "Does either condition inherit block/tile artifacts?",
+      "Does scene-truth fidelity differ materially by condition?"
+    ],
+    "notes": null
+  },
+  "laws": {
+    "trialCannotMutateCanon": true,
+    "providerSeedControlMustNotBeClaimed": true,
+    "carrierIsNotVisualWitness": true,
+    "carrierCannotTeachPainterlyHand": true,
+    "carrierCannotCarrySemanticSceneAuthority": true,
+    "pilotMaySpendExactlyThreeAdditionalRequests": true,
+    "noExpansionBeyondTwoPlusTwoWithoutHumanReview": true
+  },
+  "executedAt": "2026-11-17T15:26:36.775120+00:00",
+  "completedAt": "2026-11-17T15:27:07.545224+00:00",
+  "providerRequestsSpentTotal": 4
+}

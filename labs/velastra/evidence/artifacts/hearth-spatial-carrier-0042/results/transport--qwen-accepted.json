@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "trial": "hearth-spatial-carrier-0042-qwen-transport-probe",
+  "status": "transport_accepted",
+  "createdAt": "2026-11-17T14:36:53.933538+00:00",
+  "purpose": "Verify Qwen Image Edit accepts the structured non-semantic carrier before authorizing the 2+2 geometry pilot.",
+  "providerRequestCountAuthorized": 1,
+  "input": {
+    "condition": "structured",
+    "path": "labs/velastra/evidence/artifacts/hearth-spatial-carrier-0042/structured.png",
+    "sha256": "0b6695aebdc1b2e9add009ed7b56bb868695fd482651f78415ae67f24bba1b5b",
+    "pixelHistogramSha256": "99df0839d8169fd1ae2911081865cfea591f4545225984bfbeb21ffcec9e89d5",
+    "semanticContent": "none",
+    "styleContent": "none"
+  },
+  "prompt": {
+    "sha256": "e9a290ffb5f5c42eb816e956f0d9c668fe3691cb6623b0eb4d8c8d95b3804fff",
+    "estimatedTokens": 172,
+    "internalControlLeaks": []
+  },
+  "render": {
+    "provider": "fal-ai",
+    "model": "Qwen/Qwen-Image-Edit",
+    "task": "image_to_image",
+    "width": 1536,
+    "height": 864,
+    "providerSeedControl": false,
+    "attempts": 1
+  },
+  "output": {
+    "path": ".velastra/spatial-carrier/hearth-0042/qwen-structured-probe.png",
+    "sha256": "e0cdd95461c1da3e7a920844adf7b163a9a3787983a3ccb99eaf27b7c62eefe4"
+  },
+  "providerResult": {
+    "accepted": true,
+    "recordedAt": "2026-11-17T14:37:07.597746+00:00"
+  },
+  "laws": {
+    "probeMaySpendAtMostOneRequest": true,
+    "probeUsesStructuredCarrierOnly": true,
+    "carrierIsNotVisualWitness": true,
+    "carrierCarriesNoSemanticSceneAuthority": true,
+    "rejectionMustBeRecorded": true,
+    "noRetryOnRejectedTransport": true
+  },
+  "executedAt": "2026-11-17T14:36:55.141913+00:00"
+}
