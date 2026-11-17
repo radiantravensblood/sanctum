@@ -16,13 +16,22 @@ from __future__ import annotations
 import argparse
 import hashlib
 import inspect
+import importlib.util
 import json
 import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-import spatial_carrier_qwen_probe as probe
+PROBE_MODULE_PATH = Path(__file__).with_name("spatial_carrier_qwen_probe.py")
+PROBE_SPEC = importlib.util.spec_from_file_location(
+    "velastra_spatial_carrier_qwen_probe_runtime",
+    PROBE_MODULE_PATH,
+)
+if PROBE_SPEC is None or PROBE_SPEC.loader is None:
+    raise RuntimeError("Unable to load spatial_carrier_qwen_probe.py")
+probe = importlib.util.module_from_spec(PROBE_SPEC)
+PROBE_SPEC.loader.exec_module(probe)
 
 
 MODEL = probe.MODEL
