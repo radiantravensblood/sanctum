@@ -1,16 +1,34 @@
 import { validateBundle } from './core.mjs';
 import { RasterAtelier } from './engine.mjs';
 
+const PASS_INFO = {
+  '0001': {
+    label: '0001 · First Block-In',
+    events: './scenes/hearth.events.json',
+    exportName: 'hearth-atelier-0001.png'
+  },
+  '0002': {
+    label: '0002 · Painterly Passes',
+    events: './scenes/hearth.events.0002.json',
+    exportName: 'hearth-atelier-0002.png'
+  }
+};
+
 async function loadJSON(path) {
   const response = await fetch(path, { cache: 'no-store' });
   if (!response.ok) throw new Error(`Unable to load ${path}: ${response.status}`);
   return response.json();
 }
 
+const params = new URLSearchParams(window.location.search);
+const requestedPass = params.get('pass');
+const passId = PASS_INFO[requestedPass] ? requestedPass : '0002';
+const pass = PASS_INFO[passId];
+
 const [scene, layout, events] = await Promise.all([
   loadJSON('./scenes/hearth.scene.json'),
   loadJSON('./scenes/hearth.layout.json'),
-  loadJSON('./scenes/hearth.events.json')
+  loadJSON(pass.events)
 ]);
 
 const validation = validateBundle({ scene, layout, events });
@@ -24,6 +42,8 @@ const playButton = document.querySelector('#play');
 const overlayToggle = document.querySelector('#authority-overlay');
 const liveToggle = document.querySelector('#live-paint');
 const layerSelect = document.querySelector('#paint-layer');
+const passSelect = document.querySelector('#pass-select');
+const passLabel = document.querySelector('#pass-label');
 const colorInput = document.querySelector('#paint-color');
 const sizeInput = document.querySelector('#paint-size');
 const opacityInput = document.querySelector('#paint-opacity');
@@ -31,6 +51,20 @@ const sessionCount = document.querySelector('#session-count');
 const status = document.querySelector('#status');
 let timer = null;
 let pointer = null;
+
+for (const [id, info] of Object.entries(PASS_INFO)) {
+  const option = document.createElement('option');
+  option.value = id;
+  option.textContent = info.label;
+  passSelect.append(option);
+}
+passSelect.value = passId;
+passLabel.textContent = pass.label;
+passSelect.addEventListener('change', () => {
+  const url = new URL(window.location.href);
+  url.searchParams.set('pass', passSelect.value);
+  window.location.assign(url);
+});
 
 function refreshTimeline() {
   slider.max = String(atelier.allEvents().length);
@@ -60,7 +94,7 @@ function startPlayback() {
     slider.value = String(index);
     redraw(index);
     if (index >= atelier.allEvents().length) stopPlayback();
-  }, 110);
+  }, passId === '0002' ? 85 : 110);
 }
 
 for (const layer of scene.layers) {
@@ -93,7 +127,7 @@ for (const [id, region] of Object.entries(layout.regions)) {
 }
 
 const validationNode = document.querySelector('#validation');
-validationNode.textContent = `VALID · ${validation.counts.events} events · scene ${validation.fingerprints.scene} · layout ${validation.fingerprints.layout} · events ${validation.fingerprints.events}`;
+validationNode.textContent = `VALID · pass ${passId} · ${validation.counts.events} events · scene ${validation.fingerprints.scene} · layout ${validation.fingerprints.layout} · events ${validation.fingerprints.events}`;
 
 slider.addEventListener('input', () => {
   stopPlayback();
@@ -111,7 +145,7 @@ document.querySelector('#finish').addEventListener('click', () => {
   redraw(atelier.allEvents().length);
 });
 overlayToggle.addEventListener('change', () => atelier.compose({ overlay: overlayToggle.checked }));
-document.querySelector('#export').addEventListener('click', () => atelier.exportPNG('hearth-atelier-0001.png'));
+document.querySelector('#export').addEventListener('click', () => atelier.exportPNG(pass.exportName));
 document.querySelector('#undo').addEventListener('click', () => {
   if (atelier.undoManual()) {
     refreshTimeline();
@@ -120,7 +154,12 @@ document.querySelector('#undo').addEventListener('click', () => {
   }
 });
 document.querySelector('#copy-session').addEventListener('click', async () => {
-  const payload = JSON.stringify({ protocol: scene.protocol, scene: scene.id, events: atelier.sessionEvents }, null, 2);
+  const payload = JSON.stringify({
+    protocol: scene.protocol,
+    scene: scene.id,
+    pass: passId,
+    events: atelier.sessionEvents
+  }, null, 2);
   await navigator.clipboard.writeText(payload);
   status.textContent = 'Session event JSON copied.';
 });
@@ -169,7 +208,10 @@ canvas.addEventListener('pointerup', (event) => {
   slider.value = String(atelier.allEvents().length);
   redraw(atelier.allEvents().length);
 });
-canvas.addEventListener('pointercancel', () => { pointer = null; redraw(atelier.allEvents().length); });
+canvas.addEventListener('pointercancel', () => {
+  pointer = null;
+  redraw(atelier.allEvents().length);
+});
 
 function hexToRgb(hex) {
   const value = hex.replace('#', '');
@@ -180,5 +222,5 @@ function hexToRgb(hex) {
 refreshTimeline();
 slider.value = '0';
 redraw(0);
-status.textContent = 'Atelier 0001 ready. Play the authored pass or enable Live paint.';
-window.VelastraAtelier0001 = { atelier, scene, layout, events, validation };
+status.textContent = `${pass.label} ready. Play the authored pass or enable Live paint.`;
+window.VelastraAtelier = { atelier, scene, layout, events, validation, passId };
