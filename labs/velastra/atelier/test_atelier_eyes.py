@@ -48,7 +48,7 @@ for element_id in (
 ):
     assert f'id="{element_id}"' in html, f"missing Eyes UI element: {element_id}"
 
-assert "app.mjs?v=0003-eyes-retina" in html
+assert "app.mjs?v=0003-eye-response-0001" in html
 
 print("Velastra Eyes / Retina 0001: PASS")
 print("retina:          whole composite")
