@@ -276,3 +276,72 @@ The governing loop is:
 The mathematics remain motor control.
 
 Visual judgment decides what the hands do next.
+
+
+---
+
+## Velastra Eyes — Retina 0001
+
+The first Eyes prototype is native to the Atelier workbench.
+
+It does not call a generative model and it does not claim that numeric image analysis is aesthetic judgment.
+
+**Capture Eyes** completes the current active stage, temporarily removes the Spatial Authority overlay, and samples the actual composite canvas.
+
+It produces four simultaneous views:
+
+- whole composition;
+- fire crop;
+- cushion crop;
+- threshold crop.
+
+Each view exposes simple perceptual instruments:
+
+- mean luminance;
+- local contrast;
+- mean saturation;
+- edge density;
+- warmth.
+
+These numbers are **measurement without sovereignty**.
+
+They may help expose value collapse, flatness, excessive edge activity, or chromatic imbalance. They may not decide whether a passage is beautiful, alive, or worth preserving.
+
+The Eye packet uses protocol:
+
+```text
+velastra.atelier.eye.v1
+```
+
+Its laws are:
+
+```text
+measurementsAreInstrumentsNotJudgment = true
+eyeCannotRewriteSceneTruth = true
+eyeCannotAuthorizeNewObjects = true
+handMustReceiveExplicitPainterlyIntention = true
+```
+
+The intended loop is:
+
+```text
+canvas
+  ↓
+actual pixel checkpoint
+  ↓
+whole + foveal inspection
+  ↓
+visual judgment
+  ↓
+explicit painterly intention
+  ↓
+bounded Hand action
+  ↓
+canvas
+```
+
+Run the Eyes integrity test with:
+
+```bash
+python3 labs/velastra/atelier/test_atelier_eyes.py
+```
