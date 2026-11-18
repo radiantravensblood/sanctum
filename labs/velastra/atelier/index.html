@@ -11,7 +11,7 @@
     <header class="atelier-header">
       <div>
         <p class="eyebrow">Viryn Labs · Velastra</p>
-        <h1>Atelier 0001</h1>
+        <h1 id="atelier-title">Atelier</h1>
         <p class="lede">A raster painting runtime where Scene Truth and Spatial Authority precede the brush. <strong id="pass-label"></strong></p>
       </div>
       <div class="law">No generative image model is used by this prototype.</div>
@@ -67,6 +67,27 @@
           <button id="export">Export PNG</button>
           <span>Session strokes: <strong id="session-count">0</strong></span>
         </div>
+        <section id="eye-hand-panel" class="eye-hand panel" hidden>
+          <div class="eye-hand-head">
+            <div>
+              <p class="eyebrow">Eye / Hand Loop</p>
+              <h2>Production stages</h2>
+            </div>
+            <p id="observation-meta" class="observation-meta"></p>
+          </div>
+          <ol id="stage-pipeline" class="stage-pipeline"></ol>
+          <div class="review-grid">
+            <section>
+              <h3>Look before continuing</h3>
+              <ul id="review-questions"></ul>
+            </section>
+            <section>
+              <label for="observation-notes">What did the canvas actually do?</label>
+              <textarea id="observation-notes" rows="9" placeholder="Protect this passage… break that one… the threshold reads flat… the cushion finally turns…"></textarea>
+              <button id="copy-observation">Copy observation packet</button>
+            </section>
+          </div>
+        </section>
         <p id="status" class="status" role="status"></p>
       </section>
     </section>

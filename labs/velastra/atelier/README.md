@@ -191,3 +191,88 @@ The comparison is intentionally narrow:
 > **Did the painting become richer without becoming less obedient?**
 
 If the answer is no, the new brush behavior should be corrected or removed rather than compensated for by changing Scene Truth or Spatial Authority.
+
+
+---
+
+## Atelier 0003 — Eye / Hand Loop
+
+Atelier 0003 changes the unit of authorship.
+
+0001 proved direct raster obedience.
+
+0002 proved that richer brush behavior can be added without surrendering scene sovereignty.
+
+0003 does **not** pre-author a finished painting. It introduces a gated production sequence:
+
+```text
+Layout
+  ↓
+Rough Key
+  ↓ [observe]
+Breakdown
+  ↓ [observe]
+Second Key
+  ↓ [observe]
+Material / Light
+  ↓ [observe]
+Cleanup
+  ↓ [observe]
+Composite
+```
+
+Only **Layout** and **Rough Key** exist in the first 0003 implementation.
+
+The later stages are intentionally blocked until the active review is answered.
+
+### Rough Key law
+
+The fixed-object regions remain authoritative, but they no longer paint their own silhouettes.
+
+For the Rough Key:
+
+- the fire is constructed from broad bristle strokes inside the fire region;
+- the cushion is constructed from layered mass strokes inside the cushion region;
+- the threshold is constructed from dark and cool vertical strokes inside the threshold region;
+- `regionFill` is forbidden for those three authored form regions.
+
+The wall and floor may still receive broad ground fields because they are environmental support planes rather than fixed-object silhouettes.
+
+### Observation packet
+
+The 0003 workbench exposes the production stages and review questions below the canvas.
+
+After viewing the complete Rough Key, record what the canvas actually did and choose **Copy observation packet**.
+
+The packet records:
+
+- workflow and review identity;
+- current stage;
+- scene, layout, and event fingerprints;
+- authored and manual-event counts;
+- the active review questions;
+- human/painter notes;
+- the fact that the next stage remains locked.
+
+A copied observation does not automatically unlock anything. It is evidence for the next authored decision.
+
+### Test
+
+```bash
+python3 labs/velastra/atelier/test_atelier_0003.py
+```
+
+The test fails if:
+
+- a future stage is prematurely active;
+- the required Rough Key review is missing;
+- fixed forms are painted with `regionFill`;
+- scene object identity/cardinality is lost.
+
+The governing loop is:
+
+> **render → observe → decide → author the next marks → render again**
+
+The mathematics remain motor control.
+
+Visual judgment decides what the hands do next.

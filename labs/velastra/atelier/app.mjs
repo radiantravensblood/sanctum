@@ -3,14 +3,23 @@ import { RasterAtelier } from './engine.mjs';
 
 const PASS_INFO = {
   '0001': {
+    atelier: 'Atelier 0001',
     label: '0001 · First Block-In',
     events: './scenes/hearth.events.json',
     exportName: 'hearth-atelier-0001.png'
   },
   '0002': {
+    atelier: 'Atelier 0002',
     label: '0002 · Painterly Passes',
     events: './scenes/hearth.events.0002.json',
     exportName: 'hearth-atelier-0002.png'
+  },
+  '0003': {
+    atelier: 'Atelier 0003',
+    label: '0003 · Eye / Hand — Rough Key',
+    events: './scenes/hearth.rough-key.0003.json',
+    workflow: './scenes/hearth.workflow.0003.json',
+    exportName: 'hearth-atelier-0003-rough-key.png'
   }
 };
 
@@ -22,13 +31,14 @@ async function loadJSON(path) {
 
 const params = new URLSearchParams(window.location.search);
 const requestedPass = params.get('pass');
-const passId = PASS_INFO[requestedPass] ? requestedPass : '0002';
+const passId = PASS_INFO[requestedPass] ? requestedPass : '0003';
 const pass = PASS_INFO[passId];
 
-const [scene, layout, events] = await Promise.all([
+const [scene, layout, events, workflow] = await Promise.all([
   loadJSON('./scenes/hearth.scene.json'),
   loadJSON('./scenes/hearth.layout.json'),
-  loadJSON(pass.events)
+  loadJSON(pass.events),
+  pass.workflow ? loadJSON(pass.workflow) : Promise.resolve(null)
 ]);
 
 const validation = validateBundle({ scene, layout, events });
@@ -44,11 +54,17 @@ const liveToggle = document.querySelector('#live-paint');
 const layerSelect = document.querySelector('#paint-layer');
 const passSelect = document.querySelector('#pass-select');
 const passLabel = document.querySelector('#pass-label');
+const atelierTitle = document.querySelector('#atelier-title');
 const colorInput = document.querySelector('#paint-color');
 const sizeInput = document.querySelector('#paint-size');
 const opacityInput = document.querySelector('#paint-opacity');
 const sessionCount = document.querySelector('#session-count');
 const status = document.querySelector('#status');
+const eyeHandPanel = document.querySelector('#eye-hand-panel');
+const stagePipeline = document.querySelector('#stage-pipeline');
+const reviewQuestions = document.querySelector('#review-questions');
+const observationNotes = document.querySelector('#observation-notes');
+const observationMeta = document.querySelector('#observation-meta');
 let timer = null;
 let pointer = null;
 
@@ -60,6 +76,8 @@ for (const [id, info] of Object.entries(PASS_INFO)) {
 }
 passSelect.value = passId;
 passLabel.textContent = pass.label;
+atelierTitle.textContent = pass.atelier;
+document.title = `${pass.atelier} · Velastra`;
 passSelect.addEventListener('change', () => {
   const url = new URL(window.location.href);
   url.searchParams.set('pass', passSelect.value);
@@ -94,7 +112,7 @@ function startPlayback() {
     slider.value = String(index);
     redraw(index);
     if (index >= atelier.allEvents().length) stopPlayback();
-  }, passId === '0002' ? 85 : 110);
+  }, passId === '0002' ? 85 : passId === '0003' ? 120 : 110);
 }
 
 for (const layer of scene.layers) {
@@ -129,6 +147,24 @@ for (const [id, region] of Object.entries(layout.regions)) {
 const validationNode = document.querySelector('#validation');
 validationNode.textContent = `VALID · pass ${passId} · ${validation.counts.events} events · scene ${validation.fingerprints.scene} · layout ${validation.fingerprints.layout} · events ${validation.fingerprints.events}`;
 
+if (workflow) {
+  eyeHandPanel.hidden = false;
+  for (const stage of workflow.stages) {
+    const item = document.createElement('li');
+    item.className = `stage stage-${stage.status}`;
+    item.innerHTML = `<span class="stage-mark" aria-hidden="true"></span><div><strong>${stage.id.replace('_', ' · ')} · ${stage.label}</strong><span>${stage.status}</span><p>${stage.purpose}</p></div>`;
+    stagePipeline.append(item);
+  }
+
+  for (const question of workflow.activeReview.questions) {
+    const li = document.createElement('li');
+    li.textContent = question;
+    reviewQuestions.append(li);
+  }
+
+  observationMeta.textContent = `${workflow.activeReview.id} · next stage remains locked until this review is answered.`;
+}
+
 slider.addEventListener('input', () => {
   stopPlayback();
   redraw(Number(slider.value));
@@ -162,6 +198,27 @@ document.querySelector('#copy-session').addEventListener('click', async () => {
   }, null, 2);
   await navigator.clipboard.writeText(payload);
   status.textContent = 'Session event JSON copied.';
+});
+
+document.querySelector('#copy-observation').addEventListener('click', async () => {
+  if (!workflow) return;
+  const payload = {
+    protocol: 'velastra.atelier.observation.v1',
+    workflow: workflow.id,
+    review: workflow.activeReview.id,
+    stage: workflow.activeReview.stage,
+    scene: scene.id,
+    pass: passId,
+    fingerprints: validation.fingerprints,
+    authoredEvents: validation.counts.events,
+    manualSessionEvents: atelier.sessionEvents.length,
+    questions: workflow.activeReview.questions,
+    notes: observationNotes.value.trim(),
+    decision: 'pending_human_and_painter_review',
+    nextStageLocked: true
+  };
+  await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+  status.textContent = 'Observation packet copied. The next stage remains locked.';
 });
 
 function pointFromPointer(event) {
@@ -222,5 +279,8 @@ function hexToRgb(hex) {
 refreshTimeline();
 slider.value = '0';
 redraw(0);
-status.textContent = `${pass.label} ready. Play the authored pass or enable Live paint.`;
-window.VelastraAtelier = { atelier, scene, layout, events, validation, passId };
+status.textContent = workflow
+  ? `${pass.label} ready. Play the Rough Key, inspect it, then record what the canvas actually did.`
+  : `${pass.label} ready. Play the authored pass or enable Live paint.`;
+
+window.VelastraAtelier = { atelier, scene, layout, events, validation, passId, workflow };
