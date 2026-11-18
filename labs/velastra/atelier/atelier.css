@@ -88,6 +88,9 @@ canvas { width: 100%; height: auto; display: block; border-radius: .55rem; backg
 .stage-reviewed { border-color: rgba(149,174,176,.28); }
 .stage-reviewed .stage-mark { background: #87a69f; box-shadow: 0 0 12px rgba(135,166,159,.25); }
 .stage-reviewed strong::after { content: " · witnessed"; color: #87a69f; font-weight: 500; }
+.stage-review-eyes { border-color: rgba(121,145,184,.30); }
+.stage-review-eyes .stage-mark { background: #7f96b8; box-shadow: 0 0 12px rgba(127,150,184,.26); }
+.stage-review-eyes strong::after { content: " · seen"; color: #7f96b8; }
 
 .eyes-panel { margin-top: .75rem; padding: 1rem; }
 .eyes-head { display: flex; justify-content: space-between; gap: 1.5rem; align-items: end; }
