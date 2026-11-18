@@ -1,0 +1,35 @@
+{
+  "protocol": "velastra.atelier.eye-decision.v1",
+  "workflow": "hearth-eye-hand-0003",
+  "basis": "hearth-0003-breakdown-eye-checkpoint.json",
+  "stageObserved": "03_breakdown",
+  "decision": "insert_eye_response_before_second_key",
+  "observation": "At thumbnail scale the room still does not read as a room. Fire reads as a small articulated warm passage; cushion reads as a chromatic mound; threshold reads as a dark vertical interruption; upper wall bands remain procedural. The checkpoint metrics support the visual diagnosis without serving as aesthetic authority.",
+  "protect": [
+    "broken fire shading",
+    "low fire scale",
+    "cushion irregular warm ridge",
+    "large negative-space interval",
+    "scene asymmetry"
+  ],
+  "change": [
+    "establish threshold as actual spatial recession",
+    "connect floor plane toward threshold",
+    "create selective near/far edge separation",
+    "suppress procedural upper-wall bands"
+  ],
+  "doNot": [
+    "touch fire",
+    "touch cushion",
+    "globally brighten the room",
+    "sharpen every edge",
+    "add furniture or decorative cues",
+    "turn threshold into a glowing portal"
+  ],
+  "nextPainterlyIntention": "Create one believable spatial hinge at the threshold/floor/wall junction using selective value separation and lost/found edges, so the Hearth begins to exist as a place before its objects are further described.",
+  "experiment": {
+    "id": "eye-response-0001",
+    "maxMarks": 8,
+    "successQuestion": "Can a few perception-led touches materially improve the whole-composition read by creating spatial orientation without changing scene facts or object rendering?"
+  }
+}
