@@ -1,0 +1,28 @@
+{
+  "protocol": "velastra.atelier.review-resolution.v1",
+  "workflow": "hearth-eye-hand-0003",
+  "review": "hearth-0003-rough-key-review",
+  "stage": "02_rough_key",
+  "scene": "hearth-atelier-0001",
+  "pass": "0003",
+  "decision": "approved_advance",
+  "nextStage": "03_breakdown",
+  "nextStageLocked": false,
+  "carryForward": {
+    "preserve": [
+      "simple denoted fire stroke",
+      "broken-down fire shading",
+      "low contained fire",
+      "single-cushion canon",
+      "active negative space",
+      "threshold remains visually available"
+    ],
+    "solve": [
+      "cushion must read as a resting form with weight and contact",
+      "threshold must read as spatial continuation rather than a navy streak",
+      "upper and back field must stop reading as procedural marks",
+      "room must begin to feel truly lived in"
+    ]
+  },
+  "primaryNeed": "establish a truly lived in space"
+}
