@@ -26,19 +26,23 @@
     {
       "id": "02_rough_key",
       "label": "Rough Key",
-      "status": "active",
+      "status": "reviewed",
       "kind": "paint",
       "source": "hearth.rough-key.0003.json",
       "reviewRequired": true,
       "observationId": "hearth-0003-rough-key-review",
-      "purpose": "Make the whole image read through broad masses and gesture before detail."
+      "purpose": "Make the whole image read through broad masses and gesture before detail.",
+      "reviewResolution": "../observations/hearth-0003-rough-key-resolution.json"
     },
     {
       "id": "03_breakdown",
       "label": "Breakdown",
-      "status": "blocked",
-      "blockedBy": "hearth-0003-rough-key-review",
-      "purpose": "Turn broad masses into volume, plane relationships, and spatial continuity."
+      "status": "active",
+      "purpose": "Turn broad masses into volume, plane relationships, and spatial continuity.",
+      "kind": "paint",
+      "source": "hearth.breakdown.0003.json",
+      "reviewRequired": true,
+      "observationId": "hearth-0003-breakdown-review"
     },
     {
       "id": "04_second_key",
@@ -70,16 +74,16 @@
     }
   ],
   "activeReview": {
-    "id": "hearth-0003-rough-key-review",
-    "stage": "02_rough_key",
+    "id": "hearth-0003-breakdown-review",
+    "stage": "03_breakdown",
     "questions": [
-      "At a glance, do fire, rest, threshold, and breathing room read without explanation?",
-      "Does the cushion already feel like a resting form rather than a diagrammatic ellipse?",
-      "Does the fire remain low and subordinate while still carrying warmth?",
-      "Does the threshold feel like somewhere space continues, or only like a colored panel?",
-      "Which accidental mark or passage should be protected rather than corrected?",
-      "Which passage feels dead, decorative, or merely procedural?",
-      "What should the Breakdown stage solve first?"
+      "Does the cushion now carry weight, contact, and a readable top/front turn without becoming a chair?",
+      "Does the threshold now suggest spatial continuation rather than a navy streak or flat panel?",
+      "Do the upper and back fields read more like room enclosure and less like procedural brush display?",
+      "Did the added fire relationship preserve the low, subordinate fire rather than promoting it?",
+      "Does the Hearth begin to feel lived in without adding clutter or invented objects?",
+      "Which Breakdown passage feels most alive and should be protected?",
+      "What must Second Key clarify without flattening the gesture?"
     ]
   }
 }
