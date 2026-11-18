@@ -1,0 +1,140 @@
+{
+  "protocol": "velastra.atelier.eye.v1",
+  "checkpointId": "hearth-eye-hand-0003--03_breakdown--cdba00c7",
+  "scene": "hearth-atelier-0001",
+  "workflow": "hearth-eye-hand-0003",
+  "stage": "03_breakdown",
+  "fingerprints": {
+    "scene": "b2204938",
+    "layout": "29fc42dc",
+    "events": "cdba00c7"
+  },
+  "stageSources": [
+    {
+      "stage": "02_rough_key",
+      "source": "hearth.rough-key.0003.json",
+      "status": "reviewed",
+      "eventCount": 17
+    },
+    {
+      "stage": "03_breakdown",
+      "source": "hearth.breakdown.0003.json",
+      "status": "active",
+      "eventCount": 18
+    }
+  ],
+  "laws": {
+    "measurementsAreInstrumentsNotJudgment": true,
+    "eyeCannotRewriteSceneTruth": true,
+    "eyeCannotAuthorizeNewObjects": true,
+    "handMustReceiveExplicitPainterlyIntention": true
+  },
+  "sceneTruth": [
+    "The room is inhabitable rather than staged.",
+    "The fire is low, contained, and subordinate to the room.",
+    "There is exactly one velvet cushion.",
+    "There are no chairs, tables, altars, thrones, people, text, or decorative symbols.",
+    "A permeable threshold remains visually available.",
+    "Negative space is an active part of the room rather than an absence to fill."
+  ],
+  "spatialRelations": [
+    "fire and cushion are not mirrored across a central axis",
+    "negative_space separates the main masses rather than becoming a focal object",
+    "threshold remains open and visually distinct from the fire",
+    "fire is lower than the cushion's visual center",
+    "no region is permitted to become a throne or altar axis"
+  ],
+  "views": [
+    {
+      "id": "whole",
+      "label": "Whole composition",
+      "bounds": { "x0": 0, "y0": 0, "x1": 1, "y1": 1 },
+      "metrics": {
+        "meanLuminance": 0.086,
+        "contrast": 0.038,
+        "meanSaturation": 0.407,
+        "edgeDensity": 0.001,
+        "warmth": 0.031
+      }
+    },
+    {
+      "id": "fire",
+      "label": "Fire",
+      "bounds": {
+        "x0": 0.12100000000000002,
+        "y0": 0.6273999999999998,
+        "x1": 0.31899999999999995,
+        "y1": 0.7726000000000001
+      },
+      "metrics": {
+        "meanLuminance": 0.157,
+        "contrast": 0.044,
+        "meanSaturation": 0.516,
+        "edgeDensity": 0.009,
+        "warmth": 0.127
+      }
+    },
+    {
+      "id": "cushion",
+      "label": "Cushion",
+      "bounds": {
+        "x0": 0.5648,
+        "y0": 0.621,
+        "x1": 0.8552,
+        "y1": 0.819
+      },
+      "metrics": {
+        "meanLuminance": 0.112,
+        "contrast": 0.031,
+        "meanSaturation": 0.395,
+        "edgeDensity": 0,
+        "warmth": 0.069
+      }
+    },
+    {
+      "id": "threshold",
+      "label": "Threshold",
+      "bounds": {
+        "x0": 0.816,
+        "y0": 0,
+        "x1": 1,
+        "y1": 0.7991999999999999
+      },
+      "metrics": {
+        "meanLuminance": 0.06,
+        "contrast": 0.021,
+        "meanSaturation": 0.389,
+        "edgeDensity": 0,
+        "warmth": -0.026
+      }
+    }
+  ],
+  "questions": [
+    "At thumbnail scale, what reads before explanation?",
+    "Which form collapses back into a mark when seen in isolation?",
+    "Which edge relationships create depth, and which flatten it?",
+    "Which passage has life and should be protected from correction?",
+    "What single visual correction has the highest leverage for the next hand action?"
+  ],
+  "eyeDecision": {
+    "observation": "",
+    "protect": [],
+    "change": [],
+    "doNot": [],
+    "nextPainterlyIntention": ""
+  },
+  "activeReview": {
+    "id": "hearth-0003-breakdown-review",
+    "stage": "03_breakdown",
+    "questions": [
+      "Does the cushion now carry weight, contact, and a readable top/front turn without becoming a chair?",
+      "Does the threshold now suggest spatial continuation rather than a navy streak or flat panel?",
+      "Do the upper and back fields read more like room enclosure and less like procedural brush display?",
+      "Did the added fire relationship preserve the low, subordinate fire rather than promoting it?",
+      "Does the Hearth begin to feel lived in without adding clutter or invented objects?",
+      "Which Breakdown passage feels most alive and should be protected?",
+      "What must Second Key clarify without flattening the gesture?"
+    ]
+  },
+  "humanNotesAtCapture": ""
+}
