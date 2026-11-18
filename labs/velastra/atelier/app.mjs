@@ -1,5 +1,6 @@
 import { validateBundle } from './core.mjs';
 import { RasterAtelier } from './engine.mjs';
+import { captureEyeCheckpoint, renderEyeCheckpoint, exportCheckpointPNG } from './eyes.mjs';
 
 const PASS_INFO = {
   '0001': {
@@ -102,8 +103,15 @@ const stagePipeline = document.querySelector('#stage-pipeline');
 const reviewQuestions = document.querySelector('#review-questions');
 const observationNotes = document.querySelector('#observation-notes');
 const observationMeta = document.querySelector('#observation-meta');
+const eyesPanel = document.querySelector('#eyes-panel');
+const eyeViews = document.querySelector('#eye-views');
+const eyesMeta = document.querySelector('#eyes-meta');
+const captureEyesButton = document.querySelector('#capture-eyes');
+const copyEyePacketButton = document.querySelector('#copy-eye-packet');
+const exportEyePngButton = document.querySelector('#export-eye-png');
 let timer = null;
 let pointer = null;
+let eyeCheckpoint = null;
 
 for (const [id, info] of Object.entries(PASS_INFO)) {
   const option = document.createElement('option');
@@ -191,6 +199,7 @@ validationNode.textContent = `VALID · pass ${passId} · ${validation.counts.eve
 
 if (workflow) {
   eyeHandPanel.hidden = false;
+  eyesPanel.hidden = false;
   for (const stage of workflow.stages) {
     const item = document.createElement('li');
     item.className = `stage stage-${stage.status}`;
@@ -206,6 +215,52 @@ if (workflow) {
 
   observationMeta.textContent = `${workflow.activeReview.id} · next stage remains locked until this review is answered.`;
 }
+
+
+function captureEyes() {
+  if (!workflow || !activeStage) return;
+
+  stopPlayback();
+  const finalCount = atelier.allEvents().length;
+  slider.value = String(finalCount);
+  atelier.replay(finalCount);
+  atelier.compose({ overlay: false });
+  eventLabel.textContent = `${finalCount} / ${finalCount}`;
+
+  eyeCheckpoint = captureEyeCheckpoint({
+    sourceCanvas: canvas,
+    layout,
+    scene,
+    workflow,
+    activeStage,
+    validation,
+    stageSources: events.stageSources || []
+  });
+
+  eyeCheckpoint.packet.activeReview = workflow.activeReview;
+  eyeCheckpoint.packet.humanNotesAtCapture = observationNotes.value.trim();
+
+  renderEyeCheckpoint(eyeCheckpoint, eyeViews);
+  eyesMeta.textContent = `${eyeCheckpoint.checkpointId} · ${eyeCheckpoint.views.length} views · actual composite pixels · numeric measurements are non-sovereign instruments`;
+  copyEyePacketButton.disabled = false;
+  exportEyePngButton.disabled = false;
+
+  atelier.compose({ overlay: overlayToggle.checked });
+  status.textContent = `Eyes captured ${activeStage.label}. Inspect the whole image and foveal crops before deciding the next hand action.`;
+}
+
+captureEyesButton.addEventListener('click', captureEyes);
+
+copyEyePacketButton.addEventListener('click', async () => {
+  if (!eyeCheckpoint) return;
+  await navigator.clipboard.writeText(JSON.stringify(eyeCheckpoint.packet, null, 2));
+  status.textContent = 'Eye packet copied. Pair it with the visible checkpoint when requesting painterly judgment.';
+});
+
+exportEyePngButton.addEventListener('click', () => {
+  if (!eyeCheckpoint) return;
+  exportCheckpointPNG(eyeCheckpoint, `hearth-${activeStage?.id || 'checkpoint'}-eyes.png`);
+});
 
 slider.addEventListener('input', () => {
   stopPlayback();
@@ -327,4 +382,16 @@ status.textContent = workflow
   ? `${activeStage ? activeStage.label : pass.label} ready. ${passSource}. Play the cumulative painting, inspect the active stage, then record what the canvas actually did.`
   : `${pass.label} ready. ${passSource}. Play the authored pass or enable Live paint.`;
 
-window.VelastraAtelier = { atelier, scene, layout, events, validation, passId, workflow, activeStage, stagePackets };
+window.VelastraAtelier = {
+  atelier,
+  scene,
+  layout,
+  events,
+  validation,
+  passId,
+  workflow,
+  activeStage,
+  stagePackets,
+  get eyeCheckpoint() { return eyeCheckpoint; },
+  captureEyes
+};
