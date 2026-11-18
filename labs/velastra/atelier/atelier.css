@@ -84,3 +84,7 @@ canvas { width: 100%; height: auto; display: block; border-radius: .55rem; backg
   .eye-hand-head { align-items: start; flex-direction: column; }
   .observation-meta { text-align: left; }
 }
+
+.stage-reviewed { border-color: rgba(149,174,176,.28); }
+.stage-reviewed .stage-mark { background: #87a69f; box-shadow: 0 0 12px rgba(135,166,159,.25); }
+.stage-reviewed strong::after { content: " · witnessed"; color: #87a69f; font-weight: 500; }
