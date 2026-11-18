@@ -16,10 +16,9 @@ const PASS_INFO = {
   },
   '0003': {
     atelier: 'Atelier 0003',
-    label: '0003 · Eye / Hand — Rough Key',
-    events: './scenes/hearth.rough-key.0003.json',
+    label: '0003 · Eye / Hand — Breakdown',
     workflow: './scenes/hearth.workflow.0003.json',
-    exportName: 'hearth-atelier-0003-rough-key.png'
+    exportName: 'hearth-atelier-0003-breakdown.png'
   }
 };
 
@@ -35,12 +34,49 @@ const branchDefaultPass = '0003';
 const passId = PASS_INFO[requestedPass] ? requestedPass : branchDefaultPass;
 const pass = PASS_INFO[passId];
 
-const [scene, layout, events, workflow] = await Promise.all([
+const [scene, layout, workflow] = await Promise.all([
   loadJSON('./scenes/hearth.scene.json'),
   loadJSON('./scenes/hearth.layout.json'),
-  loadJSON(pass.events),
   pass.workflow ? loadJSON(pass.workflow) : Promise.resolve(null)
 ]);
+
+const activeStage = workflow
+  ? workflow.stages.find((stage) => stage.status === 'active') || null
+  : null;
+
+let stagePackets = [];
+let events;
+
+if (workflow) {
+  const paintStages = workflow.stages.filter(
+    (stage) => stage.kind === 'paint' && ['reviewed', 'active'].includes(stage.status)
+  );
+
+  stagePackets = await Promise.all(
+    paintStages.map(async (stage) => ({
+      stage,
+      packet: await loadJSON('./scenes/' + stage.source)
+    }))
+  );
+
+  events = {
+    protocol: 'velastra.atelier.raster.v1',
+    scene: scene.id,
+    pass: activeStage ? `0003-${activeStage.id}` : '0003',
+    designation: activeStage
+      ? `Eye / Hand Loop — ${activeStage.label}`
+      : 'Eye / Hand Loop',
+    stageSources: stagePackets.map(({ stage, packet }) => ({
+      stage: stage.id,
+      source: stage.source,
+      status: stage.status,
+      eventCount: (packet.events || []).length
+    })),
+    events: stagePackets.flatMap(({ packet }) => packet.events || [])
+  };
+} else {
+  events = await loadJSON(pass.events);
+}
 
 const validation = validateBundle({ scene, layout, events });
 if (!validation.valid) throw new Error('Atelier bundle invalid: ' + validation.errors.join('; '));
@@ -76,7 +112,9 @@ for (const [id, info] of Object.entries(PASS_INFO)) {
   passSelect.append(option);
 }
 passSelect.value = passId;
-passLabel.textContent = pass.label;
+passLabel.textContent = activeStage
+  ? `0003 · Eye / Hand — ${activeStage.label}`
+  : pass.label;
 atelierTitle.textContent = pass.atelier;
 document.title = `${pass.atelier} · Velastra`;
 passSelect.addEventListener('change', () => {
@@ -146,7 +184,10 @@ for (const [id, region] of Object.entries(layout.regions)) {
 }
 
 const validationNode = document.querySelector('#validation');
-validationNode.textContent = `VALID · pass ${passId} · ${validation.counts.events} events · scene ${validation.fingerprints.scene} · layout ${validation.fingerprints.layout} · events ${validation.fingerprints.events}`;
+const stageSummary = stagePackets.length
+  ? ' · ' + stagePackets.map(({ stage, packet }) => `${stage.id}:${(packet.events || []).length}`).join(' + ')
+  : '';
+validationNode.textContent = `VALID · pass ${passId} · ${validation.counts.events} events${stageSummary} · scene ${validation.fingerprints.scene} · layout ${validation.fingerprints.layout} · events ${validation.fingerprints.events}`;
 
 if (workflow) {
   eyeHandPanel.hidden = false;
@@ -212,6 +253,7 @@ document.querySelector('#copy-observation').addEventListener('click', async () =
     pass: passId,
     fingerprints: validation.fingerprints,
     authoredEvents: validation.counts.events,
+    stageSources: events.stageSources || [],
     manualSessionEvents: atelier.sessionEvents.length,
     questions: workflow.activeReview.questions,
     notes: observationNotes.value.trim(),
@@ -282,7 +324,7 @@ slider.value = '0';
 redraw(0);
 const passSource = requestedPass ? `URL requested pass=${requestedPass}` : `branch default pass=${branchDefaultPass}`;
 status.textContent = workflow
-  ? `${pass.label} ready. ${passSource}. Play the Rough Key, inspect it, then record what the canvas actually did.`
+  ? `${activeStage ? activeStage.label : pass.label} ready. ${passSource}. Play the cumulative painting, inspect the active stage, then record what the canvas actually did.`
   : `${pass.label} ready. ${passSource}. Play the authored pass or enable Live paint.`;
 
-window.VelastraAtelier = { atelier, scene, layout, events, validation, passId, workflow };
+window.VelastraAtelier = { atelier, scene, layout, events, validation, passId, workflow, activeStage, stagePackets };
