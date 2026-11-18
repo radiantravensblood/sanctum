@@ -202,8 +202,12 @@ if (workflow) {
   eyesPanel.hidden = false;
   for (const stage of workflow.stages) {
     const item = document.createElement('li');
-    item.className = `stage stage-${stage.status}`;
-    item.innerHTML = `<span class="stage-mark" aria-hidden="true"></span><div><strong>${stage.id.replace('_', ' · ')} · ${stage.label}</strong><span>${stage.status}</span><p>${stage.purpose}</p></div>`;
+    const reviewClass = stage.reviewKind ? ` stage-review-${stage.reviewKind}` : '';
+    item.className = `stage stage-${stage.status}${reviewClass}`;
+    const reviewLabel = stage.status === 'reviewed'
+      ? (stage.reviewKind === 'eyes' ? 'reviewed · eyes' : 'reviewed · witnessed')
+      : stage.status;
+    item.innerHTML = `<span class="stage-mark" aria-hidden="true"></span><div><strong>${stage.id.replaceAll('_', ' · ')} · ${stage.label}</strong><span>${reviewLabel}</span><p>${stage.purpose}</p></div>`;
     stagePipeline.append(item);
   }
 
