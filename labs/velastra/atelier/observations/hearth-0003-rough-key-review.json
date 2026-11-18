@@ -1,0 +1,27 @@
+{
+  "protocol": "velastra.atelier.observation.v1",
+  "workflow": "hearth-eye-hand-0003",
+  "review": "hearth-0003-rough-key-review",
+  "stage": "02_rough_key",
+  "scene": "hearth-atelier-0001",
+  "pass": "0003",
+  "fingerprints": {
+    "scene": "b2204938",
+    "layout": "29fc42dc",
+    "events": "359ce1be"
+  },
+  "authoredEvents": 17,
+  "manualSessionEvents": 0,
+  "questions": [
+    "At a glance, do fire, rest, threshold, and breathing room read without explanation?",
+    "Does the cushion already feel like a resting form rather than a diagrammatic ellipse?",
+    "Does the fire remain low and subordinate while still carrying warmth?",
+    "Does the threshold feel like somewhere space continues, or only like a colored panel?",
+    "Which accidental mark or passage should be protected rather than corrected?",
+    "Which passage feels dead, decorative, or merely procedural?",
+    "What should the Breakdown stage solve first?"
+  ],
+  "notes": "I would say the fire stroke is simple yet denoted.\n\nThe cushion is only known because we're trying to represent one... the strokes as of now could be anything.\n\nthe fire is objectively low but only because no form of extra light is being added from it.\n\nthe threshold still feels a bit like a navy streak in a corner but otherwise... it stands towards something\n\ni like the shading of the fire as its been broken down\n\nas of now, the top marks denoting the top/back of the space feel incredibly procedural.\n\nwe need to establish a truly lived in space.",
+  "decision": "pending_human_and_painter_review",
+  "nextStageLocked": true
+}
