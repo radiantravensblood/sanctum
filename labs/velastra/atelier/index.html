@@ -67,6 +67,27 @@
           <button id="export">Export PNG</button>
           <span>Session strokes: <strong id="session-count">0</strong></span>
         </div>
+        <section id="eyes-panel" class="eyes-panel panel" hidden>
+          <div class="eyes-head">
+            <div>
+              <p class="eyebrow">Velastra Eyes · Retina 0001</p>
+              <h2>Perceptual checkpoint</h2>
+              <p>Capture the actual composite canvas, then inspect the whole image and foveal regions before authoring the next hand action.</p>
+            </div>
+            <div class="eyes-actions">
+              <button id="capture-eyes">Capture Eyes</button>
+              <button id="copy-eye-packet" disabled>Copy Eye packet</button>
+              <button id="export-eye-png" disabled>Export checkpoint PNG</button>
+            </div>
+          </div>
+          <p id="eyes-meta" class="eyes-meta">No checkpoint captured yet. Measurements are instruments, not judgment.</p>
+          <div id="eye-views" class="eye-views"></div>
+          <details class="eyes-law">
+            <summary>Eye law</summary>
+            <p>The Eyes may measure and interpret the existing canvas. They may not rewrite Scene Truth, authorize new objects, or treat numeric metrics as aesthetic authority.</p>
+          </details>
+        </section>
+
         <section id="eye-hand-panel" class="eye-hand panel" hidden>
           <div class="eye-hand-head">
             <div>
@@ -93,6 +114,6 @@
     </section>
   </main>
 
-  <script type="module" src="./app.mjs?v=0003-breakdown"></script>
+  <script type="module" src="./app.mjs?v=0003-eyes-retina"></script>
 </body>
 </html>
