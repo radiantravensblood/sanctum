@@ -3,9 +3,18 @@ import { clamp, pointToPixels, regionPath, seededRandom } from './core.mjs';
 function rgba(color, opacity = 1) {
   if (Array.isArray(color)) {
     const [r, g, b, a = 1] = color;
-    return `rgba(${r}, ${g}, ${b}, ${clamp(a * opacity)})`;
+    return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${clamp(a * opacity)})`;
   }
   return color;
+}
+
+function mixColor(a, b, amount) {
+  const t = clamp(amount);
+  return [
+    a[0] * (1 - t) + b[0] * t,
+    a[1] * (1 - t) + b[1] * t,
+    a[2] * (1 - t) + b[2] * t
+  ];
 }
 
 function createLayerCanvas(width, height) {
@@ -66,6 +75,7 @@ export class RasterAtelier {
         case 'regionFill': return this.regionFill(ctx, event);
         case 'dab': return this.dab(ctx, event);
         case 'stroke': return this.stroke(ctx, event);
+        case 'regionEdge': return this.regionEdge(ctx, event);
         case 'glaze': return this.glaze(ctx, event);
         case 'lift': return this.lift(ctx, event);
         case 'smudge': return this.smudge(layer, event);
@@ -108,6 +118,85 @@ export class RasterAtelier {
     ctx.fill();
   }
 
+  sampleLayerColor(ctx, x, y) {
+    const px = Math.max(0, Math.min(this.display.width - 1, Math.round(x)));
+    const py = Math.max(0, Math.min(this.display.height - 1, Math.round(y)));
+    const data = ctx.getImageData(px, py, 1, 1).data;
+    return data[3] > 0 ? [data[0], data[1], data[2]] : null;
+  }
+
+  paintStamp(ctx, {
+    x,
+    y,
+    radius,
+    aspect = 0.7,
+    angle = 0,
+    color,
+    opacity = 1,
+    flow = 1,
+    texture = 'soft',
+    wetness = 0,
+    load = 1,
+    grain = 0,
+    random
+  }) {
+    const under = wetness > 0 ? this.sampleLayerColor(ctx, x, y) : null;
+    const pigment = under ? mixColor(color, under, wetness * 0.58) : color;
+    const alpha = clamp(opacity * flow * load);
+
+    if (texture !== 'bristle') {
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = rgba(pigment);
+      ctx.beginPath();
+      ctx.ellipse(x, y, radius, radius * aspect, angle, 0, Math.PI * 2);
+      ctx.fill();
+      return;
+    }
+
+    const bristles = Math.max(9, Math.round(radius * 0.72));
+    const dryBreak = clamp(grain * (1 - wetness) * 0.86);
+    const spread = radius * 0.72;
+
+    for (let i = 0; i < bristles; i += 1) {
+      if (random() < dryBreak) continue;
+      const lateral = (random() - 0.5) * spread * 2;
+      const longitudinal = (random() - 0.5) * radius * 0.32;
+      const cos = Math.cos(angle);
+      const sin = Math.sin(angle);
+      const bx = x + lateral * -sin + longitudinal * cos;
+      const by = y + lateral * cos + longitudinal * sin;
+      const width = Math.max(0.8, radius * (0.035 + random() * 0.075));
+      const length = radius * (0.55 + random() * 0.9);
+      const valueDrift = (random() - 0.5) * 18 * grain;
+      const fiberColor = [
+        clamp(pigment[0] + valueDrift, 0, 255),
+        clamp(pigment[1] + valueDrift * 0.72, 0, 255),
+        clamp(pigment[2] + valueDrift * 0.45, 0, 255)
+      ];
+      ctx.globalAlpha = alpha * (0.28 + random() * 0.58);
+      ctx.fillStyle = rgba(fiberColor);
+      ctx.beginPath();
+      ctx.ellipse(
+        bx,
+        by,
+        length * 0.5,
+        width,
+        angle + (random() - 0.5) * 0.18,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+    }
+
+    if (wetness > 0.38) {
+      ctx.globalAlpha = alpha * wetness * 0.16;
+      ctx.fillStyle = rgba(pigment);
+      ctx.beginPath();
+      ctx.ellipse(x, y, radius * 0.92, radius * aspect * 0.7, angle, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
   dab(ctx, event) {
     const [x, y] = pointToPixels(event.at, this.display.width, this.display.height);
     const radius = event.radius || 20;
@@ -117,6 +206,26 @@ export class RasterAtelier {
     const jx = (random() - 0.5) * jitter * radius;
     const jy = (random() - 0.5) * jitter * radius;
     ctx.globalCompositeOperation = event.composite || 'source-over';
+
+    if (event.texture === 'bristle') {
+      this.paintStamp(ctx, {
+        x: x + jx,
+        y: y + jy,
+        radius,
+        aspect,
+        angle: event.rotation || 0,
+        color: event.color,
+        opacity: event.opacity ?? 1,
+        flow: event.flow ?? 0.72,
+        texture: 'bristle',
+        wetness: event.wetness ?? 0,
+        load: event.load ?? 1,
+        grain: event.grain ?? 0.3,
+        random
+      });
+      return;
+    }
+
     ctx.globalAlpha = clamp(event.opacity ?? 1);
     const gradient = ctx.createRadialGradient(x + jx, y + jy, 0, x + jx, y + jy, radius);
     gradient.addColorStop(0, rgba(event.color, 1));
@@ -140,7 +249,7 @@ export class RasterAtelier {
     const pixelPoints = points.map((point) => pointToPixels(point, this.display.width, this.display.height));
     ctx.globalCompositeOperation = event.composite || 'source-over';
 
-    const dabAt = (x, y, progress = 0) => {
+    const dabAt = (x, y, progress = 0, travelAngle = brush.angle || 0) => {
       const pressure = Array.isArray(brush.pressure) && brush.pressure.length
         ? brush.pressure[Math.min(brush.pressure.length - 1, Math.floor(progress * brush.pressure.length))]
         : 1;
@@ -148,15 +257,27 @@ export class RasterAtelier {
       const jitter = (brush.jitter || 0) * r;
       const jx = (random() - 0.5) * jitter;
       const jy = (random() - 0.5) * jitter;
-      ctx.globalAlpha = opacity * flow * (0.72 + random() * 0.28);
-      ctx.fillStyle = rgba(event.color, 1);
-      ctx.beginPath();
-      ctx.ellipse(x + jx, y + jy, r, r * (brush.aspect || 0.7), (brush.angle || 0) + (random() - 0.5) * (brush.angleJitter || 0.2), 0, Math.PI * 2);
-      ctx.fill();
+      this.paintStamp(ctx, {
+        x: x + jx,
+        y: y + jy,
+        radius: r,
+        aspect: brush.aspect || 0.7,
+        angle: brush.followPath === false
+          ? (brush.angle || 0)
+          : travelAngle + (brush.angleOffset || 0) + (random() - 0.5) * (brush.angleJitter || 0.12),
+        color: event.color,
+        opacity: opacity * (0.76 + random() * 0.24),
+        flow,
+        texture: brush.texture || 'soft',
+        wetness: brush.wetness ?? 0,
+        load: brush.load ?? 1,
+        grain: brush.grain ?? 0,
+        random
+      });
     };
 
     if (pixelPoints.length === 1) {
-      dabAt(pixelPoints[0][0], pixelPoints[0][1], 0);
+      dabAt(pixelPoints[0][0], pixelPoints[0][1], 0, brush.angle || 0);
       return;
     }
 
@@ -169,14 +290,72 @@ export class RasterAtelier {
       const [x0, y0] = pixelPoints[i - 1];
       const [x1, y1] = pixelPoints[i];
       const distance = Math.hypot(x1 - x0, y1 - y0);
+      const travelAngle = Math.atan2(y1 - y0, x1 - x0);
       const steps = Math.max(1, Math.ceil(distance / spacing));
       for (let step = 0; step <= steps; step += 1) {
         const t = step / steps;
         const x = x0 + (x1 - x0) * t;
         const y = y0 + (y1 - y0) * t;
-        dabAt(x, y, total ? (traveled + distance * t) / total : 0);
+        dabAt(x, y, total ? (traveled + distance * t) / total : 0, travelAngle);
       }
       traveled += distance;
+    }
+  }
+
+  regionEdge(ctx, event) {
+    const region = this.layout.regions[event.region];
+    if (!region) throw new Error('Unknown edge region: ' + event.region);
+    const points = [];
+
+    if (region.shape === 'ellipse') {
+      const segments = event.segments || [[0, 1]];
+      const samples = Math.max(12, event.samples || 72);
+      for (const [start, end] of segments) {
+        const local = [];
+        for (let i = 0; i <= samples; i += 1) {
+          const t = start + (end - start) * (i / samples);
+          const theta = t * Math.PI * 2;
+          const rx = region.rx * this.display.width;
+          const ry = region.ry * this.display.height;
+          const cx = region.cx * this.display.width;
+          const cy = region.cy * this.display.height;
+          const x0 = Math.cos(theta) * rx;
+          const y0 = Math.sin(theta) * ry;
+          const rot = region.rotation || 0;
+          const x = cx + x0 * Math.cos(rot) - y0 * Math.sin(rot);
+          const y = cy + x0 * Math.sin(rot) + y0 * Math.cos(rot);
+          local.push([x / this.display.width, y / this.display.height]);
+        }
+        points.push(local);
+      }
+    } else if (region.shape === 'polygon') {
+      const polygon = region.points || [];
+      const edges = event.edges || polygon.map((_, i) => i);
+      for (const edgeIndex of edges) {
+        const a = polygon[edgeIndex % polygon.length];
+        const b = polygon[(edgeIndex + 1) % polygon.length];
+        points.push([a, b]);
+      }
+    } else if (region.shape === 'rect') {
+      const corners = [
+        [region.x, region.y],
+        [region.x + region.w, region.y],
+        [region.x + region.w, region.y + region.h],
+        [region.x, region.y + region.h]
+      ];
+      const edges = event.edges || [0, 1, 2, 3];
+      for (const edgeIndex of edges) {
+        points.push([corners[edgeIndex], corners[(edgeIndex + 1) % 4]]);
+      }
+    }
+
+    for (let i = 0; i < points.length; i += 1) {
+      this.stroke(ctx, {
+        ...event,
+        id: `${event.id}:edge:${i}`,
+        op: 'stroke',
+        points: points[i]
+      });
     }
   }
 
@@ -256,7 +435,19 @@ export class RasterAtelier {
       layer: layerId,
       color,
       points,
-      brush: { radius, opacity, flow: 0.52, spacing: Math.max(2, radius * 0.25), jitter: 0.08, aspect: 0.72 }
+      brush: {
+        radius,
+        opacity,
+        flow: 0.48,
+        spacing: Math.max(2, radius * 0.22),
+        jitter: 0.08,
+        aspect: 0.58,
+        texture: 'bristle',
+        wetness: 0.18,
+        load: 0.82,
+        grain: 0.34,
+        followPath: true
+      }
     };
   }
 
@@ -274,7 +465,7 @@ export class RasterAtelier {
     return true;
   }
 
-  exportPNG(filename = 'velastra-atelier-0001.png') {
+  exportPNG(filename = 'velastra-atelier.png') {
     this.compose();
     const link = document.createElement('a');
     link.download = filename;

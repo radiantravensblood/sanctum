@@ -12,7 +12,7 @@
       <div>
         <p class="eyebrow">Viryn Labs · Velastra</p>
         <h1>Atelier 0001</h1>
-        <p class="lede">A raster painting runtime where Scene Truth and Spatial Authority precede the brush.</p>
+        <p class="lede">A raster painting runtime where Scene Truth and Spatial Authority precede the brush. <strong id="pass-label"></strong></p>
       </div>
       <div class="law">No generative image model is used by this prototype.</div>
     </header>
@@ -44,6 +44,7 @@
 
         <div class="transport panel">
           <div class="transport-row">
+            <label>Pass <select id="pass-select" aria-label="Atelier painting pass"></select></label>
             <button id="reset">Reset</button>
             <button id="play">Play</button>
             <button id="finish">Finish</button>
