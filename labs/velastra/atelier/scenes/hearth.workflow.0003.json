@@ -1,0 +1,85 @@
+{
+  "protocol": "velastra.atelier.eye_hand.v1",
+  "id": "hearth-eye-hand-0003",
+  "designation": "Atelier 0003 — Eye / Hand Loop",
+  "scene": "hearth.scene.json",
+  "layout": "hearth.layout.json",
+  "laws": {
+    "sceneTruthFrozenFrom0001": true,
+    "spatialAuthorityFrozenFrom0001": true,
+    "nextStageRequiresObservation": true,
+    "observationCannotRewriteSceneTruth": true,
+    "observationMayRedirectPainterlyDecision": true,
+    "laterStagesCannotBePreAuthoredBeforeRequiredReview": true,
+    "manualMarksDoNotUnlockStage": true
+  },
+  "stages": [
+    {
+      "id": "01_layout",
+      "label": "Layout",
+      "status": "frozen",
+      "kind": "authority",
+      "source": "hearth.layout.json",
+      "reviewRequired": false,
+      "purpose": "Establish camera, masses, negative space, threshold, and fixed-object regions before paint."
+    },
+    {
+      "id": "02_rough_key",
+      "label": "Rough Key",
+      "status": "active",
+      "kind": "paint",
+      "source": "hearth.rough-key.0003.json",
+      "reviewRequired": true,
+      "observationId": "hearth-0003-rough-key-review",
+      "purpose": "Make the whole image read through broad masses and gesture before detail."
+    },
+    {
+      "id": "03_breakdown",
+      "label": "Breakdown",
+      "status": "blocked",
+      "blockedBy": "hearth-0003-rough-key-review",
+      "purpose": "Turn broad masses into volume, plane relationships, and spatial continuity."
+    },
+    {
+      "id": "04_second_key",
+      "label": "Second Key",
+      "status": "blocked",
+      "blockedBy": "03_breakdown_review",
+      "purpose": "Clarify object identity and form without flattening the rough-key gesture."
+    },
+    {
+      "id": "05_material_light",
+      "label": "Material / Light",
+      "status": "blocked",
+      "blockedBy": "04_second_key_review",
+      "purpose": "Let velvet, ember, wall, floor, and threshold acquire distinct material behavior."
+    },
+    {
+      "id": "06_cleanup",
+      "label": "Cleanup",
+      "status": "blocked",
+      "blockedBy": "05_material_light_review",
+      "purpose": "Resolve only the edges and details that strengthen the image's read."
+    },
+    {
+      "id": "07_composite",
+      "label": "Composite",
+      "status": "blocked",
+      "blockedBy": "06_cleanup_review",
+      "purpose": "Balance glaze, atmosphere, hierarchy, and final integration without rewriting structure."
+    }
+  ],
+  "activeReview": {
+    "id": "hearth-0003-rough-key-review",
+    "stage": "02_rough_key",
+    "questions": [
+      "At a glance, do fire, rest, threshold, and breathing room read without explanation?",
+      "Does the cushion already feel like a resting form rather than a diagrammatic ellipse?",
+      "Does the fire remain low and subordinate while still carrying warmth?",
+      "Does the threshold feel like somewhere space continues, or only like a colored panel?",
+      "Which accidental mark or passage should be protected rather than corrected?",
+      "Which passage feels dead, decorative, or merely procedural?",
+      "What should the Breakdown stage solve first?"
+    ]
+  }
+}
