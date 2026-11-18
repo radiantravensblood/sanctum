@@ -31,7 +31,8 @@ async function loadJSON(path) {
 
 const params = new URLSearchParams(window.location.search);
 const requestedPass = params.get('pass');
-const passId = PASS_INFO[requestedPass] ? requestedPass : '0003';
+const branchDefaultPass = '0003';
+const passId = PASS_INFO[requestedPass] ? requestedPass : branchDefaultPass;
 const pass = PASS_INFO[passId];
 
 const [scene, layout, events, workflow] = await Promise.all([
@@ -279,8 +280,9 @@ function hexToRgb(hex) {
 refreshTimeline();
 slider.value = '0';
 redraw(0);
+const passSource = requestedPass ? `URL requested pass=${requestedPass}` : `branch default pass=${branchDefaultPass}`;
 status.textContent = workflow
-  ? `${pass.label} ready. Play the Rough Key, inspect it, then record what the canvas actually did.`
-  : `${pass.label} ready. Play the authored pass or enable Live paint.`;
+  ? `${pass.label} ready. ${passSource}. Play the Rough Key, inspect it, then record what the canvas actually did.`
+  : `${pass.label} ready. ${passSource}. Play the authored pass or enable Live paint.`;
 
 window.VelastraAtelier = { atelier, scene, layout, events, validation, passId, workflow };
