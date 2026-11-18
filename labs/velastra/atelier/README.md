@@ -345,3 +345,48 @@ Run the Eyes integrity test with:
 ```bash
 python3 labs/velastra/atelier/test_atelier_eyes.py
 ```
+
+
+---
+
+## Eye Response 0001 — spatial hinge experiment
+
+The first native Eyes checkpoint at Breakdown showed a specific perceptual failure:
+
+- the fire was the only locally articulated passage;
+- the cushion had chroma and some volume but weak edge hierarchy;
+- the threshold still read primarily as a dark vertical interruption;
+- the upper wall bands remained procedural;
+- the whole composition lacked a stable depth coordinate.
+
+Rather than advancing directly to Second Key, Atelier 0003 inserts **Eye Response 0001**.
+
+The response is deliberately constrained to eight marks.
+
+It may touch only:
+
+- wall;
+- floor;
+- threshold.
+
+It may not touch:
+
+- fire;
+- cushion;
+- scene object cardinality;
+- Scene Truth;
+- Spatial Authority.
+
+The painterly intention is:
+
+> Create one believable spatial hinge at the threshold/floor/wall junction using selective value separation and lost/found edges, so the Hearth begins to exist as a place before its objects are further described.
+
+The experimental question is:
+
+> Can eight perception-led touches materially improve the whole-composition read without changing scene facts or compensating through prettier object rendering?
+
+After rendering the cumulative 43-event canvas, capture Eyes again.
+
+If the whole-composition read materially improves, the Eye → Hand bridge has demonstrated perceptual leverage.
+
+If it does not, the next bottleneck is likely the expressive power of the Hand rather than observation.
