@@ -1,0 +1,167 @@
+{
+  "protocol": "velastra.atelier.raster.v1",
+  "scene": "hearth-atelier-0001",
+  "pass": "0003-eye-response-0001",
+  "designation": "Eye / Hand Loop — Eye Response 0001",
+  "inherits": "hearth.breakdown.0003.json",
+  "eyeBasis": "../observations/hearth-0003-breakdown-eye-checkpoint.json",
+  "decisionBasis": "../observations/hearth-0003-eye-response-0001-decision.json",
+  "stageLaw": "Touch only wall, floor, and threshold. Establish one spatial hinge through selective value separation and lost/found edges. Do not touch fire or cushion. Do not add scene facts.",
+  "events": [
+    {
+      "id": "3201-threshold-recess",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "threshold",
+      "color": [8,13,17],
+      "points": [[0.884,0.18],[0.892,0.34],[0.898,0.50],[0.904,0.65]],
+      "brush": {
+        "radius": 48,
+        "opacity": 0.34,
+        "flow": 0.40,
+        "spacing": 12,
+        "jitter": 0.03,
+        "aspect": 0.26,
+        "texture": "bristle",
+        "wetness": 0.36,
+        "load": 0.66,
+        "grain": 0.18,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3202-threshold-far-plane",
+      "op": "stroke",
+      "layer": "light",
+      "clipRegion": "threshold",
+      "color": [61,86,92],
+      "points": [[0.950,0.17],[0.956,0.33],[0.958,0.49],[0.960,0.64]],
+      "brush": {
+        "radius": 17,
+        "opacity": 0.18,
+        "flow": 0.28,
+        "spacing": 6,
+        "jitter": 0.03,
+        "aspect": 0.16,
+        "texture": "bristle",
+        "wetness": 0.20,
+        "load": 0.46,
+        "grain": 0.40,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3203-threshold-found-edge",
+      "op": "stroke",
+      "layer": "detail",
+      "color": [91,114,116],
+      "points": [[0.861,0.64],[0.854,0.55],[0.849,0.47]],
+      "brush": {
+        "radius": 4,
+        "opacity": 0.24,
+        "flow": 0.30,
+        "spacing": 3,
+        "jitter": 0.02,
+        "aspect": 0.12,
+        "texture": "bristle",
+        "wetness": 0.04,
+        "load": 0.44,
+        "grain": 0.58,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3204-floor-recession-dark",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "floor",
+      "color": [25,31,31],
+      "points": [[0.56,0.835],[0.69,0.800],[0.80,0.758],[0.895,0.711]],
+      "brush": {
+        "radius": 13,
+        "opacity": 0.18,
+        "flow": 0.30,
+        "spacing": 5,
+        "jitter": 0.06,
+        "aspect": 0.14,
+        "texture": "bristle",
+        "wetness": 0.24,
+        "load": 0.48,
+        "grain": 0.38,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3205-floor-recession-light",
+      "op": "stroke",
+      "layer": "light",
+      "clipRegion": "floor",
+      "color": [57,70,67],
+      "points": [[0.70,0.808],[0.80,0.770],[0.875,0.735],[0.929,0.704]],
+      "brush": {
+        "radius": 7,
+        "opacity": 0.13,
+        "flow": 0.25,
+        "spacing": 3,
+        "jitter": 0.05,
+        "aspect": 0.12,
+        "texture": "bristle",
+        "wetness": 0.12,
+        "load": 0.40,
+        "grain": 0.48,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3206-hinge-contact",
+      "op": "stroke",
+      "layer": "detail",
+      "clipRegion": "floor",
+      "color": [13,18,19],
+      "points": [[0.803,0.704],[0.856,0.694],[0.907,0.694],[0.948,0.700]],
+      "brush": {
+        "radius": 9,
+        "opacity": 0.28,
+        "flow": 0.34,
+        "spacing": 4,
+        "jitter": 0.04,
+        "aspect": 0.14,
+        "texture": "bristle",
+        "wetness": 0.10,
+        "load": 0.56,
+        "grain": 0.42,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3207-upper-right-veil",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "wall",
+      "color": [18,22,27],
+      "points": [[0.57,0.34],[0.69,0.315],[0.80,0.320],[0.90,0.300]],
+      "brush": {
+        "radius": 63,
+        "opacity": 0.20,
+        "flow": 0.36,
+        "spacing": 17,
+        "jitter": 0.07,
+        "aspect": 0.46,
+        "texture": "bristle",
+        "wetness": 0.50,
+        "load": 0.54,
+        "grain": 0.14,
+        "followPath": true
+      }
+    },
+    {
+      "id": "3208-upper-right-integrate",
+      "op": "smudge",
+      "layer": "mass",
+      "clipRegion": "wall",
+      "points": [[0.57,0.315],[0.68,0.310],[0.78,0.315],[0.88,0.305]],
+      "radius": 52,
+      "opacity": 0.10
+    }
+  ]
+}
