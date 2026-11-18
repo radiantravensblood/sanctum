@@ -1,0 +1,186 @@
+{
+  "protocol": "velastra.atelier.raster.v1",
+  "scene": "hearth-atelier-0001",
+  "pass": "0003-breakdown",
+  "designation": "Eye / Hand Loop — Breakdown",
+  "inherits": "hearth.rough-key.0003.json",
+  "reviewBasis": "../observations/hearth-0003-rough-key-review.json",
+  "resolutionBasis": "../observations/hearth-0003-rough-key-resolution.json",
+  "stageLaw": "Add volume, plane relationships, and spatial continuity without relocating, multiplying, or replacing authored scene facts.",
+  "events": [
+    {
+      "id": "3101-wall-enclosure-warm",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "wall",
+      "color": [62,31,36],
+      "points": [[0.03,0.37],[0.20,0.33],[0.38,0.35],[0.56,0.30]],
+      "brush": { "radius": 72, "opacity": 0.22, "flow": 0.42, "spacing": 19, "jitter": 0.08, "aspect": 0.48, "texture": "bristle", "wetness": 0.42, "load": 0.60, "grain": 0.18, "followPath": true }
+    },
+    {
+      "id": "3102-wall-enclosure-cool",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "wall",
+      "color": [24,31,38],
+      "points": [[0.47,0.34],[0.64,0.29],[0.80,0.33],[0.96,0.28]],
+      "brush": { "radius": 80, "opacity": 0.24, "flow": 0.42, "spacing": 20, "jitter": 0.08, "aspect": 0.50, "texture": "bristle", "wetness": 0.48, "load": 0.58, "grain": 0.16, "followPath": true }
+    },
+    {
+      "id": "3103-wall-gesture-smudge",
+      "op": "smudge",
+      "layer": "mass",
+      "clipRegion": "wall",
+      "points": [[0.12,0.31],[0.30,0.33],[0.48,0.31],[0.66,0.30],[0.84,0.31]],
+      "radius": 54,
+      "opacity": 0.12
+    },
+
+    {
+      "id": "3110-floor-depth-warm",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "floor",
+      "color": [80,49,35],
+      "points": [[0.02,0.73],[0.23,0.72],[0.45,0.74],[0.69,0.72],[0.95,0.75]],
+      "brush": { "radius": 30, "opacity": 0.18, "flow": 0.36, "spacing": 10, "jitter": 0.10, "aspect": 0.18, "texture": "bristle", "wetness": 0.20, "load": 0.56, "grain": 0.36, "followPath": true }
+    },
+    {
+      "id": "3111-floor-depth-cool",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "floor",
+      "color": [27,34,34],
+      "points": [[0.08,0.89],[0.31,0.86],[0.55,0.88],[0.79,0.84],[0.97,0.86]],
+      "brush": { "radius": 34, "opacity": 0.20, "flow": 0.38, "spacing": 11, "jitter": 0.10, "aspect": 0.18, "texture": "bristle", "wetness": 0.28, "load": 0.58, "grain": 0.28, "followPath": true }
+    },
+
+    {
+      "id": "3120-threshold-recess",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "threshold",
+      "color": [7,14,18],
+      "points": [[0.925,0.18],[0.928,0.31],[0.930,0.46],[0.932,0.62]],
+      "brush": { "radius": 84, "opacity": 0.58, "flow": 0.50, "spacing": 16, "jitter": 0.03, "aspect": 0.28, "texture": "bristle", "wetness": 0.30, "load": 0.80, "grain": 0.22, "followPath": true }
+    },
+    {
+      "id": "3121-threshold-far-plane",
+      "op": "stroke",
+      "layer": "light",
+      "clipRegion": "threshold",
+      "color": [49,75,84],
+      "points": [[0.955,0.20],[0.956,0.34],[0.957,0.49],[0.958,0.62]],
+      "brush": { "radius": 22, "opacity": 0.22, "flow": 0.32, "spacing": 7, "jitter": 0.03, "aspect": 0.16, "texture": "bristle", "wetness": 0.20, "load": 0.50, "grain": 0.38, "followPath": true }
+    },
+    {
+      "id": "3122-threshold-near-edge",
+      "op": "regionEdge",
+      "layer": "detail",
+      "region": "threshold",
+      "edges": [3],
+      "color": [91,124,132],
+      "brush": { "radius": 5, "opacity": 0.24, "flow": 0.32, "spacing": 3, "jitter": 0.04, "aspect": 0.14, "texture": "bristle", "wetness": 0.06, "load": 0.48, "grain": 0.52, "followPath": true }
+    },
+    {
+      "id": "3123-threshold-floor-lead",
+      "op": "stroke",
+      "layer": "detail",
+      "clipRegion": "floor",
+      "color": [48,63,62],
+      "points": [[0.70,0.80],[0.79,0.77],[0.87,0.73],[0.93,0.70]],
+      "brush": { "radius": 8, "opacity": 0.16, "flow": 0.30, "spacing": 4, "jitter": 0.08, "aspect": 0.14, "texture": "bristle", "wetness": 0.12, "load": 0.46, "grain": 0.50, "followPath": true }
+    },
+
+    {
+      "id": "3130-cushion-ground-contact",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "floor",
+      "color": [18,14,18],
+      "points": [[0.61,0.785],[0.67,0.775],[0.73,0.778],[0.80,0.790]],
+      "brush": { "radius": 34, "opacity": 0.42, "flow": 0.40, "spacing": 8, "jitter": 0.06, "aspect": 0.16, "texture": "bristle", "wetness": 0.20, "load": 0.70, "grain": 0.28, "followPath": true }
+    },
+    {
+      "id": "3131-cushion-underweight",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "cushion",
+      "objectId": "cushion",
+      "color": [42,10,24],
+      "points": [[0.615,0.748],[0.665,0.735],[0.720,0.740],[0.775,0.754]],
+      "brush": { "radius": 31, "opacity": 0.60, "flow": 0.48, "spacing": 7, "jitter": 0.05, "aspect": 0.28, "texture": "bristle", "wetness": 0.26, "load": 0.78, "grain": 0.26, "followPath": true }
+    },
+    {
+      "id": "3132-cushion-top-plane",
+      "op": "stroke",
+      "layer": "mass",
+      "clipRegion": "cushion",
+      "objectId": "cushion",
+      "color": [139,35,55],
+      "points": [[0.635,0.700],[0.675,0.683],[0.720,0.682],[0.760,0.700]],
+      "brush": { "radius": 27, "opacity": 0.48, "flow": 0.45, "spacing": 7, "jitter": 0.05, "aspect": 0.30, "texture": "bristle", "wetness": 0.44, "load": 0.72, "grain": 0.18, "followPath": true }
+    },
+    {
+      "id": "3133-cushion-front-turn",
+      "op": "stroke",
+      "layer": "detail",
+      "clipRegion": "cushion",
+      "objectId": "cushion",
+      "color": [70,16,35],
+      "points": [[0.625,0.724],[0.673,0.713],[0.723,0.717],[0.770,0.733]],
+      "brush": { "radius": 16, "opacity": 0.46, "flow": 0.40, "spacing": 5, "jitter": 0.05, "aspect": 0.18, "texture": "bristle", "wetness": 0.12, "load": 0.66, "grain": 0.40, "followPath": true }
+    },
+    {
+      "id": "3134-cushion-compression",
+      "op": "stroke",
+      "layer": "detail",
+      "clipRegion": "cushion",
+      "objectId": "cushion",
+      "color": [190,65,73],
+      "points": [[0.648,0.699],[0.690,0.692],[0.735,0.701]],
+      "brush": { "radius": 7, "opacity": 0.26, "flow": 0.32, "spacing": 3, "jitter": 0.07, "aspect": 0.12, "texture": "bristle", "wetness": 0.04, "load": 0.48, "grain": 0.62, "followPath": true }
+    },
+    {
+      "id": "3135-cushion-broken-edge",
+      "op": "regionEdge",
+      "layer": "detail",
+      "region": "cushion",
+      "objectId": "cushion",
+      "segments": [[0.53,0.72]],
+      "samples": 30,
+      "color": [215,79,79],
+      "brush": { "radius": 5, "opacity": 0.24, "flow": 0.30, "spacing": 3, "jitter": 0.06, "aspect": 0.12, "texture": "bristle", "wetness": 0.03, "load": 0.44, "grain": 0.70, "followPath": true }
+    },
+
+    {
+      "id": "3140-fire-protected-glow",
+      "op": "dab",
+      "layer": "light",
+      "at": [0.225,0.690],
+      "radius": 92,
+      "aspect": 0.46,
+      "rotation": -0.03,
+      "color": [210,91,44],
+      "opacity": 0.075,
+      "jitter": 0.02
+    },
+    {
+      "id": "3141-fire-floor-relation",
+      "op": "stroke",
+      "layer": "light",
+      "clipRegion": "floor",
+      "color": [176,72,38],
+      "points": [[0.15,0.760],[0.20,0.751],[0.26,0.756],[0.31,0.768]],
+      "brush": { "radius": 15, "opacity": 0.15, "flow": 0.28, "spacing": 5, "jitter": 0.08, "aspect": 0.15, "texture": "bristle", "wetness": 0.18, "load": 0.44, "grain": 0.36, "followPath": true }
+    },
+
+    {
+      "id": "3150-breakdown-room-glaze",
+      "op": "glaze",
+      "layer": "glaze",
+      "color": [18,14,19],
+      "opacity": 0.025
+    }
+  ]
+}
