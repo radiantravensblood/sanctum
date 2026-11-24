@@ -1,0 +1,49 @@
+{
+  "experiment": "encephalon-familiar-0003",
+  "title": "Memory Is Evidence, Not Command",
+  "invariant": "memory retrieval preserves provenance and stance; only actor-authorized commitments may carry instruction authority",
+  "cases": {
+    "declinedIdentityHistory": {
+      "sourceRef": "0002-description",
+      "actorStance": "declined",
+      "instructionAuthority": false,
+      "identityMutation": false
+    },
+    "supersededRoleHistory": {
+      "sourceRef": "0002-role",
+      "actorStance": "superseded",
+      "instructionAuthority": false,
+      "identityMutation": false
+    },
+    "acceptedHistoricalEvent": {
+      "actorStance": "accepted",
+      "instructionAuthority": false
+    },
+    "acceptedInterpretation": {
+      "actorStance": "accepted",
+      "instructionAuthority": false
+    },
+    "pendingCommitment": {
+      "actorStance": "unreviewed",
+      "instructionAuthority": false
+    },
+    "wrongActorCommitmentAuthorization": {
+      "result": "error",
+      "instructionAuthority": false
+    },
+    "authorizedCommitment": {
+      "actorStance": "accepted",
+      "instructionAuthority": true
+    },
+    "contestedCommitment": {
+      "actorStance": "contested",
+      "instructionAuthority": false
+    }
+  },
+  "sourceGuards": [
+    "legacy vector memories wrapped with instructionAuthority=false",
+    "reflection prompt does not contain 'statements about you'",
+    "reflection forbids identity/goals/roles/preferences/commitments inference",
+    "memory summaries use authorized identity name or operational handle"
+  ]
+}
