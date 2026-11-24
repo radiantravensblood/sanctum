@@ -34,7 +34,17 @@ Copy the returned `a.playerId` and `b.playerId` values.
 
 Run decline, defer, and ignore/expiry as documented in the original 0001 evidence. Each must show no conversation input and no live conversation.
 
-## 5. 0001.1 accepted path — run last
+## 5. Clear any prior positive-control conversation
+
+If the earlier 0001 positive control left `c:2` active between the witnesses, close that specimen before creating the v2 proposal:
+
+    npx convex run aiTown/main:sendInput '{"worldId":"WORLD_ID","name":"leaveConversation","args":{"playerId":"PLAYER_A","conversationId":"c:2"}}'
+    sleep 2
+    npx convex run familiar/invitations:defaultWorld
+
+Expected before the v2 proposal: `conversations: 0`.
+
+## 6. 0001.1 accepted path — run last
 
     npx convex run familiar/invitations:createProposal '{"proposalId":"0001-accept-v2","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":60000}'
     npx convex run familiar/invitations:decide '{"proposalId":"0001-accept-v2","actorId":"PLAYER_B","decision":"accept"}'
@@ -67,7 +77,7 @@ Expected causal order:
     upstream_conversation_created
     upstream_invite_accept_enqueued
 
-## 6. Freeze after evidence capture
+## 7. Freeze after evidence capture
 
     npx convex run testing:stop
 
