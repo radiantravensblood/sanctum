@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { DatabaseReader, mutation, query } from '../_generated/server';
+import { DatabaseReader, MutationCtx, mutation, query } from '../_generated/server';
 import { Id } from '../_generated/dataModel';
 import { playerId } from '../aiTown/ids';
 
@@ -96,7 +96,7 @@ export function identityPromptLines(
 }
 
 async function supersedeActiveSlot(
-  ctx: any,
+  ctx: MutationCtx,
   worldId: Id<'worlds'>,
   actorId: string,
   slot: string,
@@ -105,7 +105,7 @@ async function supersedeActiveSlot(
 ) {
   const active = await ctx.db
     .query('familiarIdentityClaims')
-    .withIndex('actorSlot', (q: any) =>
+    .withIndex('actorSlot', (q) =>
       q.eq('worldId', worldId).eq('actorId', actorId).eq('slot', slot),
     )
     .collect();
