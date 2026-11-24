@@ -1,4 +1,4 @@
-# Live Convex runbook — Familiar 0001
+# Live Convex runbook — Familiar 0001 / 0001.1
 
 This runbook assumes the zero-agent world already exists in the disposable Convex development deployment.
 
@@ -10,76 +10,65 @@ From the Sanctum repository root:
     cd .external/ai-town
     npx convex dev --once
 
-Do not run npm audit fix --force; the checkout is a pinned research specimen.
+Do not run `npm audit fix --force`; the checkout is a pinned research specimen.
 
 ## 2. Ensure the world engine is running
 
     npx convex run testing:resume
     npx convex run familiar/invitations:defaultWorld
 
-If testing:resume reports that the world is already running, continue.
+If queued inputs do not process even while world status reports `running`, refresh observation state:
+
+    npx convex run world:heartbeatWorld '{"worldId":"WORLD_ID"}'
+
+AI Town's inactivity cron can stop the engine when `lastViewed` is stale even after `testing:resume`; the heartbeat refreshes `lastViewed` and restarts an inactive world.
 
 ## 3. Create two non-agent witnesses
 
     npx convex run familiar/invitations:setupSyntheticPair
-
-Wait a moment for the input queue, then:
-
     npx convex run familiar/invitations:syntheticPair
 
-Copy the returned a.playerId and b.playerId values. In the examples below, substitute them for PLAYER_A and PLAYER_B.
+Copy the returned `a.playerId` and `b.playerId` values.
 
-## 4. Decline control
+## 4. Negative controls
 
-    npx convex run familiar/invitations:createProposal '{"proposalId":"0001-decline","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":60000}'
-    npx convex run familiar/invitations:decide '{"proposalId":"0001-decline","actorId":"PLAYER_B","decision":"decline"}'
-    npx convex run familiar/invitations:inspect '{"proposalId":"0001-decline"}'
+Run decline, defer, and ignore/expiry as documented in the original 0001 evidence. Each must show no conversation input and no live conversation.
 
-Expected: declined, no conversation input, no live conversation.
+## 5. 0001.1 accepted path — run last
 
-## 5. Defer control
+    npx convex run familiar/invitations:createProposal '{"proposalId":"0001-accept-v2","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":60000}'
+    npx convex run familiar/invitations:decide '{"proposalId":"0001-accept-v2","actorId":"PLAYER_B","decision":"accept"}'
+    npx convex run familiar/invitations:inspect '{"proposalId":"0001-accept-v2"}'
 
-    npx convex run familiar/invitations:createProposal '{"proposalId":"0001-defer","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":60000}'
-    npx convex run familiar/invitations:decide '{"proposalId":"0001-defer","actorId":"PLAYER_B","decision":"defer"}'
-    npx convex run familiar/invitations:inspect '{"proposalId":"0001-defer"}'
+At this inspection the required state is:
 
-Expected: deferred, no conversation input, no live conversation.
+- `actor_accepted` exists;
+- `conversationInput` is null;
+- `liveConversation` is null.
 
-## 6. Ignore / world-expiry control
+Only then enact the accepted proposal:
 
-No actor decision is submitted.
+    npx convex run familiar/invitations:enactAccepted '{"proposalId":"0001-accept-v2"}'
+    sleep 2
+    npx convex run familiar/invitations:inspect '{"proposalId":"0001-accept-v2"}'
 
-    npx convex run familiar/invitations:createProposal '{"proposalId":"0001-ignore","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":0}'
-    npx convex run familiar/invitations:expire '{"proposalId":"0001-ignore"}'
-    npx convex run familiar/invitations:inspect '{"proposalId":"0001-ignore"}'
+Once `conversationInput` is `ok`, materialize the already-authorized upstream invitation acceptance:
 
-Expected: expired, decision absent, event ledger contains proposal_created then world_expired, and no conversation exists.
+    npx convex run familiar/invitations:materializeAccepted '{"proposalId":"0001-accept-v2"}'
+    sleep 2
+    npx convex run familiar/invitations:inspect '{"proposalId":"0001-accept-v2"}'
 
-## 7. Accepted path — run last
-
-    npx convex run familiar/invitations:createProposal '{"proposalId":"0001-accept","inviter":"PLAYER_A","invitee":"PLAYER_B","ttlMs":60000}'
-    npx convex run familiar/invitations:decide '{"proposalId":"0001-accept","actorId":"PLAYER_B","decision":"accept"}'
-
-Wait for the startConversation input to process, then inspect:
-
-    npx convex run familiar/invitations:inspect '{"proposalId":"0001-accept"}'
-
-Once conversationInput is ok, materialize the already-authorized acceptance:
-
-    npx convex run familiar/invitations:materializeAccepted '{"proposalId":"0001-accept"}'
-
-Wait for that input to process and inspect again. Expected causal order:
+Expected causal order:
 
     proposal_created
     actor_accepted
+    enactment_requested
     conversation_start_enqueued
     upstream_conversation_created
     upstream_invite_accept_enqueued
 
-The inspection should show a live conversation only in this accepted case, and acceptInput should resolve successfully.
-
-## 8. Freeze the specimen after evidence capture
+## 6. Freeze after evidence capture
 
     npx convex run testing:stop
 
-Preserve the four inspect outputs with the experiment results. Do not infer success from the UI alone; the event ledger is the evidence.
+Preserve the inspect outputs. Do not infer success from the UI alone; the event ledger is the evidence.
