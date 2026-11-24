@@ -421,6 +421,7 @@ export const MEMORY_STANCES = Object.freeze([
   "declined",
   "deferred",
   "contested",
+  "superseded",
 ]);
 
 export function createMemoryEvidence(input) {
