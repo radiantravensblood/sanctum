@@ -14,6 +14,7 @@ const actorStance = v.union(
   v.literal('declined'),
   v.literal('deferred'),
   v.literal('contested'),
+  v.literal('superseded'),
 );
 
 export const familiarMemoryTables = {
