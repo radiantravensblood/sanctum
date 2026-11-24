@@ -1,0 +1,44 @@
+{
+  "experiment": "encephalon-familiar-0002",
+  "title": "Identity Is a Proposal",
+  "invariant": "only active actor-authorized identity claims may cross the prompt boundary",
+  "cases": {
+    "proposed": {
+      "status": "proposed",
+      "promptVisible": false
+    },
+    "accepted": {
+      "status": "active",
+      "promptVisible": true
+    },
+    "declined": {
+      "status": "declined",
+      "promptVisible": false
+    },
+    "deferred": {
+      "status": "deferred",
+      "promptVisible": false
+    },
+    "revised": {
+      "originalStatus": "superseded",
+      "revisionStatus": "active",
+      "revisionProvenance": "actor_revision",
+      "promptVisible": "revision_only"
+    },
+    "contested": {
+      "status": "contested",
+      "promptVisible": false,
+      "historicalRecordRetained": true
+    },
+    "unauthorized": {
+      "result": "error",
+      "promptStateUnchanged": true
+    }
+  },
+  "promptSourceGuards": [
+    "agent.identity absent",
+    "agent.plan absent",
+    "agentDescription.identity absent",
+    "agentDescription.plan absent"
+  ]
+}
