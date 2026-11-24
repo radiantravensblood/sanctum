@@ -284,7 +284,7 @@ export const contest = mutation({
     const now = Date.now();
     await ctx.db.patch(claim._id, {
       status: 'contested',
-      contestReason: args.reason,
+      ...(args.reason ? { contestReason: args.reason } : {}),
       resolvedAt: now,
       events: [...claim.events, event('identity_claim_contested', args.actorId, { reason: args.reason ?? null })],
     });
