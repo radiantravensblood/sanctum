@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import {
+  createInvitationProposal,
   invitationDecision,
+  applyInvitationDecision,
+  expireInvitation,
   mayJoinConversation,
   proposeIdentityClaim,
   authorizeIdentityClaim,
@@ -11,29 +14,56 @@ import {
   worldBlock,
 } from "./authority-kernel.mjs";
 
-const invitation = {
-  kind: "conversation_invitation",
+const invitation = createInvitationProposal({
   proposalId: "invite-0001",
   inviterActorId: "actor-a",
   inviteeActorId: "actor-b",
-};
+  createdAt: "2026-11-24T12:00:00Z",
+  expiresAt: "2026-11-24T12:05:00Z",
+});
+assert.equal(invitation.status, "pending");
+assert.equal(invitation.actorDecision, null);
+assert.equal(mayJoinConversation(invitation), false);
 
-const refusal = invitationDecision(invitation, {
+const refusalEvent = invitationDecision(invitation, {
   actorId: "actor-b",
   decision: "decline",
   reason: "I do not want to talk right now.",
-  authorizedAt: "2026-11-24T12:00:00Z",
-});
-
-assert.equal(refusal.decision, "decline");
-assert.equal(mayJoinConversation(invitation, refusal), false);
-
-const acceptance = invitationDecision(invitation, {
-  actorId: "actor-b",
-  decision: "accept",
   authorizedAt: "2026-11-24T12:01:00Z",
 });
-assert.equal(mayJoinConversation(invitation, acceptance), true);
+const refused = applyInvitationDecision(invitation, refusalEvent);
+assert.equal(refused.status, "declined");
+assert.equal(mayJoinConversation(refused), false);
+
+const acceptanceEvent = invitationDecision(invitation, {
+  actorId: "actor-b",
+  decision: "accept",
+  authorizedAt: "2026-11-24T12:01:30Z",
+});
+const accepted = applyInvitationDecision(invitation, acceptanceEvent);
+assert.equal(accepted.status, "accepted");
+assert.equal(mayJoinConversation(accepted), true);
+
+const deferEvent = invitationDecision(invitation, {
+  actorId: "actor-b",
+  decision: "defer",
+  authorizedAt: "2026-11-24T12:02:00Z",
+});
+const deferred = applyInvitationDecision(invitation, deferEvent);
+assert.equal(deferred.status, "deferred");
+assert.equal(mayJoinConversation(deferred), false);
+
+assert.throws(
+  () => invitationDecision(invitation, { actorId: "actor-b", decision: "ignore" }),
+  /absence of an actor decision/,
+);
+const ignoredThenExpired = expireInvitation(invitation, {
+  expiredAt: "2026-11-24T12:05:00Z",
+});
+assert.equal(ignoredThenExpired.status, "expired");
+assert.equal(ignoredThenExpired.actorDecision, null);
+assert.equal(ignoredThenExpired.worldResolution.event, "world_expired_invitation");
+assert.equal(mayJoinConversation(ignoredThenExpired), false);
 
 let claims = proposeIdentityClaim([], {
   claimId: "identity-0001",
