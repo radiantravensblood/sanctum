@@ -167,22 +167,41 @@ export const decide = mutation({
       return { status: 'deferred', conversationInputId: null };
     }
 
+    await ctx.db.patch(proposal._id, {
+      status: 'accepted',
+      decision: 'accept',
+      resolvedAt: now,
+      events: [...proposal.events, event('actor_accepted', args.actorId)],
+    });
+    return { status: 'accepted', conversationInputId: null };
+  },
+});
+
+export const enactAccepted = mutation({
+  args: { proposalId: v.string() },
+  handler: async (ctx, args) => {
+    const proposal = await proposalById(ctx.db, args.proposalId);
+    if (!proposal) throw new Error('Unknown proposal.');
+    if (proposal.status !== 'accepted' || proposal.decision !== 'accept') {
+      throw new Error('Only a durably accepted proposal may be enacted.');
+    }
+    if (proposal.conversationInputId) {
+      return { conversationInputId: proposal.conversationInputId, alreadyEnacted: true };
+    }
+
     const conversationInputId = await insertInput(ctx, proposal.worldId, 'startConversation', {
       playerId: proposal.inviter,
       invitee: proposal.invitee,
     });
     await ctx.db.patch(proposal._id, {
-      status: 'accepted',
-      decision: 'accept',
-      resolvedAt: now,
       conversationInputId,
       events: [
         ...proposal.events,
-        event('actor_accepted', args.actorId),
+        event('enactment_requested', undefined, { authority: 'actor_accepted' }),
         event('conversation_start_enqueued', undefined, { inputId: conversationInputId }),
       ],
     });
-    return { status: 'accepted', conversationInputId };
+    return { conversationInputId, alreadyEnacted: false };
   },
 });
 
