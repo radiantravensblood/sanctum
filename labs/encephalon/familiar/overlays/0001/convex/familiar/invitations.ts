@@ -1,24 +1,25 @@
 import { v } from 'convex/values';
-import { mutation, query } from '../_generated/server';
+import { DatabaseReader, mutation, query } from '../_generated/server';
+import { Doc } from '../_generated/dataModel';
 import { playerId } from '../aiTown/ids';
 import { insertInput } from '../aiTown/insertInput';
 
 const TEST_A = 'Familiar Witness A';
 const TEST_B = 'Familiar Witness B';
 
-async function defaultWorldStatus(ctx: any) {
-  const status = await ctx.db
+async function defaultWorldStatus(db: DatabaseReader) {
+  const status = await db
     .query('worldStatus')
-    .filter((q: any) => q.eq(q.field('isDefault'), true))
+    .filter((q) => q.eq(q.field('isDefault'), true))
     .unique();
   if (!status) throw new Error('No default world. Run init first.');
   return status;
 }
 
-async function proposalById(ctx: any, proposalId: string) {
-  return await ctx.db
+async function proposalById(db: DatabaseReader, proposalId: string) {
+  return await db
     .query('familiarInvitationProposals')
-    .withIndex('proposalId', (q: any) => q.eq('proposalId', proposalId))
+    .withIndex('proposalId', (q) => q.eq('proposalId', proposalId))
     .unique();
 }
 
@@ -29,7 +30,7 @@ function event(eventName: string, actorId?: string, detail?: unknown) {
   return record;
 }
 
-function pairConversation(world: any, inviter: string, invitee: string) {
+function pairConversation(world: Doc<'worlds'>, inviter: string, invitee: string) {
   return world.conversations.find((conversation: any) => {
     const ids = conversation.participants.map((member: any) => member.playerId);
     return ids.includes(inviter) && ids.includes(invitee);
@@ -39,7 +40,7 @@ function pairConversation(world: any, inviter: string, invitee: string) {
 export const defaultWorld = query({
   args: {},
   handler: async (ctx) => {
-    const status = await defaultWorldStatus(ctx);
+    const status = await defaultWorldStatus(ctx.db);
     const world = await ctx.db.get(status.worldId);
     return {
       worldId: status.worldId,
@@ -53,7 +54,7 @@ export const defaultWorld = query({
 export const setupSyntheticPair = mutation({
   args: {},
   handler: async (ctx) => {
-    const status = await defaultWorldStatus(ctx);
+    const status = await defaultWorldStatus(ctx.db);
     const descriptions = await ctx.db
       .query('playerDescriptions')
       .withIndex('worldId', (q) => q.eq('worldId', status.worldId))
@@ -85,7 +86,7 @@ export const setupSyntheticPair = mutation({
 export const syntheticPair = query({
   args: {},
   handler: async (ctx) => {
-    const status = await defaultWorldStatus(ctx);
+    const status = await defaultWorldStatus(ctx.db);
     const descriptions = await ctx.db
       .query('playerDescriptions')
       .withIndex('worldId', (q) => q.eq('worldId', status.worldId))
@@ -110,8 +111,8 @@ export const createProposal = mutation({
   handler: async (ctx, args) => {
     if (args.inviter === args.invitee) throw new Error('Cannot invite self.');
     if (args.ttlMs < 0) throw new Error('ttlMs must be non-negative.');
-    if (await proposalById(ctx, args.proposalId)) throw new Error('Proposal ID already exists.');
-    const status = await defaultWorldStatus(ctx);
+    if (await proposalById(ctx.db, args.proposalId)) throw new Error('Proposal ID already exists.');
+    const status = await defaultWorldStatus(ctx.db);
     const world = await ctx.db.get(status.worldId);
     if (!world) throw new Error('Default world not found.');
     if (!world.players.some((player) => player.id === args.inviter)) throw new Error('Inviter not in world.');
@@ -140,7 +141,7 @@ export const decide = mutation({
     decision: v.union(v.literal('accept'), v.literal('decline'), v.literal('defer')),
   },
   handler: async (ctx, args) => {
-    const proposal = await proposalById(ctx, args.proposalId);
+    const proposal = await proposalById(ctx.db, args.proposalId);
     if (!proposal) throw new Error('Unknown proposal.');
     if (args.actorId !== proposal.invitee) throw new Error('Only the invited actor may decide this proposal.');
     if (!['pending', 'deferred'].includes(proposal.status)) throw new Error('Proposal is no longer open.');
@@ -188,7 +189,7 @@ export const decide = mutation({
 export const materializeAccepted = mutation({
   args: { proposalId: v.string() },
   handler: async (ctx, args) => {
-    const proposal = await proposalById(ctx, args.proposalId);
+    const proposal = await proposalById(ctx.db, args.proposalId);
     if (!proposal) throw new Error('Unknown proposal.');
     if (proposal.status !== 'accepted') throw new Error('Only an accepted proposal may materialize.');
     if (!proposal.conversationInputId) throw new Error('Accepted proposal has no conversation input.');
@@ -225,7 +226,7 @@ export const materializeAccepted = mutation({
 export const expire = mutation({
   args: { proposalId: v.string() },
   handler: async (ctx, args) => {
-    const proposal = await proposalById(ctx, args.proposalId);
+    const proposal = await proposalById(ctx.db, args.proposalId);
     if (!proposal) throw new Error('Unknown proposal.');
     if (!['pending', 'deferred'].includes(proposal.status)) throw new Error('Only unresolved proposals may expire.');
     if (Date.now() < proposal.expiresAt) throw new Error('Proposal has not reached its expiry boundary.');
@@ -246,7 +247,7 @@ export const expire = mutation({
 export const inspect = query({
   args: { proposalId: v.string() },
   handler: async (ctx, args) => {
-    const proposal = await proposalById(ctx, args.proposalId);
+    const proposal = await proposalById(ctx.db, args.proposalId);
     if (!proposal) return null;
     const world = await ctx.db.get(proposal.worldId);
     const conversationInput = proposal.conversationInputId
