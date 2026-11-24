@@ -10,3 +10,6 @@ authoring/inbox/*.velastra.json
 # Visual Witness raw uploads remain ephemeral
 authoring/witnesses/*
 !authoring/witnesses/README.md
+
+# External research checkouts remain local and preserve upstream history
+.external/
