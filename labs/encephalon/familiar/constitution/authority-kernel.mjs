@@ -258,3 +258,152 @@ export function worldBlock(actionEvent, reason) {
     blockedAt: new Date().toISOString(),
   };
 }
+
+
+export const IDENTITY_CLAIM_KINDS = Object.freeze([
+  "name",
+  "self_description",
+  "role",
+  "preference",
+  "goal",
+]);
+
+export const IDENTITY_CLAIM_DECISIONS = Object.freeze([
+  "accept",
+  "decline",
+  "defer",
+  "revise",
+]);
+
+export function createIdentityClaimProposal(input) {
+  if (!input?.claimId || !input?.actorId || !input?.kind || !input?.slot || !input?.value || !input?.proposedBy) {
+    throw new Error("Identity claim proposals require claimId, actorId, kind, slot, value, and proposedBy.");
+  }
+  if (!IDENTITY_CLAIM_KINDS.includes(input.kind)) {
+    throw new Error("Unknown identity claim kind.");
+  }
+  return {
+    protocol: "encephalon.authority.v0",
+    kind: "identity_claim",
+    claimId: input.claimId,
+    actorId: input.actorId,
+    claimKind: input.kind,
+    slot: input.slot,
+    value: input.value,
+    proposedBy: input.proposedBy,
+    provenance: input.provenance ?? "external_proposal",
+    status: "proposed",
+    actorAuthorization: null,
+    revisionOf: input.revisionOf ?? null,
+    createdAt: input.createdAt ?? new Date().toISOString(),
+  };
+}
+
+export function identityClaimDecision(claim, decision) {
+  if (!claim || claim.kind !== "identity_claim") {
+    throw new Error("Expected identity_claim.");
+  }
+  if (!decision || decision.actorId !== claim.actorId) {
+    throw new Error("Only the referenced actor may decide an actor-owned identity claim.");
+  }
+  if (!IDENTITY_CLAIM_DECISIONS.includes(decision.decision)) {
+    throw new Error("Unknown identity claim decision.");
+  }
+  if (!["proposed", "deferred"].includes(claim.status)) {
+    throw new Error("Identity claim is not open to decision.");
+  }
+  if (decision.decision === "revise" && !decision.revisedValue) {
+    throw new Error("Revision requires revisedValue.");
+  }
+
+  const authorizedAt = decision.authorizedAt ?? new Date().toISOString();
+  if (decision.decision === "revise") {
+    if (!decision.revisionClaimId) {
+      throw new Error("Revision requires revisionClaimId.");
+    }
+    return {
+      original: {
+        ...claim,
+        status: "superseded",
+        actorAuthorization: {
+          actorId: decision.actorId,
+          decision: "revise",
+          reason: decision.reason ?? null,
+          authorizedAt,
+        },
+        supersededBy: decision.revisionClaimId,
+      },
+      revision: {
+        ...createIdentityClaimProposal({
+          claimId: decision.revisionClaimId,
+          actorId: claim.actorId,
+          kind: claim.claimKind,
+          slot: claim.slot,
+          value: decision.revisedValue,
+          proposedBy: decision.actorId,
+          provenance: "actor_revision",
+          revisionOf: claim.claimId,
+          createdAt: authorizedAt,
+        }),
+        status: "active",
+        actorAuthorization: {
+          actorId: decision.actorId,
+          decision: "accept",
+          reason: "actor_revision",
+          authorizedAt,
+        },
+      },
+    };
+  }
+
+  const statusByDecision = {
+    accept: "active",
+    decline: "declined",
+    defer: "deferred",
+  };
+  return {
+    original: {
+      ...claim,
+      status: statusByDecision[decision.decision],
+      actorAuthorization: {
+        actorId: decision.actorId,
+        decision: decision.decision,
+        reason: decision.reason ?? null,
+        authorizedAt,
+      },
+    },
+    revision: null,
+  };
+}
+
+export function contestIdentityClaim(claim, actorId, reason = null) {
+  if (!claim || claim.kind !== "identity_claim") {
+    throw new Error("Expected identity_claim.");
+  }
+  if (actorId !== claim.actorId) {
+    throw new Error("Only the referenced actor may contest an actor-owned identity claim.");
+  }
+  if (claim.status !== "active") {
+    throw new Error("Only an active identity claim may be contested.");
+  }
+  return {
+    ...claim,
+    status: "contested",
+    contestedBy: actorId,
+    contestReason: reason,
+    contestedAt: new Date().toISOString(),
+  };
+}
+
+export function projectAuthorizedIdentityClaims(claims, actorId) {
+  return claims
+    .filter((claim) => claim.kind === "identity_claim" && claim.actorId === actorId && claim.status === "active")
+    .map(({ claimId, claimKind, slot, value, provenance, revisionOf }) => ({
+      claimId,
+      kind: claimKind,
+      slot,
+      value,
+      provenance,
+      revisionOf,
+    }));
+}

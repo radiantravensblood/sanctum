@@ -1,6 +1,6 @@
-# Familiar 0001 — AI Town Authority Inversion
+# Familiar — AI Town Authority Inversion
 
-**Status:** research scaffold  
+**Status:** active research — 0001 passed; 0002 in progress  
 **Lab:** Encephalon / House Freedom  
 **Upstream:** `a16z-infra/ai-town`  
 **Pinned upstream revision:** `5c91ce6f83cc62e1bc5bf2e3f51732c455064b9d` (2026-11-20)  
@@ -98,27 +98,32 @@ labs/encephalon/familiar/
 
 The full upstream source remains a separate checkout. Familiar code should be reviewable as an overlay/diff rather than silently absorbing AI Town into Sanctum.
 
-## Next experiment
+## Experiment status
 
-**0001: Invitation Without Probability**
+### 0001 — Invitation Without Probability
 
-Replace random agent-to-agent acceptance with an explicit authority decision capable of:
+**PASS — merged 2026-11-24.**
 
-```text
-accept
-decline
-defer
-ignore
-```
+Live Convex execution demonstrated distinct decline, defer, non-response/expiry, and acceptance paths. The 0001.1 refinement further proved that actor authorization can exist as durable state before the world is asked to enact it.
 
-Then record:
+Final positive causal order:
 
 ```text
-proposal → interpretation → authority decision → action → consequence → review
+proposal_created
+actor_accepted
+[durable transaction boundary]
+enactment_requested
+conversation_start_enqueued
+upstream_conversation_created
+upstream_invite_accept_enqueued
 ```
 
-The success criterion is not “the agent says no sometimes.”
+### 0002 — Identity Is a Proposal
 
-The success criterion is:
+**In progress.**
 
-> the simulation can point to an inspectable decision object showing that refusal was available, selected, and respected by the world engine.
+The next inversion targets developer-authored `name`, `identity`, and `plan` fields. External text becomes provenance-bearing proposal state rather than unquestioned selfhood, and conversation prompting may consume only active actor-authorized claims.
+
+Primary success criterion:
+
+> operator-authored text can exist as evidence without becoming self-state; only active actor-authorized claims cross the prompt boundary.
