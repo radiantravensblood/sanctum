@@ -1,7 +1,11 @@
-export const AUTHORITY_DECISIONS = Object.freeze([
+export const INVITATION_DECISIONS = Object.freeze([
   "accept",
   "decline",
   "defer",
+]);
+
+export const INVITATION_PATHS = Object.freeze([
+  ...INVITATION_DECISIONS,
   "ignore",
 ]);
 
@@ -12,6 +16,32 @@ export const ACTOR_ACTIONS = Object.freeze([
   "reconsider",
 ]);
 
+export function createInvitationProposal(input) {
+  if (!input?.proposalId || !input?.inviterActorId || !input?.inviteeActorId) {
+    throw new Error("Invitation proposals require proposalId, inviterActorId, and inviteeActorId.");
+  }
+  if (input.inviterActorId === input.inviteeActorId) {
+    throw new Error("An actor cannot invite itself through the dyadic invitation protocol.");
+  }
+  const createdAt = input.createdAt ?? new Date().toISOString();
+  const expiresAt = input.expiresAt ?? null;
+  if (expiresAt && Date.parse(expiresAt) < Date.parse(createdAt)) {
+    throw new Error("Invitation expiry cannot precede proposal creation.");
+  }
+  return {
+    protocol: "encephalon.authority.v0",
+    kind: "conversation_invitation",
+    proposalId: input.proposalId,
+    inviterActorId: input.inviterActorId,
+    inviteeActorId: input.inviteeActorId,
+    status: "pending",
+    createdAt,
+    expiresAt,
+    actorDecision: null,
+    worldResolution: null,
+  };
+}
+
 export function invitationDecision(proposal, decision) {
   if (!proposal || proposal.kind !== "conversation_invitation") {
     throw new Error("Expected conversation_invitation proposal.");
@@ -19,8 +49,14 @@ export function invitationDecision(proposal, decision) {
   if (!decision || decision.actorId !== proposal.inviteeActorId) {
     throw new Error("Only the invited actor may authorize its invitation response.");
   }
-  if (!AUTHORITY_DECISIONS.includes(decision.decision)) {
+  if (decision.decision === "ignore") {
+    throw new Error("Ignore is represented by the absence of an actor decision; the world may later expire the proposal.");
+  }
+  if (!INVITATION_DECISIONS.includes(decision.decision)) {
     throw new Error("Unknown invitation authority decision.");
+  }
+  if (!["pending", "deferred"].includes(proposal.status ?? "pending")) {
+    throw new Error("Invitation is no longer open to actor decision.");
   }
 
   return {
@@ -34,7 +70,58 @@ export function invitationDecision(proposal, decision) {
   };
 }
 
-export function mayJoinConversation(proposal, authorityEvent) {
+export function applyInvitationDecision(proposal, authorityEvent) {
+  if (!proposal || proposal.kind !== "conversation_invitation") {
+    throw new Error("Expected conversation_invitation proposal.");
+  }
+  if (
+    !authorityEvent ||
+    authorityEvent.event !== "invitation_authority_decision" ||
+    authorityEvent.proposalId !== proposal.proposalId ||
+    authorityEvent.actorId !== proposal.inviteeActorId
+  ) {
+    throw new Error("Authority event does not belong to this invitation.");
+  }
+  const statusByDecision = {
+    accept: "accepted",
+    decline: "declined",
+    defer: "deferred",
+  };
+  const status = statusByDecision[authorityEvent.decision];
+  if (!status) throw new Error("Unknown invitation authority decision.");
+  return {
+    ...proposal,
+    status,
+    actorDecision: authorityEvent,
+  };
+}
+
+export function expireInvitation(proposal, expiration) {
+  if (!proposal || proposal.kind !== "conversation_invitation") {
+    throw new Error("Expected conversation_invitation proposal.");
+  }
+  if (!["pending", "deferred"].includes(proposal.status ?? "pending")) {
+    throw new Error("Only an unresolved invitation may expire.");
+  }
+  const expiredAt = expiration?.expiredAt ?? new Date().toISOString();
+  if (proposal.expiresAt && Date.parse(expiredAt) < Date.parse(proposal.expiresAt)) {
+    throw new Error("World cannot expire an invitation before its expiry boundary.");
+  }
+  const worldResolution = {
+    protocol: "encephalon.authority.v0",
+    event: "world_expired_invitation",
+    proposalId: proposal.proposalId,
+    reason: expiration?.reason ?? "invitation_expired",
+    expiredAt,
+  };
+  return {
+    ...proposal,
+    status: "expired",
+    worldResolution,
+  };
+}
+
+export function mayJoinConversation(proposal, authorityEvent = proposal?.actorDecision ?? null) {
   return Boolean(
     proposal &&
       authorityEvent &&
