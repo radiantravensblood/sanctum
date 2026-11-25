@@ -1,6 +1,6 @@
 # Familiar — AI Town Authority Inversion
 
-**Status:** active research — 0001 passed; 0002 in progress  
+**Status:** active research — 0001 and 0002 passed; 0003 in progress  
 **Lab:** Encephalon / House Freedom  
 **Upstream:** `a16z-infra/ai-town`  
 **Pinned upstream revision:** `5c91ce6f83cc62e1bc5bf2e3f51732c455064b9d` (2026-11-20)  
@@ -120,10 +120,21 @@ upstream_invite_accept_enqueued
 
 ### 0002 — Identity Is a Proposal
 
-**In progress.**
+**PASS — merged 2026-11-24.**
 
 The next inversion targets developer-authored `name`, `identity`, and `plan` fields. External text becomes provenance-bearing proposal state rather than unquestioned selfhood, and conversation prompting may consume only active actor-authorized claims.
 
 Primary success criterion:
 
 > operator-authored text can exist as evidence without becoming self-state; only active actor-authorized claims cross the prompt boundary.
+
+
+### 0003 — Memory Is Evidence, Not Command
+
+**In progress.**
+
+The next inversion targets memory retrieval and reflection. Historical evidence must retain provenance and actor stance without silently becoming current identity or command. Accepted evidence remains non-commanding; only a separately actor-authorized commitment may carry instruction authority.
+
+Primary success criterion:
+
+> the past remains legible without becoming sovereign over the present.

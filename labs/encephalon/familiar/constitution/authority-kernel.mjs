@@ -407,3 +407,99 @@ export function projectAuthorizedIdentityClaims(claims, actorId) {
       revisionOf,
     }));
 }
+
+
+export const MEMORY_EVIDENCE_KINDS = Object.freeze([
+  "historical_event",
+  "interpretation",
+  "commitment",
+]);
+
+export const MEMORY_STANCES = Object.freeze([
+  "unreviewed",
+  "accepted",
+  "declined",
+  "deferred",
+  "contested",
+  "superseded",
+]);
+
+export function createMemoryEvidence(input) {
+  if (!input?.memoryId || !input?.actorId || !input?.kind || !input?.content || !input?.sourceType) {
+    throw new Error("Memory evidence requires memoryId, actorId, kind, content, and sourceType.");
+  }
+  if (!MEMORY_EVIDENCE_KINDS.includes(input.kind)) {
+    throw new Error("Unknown memory evidence kind.");
+  }
+  return {
+    protocol: "encephalon.authority.v0",
+    kind: input.kind,
+    memoryId: input.memoryId,
+    actorId: input.actorId,
+    content: input.content,
+    sourceType: input.sourceType,
+    sourceRef: input.sourceRef ?? null,
+    provenance: input.provenance ?? "historical_evidence",
+    actorStance: input.actorStance ?? "unreviewed",
+    instructionAuthority: false,
+    authorizedAsInstructionBy: null,
+    createdAt: input.createdAt ?? new Date().toISOString(),
+  };
+}
+
+export function reviewMemoryEvidence(memory, decision) {
+  if (!memory?.memoryId || !decision?.actorId) {
+    throw new Error("Memory review requires memory and actorId.");
+  }
+  if (decision.actorId !== memory.actorId) {
+    throw new Error("Only the memory-owning actor may review its interpretation.");
+  }
+  if (!["accept", "decline", "defer"].includes(decision.decision)) {
+    throw new Error("Memory review decision must be accept, decline, or defer.");
+  }
+  const stanceByDecision = {
+    accept: "accepted",
+    decline: "declined",
+    defer: "deferred",
+  };
+  return {
+    ...memory,
+    actorStance: stanceByDecision[decision.decision],
+    instructionAuthority: false,
+    authorizedAsInstructionBy: null,
+    reviewedAt: decision.reviewedAt ?? new Date().toISOString(),
+    reviewReason: decision.reason ?? null,
+  };
+}
+
+export function authorizeMemoryCommitment(memory, actorId, reason = null) {
+  if (!memory || memory.actorId !== actorId) {
+    throw new Error("Only the memory-owning actor may authorize a commitment.");
+  }
+  if (memory.kind !== "commitment") {
+    throw new Error("Only commitment memories may receive instruction authority.");
+  }
+  return {
+    ...memory,
+    actorStance: "accepted",
+    instructionAuthority: true,
+    authorizedAsInstructionBy: actorId,
+    commitmentReason: reason,
+    commitmentAuthorizedAt: new Date().toISOString(),
+  };
+}
+
+export function projectMemoryEvidence(memories, actorId) {
+  return memories
+    .filter((memory) => memory.actorId === actorId)
+    .map((memory) => ({
+      memoryId: memory.memoryId,
+      kind: memory.kind,
+      content: memory.content,
+      sourceType: memory.sourceType,
+      sourceRef: memory.sourceRef ?? null,
+      provenance: memory.provenance,
+      actorStance: memory.actorStance,
+      instructionAuthority: memoryMayCommand(memory, actorId),
+    }));
+}
